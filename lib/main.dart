@@ -4,6 +4,8 @@ import 'package:flutter_flavor/flutter_flavor.dart';
 import 'package:slahly/MyApp.dart';
 
 void main() async {
+  print("Hello world");
+
   // FlavorConfig(
   //   name: "DEVELOPMENT",
   //   color: Colors.red,
@@ -29,8 +31,6 @@ void main() async {
         supportedLocales: [Locale('en'), Locale('ar')],
         path: 'assets/translations',
         fallbackLocale: Locale('en'),
-        child: MyApp()
-    ),
+        child: MyApp()),
   );
 }
-
