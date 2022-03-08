@@ -5,6 +5,8 @@ import 'package:slahly/screens/loginscreen.dart';
 import 'package:slahly/screens/signupscreen.dart';
 
 void main() async {
+  print("Hello world");
+
   // FlavorConfig(
   //   name: "DEVELOPMENT",
   //   color: Colors.red,
@@ -28,13 +30,11 @@ void main() async {
         supportedLocales: [Locale('en'), Locale('ar')],
         path: 'assets/translations',
         fallbackLocale: Locale('en'),
-        child: MyApp()
-    ),
+        child: MyApp()),
   );
 }
 
 class MyApp extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -46,8 +46,8 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       routes: {
-          SignUpScreen().routeName:(context)=>SignUpScreen(),
-        LoginScreen().routeName:(context)=>LoginScreen(),
+        SignUpScreen().routeName: (context) => SignUpScreen(),
+        LoginScreen().routeName: (context) => LoginScreen(),
       },
       initialRoute: SignUpScreen().routeName,
     );
