@@ -1,8 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_flavor/flutter_flavor.dart';
-import 'package:slahly/screens/loginscreen.dart';
-import 'package:slahly/screens/signupscreen.dart';
+import 'package:slahly/MyApp.dart';
 
 void main() async {
   // FlavorConfig(
@@ -11,6 +10,7 @@ void main() async {
   //   location: BannerLocation.bottomStart,
   //   variables: {
   //     "counter": 5,
+  //     "database" : "localhost"
   //   },
   // );
   // FlavorConfig(
@@ -19,6 +19,7 @@ void main() async {
   //   location: BannerLocation.bottomStart,
   //   variables: {
   //     "counter": 6,
+  //     "database": "192.44.233.2/3306"
   //   },
   // );
   WidgetsFlutterBinding.ensureInitialized();
@@ -33,23 +34,3 @@ void main() async {
   );
 }
 
-class MyApp extends StatelessWidget {
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      localizationsDelegates: context.localizationDelegates,
-      supportedLocales: context.supportedLocales,
-      locale: context.locale,
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      routes: {
-          SignUpScreen().routeName:(context)=>SignUpScreen(),
-        LoginScreen().routeName:(context)=>LoginScreen(),
-      },
-      initialRoute: SignUpScreen().routeName,
-    );
-  }
-}
