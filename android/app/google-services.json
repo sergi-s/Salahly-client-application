@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "268856227510",
+    "firebase_url": "https://salahny-6bfea-default-rtdb.firebaseio.com",
+    "project_id": "salahny-6bfea",
+    "storage_bucket": "salahny-6bfea.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:268856227510:android:6f83366a6a8a5f7da49817",
+        "android_client_info": {
+          "package_name": "com.salahly.salahly"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "268856227510-ovb75ni3uitkehpr93b36t7jtbpdb3qh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCuDZsh0WAgOreWhre_G2PlPJ61yLfGVc4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "268856227510-ovb75ni3uitkehpr93b36t7jtbpdb3qh.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

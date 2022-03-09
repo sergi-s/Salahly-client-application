@@ -1,4 +1,4 @@
-package com.salahly.slahly
+package com.salahly.salahly
 
 import io.flutter.embedding.android.FlutterActivity
 
