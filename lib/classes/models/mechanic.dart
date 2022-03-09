@@ -1,10 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:slahly/abstract_classes/user.dart';
 
-class Client extends UserType {
-  int subscription;
+class Mechanic extends UserType {
+  String? nationalID;
+  bool? isCenter;
+  bool? isAccepted;
 
-  Client({
+  Mechanic({
     required String? name,
     required String? email,
     String? id,
@@ -16,7 +18,9 @@ class Client extends UserType {
     String? avatar,
     String? address,
     String? phoneNumber,
-    required this.subscription,
+    this.isAccepted,
+    this.isCenter,
+    this.nationalID,
   }) : super(name: name, email: email, id: id);
 
   @override
@@ -26,10 +30,11 @@ class Client extends UserType {
 
   @override
   bool isValid() {
-    return (super.isValid() && subscriptionValidate(subscription));
+    return (super.isValid() && nationalIDValidate(nationalID!));
   }
+
   // Validation
-  bool subscriptionValidate(int subscription) {
-    return subscription > 0;
+  bool nationalIDValidate(String id) {
+    return id.length > 0;
   }
 }
