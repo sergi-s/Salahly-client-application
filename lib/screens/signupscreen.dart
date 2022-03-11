@@ -2,6 +2,7 @@ import "package:flutter/material.dart";
 import 'package:easy_localization/easy_localization.dart';
 import 'package:go_router/go_router.dart';
 import 'package:slahly/screens/loginscreen.dart';
+import 'package:slahly/widgets/getLocationComponent.dart';
 
 class SignUpScreen extends StatelessWidget {
   static final routeName = "/signupscreen";
@@ -16,7 +17,7 @@ class SignUpScreen extends StatelessWidget {
             Container(
               width: 500,height: 200,color: Colors.deepOrange,
               child: ElevatedButton(onPressed: (){
-                context.go(LoginScreen.routeName);
+                context.go(LocationComponent.routeName);
               },child: Text("Press me"),),
             )
             // Form(
