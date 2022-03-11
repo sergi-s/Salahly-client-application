@@ -14,7 +14,7 @@ class TowProvider extends UserType {
     String? id,
     String? birthDay,
     String? createdDate,
-    State? state,
+    AccountState? userState,
     Sex? sex,
     Type? type,
     String? avatar,
@@ -23,7 +23,18 @@ class TowProvider extends UserType {
     this.isAccepted,
     required this.isCenter,
     required this.nationalID,
-  }) : super(name: name, email: email, id: id);
+  }) : super(
+            name: name,
+            email: email,
+            id: id,
+            birthDay: birthDay,
+            createdDate: createdDate,
+            state: userState,
+            sex: sex,
+            type: type,
+            avatar: avatar,
+            loc: loc,
+            phoneNumber: phoneNumber);
 
   @override
   set setPassword(String value) {

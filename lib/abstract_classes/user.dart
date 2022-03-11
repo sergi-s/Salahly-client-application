@@ -1,3 +1,5 @@
+import 'package:slahly/classes/models/location.dart';
+
 enum AccountState { active, block }
 enum Sex { none, male, female }
 enum Type { client, mechanic, provider, admin }
@@ -13,6 +15,7 @@ abstract class UserType {
   String? _password;
   String? phoneNumber;
   String? address;
+  Location? loc;
 
   // final Language lang;
   Sex? sex;
@@ -29,7 +32,7 @@ abstract class UserType {
     this.sex,
     this.type,
     this.avatar,
-    this.address,
+    this.loc,
     this.phoneNumber,
   });
 
