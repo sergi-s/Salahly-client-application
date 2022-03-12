@@ -1,11 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:slahly/abstract_classes/user.dart';
-import 'package:slahly/classes/models/location.dart';
 
-class Client extends UserType {
-  int subscription;
+class TowProvider extends UserType {
+  String? nationalID;
+  bool? isCenter;
+  bool? isAccepted;
 
-  Client({
+  List<TowDriver> towDriver = [];
+
+  TowProvider({
     required String? name,
     required String? email,
     String? id,
@@ -17,8 +20,9 @@ class Client extends UserType {
     String? avatar,
     String? address,
     String? phoneNumber,
-    Location? loc,
-    required this.subscription,
+    this.isAccepted,
+    required this.isCenter,
+    required this.nationalID,
   }) : super(
             name: name,
             email: email,
@@ -39,11 +43,22 @@ class Client extends UserType {
 
   @override
   bool isValid() {
-    return (super.isValid() && subscriptionValidate(subscription));
+    return (super.isValid() && nationalIDValidate(nationalID!));
   }
 
   // Validation
-  bool subscriptionValidate(int subscription) {
-    return subscription > 0;
+  bool nationalIDValidate(String id) {
+    return id.length > 0;
   }
+}
+
+class TowDriver {
+  String nationalID;
+  bool isCenter;
+  bool isAccepted;
+  String name;
+  String hireDate;
+
+  TowDriver(this.nationalID, this.isCenter, this.isAccepted, this.name,
+      this.hireDate);
 }

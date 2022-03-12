@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:slahly/components/Rouned-Input.dart';
 import 'package:slahly/components/Rounded_password.dart';
 import 'package:slahly/screens/loginscreen.dart';
+import 'package:slahly/widgets/getLocationComponent.dart';
 
 import '../components/Rounded_Bottom.dart';
 
@@ -39,6 +40,7 @@ class _SignUpScreenState extends State<SignUpScreen> with SingleTickerProviderSt
     double defaultlogin=size.height-(size.height*0.1);
     ContainerSize=Tween<double>(begin:size.height*0.1,end: defaultregstration).animate(  CurvedAnimation(parent: animationController, curve: Curves.linear));
     return Scaffold(
+
       body:Stack(
         children: [
           //cancel buttom
@@ -189,6 +191,7 @@ class _SignUpScreenState extends State<SignUpScreen> with SingleTickerProviderSt
               fontSize: 18,
             ),
           ):null,
+
         ),
       ),
       ),
