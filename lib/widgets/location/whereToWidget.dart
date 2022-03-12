@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:slahly/widgets/location/divider.dart';
 
 import 'divider.dart';
 

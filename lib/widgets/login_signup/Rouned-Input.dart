@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:slahly/components/Input_container.dart';
+import 'package:slahly/widgets/login_signup/Input_container.dart';
 
 class RounedInput extends StatelessWidget {
   const RounedInput({

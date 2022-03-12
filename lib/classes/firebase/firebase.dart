@@ -4,45 +4,46 @@ import 'package:slahly/abstract_classes/authentication.dart';
 import 'package:slahly/classes/models/client.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:slahly/main.dart';
 
-class FirebaseAuth extends Authentication {
+class FirebaseCustomAuth extends Authentication {
+  final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+
   @override
-  void login(Client client) {
+  Future<bool> login(Client client) async {
     // TODO: Magdy
     try {
-      final user = await _auth.signInWithEmailAndPassword(
-          email: email, password: password);
+      String emm = ((client.email) != null ? client.email : "").toString();
+      final user = await _firebaseAuth.signInWithEmailAndPassword(
+          email: emm, password: client.password);
       if (user != null) {
-        Navigator.pushNamed(context, ChatScreen.id);
+        return true;
       }
     } catch (e) {
       print(e);
+      return false;
     }
+    return false;
   }
 
   @override
   Future<bool> signup(Client client) async {
-    DatabaseReference usersRef =
-        FirebaseDatabase.instance.reference().child("user");
-
-    WidgetsFlutterBinding.ensureInitialized();
-    await Firebase.initializeApp();
-
-    final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
-
-    final User firebaseUser =
-        (await _firebaseAuth.createUserWithEmailAndPassword(
-                email: client.email, password: client.password))
+    String emm = ((client.email) != null ? client.email : "").toString();
+    final User? firebaseUser = (await _firebaseAuth
+            .createUserWithEmailAndPassword(
+                email: emm, password: client.password)
             .catchError((errMsg) {
       print(errMsg);
       return false;
-    }).user;
+    }))
+        .user;
+
     if (firebaseUser != null) {
       //user created
       Map userDataMap = {
         "name": client.name,
         "email": client.email,
-        "birthday": client.birthday,
+        "birthday": client.birthDay,
         "createdDate": client.createdDate,
         "sex": client.sex,
         "type": client.type,

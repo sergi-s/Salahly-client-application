@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:slahly/abstract_classes/user.dart';
+import 'package:slahly/classes/models/location.dart';
 
 class TowProvider extends UserType {
   String? nationalID;
@@ -20,6 +21,7 @@ class TowProvider extends UserType {
     String? avatar,
     String? address,
     String? phoneNumber,
+    Location? loc,
     this.isAccepted,
     required this.isCenter,
     required this.nationalID,

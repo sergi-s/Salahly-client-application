@@ -1,26 +1,25 @@
 import 'package:go_router/go_router.dart';
-import 'package:slahly/screens/loginscreen.dart';
-import 'package:slahly/screens/signupscreen.dart';
-import 'package:slahly/screens/splashscreen.dart';
-import 'package:slahly/widgets/getLocationComponent.dart';
+import 'package:slahly/screens/login_signup/signupscreen.dart';
+import 'package:slahly/screens/splashScreen/splashscreen.dart';
+import 'package:slahly/screens/myLocation/getLocationComponent.dart';
 
 class Routing {
   get router => GoRouter(
 
-    initialLocation: SignUpScreen.routeName,
+    initialLocation: SplashScreen.routeName,
 
     routes: <GoRoute> [
       GoRoute(
-        path: SignUpScreen.routeName,
-        builder: (context, state) => splashscreen(),
+        path: LoginSignupScreen.routeName,
+        builder: (context, state) => LoginSignupScreen(),
       ),
       GoRoute(
-        path: LoginScreen.routeName,
-        builder: (context, state) => LoginScreen(),
+        path: LocationScreen.routeName,
+        builder: (context, state) => LocationScreen(),
       ),
       GoRoute(
-        path: LocationComponent.routeName,
-        builder: (context, state) => LocationComponent(),
+        path: SplashScreen.routeName,
+        builder: (context, state) => SplashScreen(),
       ),
     ],
   );

@@ -1,4 +1,14 @@
 {
   "appname": "salahly",
-  "presshere": "press here"
+  "presshere": "press here",
+  "login" : "login",
+  "welcome_back":"welcome back",
+  "username" : "username",
+  "password" : "password",
+  "email" : "email",
+  "phone_number": "phone number",
+  "or": "or",
+  "confirm_password": "confirm password",
+  "sign_up": "sign up",
+  "dont_have_account": "Dont have an account? Signup now"
 }

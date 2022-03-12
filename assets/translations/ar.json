@@ -1,4 +1,14 @@
 {
   "appname": "صلحلي",
-  "presshere": "اضغط هنا"
+  "presshere": "اضغط هنا",
+  "login" : "تسجيل الدخخول",
+  "welcome_back":"مرحبا بك",
+  "username" : "اسم المستخدم",
+  "password" : "كلمة السر",
+  "email" : "البريد الإلكتروني",
+  "phone_number": "رقم الهاتف",
+  "or": "أو",
+  "confirm_password": "تأكيد كلمة السر",
+  "sign_up": "انشاء حساب",
+  "dont_have_account": "ليس لديك حساب؟ سجل الان"
 }

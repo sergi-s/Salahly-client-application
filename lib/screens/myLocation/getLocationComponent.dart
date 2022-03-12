@@ -6,14 +6,14 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:place_picker/place_picker.dart';
 import 'package:slahly/utils/constants.dart';
 
-class LocationComponent extends StatefulWidget {
+class LocationScreen extends StatefulWidget {
   static final String routeName = "/locationComponent";
 
   @override
-  _LocationComponentState createState() => _LocationComponentState();
+  _LocationScreenState createState() => _LocationScreenState();
 }
 
-class _LocationComponentState extends State<LocationComponent> {
+class _LocationScreenState extends State<LocationScreen> {
   @override
   Widget build(BuildContext context) {
 

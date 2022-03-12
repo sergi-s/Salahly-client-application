@@ -1,10 +1,11 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_flavor/flutter_flavor.dart';
 import 'package:slahly/MyApp.dart';
-import 'package:slahly/utils/constants.dart';
-import 'package:slahly/widgets/getLocationComponent.dart';
 
+DatabaseReference usersRef = FirebaseDatabase.instance.reference().child("user");
 void main() async {
   FlavorConfig(
     name: "DEVELOPMENT",
@@ -26,6 +27,8 @@ void main() async {
   );
   WidgetsFlutterBinding.ensureInitialized();
   await EasyLocalization.ensureInitialized();
+  await Firebase.initializeApp();
+
   runApp(
     EasyLocalization(
       supportedLocales: [Locale('en'), Locale('ar')],
