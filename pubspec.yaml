@@ -51,35 +51,9 @@ dependencies:
   firebase_core: ^1.13.1
   firebase_database: ^9.0.8
   google_maps_flutter: ^2.1.2
+  string_validator: ^0.3.0
   geolocator: ^8.2.0
   place_picker: ^0.9.20-nullsafety
-#  google_map_location_picker: ^4.1.7
-#  intl: ^0.17.0
-#  flutter_localizations:
-#    sdk: flutter
-#  google_map_location_picker: any
-#  google_maps_flutter: ^0.5.30
-#  google_map_location_picker: ^4.1.7
-#  intl: ^0.17.0
-#  flutter_localizations:
-#    sdk: flutter
-#  android_intent: any
-#  flutter_localizations:
-#    sdk: flutter
-#  geolocator: any
-#  http: any
-#  intl: any
-#  package_info: any
-#  provider: any
-#  stack_trace: any
-
-
-#  google_maps_flutter: ^0.5.30
-#  flutter_localizations:
-#    sdk: flutter
-
-#  google_maps_flutter: ^2.1.2
-#  google_map_location_picker: ^4.1.7
 
 
 
@@ -107,7 +81,7 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-    - assets/images/
+#    - assets/images/
     - assets/translations/
   #   - images/a_dot_ham.jpeg
 
