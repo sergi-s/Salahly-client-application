@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_flavor/flutter_flavor.dart';
 import 'package:slahly/MyApp.dart';
 import 'package:slahly/utils/constants.dart';
+import 'package:slahly/widgets/getLocationComponent.dart';
 
 void main() async {
   FlavorConfig(
@@ -18,7 +19,8 @@ void main() async {
     color: Colors.greenAccent,
     // location: BannerLocation.bottomStart,
     variables: {
-      "maps_api": "AIzaSyCuDZsh0WAgOreWhre_G2PlPJ61yLfGVc4"//await envVars['GOOGLE_MAPS_API']
+      "maps_api": "AIzaSyCuDZsh0WAgOreWhre_G2PlPJ61yLfGVc4"
+      //await envVars['GOOGLE_MAPS_API']
       // "maps_api": await DotEnv().env['GOOGLE_MAPS_API'],
     },
   );
@@ -26,9 +28,12 @@ void main() async {
   await EasyLocalization.ensureInitialized();
   runApp(
     EasyLocalization(
-        supportedLocales: [Locale('en'), Locale('ar')],
-        path: 'assets/translations',
-        fallbackLocale: Locale('en'),
-        child: MyApp()),
+      supportedLocales: [Locale('en'), Locale('ar')],
+      path: 'assets/translations',
+      fallbackLocale: Locale('en'),
+      child:
+      // LocationComponent()
+      MyApp(),
+    ),
   );
 }

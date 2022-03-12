@@ -9,6 +9,15 @@ class FirebaseAuth extends Authentication {
   @override
   void login(Client client) {
     // TODO: Magdy
+    try {
+      final user = await _auth.signInWithEmailAndPassword(
+          email: email, password: password);
+      if (user != null) {
+        Navigator.pushNamed(context, ChatScreen.id);
+      }
+    } catch (e) {
+      print(e);
+    }
   }
 
   @override
