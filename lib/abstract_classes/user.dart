@@ -15,7 +15,7 @@ abstract class UserType {
   String? _password;
   String? phoneNumber;
   String? address;
-  Location? loc;
+  CustomLocation? loc;
 
   // final Language lang;
   Sex? sex;

@@ -17,7 +17,7 @@ class Client extends UserType {
     String? avatar,
     String? address,
     String? phoneNumber,
-    Location? loc,
+    CustomLocation? loc,
     required this.subscription,
   }) : super(
             name: name,

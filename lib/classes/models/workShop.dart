@@ -6,7 +6,7 @@ class WorkShop {
   bool isCenter;
   String? phoneNumber;
 
-  Location loc;
+  CustomLocation loc;
 
   WorkShop(
       {this.id,

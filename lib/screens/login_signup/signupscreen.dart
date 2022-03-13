@@ -1,13 +1,7 @@
 import "package:flutter/material.dart";
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/services.dart';
-import 'package:go_router/go_router.dart';
 import 'package:slahly/screens/login_signup/signupForm.dart';
-import 'package:slahly/widgets/login_signup/Rouned-Input.dart';
-import 'package:slahly/widgets/login_signup/Rounded_password.dart';
-import 'package:slahly/screens/myLocation/getLocationComponent.dart';
-
-import '../../widgets/login_signup/Rounded_Bottom.dart';
 import 'loginForm.dart';
 
 class LoginSignupScreen extends StatefulWidget {

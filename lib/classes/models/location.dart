@@ -1,8 +1,8 @@
-class Location {
+class CustomLocation {
   double? longitude;
   double? latitude;
   String? address;
   String? name;
 
-  Location(this.longitude, this.latitude, this.address, this.name);
+  CustomLocation(this.longitude, this.latitude, this.address, this.name);
 }

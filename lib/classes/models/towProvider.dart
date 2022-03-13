@@ -21,7 +21,7 @@ class TowProvider extends UserType {
     String? avatar,
     String? address,
     String? phoneNumber,
-    Location? loc,
+    CustomLocation? loc,
     this.isAccepted,
     required this.isCenter,
     required this.nationalID,

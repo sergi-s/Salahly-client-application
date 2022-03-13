@@ -17,7 +17,7 @@ class Mechanic extends UserType {
     Sex? sex,
     Type? type,
     String? avatar,
-    Location? loc,
+    CustomLocation? loc,
     String? phoneNumber,
     this.isAccepted,
     this.isCenter,
