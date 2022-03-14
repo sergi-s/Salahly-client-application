@@ -1,6 +1,9 @@
+import 'package:firebase_database/firebase_database.dart';
 import 'package:slahly/classes/models/location.dart';
 import 'package:slahly/classes/models/mechanic.dart';
 import 'package:slahly/classes/models/towProvider.dart';
+
+import '../../../main.dart';
 
 class RSA {
   RSA_state state = RSA_state.created;
@@ -41,6 +44,16 @@ class RSA {
 
   Future<bool> createRSA(loc,uId) async {
     _RSA(location: loc, userID: uId);
+
+    dbRef.child("RSA").set({
+      'date': 'sergi',
+      'text': 'kokoko'
+    });
+    // http
+    // var url = Uri.parse(fbcfurl+"helloWorld");
+    // var response = await http.get(url);
+    // print('Response status: ${response.statusCode}');
+    // print('Response body: ${response.body}');
     return (RSA_id != null);
   }
   // the constructor private so you should use the createRSA function

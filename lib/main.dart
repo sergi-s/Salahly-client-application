@@ -7,7 +7,7 @@ import 'package:slahly/MyApp.dart';
 import 'package:slahly/classes/firebase/firebase.dart';
 
 DatabaseReference usersRef = FirebaseDatabase.instance.ref().child("user");
-
+final DatabaseReference dbRef =  FirebaseDatabase.instance.ref();
 void main() async {
   FlavorConfig(
     name: "DEVELOPMENT",
