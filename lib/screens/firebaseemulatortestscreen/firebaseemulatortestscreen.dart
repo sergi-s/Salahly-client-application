@@ -2,13 +2,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:slahly/classes/firebase/firebase.dart';
-import 'package:slahly/classes/models/client.dart';
-import 'package:slahly/main.dart';
 import 'package:http/http.dart' as http;
+import 'package:slahly/utils/constants.dart';
 
-class HomeScreen extends StatelessWidget {
-  static final routeName = "/homescreen";
+class FirebaseEmulatorScreen extends StatelessWidget {
+  static final routeName = "/firebaseemulatortestscreen";
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -63,26 +61,26 @@ class HomeScreen extends StatelessWidget {
     }
     return false;
   }
-    Future signupAccount()async {
+  Future signupAccount()async {
     final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
-      final User? firebaseUser = (await _firebaseAuth
-          .createUserWithEmailAndPassword(
-          email: "mo@mo.mo", password: "momomo")
-          .catchError((errMsg) {
-        print(errMsg);
-        return false;
-      }))
-          .user;
-
-      if (firebaseUser != null) {
-        //user created
-        return true;
-      }
+    final User? firebaseUser = (await _firebaseAuth
+        .createUserWithEmailAndPassword(
+        email: "mo@mo.mo", password: "momomo")
+        .catchError((errMsg) {
+      print(errMsg);
       return false;
+    }))
+        .user;
+
+    if (firebaseUser != null) {
+      //user created
+      return true;
+    }
+    return false;
 
   }
   void httptest() async {
-    var url = Uri.parse("http://10.0.2.2:5001/salahny-6bfea/us-central1/helloWorld");
+    var url = Uri.parse(fbcfurl+"helloWorld");
     var response = await http.get(url);
     print('Response status: ${response.statusCode}');
     print('Response body: ${response.body}');
@@ -100,9 +98,9 @@ class HomeScreen extends StatelessWidget {
     // messagesRef.push().set(message.toJson());
     print("OK");
   }
-  // Query getMessageQuery() {
-  //   return messagesRef;
-  // }
+// Query getMessageQuery() {
+//   return messagesRef;
+// }
 }
 
 class Message {

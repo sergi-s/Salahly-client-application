@@ -1,4 +1,6 @@
 
+import 'dart:io';
+
 import 'package:flutter_flavor/flutter_flavor.dart';
 
 dynamic getGoogleMapsAPI() {
@@ -8,3 +10,10 @@ dynamic getGoogleMapsAPI() {
 }
 
 final googleMapsAPI = "AIzaSyCuDZsh0WAgOreWhre_G2PlPJ61yLfGVc4";
+
+// For firebase emulator (don't touch)
+final localHostString = Platform.isAndroid? '10.0.2.2' : 'localhost';
+const int fbdbport = 9000;
+const fbauthport = 9099;
+const _fbcfport = 5001;
+final fbcfurl = "http://"+localHostString+":$_fbcfport/salahny-6bfea/us-central1/";
