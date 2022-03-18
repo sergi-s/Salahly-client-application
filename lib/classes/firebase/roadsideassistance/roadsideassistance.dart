@@ -1,26 +1,28 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:slahly/classes/firebase/nearbylocations.dart';
+import 'package:slahly/classes/models/client.dart';
 import 'package:slahly/classes/models/location.dart';
 import 'package:slahly/classes/models/mechanic.dart';
 import 'package:slahly/classes/models/towProvider.dart';
+import 'package:string_validator/string_validator.dart';
 
 import '../../../main.dart';
 
 class RSA {
   RSA_state state = RSA_state.created;
-  late CustomLocation location; // lazm yt2sm le long w lat
+  late CustomLocation _location; // lazm yt2sm le long w lat
   late String RSA_id;
-  late String userID;
-  late TowProvider towProvider;
-  late Mechanic mechanic;
-  late DateTime estimatedTime;
+  late Client _user;
+  late TowProvider _towProvider;
+  late Mechanic _mechanic;
+  late DateTime _estimatedTime;
   late List<Mechanic> nearbyMechanics; // not included in FB
   late List<TowProvider> nearbyProviders; // not included in FB
 
-  bool requestNearbyMechanics(){
-    //uses location get nearby mechs
-    nearbyMechanics = [];
-    return false;
+  setLocation(CustomLocation ll){
+    _location = ll;
   }
 
   Future _checkLocationPermission() async {
@@ -67,58 +69,61 @@ class RSA {
     Position pos = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high);
     return CustomLocation(longitude: pos.longitude,latitude: pos.latitude);
-    print("sad");
   }
-
-  bool requestNearbyProviders(){
+  requestNearbyProviders() async{
     //uses location get nearby mechs
     nearbyProviders = [];
-    return false;
+    await NearbyLocations.getNearbyProviders(_location.latitude, _location.longitude,
+        // user.getSubscriptionRange()!.toDouble(),
+        100,
+        nearbyProviders
+    );
+  }
+  requestNearbyMechanics() async {
+    //uses location get nearby mechs
+    nearbyMechanics = [];
+
+    await NearbyLocations.getNearbyMechanics(_location.latitude, _location.longitude,
+    // user.getSubscriptionRange()!.toDouble(),
+    100,
+     nearbyMechanics
+    );
   }
 
-  bool chooseMechanic(Mechanic mech) {
+  setMechanic(Mechanic mech,bool stopListener) {
     //momken nbdlha b firebase ID aw ayan kan
-    mechanic = mech;
-
-    return false;
+    _mechanic = mech;
+    if(stopListener)
+    NearbyLocations.stopListener();
   }
 
-  bool chooseProvider(TowProvider provider) {
+  setProvider(TowProvider provider,bool stopListener) {
     //momken nbdlha b firebase ID aw ayan kan
-    towProvider = provider;
-
-    return false;
+    _towProvider = provider;
+    if(stopListener)
+    NearbyLocations.stopListener();
   }
+  Future requestRSA() async {
+    //testing purpose
+    _user = Client(email: 'momo',name: "sd",id: "3", subscription: SubscriptionTypes.silver);
 
-  Future<bool> createRSA(loc,uId) async {
-    _RSA(location: loc, userID: uId);
-
-    dbRef.child("RSA").set({
-      'date': 'sergi',
-      'text': 'kokoko'
-    });
-    // http
-    // var url = Uri.parse(fbcfurl+"helloWorld");
-    // var response = await http.get(url);
-    // print('Response status: ${response.statusCode}');
-    // print('Response body: ${response.body}');
-    return (RSA_id != null);
-  }
-  // the constructor private so you should use the createRSA function
-  _RSA({required location,required userID}) async {
-   // create RSA in firebase
-    String rsaId = "";
-    if(rsaId != null){
-
-      RSA_id = rsaId;
-    }else{
-      throw Exception("Could not create RSA");
+    DatabaseReference newRSA = dbRef.child("rsa").push();
+    if(newRSA != null){
+      await newRSA.set({
+        "userID": _user.id,
+        "latitude" : _location.latitude,
+        "longitude" : _location.longitude,
+        "towProviderID" : _towProvider.id,
+        "mechanic" : _mechanic.id,
+        "state": RSA_state.waiting_for_mech_response.toString()
+      });
+      state = RSA_state.waiting_for_mech_response;
+      RSA_id = newRSA.key.toString();
+      return true;
     }
-
-   // return RSA_id
+    return false;
   }
 }
-
 enum RSA_state {
   canceled,
   created,
@@ -132,3 +137,4 @@ enum RSA_state {
   waiting_for_mech_response,
   waiting_for_prov_response
 }
+

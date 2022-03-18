@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter_geofire/flutter_geofire.dart';
@@ -15,16 +17,16 @@ class Mo {
 }
 
 class NearbyLocations {
-  List<Mechanic> nearbyMechanics = [];
-  List<TowProvider> nearbyProviders = [];
+  // List<Mechanic> nearbyMechanics = [] ;
+  // List<TowProvider> nearbyProviders = [];
 
-  NearbyLocations() {
-    // FirebaseAuth.instance.signOut();
+  // NearbyLocations() {
+  //   // FirebaseAuth.instance.signOut();
+  //
+  //   // _getUserLocation();
+  // }
 
-    // _getUserLocation();
-  }
-
-  addNearbyMechanics() async {
+  static _addNearbyMechanics() async {
     _initializeGeoFireMechanic();
     CustomLocation loc_1 = CustomLocation(
         latitude: 31.207877,
@@ -45,7 +47,7 @@ class NearbyLocations {
     }
   }
 
-  addNearbyProviders() async {
+  static _addNearbyProviders() async {
     _initializeGeoFireProviders();
     CustomLocation loc_3 = CustomLocation(
         latitude: 31.206866,
@@ -59,7 +61,7 @@ class NearbyLocations {
     }
   }
 
-  _addLocToDB(CustomLocation lola) async {
+  static _addLocToDB(CustomLocation lola) async {
     // await dbRef.child("available").child((lola.name).toString()).set({
     //
     // });
@@ -67,14 +69,14 @@ class NearbyLocations {
         lola.name.toString(), lola.latitude, lola.longitude));
   }
 
-  _initializeGeoFireMechanic() {
+  static _initializeGeoFireMechanic() {
     String pathToReference = "available/mechanics";
     // String pathToReference = "availableMechanics";
     pathToReference = dbRef.child(pathToReference).path;
     Geofire.initialize(pathToReference);
   }
 
-  _initializeGeoFireProviders() {
+  static _initializeGeoFireProviders() {
     String pathToReference = "available/providers";
     // String pathToReference = "availableProviders";
     pathToReference = dbRef.child(pathToReference).path;
@@ -101,7 +103,7 @@ stt38c5j0s
 
   */
 
-  Future getMechanicData(String id) async {
+  static Future _getMechanicData(String id) async {
     // FirebaseEmulatorScreen().readmsg();
 
     // dbRef.child("users").child(id).get().then((value) {
@@ -120,7 +122,7 @@ stt38c5j0s
         rating: toDouble((ds.child("rating").value).toString()));
   }
 
-  getProviderData(String id) async {
+  static _getProviderData(String id) async {
     // FirebaseEmulatorScreen().readmsg();
     DataSnapshot ds =
         await dbRef.child("users").child("providers").child(id).get();
@@ -134,15 +136,10 @@ stt38c5j0s
         nationalID: (ds.child("nationalID").value).toString());
   }
 
-  getNearbyMechanics(double lat,double long, double radius) async {
-    nearbyMechanics.clear();
-    // String pathToReference = "available/mechanics";
-    // pathToReference = FirebaseDatabase.instance.ref().child("available").child("mechanics").path;
-    // Geofire.initialize(pathToReference);
-
-    _initializeGeoFireMechanic();
-
-    ///TODO insert user location
+  _getNearbyMechanicsSecondVersion(double lat,double long, double radius,List<Mechanic> nearbyMechanics) async {
+    // Stream? st = Geofire.queryAtLocation(lat,long, radius);
+    await _initializeGeoFireMechanic();
+    StreamSubscription? nearbyMechanicSubscription =
     Geofire.queryAtLocation(lat,long, radius)?.listen((map) {
       if (map != null) {
         var callBack = map['callBack'];
@@ -151,7 +148,72 @@ stt38c5j0s
         //longitude will be retrieved from map['longitude']
         switch (callBack) {
           case Geofire.onKeyEntered:
-            getMechanicData(map["key"]).then((value) {
+            _getMechanicData(map["key"]).then((value) {
+              nearbyMechanics.add(value);
+              print("Added mechanic: "+value.name);
+            });
+
+            break;
+
+          case Geofire.onKeyExited:
+          // keysRetrieved.remove(map["key"]);
+            for (var m in nearbyMechanics) {
+              if(m.id == map["key"]){
+                nearbyMechanics.remove(m);
+                print("Added mechanic: "+m.name.toString());
+              }
+            }
+            break;
+
+          case Geofire.onKeyMoved:
+          ///TODO to be tested
+          // Update your key's location
+          // for (var m in nearbyMechanics) {
+          //   if(m.id == map["key"]){
+          //     getMechanicData(map["key"]).then((value) {
+          //       m = value;
+          //     });
+          //   }
+          // }
+            print("a7eh update");
+            break;
+
+          case Geofire.onGeoQueryReady:
+          // All Intial Data is loaded
+            print("sad");
+            print(map["result"]);
+
+            break;
+        }
+      }
+    });
+
+    nearbyMechanicSubscription?.onDone(() {print("done");nearbyMechanicSubscription.cancel(); print("done");});
+  }
+
+  static stopListener() async {
+    return await Geofire.stopListener();
+  }
+
+  static getNearbyMechanics(double lat,double long, double radius,List<Mechanic> nearbyMechanics) async {
+    nearbyMechanics.clear();
+    // String pathToReference = "available/mechanics";
+    // pathToReference = FirebaseDatabase.instance.ref().child("available").child("mechanics").path;
+    // Geofire.initialize(pathToReference);
+
+    _initializeGeoFireMechanic();
+
+    ///TODO insert user location
+    Geofire.queryAtLocation(lat,long, radius)?.listen(
+            (map) {
+      if (map != null) {
+        var callBack = map['callBack'];
+
+        //latitude will be retrieved from map['latitude']
+        //longitude will be retrieved from map['longitude']
+        switch (callBack) {
+          case Geofire.onKeyEntered:
+            _getMechanicData(map["key"]).then((value) {
               nearbyMechanics.add(value);
               print("Added mechanic: "+value.name);
             });
@@ -189,10 +251,11 @@ stt38c5j0s
             break;
         }
       }
-    });
+    }
+    );
   }
-  getNearbyProviders(double lat,double long, double radius) async {
-    nearbyMechanics.clear();
+  static getNearbyProviders(double lat,double long, double radius,List<TowProvider> nearbyProviders) async {
+    nearbyProviders.clear();
     // String pathToReference = "available/mechanics";
     // pathToReference = FirebaseDatabase.instance.ref().child("available").child("mechanics").path;
     // Geofire.initialize(pathToReference);
@@ -210,7 +273,7 @@ stt38c5j0s
         switch (callBack) {
           case Geofire.onKeyEntered:
 
-            getProviderData(map["key"]).then((value) {
+            _getProviderData(map["key"]).then((value) {
               nearbyProviders.add(value);
               print("Added provider: "+value.name);
             });

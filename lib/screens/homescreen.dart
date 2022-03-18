@@ -8,6 +8,8 @@ import 'package:http/http.dart' as http;
 import 'package:slahly/classes/firebase/nearbylocations.dart';
 import 'package:slahly/classes/firebase/roadsideassistance/roadsideassistance.dart';
 import 'package:slahly/classes/models/location.dart';
+import 'package:slahly/classes/models/mechanic.dart';
+import 'package:slahly/classes/models/towProvider.dart';
 import 'package:slahly/main.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -50,8 +52,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
             ElevatedButton(
                 onPressed: ()async{
+                  List<Mechanic> nearb = [];
                   // await FirebaseAuth.instance.signOut();
-                   geo.getNearbyMechanics(31.206971, 29.919035,100);
+                  NearbyLocations.getNearbyMechanics(31.206971, 29.919035,100,nearb);
 
 
                   // print("Keys retrieved "+NearbyLocations.keysRetrieved.length.toString());
@@ -60,10 +63,12 @@ class _HomeScreenState extends State<HomeScreen> {
                   // }
                 },
                 child: Text('get nearby mechanics')),
+
             ElevatedButton(
                 onPressed: ()async{
                   // await FirebaseAuth.instance.signOut();
-                  geo.getNearbyProviders(31.206971, 29.919035,100);
+                  List<TowProvider> nearb = [];
+                  NearbyLocations.getNearbyProviders(31.206971, 29.919035,100,nearb);
 
 
                   // print("Keys retrieved "+NearbyLocations.keysRetrieved.length.toString());
@@ -72,6 +77,19 @@ class _HomeScreenState extends State<HomeScreen> {
                   // }
                 },
                 child: Text('get nearby providers')),
+            ElevatedButton(
+                onPressed: ()async{
+                  Mechanic m = Mechanic(name: "",email: "",id: "123");
+                  TowProvider p = TowProvider(name: "name", email: "email", isCenter: false,id: "456");
+                  CustomLocation l = CustomLocation(longitude: 1,latitude: 2);
+                  RSA r = RSA();
+                  r.setLocation(l);
+                  r.setMechanic(m,false);
+                  r.setProvider(p,false);
+                  print("sad");
+                  r.requestRSA();
+                },
+                child: Text('Test RSA request')),
 
           ],
         ),
