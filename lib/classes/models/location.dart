@@ -1,8 +1,11 @@
 class CustomLocation {
-  double? longitude;
-  double? latitude;
-  String? address;
-  String? name;
+  late double longitude;
+  late double latitude;
+  late String? address;
+  late String? name;
+  late LocationType? type;
 
-  CustomLocation(this.longitude, this.latitude, this.address, this.name);
+  CustomLocation({required this.longitude, required this.latitude, this.address, this.name,this.type});
 }
+
+enum LocationType{mechanic,provider}
