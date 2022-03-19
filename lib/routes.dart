@@ -13,7 +13,7 @@ import 'package:slahly/screens/myLocation/mylocationscreen.dart';
 class Routing {
   get router => GoRouter(
 
-    initialLocation: MyLocationScreen.routeName,
+    initialLocation: HomePage.routeName,
 
     routes: <GoRoute> [
       GoRoute(
