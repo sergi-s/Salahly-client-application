@@ -10,5 +10,6 @@
   "or": "or",
   "confirm_password": "confirm password",
   "sign_up": "sign up",
-  "dont_have_account": "Dont have an account? Signup now"
+  "dont_have_account": "Dont have an account? Signup now",
+  "my_location": "My Location"
 }
