@@ -85,6 +85,10 @@ flutter:
   assets:
     - assets/images/
     - assets/translations/
+    - assets/images/logo ta5arog white car.png
+    - assets/images/logo ta5arog white salahli.png
+    - assets/images/Towing-amico copy.png
+    - assets/images/wavy shape copy.png
   #   - images/a_dot_ham.jpeg
 
 flutter_flavor:

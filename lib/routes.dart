@@ -1,4 +1,5 @@
 import 'package:go_router/go_router.dart';
+import 'package:slahly/screens/homepage.dart
 import 'package:slahly/classes/firebase/nearbylocations.dart';
 import 'package:slahly/screens/firebaseemulatortestscreen/firebaseemulatortestscreen.dart';
 import 'package:slahly/screens/homescreen.dart';
@@ -30,6 +31,10 @@ class Routing {
       GoRoute(
         path: HomeScreen.routeName,
         builder: (context, state) => HomeScreen(),
+      ),
+      GoRoute(
+        path: HomePage.routeName,
+        builder: (context, state) => HomePage(),
       ),
       GoRoute(
         path: ChooseProviderScreen.routeName,
