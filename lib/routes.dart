@@ -1,5 +1,5 @@
 import 'package:go_router/go_router.dart';
-import 'package:slahly/screens/homepage.dart
+import 'package:slahly/screens/homepage.dart';
 import 'package:slahly/classes/firebase/nearbylocations.dart';
 import 'package:slahly/screens/firebaseemulatortestscreen/firebaseemulatortestscreen.dart';
 import 'package:slahly/screens/homescreen.dart';
@@ -8,12 +8,12 @@ import 'package:slahly/screens/roadsideassistance/choosemechanic.dart';
 import 'package:slahly/screens/roadsideassistance/chooseprovider.dart';
 import 'package:slahly/screens/roadsideassistance/waitforarrival.dart';
 import 'package:slahly/screens/splashScreen/splashscreen.dart';
-import 'package:slahly/screens/myLocation/getLocationComponent.dart';
+import 'package:slahly/screens/myLocation/mylocationscreen.dart';
 
 class Routing {
   get router => GoRouter(
 
-    initialLocation: HomeScreen.routeName,
+    initialLocation: MyLocationScreen.routeName,
 
     routes: <GoRoute> [
       GoRoute(
@@ -21,8 +21,8 @@ class Routing {
         builder: (context, state) => LoginSignupScreen(),
       ),
       GoRoute(
-        path: LocationScreen.routeName,
-        builder: (context, state) => LocationScreen(),
+        path: MyLocationScreen.routeName,
+        builder: (context, state) => MyLocationScreen(),
       ),
       GoRoute(
         path: SplashScreen.routeName,

@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:slahly/classes/firebase/nearbylocations.dart';
@@ -6,9 +5,7 @@ import 'package:slahly/classes/models/client.dart';
 import 'package:slahly/classes/models/location.dart';
 import 'package:slahly/classes/models/mechanic.dart';
 import 'package:slahly/classes/models/towProvider.dart';
-import 'package:string_validator/string_validator.dart';
-
-import '../../../main.dart';
+import 'package:slahly/main.dart';
 
 class RSA {
   RSA_state state = RSA_state.created;

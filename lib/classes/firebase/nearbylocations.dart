@@ -1,20 +1,13 @@
 import 'dart:async';
-
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter_geofire/flutter_geofire.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:slahly/classes/firebase/roadsideassistance/roadsideassistance.dart';
 import 'package:slahly/classes/models/location.dart';
 import 'package:slahly/classes/models/mechanic.dart';
 import 'package:slahly/classes/models/towProvider.dart';
 import 'package:slahly/main.dart';
-import 'package:slahly/screens/firebaseemulatortestscreen/firebaseemulatortestscreen.dart';
 import 'package:string_validator/string_validator.dart';
 
-class Mo {
-  Mo m = Mo();
-}
 
 class NearbyLocations {
   // List<Mechanic> nearbyMechanics = [] ;
@@ -31,14 +24,14 @@ class NearbyLocations {
     CustomLocation loc_1 = CustomLocation(
         latitude: 31.207877,
         longitude: 29.918180,
-        // name: "1",
-        name: "mech 1",
+        name: "1",
+        // name: "mech 1",
         type: LocationType.mechanic);
     CustomLocation loc_2 = CustomLocation(
         latitude: 31.207545,
         longitude: 29.919915,
-        // name: "2",
-        name: "mech 2",
+        name: "2",
+        // name: "mech 2",
         type: LocationType.mechanic);
     var locs = [loc_1, loc_2];
     //31.207545, 29.919915
@@ -48,7 +41,7 @@ class NearbyLocations {
   }
 
   static _addNearbyProviders() async {
-    _initializeGeoFireProviders();
+    _initializeGeoFireProvider();
     CustomLocation loc_3 = CustomLocation(
         latitude: 31.206866,
         longitude: 29.918298,
@@ -76,7 +69,7 @@ class NearbyLocations {
     Geofire.initialize(pathToReference);
   }
 
-  static _initializeGeoFireProviders() {
+  static _initializeGeoFireProvider() {
     String pathToReference = "available/providers";
     // String pathToReference = "availableProviders";
     pathToReference = dbRef.child(pathToReference).path;
@@ -188,7 +181,7 @@ stt38c5j0s
       }
     });
 
-    nearbyMechanicSubscription?.onDone(() {print("done");nearbyMechanicSubscription.cancel(); print("done");});
+    // nearbyMechanicSubscription?.onDone(() {print("done");nearbyMechanicSubscription.cancel(); print("done");});
   }
 
   static stopListener() async {
@@ -260,7 +253,7 @@ stt38c5j0s
     // pathToReference = FirebaseDatabase.instance.ref().child("available").child("mechanics").path;
     // Geofire.initialize(pathToReference);
 
-    _initializeGeoFireProviders();
+    _initializeGeoFireProvider();
 
     ///TODO insert user location
     Geofire.queryAtLocation(lat,long, radius)?.listen((map) {

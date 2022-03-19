@@ -1,16 +1,7 @@
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:slahly/classes/firebase/firebase.dart';
-import 'package:slahly/classes/models/client.dart';
-import 'package:slahly/main.dart';
-import 'package:http/http.dart' as http;
-import 'package:go_router/go_router.dart';
-import 'package:slahly/screens/roadsideassistance/choosemechanic.dart';
-import 'package:slahly/screens/roadsideassistance/chooseprovider.dart';
 
 class HomePage extends StatelessWidget{
   const HomePage({Key? key}) : super(key: key);

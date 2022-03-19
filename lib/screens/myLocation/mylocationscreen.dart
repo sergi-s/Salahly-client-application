@@ -1,17 +1,17 @@
 import 'dart:async';
-
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
-class LocationScreen extends StatefulWidget {
+class MyLocationScreen extends StatefulWidget {
   static const String routeName = "/locationComponent";
 
   @override
-  _LocationScreenState createState() => _LocationScreenState();
+  _MyLocationScreenState createState() => _MyLocationScreenState();
 }
 
-class _LocationScreenState extends State<LocationScreen> {
+class _MyLocationScreenState extends State<MyLocationScreen> {
   //Google maps
   final Completer<GoogleMapController> _controllerGoogleMap = Completer();
   late GoogleMapController newGoogleMapController;
@@ -36,7 +36,7 @@ class _LocationScreenState extends State<LocationScreen> {
           onPressed: () {
             locatePosition();
           },
-          label: Text('My Location'), //TODO m4 3arf arbot el String b tr()
+          label: Text('my_location'.tr()), //TODO m4 3arf arbot el String b tr()
           icon: const Icon(Icons.location_on),
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
