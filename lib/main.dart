@@ -7,8 +7,8 @@ import 'package:slahly/MyApp.dart';
 import 'package:slahly/classes/firebase/firebase.dart';
 import 'package:slahly/screens/homepage.dart';
 
-DatabaseReference usersRef = FirebaseDatabase.instance.ref().child("user");
-final DatabaseReference dbRef =  FirebaseDatabase.instance.ref();
+DatabaseReference usersRef =  FirebaseDatabase.instance.ref().child("user");
+DatabaseReference dbRef = FirebaseDatabase.instance.ref();
 void main() async {
   FlavorConfig(
     name: "DEVELOPMENT",
@@ -31,7 +31,8 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await EasyLocalization.ensureInitialized();
   await Firebase.initializeApp();
-  await FirebaseCustom().connectToEmulator();
+  // await FirebaseCustom().connectToEmulator();
+
   runApp(
     EasyLocalization(
       supportedLocales: [Locale('en'), Locale('ar')],
