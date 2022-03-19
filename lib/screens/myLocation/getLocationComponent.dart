@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:place_picker/place_picker.dart';
+// import 'package:place_picker/place_picker.dart';
 import 'package:slahly/utils/constants.dart';
 
 class LocationScreen extends StatefulWidget {
@@ -167,14 +167,14 @@ class _LocationScreenState extends State<LocationScreen> {
 
   //PlacePicker old
   void showPlacePicker(customLocation) async {
-    LocationResult result = await Navigator.of(context).push(MaterialPageRoute(
-        builder: (context) => PlacePicker(
-              googleMapsAPI,
-              displayLocation: customLocation,
-            )));
+    // LocationResult result = await Navigator.of(context).push(MaterialPageRoute(
+    //     builder: (context) => PlacePicker(
+    //           googleMapsAPI,
+    //           displayLocation: customLocation,
+    //         )));
 
     // Handle the result in your way
-    print(result);
+    // print(result);
   }
 
   Future<Position> getMyLocationOLDOLDOLD() async {

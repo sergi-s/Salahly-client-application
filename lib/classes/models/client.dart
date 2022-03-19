@@ -3,7 +3,7 @@ import 'package:slahly/abstract_classes/user.dart';
 import 'package:slahly/classes/models/location.dart';
 
 class Client extends UserType {
-  int subscription;
+  SubscriptionTypes subscription = SubscriptionTypes.silver;
 
   Client({
     required String? name,
@@ -18,7 +18,7 @@ class Client extends UserType {
     String? address,
     String? phoneNumber,
     CustomLocation? loc,
-    required this.subscription,
+     required this.subscription,
   }) : super(
             name: name,
             email: email,
@@ -37,13 +37,29 @@ class Client extends UserType {
     super.setPassword = value;
   }
 
+  Map<SubscriptionTypes,double> _subscriptionData = {
+    SubscriptionTypes.silver: 4,
+    SubscriptionTypes.gold: 50,
+    SubscriptionTypes.platinum: 200
+  };
+
+  double? getSubscriptionRange(){
+    return _subscriptionData.containsKey(subscription)?_subscriptionData[subscription]:0;
+  }
+
   @override
   bool isValid() {
-    return (super.isValid() && subscriptionValidate(subscription));
+    return (super.isValid()
+        // && subscriptionValidate(subscription)
+    );
   }
 
   // Validation
   bool subscriptionValidate(int subscription) {
     return subscription > 0;
   }
+}
+
+enum SubscriptionTypes{
+  silver,gold,platinum
 }

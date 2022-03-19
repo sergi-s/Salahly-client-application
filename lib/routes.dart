@@ -1,4 +1,6 @@
 import 'package:go_router/go_router.dart';
+import 'package:slahly/classes/firebase/nearbylocations.dart';
+import 'package:slahly/screens/firebaseemulatortestscreen/firebaseemulatortestscreen.dart';
 import 'package:slahly/screens/homescreen.dart';
 import 'package:slahly/screens/login_signup/signupscreen.dart';
 import 'package:slahly/screens/roadsideassistance/choosemechanic.dart';
@@ -10,7 +12,7 @@ import 'package:slahly/screens/myLocation/getLocationComponent.dart';
 class Routing {
   get router => GoRouter(
 
-    initialLocation: SplashScreen.routeName,
+    initialLocation: HomeScreen.routeName,
 
     routes: <GoRoute> [
       GoRoute(
@@ -40,6 +42,10 @@ class Routing {
       GoRoute(
         path: WaitForArrival.routeName,
         builder: (context, state) => WaitForArrival(),
+      ),
+      GoRoute(
+        path: FirebaseEmulatorScreen.routeName,
+        builder: (context, state) => FirebaseEmulatorScreen(),
       ),
     ],
   );

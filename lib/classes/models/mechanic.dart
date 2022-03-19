@@ -6,10 +6,12 @@ class Mechanic extends UserType {
   String? nationalID;
   bool? isCenter;
   bool? isAccepted;
+  double? rating;
 
   Mechanic({
     required String? name,
     required String? email,
+    this.rating,
     String? id,
     String? birthDay,
     String? createdDate,
