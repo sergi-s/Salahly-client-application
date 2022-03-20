@@ -54,13 +54,14 @@ dependencies:
   string_validator: ^0.3.0
   geolocator: ^8.2.0
   place_picker: ^0.9.20-nullsafety
-
+  google_fonts: ^2.1.0
 
 
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is

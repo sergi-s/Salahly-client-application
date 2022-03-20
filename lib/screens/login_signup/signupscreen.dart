@@ -15,7 +15,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen>
     with SingleTickerProviderStateMixin {
   bool isLogin = true;
   late Animation<double> ContainerSize;
-  Duration animationDuration = Duration(milliseconds: 200);
+  Duration animationDuration = Duration(milliseconds:900);
   late AnimationController animationController;
 
   @override
@@ -42,6 +42,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen>
         .animate(
             CurvedAnimation(parent: animationController, curve: Curves.linear));
     return Scaffold(
+      backgroundColor: Color(0xFFd1d9e6),
         body: Stack(
       children: [
         //cancel buttom
@@ -72,7 +73,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen>
         //login form
         AnimatedOpacity(
           opacity: isLogin ? 1.0 : 0.0,
-          duration: animationDuration * 4,
+          duration: animationDuration * 2,
           child: Align(
             alignment: Alignment.center,
             child: SingleChildScrollView(
@@ -96,7 +97,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen>
         // Registration
         AnimatedOpacity(
           opacity: isLogin ? 0.0 : 1.0,
-          duration: animationDuration * 5,
+          duration: animationDuration * 2,
           child: Visibility(
             visible: !isLogin,
             child: Align(
