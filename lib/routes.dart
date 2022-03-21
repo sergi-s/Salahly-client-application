@@ -9,38 +9,36 @@ import 'package:slahly/screens/myLocation/getLocationComponent.dart';
 
 class Routing {
   get router => GoRouter(
-
-    initialLocation: SplashScreen.routeName,
-
-    routes: <GoRoute> [
-      GoRoute(
-        path: LoginSignupScreen.routeName,
-        builder: (context, state) => LoginSignupScreen(),
-      ),
-      GoRoute(
-        path: LocationScreen.routeName,
-        builder: (context, state) => LocationScreen(),
-      ),
-      GoRoute(
-        path: SplashScreen.routeName,
-        builder: (context, state) => SplashScreen(),
-      ),
-      GoRoute(
-        path: HomeScreen.routeName,
-        builder: (context, state) => HomeScreen(),
-      ),
-      GoRoute(
-        path: ChooseProviderScreen.routeName,
-        builder: (context, state) => ChooseProviderScreen(),
-      ),
-      GoRoute(
-        path: ChooseMechanicScreen.routeName,
-        builder: (context, state) => ChooseMechanicScreen(),
-      ),
-      GoRoute(
-        path: WaitForArrival.routeName,
-        builder: (context, state) => WaitForArrival(),
-      ),
-    ],
-  );
+        initialLocation: ChooseMechanicScreen.routeName,
+        routes: <GoRoute>[
+          GoRoute(
+            path: LoginSignupScreen.routeName,
+            builder: (context, state) => LoginSignupScreen(),
+          ),
+          GoRoute(
+            path: LocationScreen.routeName,
+            builder: (context, state) => LocationScreen(),
+          ),
+          GoRoute(
+            path: SplashScreen.routeName,
+            builder: (context, state) => SplashScreen(),
+          ),
+          GoRoute(
+            path: HomeScreen.routeName,
+            builder: (context, state) => HomeScreen(),
+          ),
+          GoRoute(
+            path: ChooseProviderScreen.routeName,
+            builder: (context, state) => ChooseProviderScreen(),
+          ),
+          GoRoute(
+            path: ChooseMechanicScreen.routeName,
+            builder: (context, state) => ChooseMechanicScreen(),
+          ),
+          GoRoute(
+            path: WaitForArrival.routeName,
+            builder: (context, state) => WaitForArrival(),
+          ),
+        ],
+      );
 }
