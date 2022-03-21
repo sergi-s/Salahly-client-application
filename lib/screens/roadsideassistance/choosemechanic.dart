@@ -8,18 +8,21 @@ class ChooseMechanicScreen extends StatelessWidget {
   List<Mechanic> mechanics = [
     Mechanic(
         name: 'Ahmed tarek',
-        email: 'Workshop',
+        phoneNumber: '011156',
         isCenter: true,
-        avatar: 'https://www.woolha.com/media/2020/03/eevee.png'),
+        avatar: 'https://www.woolha.com/media/2020/03/eevee.png',
+        email: 'email@yahoo.com'),
     Mechanic(
         name: 'Sergi Samir',
-        email: 'mechanic',
+        email: 'mechanic@yahoo.com',
+        phoneNumber: '012023',
         isCenter: false,
         avatar:
             'https://thumbs.dreamstime.com/b/default-avatar-photo-placeholder-profile-image-default-avatar-photo-placeholder-profile-image-eps-file-easy-to-edit-124557892.jpg'),
     Mechanic(
         name: 'Mahmoud Magdy',
-        email: 'Workshop',
+        email: 'Workshop@gmail.com',
+        phoneNumber: '10320312',
         isCenter: true,
         avatar:
             'https://thumbs.dreamstime.com/b/default-avatar-photo-placeholder-profile-image-default-avatar-photo-placeholder-profile-image-eps-file-easy-to-edit-124557892.jpg')
@@ -67,90 +70,104 @@ class ChooseMechanicScreen extends StatelessWidget {
             SizedBox(height: 10),
             ListView.builder(
               itemBuilder: (BuildContext, index) {
-                return Container(
-                  height: 180,
-                  child: Card(
-                    // shape: RoundedRectangleBorder(
-                    //   borderRadius: BorderRadius.circular(15.0),
-                    // ),
-                    child: Column(
-                      children: [
-                        ListTile(
-                          leading: CircleAvatar(
-                            backgroundImage: AssetImage(
-                              mechanics[index].avatar.toString(),
-                            ),
-                            radius: 25,
-                          ),
-                          title: Text(
-                            mechanics[index].name.toString(),
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 20),
-                          ),
-                          subtitle: Container(
-                            child: Column(children: [
-                              Row(
-                                children: [
-                                  Text(
-                                    mechanics[index].email.toString(),
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 16),
-                                  ),
-                                  Icon(
-                                    (mechanics[index].isCenter!)
-                                        ? Icons.favorite
-                                        : null,
-                                    color: Colors.pink,
-                                    size: 24.0,
-                                    semanticLabel:
-                                        'Text to announce in accessibility modes',
-                                  )
-                                ],
-                              ),
-                              Row(
-                                children: [
-                                  Container(
-                                    // padding: const EdgeInsets.symmetric(
-                                    //     horizontal: 83.0),
-                                    child: Text(
-                                      'Rating : 4.8',
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 16),
-                                    ),
-                                  ),
-
-                                  // mechanics[index].isCenter? : null ,
-                                ],
-                              ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: [
-                                  Container(
-                                    width: 100.0,
-                                    child: ElevatedButton(
-                                      onPressed: () {},
-                                      child: Text('Confirm'),
-                                      style: ElevatedButton.styleFrom(
-                                          shape: StadiumBorder(),
-                                          primary: Colors.blueGrey),
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ]),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                );
+                return MechanicTile(
+                    mechanics[index].email.toString(),
+                    mechanics[index].avatar.toString(),
+                    mechanics[index].phoneNumber.toString(),
+                    mechanics[index].name.toString(),
+                    mechanics[index].isCenter!);
               },
               itemCount: mechanics.length,
               shrinkWrap: true,
               padding: EdgeInsets.all(5),
               scrollDirection: Axis.vertical,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class MechanicTile extends StatelessWidget {
+  String email;
+  String avatar;
+  String phone;
+  String name;
+  bool isCenter;
+
+  MechanicTile(this.email, this.avatar, this.phone, this.name, this.isCenter);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 180,
+      child: Card(
+        // shape: RoundedRectangleBorder(
+        //   borderRadius: BorderRadius.circular(15.0),
+        // ),
+        child: Column(
+          children: [
+            ListTile(
+              leading: CircleAvatar(
+                backgroundImage: AssetImage(
+                  avatar,
+                ),
+                radius: 25,
+              ),
+              title: Text(
+                name,
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+              ),
+              subtitle: Container(
+                child: Column(children: [
+                  Row(
+                    children: [
+                      Text(
+                        phone,
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 16),
+                      ),
+                      Icon(
+                        (isCenter) ? Icons.favorite : null,
+                        color: Colors.pink,
+                        size: 24.0,
+                        semanticLabel:
+                            'Text to announce in accessibility modes',
+                      )
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Container(
+                        // padding: const EdgeInsets.symmetric(
+                        //     horizontal: 83.0),
+                        child: Text(
+                          'Rating : 4.8',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 16),
+                        ),
+                      ),
+
+                      // mechanics[index].isCenter? : null ,
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Container(
+                        width: 100.0,
+                        child: ElevatedButton(
+                          onPressed: () {},
+                          child: Text('Confirm'),
+                          style: ElevatedButton.styleFrom(
+                              shape: StadiumBorder(), primary: Colors.blueGrey),
+                        ),
+                      )
+                    ],
+                  ),
+                ]),
+              ),
             ),
           ],
         ),
