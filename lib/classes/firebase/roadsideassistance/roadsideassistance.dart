@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:firebase_database/firebase_database.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:slahly/classes/firebase/nearbylocations.dart';
@@ -6,6 +8,9 @@ import 'package:slahly/classes/models/location.dart';
 import 'package:slahly/classes/models/mechanic.dart';
 import 'package:slahly/classes/models/towProvider.dart';
 import 'package:slahly/main.dart';
+import "package:http/http.dart" as http;
+
+import '../../../utils/constants.dart';
 
 class RSA {
   RSA_state state = RSA_state.created;
@@ -18,11 +23,11 @@ class RSA {
   late List<Mechanic> nearbyMechanics; // not included in FB
   late List<TowProvider> nearbyProviders; // not included in FB
 
-  setLocation(CustomLocation ll){
+  setLocation(CustomLocation ll) {
     _location = ll;
   }
 
-  Future _checkLocationPermission() async {
+  static Future _checkLocationPermission() async {
     bool serviceEnabled;
     LocationPermission permission;
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
@@ -50,68 +55,76 @@ class RSA {
 
     if (permission == LocationPermission.deniedForever) {
       // Permissions are denied forever, handle appropriately.
-      print('Location permissions are permanently denied, we cannot request permissions.');
+      print(
+          'Location permissions are permanently denied, we cannot request permissions.');
       return Future.error(
           'Location permissions are permanently denied, we cannot request permissions.');
     }
     return true;
   }
 
-  Future<CustomLocation> getUserLocation() async {
-    _checkLocationPermission().onError((error, stackTrace)  {
+  static Future<CustomLocation> getUserLocation() async {
+    _checkLocationPermission().onError((error, stackTrace) {
       print(error);
       return null;
     });
     print("sad");
     Position pos = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high);
-    return CustomLocation(longitude: pos.longitude,latitude: pos.latitude);
+    return CustomLocation(longitude: pos.longitude, latitude: pos.latitude);
   }
-  requestNearbyProviders() async{
+
+  requestNearbyProviders() async {
     //uses location get nearby mechs
     nearbyProviders = [];
-    await NearbyLocations.getNearbyProviders(_location.latitude, _location.longitude,
+    await NearbyLocations.getNearbyProviders(
+        _location.latitude,
+        _location.longitude,
         // user.getSubscriptionRange()!.toDouble(),
         100,
-        nearbyProviders
-    );
+        nearbyProviders);
   }
+
   requestNearbyMechanics() async {
     //uses location get nearby mechs
     nearbyMechanics = [];
 
-    await NearbyLocations.getNearbyMechanics(_location.latitude, _location.longitude,
-    // user.getSubscriptionRange()!.toDouble(),
-    100,
-     nearbyMechanics
-    );
+    await NearbyLocations.getNearbyMechanics(
+        _location.latitude,
+        _location.longitude,
+        // user.getSubscriptionRange()!.toDouble(),
+        100,
+        nearbyMechanics);
   }
 
-  setMechanic(Mechanic mech,bool stopListener) {
+  setMechanic(Mechanic mech, bool stopListener) {
     //momken nbdlha b firebase ID aw ayan kan
     _mechanic = mech;
-    if(stopListener)
-    NearbyLocations.stopListener();
+    if (stopListener) NearbyLocations.stopListener();
   }
 
-  setProvider(TowProvider provider,bool stopListener) {
+  setProvider(TowProvider provider, bool stopListener) {
     //momken nbdlha b firebase ID aw ayan kan
     _towProvider = provider;
-    if(stopListener)
-    NearbyLocations.stopListener();
+    if (stopListener) NearbyLocations.stopListener();
   }
+
   Future requestRSA() async {
     //testing purpose
-    _user = Client(email: 'momo',name: "sd",id: "3", subscription: SubscriptionTypes.silver);
+    _user = Client(
+        email: 'momo',
+        name: "sd",
+        id: "3",
+        subscription: SubscriptionTypes.silver);
 
     DatabaseReference newRSA = dbRef.child("rsa").push();
-    if(newRSA != null){
+    if (newRSA != null) {
       await newRSA.set({
         "userID": _user.id,
-        "latitude" : _location.latitude,
-        "longitude" : _location.longitude,
-        "towProviderID" : _towProvider.id,
-        "mechanic" : _mechanic.id,
+        "latitude": _location.latitude,
+        "longitude": _location.longitude,
+        "towProviderID": _towProvider.id,
+        "mechanic": _mechanic.id,
         "state": RSA_state.waiting_for_mech_response.toString()
       });
       state = RSA_state.waiting_for_mech_response;
@@ -120,7 +133,37 @@ class RSA {
     }
     return false;
   }
+
+  static Future<dynamic> getRequest(String url) async {
+    http.Response response = await http.get(Uri.parse(url));
+    try {
+      if (response.statusCode == 200) {
+        String jsonData = response.body;
+        var decodeData = jsonDecode(jsonData);
+        return decodeData;
+      } else {
+        return "failed";
+      }
+    } catch (e) {
+      return "failed";
+    }
+  }
+
+  static Future<String> searchCoordinateAddress(double long, double lat) async {
+    late String placeAddress;
+    String geoURL =
+        "https://open.mapquestapi.com/geocoding/v1/reverse?key=$geoCodingKey&includeRoadMetadata=true&includeNearestIntersection=true&location=${lat},${long}";
+
+    var response = await getRequest(geoURL);
+
+    if (response != "failed") {
+      placeAddress =
+          "${response["results"][0]["locations"][0]["street"]}, ${response["results"][0]["locations"][0]["adminArea3"]}, ${response["results"][0]["locations"][0]["adminArea1"]}";
+    }
+    return placeAddress;
+  }
 }
+
 enum RSA_state {
   canceled,
   created,
@@ -134,4 +177,3 @@ enum RSA_state {
   waiting_for_mech_response,
   waiting_for_prov_response
 }
-
