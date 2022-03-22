@@ -10,10 +10,13 @@ import 'package:slahly/screens/roadsideassistance/waitforarrival.dart';
 import 'package:slahly/screens/splashScreen/splashscreen.dart';
 import 'package:slahly/screens/myLocation/mylocationscreen.dart';
 
+import 'screens/Describeproblem.dart';
+import 'screens/waitforarrvial.dart';
+
 class Routing {
   get router => GoRouter(
 
-    initialLocation: MyLocationScreen.routeName,
+    initialLocation: DescCarProblem.routeName,
 
     routes: <GoRoute> [
       GoRoute(
@@ -51,6 +54,15 @@ class Routing {
       GoRoute(
         path: FirebaseEmulatorScreen.routeName,
         builder: (context, state) => FirebaseEmulatorScreen(),
+      ),
+
+      GoRoute(
+        path: DescCarProblem.routeName,
+        builder: (context, state) => DescCarProblem(),
+      ),
+      GoRoute(
+        path: WaitArrvial.routeName,
+        builder: (context, state) => WaitArrvial(),
       ),
     ],
   );
