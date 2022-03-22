@@ -5,6 +5,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:slahly/classes/firebase/roadsideassistance/roadsideassistance.dart';
 import 'package:slahly/classes/models/location.dart';
+import 'package:slahly/utils/location/getuserlocation.dart';
 
 class MyLocationScreen extends StatefulWidget {
   static const String routeName = "/locationComponent";
@@ -68,7 +69,7 @@ class _MyLocationScreenState extends State<MyLocationScreen> {
   }
 
   void locatePosition() async {
-    currentCustomLoc = await RSA.getUserLocation();
+    currentCustomLoc = await getUserLocation();
     // currentPos = pos;
 
     LatLng latLatPosition =

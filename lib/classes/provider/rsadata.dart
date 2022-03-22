@@ -8,16 +8,10 @@ final rsaProvider = StateNotifierProvider<RSAData, RSA>((ref) {
   return RSAData();
 });
 
-class Counter extends StateNotifier<int> {
-  Counter() : super(10);
-
-  void increment() => state++;
-}
-
 class RSAData extends StateNotifier<RSA> {
 
   RSAData() : super(RSA());
-
+///TODO update state in each function
   //setters
   void assignMechanic(Mechanic mechanic, bool stopListener) {
     state = state.copyWith(mechanic: mechanic);
