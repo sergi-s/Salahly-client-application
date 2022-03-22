@@ -53,7 +53,8 @@ dependencies:
   google_maps_flutter: ^2.1.2
   string_validator: ^0.3.0
   geolocator: ^8.2.0
-  place_picker: ^0.9.20-nullsafety
+  http: ^0.13.4
+  flutter_geofire: ^2.0.1
 
 
 
@@ -84,6 +85,10 @@ flutter:
   assets:
     - assets/images/
     - assets/translations/
+    - assets/images/logo ta5arog white car.png
+    - assets/images/logo ta5arog white salahli.png
+    - assets/images/Towing-amico copy.png
+    - assets/images/wavy shape copy.png
   #   - images/a_dot_ham.jpeg
 
 flutter_flavor:
