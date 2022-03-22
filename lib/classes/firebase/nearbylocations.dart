@@ -310,5 +310,6 @@ stt38c5j0s
   _getUserLocation() async {
     ///TODO re implement after refactoring
     // return await RSA().getUserLocation();
+
   }
 }

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:firebase_database/firebase_database.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:slahly/classes/firebase/nearbylocations.dart';
@@ -6,6 +8,9 @@ import 'package:slahly/classes/models/location.dart';
 import 'package:slahly/classes/models/mechanic.dart';
 import 'package:slahly/classes/models/towProvider.dart';
 import 'package:slahly/main.dart';
+import "package:http/http.dart" as http;
+
+import '../../../utils/constants.dart';
 
 class RSA {
 
@@ -76,6 +81,7 @@ class RSA {
   TowProvider getProvider() => towProvider!;
 
   Future _checkLocationPermission() async {
+
     bool serviceEnabled;
     LocationPermission permission;
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
@@ -131,6 +137,7 @@ class RSA {
         // user.getSubscriptionRange()!.toDouble(),
         100,
         nearbyProviders!);
+
   }
 
   requestNearbyMechanics() async {
@@ -159,11 +166,13 @@ class RSA {
     if (stopListener) {
       NearbyLocations.stopListener();
     }
+
   }
 
   Future requestRSA() async {
     //testing purpose
     user = Client(
+
         email: 'momo',
         name: "sd",
         id: "3",
@@ -183,7 +192,37 @@ class RSA {
     state = RSA_state.waiting_for_mech_response;
     rsaID = newRSA.key.toString();
     return true;
+
     return false;
+  }
+
+  static Future<dynamic> getRequest(String url) async {
+    http.Response response = await http.get(Uri.parse(url));
+    try {
+      if (response.statusCode == 200) {
+        String jsonData = response.body;
+        var decodeData = jsonDecode(jsonData);
+        return decodeData;
+      } else {
+        return "failed";
+      }
+    } catch (e) {
+      return "failed";
+    }
+  }
+
+  static Future<String> searchCoordinateAddress(double long, double lat) async {
+    late String placeAddress;
+    String geoURL =
+        "https://open.mapquestapi.com/geocoding/v1/reverse?key=$geoCodingKey&includeRoadMetadata=true&includeNearestIntersection=true&location=${lat},${long}";
+
+    var response = await getRequest(geoURL);
+
+    if (response != "failed") {
+      placeAddress =
+          "${response["results"][0]["locations"][0]["street"]}, ${response["results"][0]["locations"][0]["adminArea3"]}, ${response["results"][0]["locations"][0]["adminArea1"]}";
+    }
+    return placeAddress;
   }
 }
 

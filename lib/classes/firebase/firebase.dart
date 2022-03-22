@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_renaming_method_parameters
+
 import 'dart:io';
 
 import 'package:firebase_database/firebase_database.dart';
@@ -13,12 +15,12 @@ class FirebaseCustom extends Authentication {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
 
   @override
-  Future<bool> login(Client client) async {
+  Future<bool> login(String email,String password) async {
     // TODO: Magdy
     try {
-      String emm = ((client.email) != null ? client.email : "").toString();
+      String emm = ((email) != null ? email : "").toString();
       final user = await _firebaseAuth.signInWithEmailAndPassword(
-          email: emm, password: client.password);
+          email: emm, password:password);
       if (user != null) {
         return true;
       }
@@ -32,35 +34,37 @@ class FirebaseCustom extends Authentication {
 
 
   @override
-  Future<bool> signup(Client client) async {
-    String emm = ((client.email) != null ? client.email : "").toString();
+  Future<bool> signup(String email,String password) async {
+    String emm = ((email) != null ?email : "").toString();
     final User? firebaseUser = (await _firebaseAuth
             .createUserWithEmailAndPassword(
-                email: emm, password: client.password)
+                email: emm, password:password)
             .catchError((errMsg) {
       print(errMsg);
+      print('5ara');
       return false;
     }))
         .user;
 
     if (firebaseUser != null) {
-      //user created
-      Map userDataMap = {
-        "name": client.name,
-        "email": client.email,
-        "birthday": client.birthDay,
-        "createdDate": client.createdDate,
-        "sex": client.sex,
-        "type": client.type,
-        "avatar": client.avatar,
-        "address": client.address,
-        "phoneNumber": client.phoneNumber,
-        "loc": client.loc
-      };
-      usersRef.child(firebaseUser.uid).set(userDataMap);
       return true;
-    }
+      //user created
+      // Map userDataMap = {
+      //   "name": client.name,
+      //   "email": client.email,
+      //   "birthday": client.birthDay,
+      //   "createdDate": client.createdDate,
+      //   "sex": client.sex,
+      //   "type": client.type,
+      //   "avatar": client.avatar,
+      //   "address": client.address,
+      //   "phoneNumber": client.phoneNumber,
+      //   "loc": client.loc
+      };
+      // usersRef.child(firebaseUser.uid).set(userDataMap);
     return false;
+    }
+
   }
 
   final bool use_emulator = true;
@@ -84,4 +88,3 @@ class FirebaseCustom extends Authentication {
       print("Not using emulator");
   }
 
-}

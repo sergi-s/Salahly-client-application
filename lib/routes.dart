@@ -3,6 +3,7 @@ import 'package:slahly/screens/homepage.dart';
 import 'package:slahly/classes/firebase/nearbylocations.dart';
 import 'package:slahly/screens/firebaseemulatortestscreen/firebaseemulatortestscreen.dart';
 import 'package:slahly/screens/homescreen.dart';
+import 'package:slahly/screens/login_signup/registration.dart';
 import 'package:slahly/screens/login_signup/signupscreen.dart';
 import 'package:slahly/screens/roadsideassistance/choosemechanic.dart';
 import 'package:slahly/screens/roadsideassistance/chooseprovider.dart';
@@ -11,6 +12,9 @@ import 'package:slahly/screens/roadsideassistance/waitforarrival.dart';
 import 'package:slahly/screens/splashScreen/splashscreen.dart';
 import 'package:slahly/screens/myLocation/mylocationscreen.dart';
 import 'package:slahly/screens/testscreen.dart';
+
+import 'screens/Describeproblem.dart';
+import 'screens/waitforarrvial.dart';
 
 class Routing {
   get router => GoRouter(
@@ -61,6 +65,14 @@ class Routing {
       GoRoute(
         path: RSAConfirmationScreen.routeName,
         builder: (context, state) => RSAConfirmationScreen(),
+
+      GoRoute(
+        path: DescCarProblem.routeName,
+        builder: (context, state) => DescCarProblem(),
+      ),
+      GoRoute(
+        path: WaitArrvial.routeName,
+        builder: (context, state) => WaitArrvial(),
       ),
     ],
   );
