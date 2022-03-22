@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:slahly/screens/myLocation/getLocationComponent.dart';
+import 'package:slahly/screens/myLocation/mylocationscreen.dart';
 import 'package:slahly/widgets/login_signup/Rounded_Bottom.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:go_router/go_router.dart';

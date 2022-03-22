@@ -10,5 +10,13 @@
   "or": "أو",
   "confirm_password": "تأكيد كلمة السر",
   "sign_up": "انشاء حساب",
-  "dont_have_account": "ليس لديك حساب؟ سجل الان"
+  "dont_have_account": "ليس لديك حساب؟ سجل الان",
+  "my_location": "موقعي",
+  "Enter Your Problem": "أدخل مشكلتك",
+  "Describe Your Problem": "صِف مشكلتك",
+  "My car is broke and doesn't work":"سيارتي معطلة ولا تعمل",
+  "Send": "إرسال",
+  "Cancel": "إِلغاء",
+  "Problem":"مشكلة"
+
 }

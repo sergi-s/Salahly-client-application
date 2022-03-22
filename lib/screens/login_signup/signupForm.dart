@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:slahly/classes/models/client.dart';
 import 'package:slahly/screens/myLocation/getLocationComponent.dart';
+import 'package:slahly/screens/myLocation/mylocationscreen.dart';
 import 'package:slahly/widgets/login_signup/Rounded_Bottom.dart';
 import 'package:slahly/widgets/login_signup/Rounded_password.dart';
 import 'package:slahly/widgets/login_signup/roundedInput.dart';

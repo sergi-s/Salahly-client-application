@@ -1,6 +1,22 @@
 {
   "rules": {
     ".read": true,
-    ".write": true
+    ".write": true,
+
+    "availableMechanics": {
+      ".indexOn": ["g"]
+    },
+    "availableProviders": {
+      ".indexOn": ["g"]
+    },
+    "providers": {
+      ".indexOn": ["g"]
+    },
+    "mechanics": {
+      ".indexOn": ["g"]
+    },
+    "available": {
+      ".indexOn": ["g"]
+    }
   }
 }

@@ -1,4 +1,7 @@
 import 'package:go_router/go_router.dart';
+import 'package:slahly/screens/homepage.dart';
+import 'package:slahly/classes/firebase/nearbylocations.dart';
+import 'package:slahly/screens/firebaseemulatortestscreen/firebaseemulatortestscreen.dart';
 import 'package:slahly/screens/homescreen.dart';
 import 'package:slahly/screens/login_signup/registration.dart';
 import 'package:slahly/screens/login_signup/signupscreen.dart';
@@ -6,12 +9,15 @@ import 'package:slahly/screens/roadsideassistance/choosemechanic.dart';
 import 'package:slahly/screens/roadsideassistance/chooseprovider.dart';
 import 'package:slahly/screens/roadsideassistance/waitforarrival.dart';
 import 'package:slahly/screens/splashScreen/splashscreen.dart';
-import 'package:slahly/screens/myLocation/getLocationComponent.dart';
+import 'package:slahly/screens/myLocation/mylocationscreen.dart';
+
+import 'screens/Describeproblem.dart';
+import 'screens/waitforarrvial.dart';
 
 class Routing {
   get router => GoRouter(
 
-    initialLocation: SplashScreen.routeName,
+    initialLocation: DescCarProblem.routeName,
 
     routes: <GoRoute> [
       GoRoute(
@@ -19,8 +25,8 @@ class Routing {
         builder: (context, state) => LoginSignupScreen(),
       ),
       GoRoute(
-        path: LocationScreen.routeName,
-        builder: (context, state) => LocationScreen(),
+        path: MyLocationScreen.routeName,
+        builder: (context, state) => MyLocationScreen(),
       ),
       GoRoute(
         path: SplashScreen.routeName,
@@ -29,6 +35,10 @@ class Routing {
       GoRoute(
         path: HomeScreen.routeName,
         builder: (context, state) => HomeScreen(),
+      ),
+      GoRoute(
+        path: HomePage.routeName,
+        builder: (context, state) => HomePage(),
       ),
       GoRoute(
         path: ChooseProviderScreen.routeName,
@@ -43,8 +53,17 @@ class Routing {
         builder: (context, state) => WaitForArrival(),
       ),
       GoRoute(
-        path: WaitForArrival.routeName,
-        builder: (context, state) => registration(),
+        path: FirebaseEmulatorScreen.routeName,
+        builder: (context, state) => FirebaseEmulatorScreen(),
+      ),
+
+      GoRoute(
+        path: DescCarProblem.routeName,
+        builder: (context, state) => DescCarProblem(),
+      ),
+      GoRoute(
+        path: WaitArrvial.routeName,
+        builder: (context, state) => WaitArrvial(),
       ),
     ],
   );
