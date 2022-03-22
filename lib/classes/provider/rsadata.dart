@@ -5,19 +5,7 @@ import 'package:slahly/classes/models/mechanic.dart';
 import 'package:slahly/classes/models/towProvider.dart';
 
 final rsaProvider = StateNotifierProvider<RSAData, RSA>((ref) {
-  String problem =
-      "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a ";
-  Mechanic mech = Mechanic(
-      name: "name",
-      email: "email",
-      avatar: "https://www.woolha.com/media/2020/03/eevee.png",
-      isCenter: false);
-  TowProvider prov = TowProvider(
-      name: "name",
-      email: "email",
-      isCenter: true,
-      avatar: "https://www.woolha.com/media/2020/03/eevee.png");
-  return RSAData(mech,prov,problem);
+  return RSAData();
 });
 
 class Counter extends StateNotifier<int> {
@@ -28,7 +16,7 @@ class Counter extends StateNotifier<int> {
 
 class RSAData extends StateNotifier<RSA> {
 
-  RSAData(mech,prov,problem) : super(RSA(mechanic: mech,provider: prov,problem_description: problem));
+  RSAData() : super(RSA());
 
   //setters
   void assignMechanic(Mechanic mechanic, bool stopListener) {
@@ -51,8 +39,8 @@ class RSAData extends StateNotifier<RSA> {
       // state.setProvider(provider, stopListener);
 
   void assignUserLocation(CustomLocation location) => state = state.copyWith(location: location);
-  void assignProblemDescription(String description) => state = state.copyWith(problem_description: description);
-  void assignUser(String description) => state = state.copyWith(problem_description: description);
+  void assignProblemDescription(String description) => state = state.copyWith(problemDescription: description);
+  void assignUser(String description) => state = state.copyWith(problemDescription: description);
 
   //Getters
   Mechanic getMechanic()=>state.getMechanic();

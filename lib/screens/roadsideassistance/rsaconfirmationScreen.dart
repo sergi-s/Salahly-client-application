@@ -79,8 +79,11 @@ class RSAConfirmationScreen extends ConsumerWidget {
                       "mechanic".tr(),
                       style: TextStyle(fontSize: 20),
                     ),
-                    Tilee(usr: ref.watch(rsaProvider.notifier).getMechanic()//ref.watch(rsaProvider).getMechanic()
-                    ),
+                    Tilee(
+                        usr: ref
+                            .watch(rsaProvider.notifier)
+                            .getMechanic() //ref.watch(rsaProvider).getMechanic()
+                        ),
 
                     ///TODO
                   ],
@@ -96,16 +99,33 @@ class RSAConfirmationScreen extends ConsumerWidget {
                   ],
                 ),
                 ElevatedButton(
-                    onPressed: () {
-                      // rsa.getMechanic().name  = "MOUZAAA";
-                      ref.watch(rsaProvider.notifier).assignMechanic(
-                            Mechanic(name: "Moudzzzz",email: "momomo",isCenter: true,
-                            rating: 2),
-                            false,
-                          );
-
-                    },
-                    child: Text("Change Mech data"))
+                  onPressed: () {
+                    // rsa.getMechanic().name  = "MOUZAAA";
+                    ref.watch(rsaProvider.notifier).assignMechanic(
+                          Mechanic(
+                              name: "Moudzzzz",
+                              email: "momomo",
+                              isCenter: true,
+                              rating: 2),
+                          false,
+                        );
+                  },
+                  child: Text("Change merchanic data"),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    // rsa.getMechanic().name  = "MOUZAAA";
+                    ref.watch(rsaProvider.notifier).assignProvider(
+                          TowProvider(
+                              name: "Provider",
+                              email: "prov@prov.prov",
+                              isCenter: false,
+                              rating: 4.6),
+                          false,
+                        );
+                  },
+                  child: Text("Change provider data"),
+                ),
               ],
             ),
           ),

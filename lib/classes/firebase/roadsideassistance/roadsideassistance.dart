@@ -8,85 +8,72 @@ import 'package:slahly/classes/models/towProvider.dart';
 import 'package:slahly/main.dart';
 
 class RSA {
+
   RSA_state state = RSA_state.created;
-  late CustomLocation location = CustomLocation(latitude: 1, longitude: 1); // lazm yt2sm le long w lat
-  late String RSA_id = "";
-  late String problem_description = "";
-  late Client user = Client(name: "name", email:" email", subscription: SubscriptionTypes.silver);
-  late TowProvider towProvider = TowProvider(name: "name", email: "email", isCenter: false);
-  late Mechanic mechanic = Mechanic(name: "",email: "");
-  late DateTime estimatedTime;
-   List<Mechanic> nearbyMechanics = []; // not included in FB
-   List<TowProvider> nearbyProviders = []; // not included in FB
+  CustomLocation? location; // lazm yt2sm le long w lat
+  String? rsaID;
+  String? problemDescription;
+  Client? user;
+  TowProvider? towProvider;
+  Mechanic? mechanic;
+  DateTime? estimatedTime;
+  List<Mechanic>? nearbyMechanics; // not included in FB
+  List<TowProvider>? nearbyProviders; // not included in FB
 
   _setProblemDescription(String description) {
-    problem_description = description;
+    problemDescription = description;
   }
 
   RSA({
     Mechanic? mechanic,
-    TowProvider? provider,
+    TowProvider? towProvider,
     RSA_state? state,
-    String? problem_description,
+    String? problemDescription,
     List<Mechanic>? nearbyMechanics,
     List<TowProvider>? nearbyProviders,
     CustomLocation? location,
-    String? rsa_id,
+    String? rsaID,
     Client? user,
   }) {
     this.mechanic = mechanic ?? this.mechanic;
-    this.towProvider = provider ?? this.towProvider;
+    this.towProvider = towProvider ?? this.towProvider;
     this.state = state ?? this.state;
-    this.problem_description = problem_description ?? this.problem_description;
+    this.problemDescription = problemDescription ?? problemDescription;
     this.nearbyMechanics = nearbyMechanics ?? this.nearbyMechanics;
     this.nearbyProviders = nearbyProviders ?? this.nearbyProviders;
     this.location = location ?? this.location;
-    this.RSA_id = rsa_id ?? this.RSA_id;
+    this.rsaID = rsaID ?? this.rsaID;
     this.user = user ?? this.user;
   }
-
-  // RSA(Mechanic mechanic, TowProvider provider);
-
-  // RSA({this.location,this.mechanic,required this.towProvider,this.state,this.estimatedTime, this.problem_description, this.nearbyMechanics, this.nearbyProviders})
 
   RSA copyWith({
     Mechanic? mechanic,
     TowProvider? provider,
     RSA_state? state,
-    String? problem_description,
+    String? problemDescription,
     List<Mechanic>? nearbyMechanics,
     List<TowProvider>? nearbyProviders,
     CustomLocation? location,
-    String? rsa_id,
+    String? rsaID,
     Client? user,
   }) =>
       RSA(
           mechanic:mechanic ?? this.mechanic,
-          provider : provider ?? this.towProvider,
+          towProvider : provider ?? this.towProvider,
           state : state ?? this.state,
-          problem_description : problem_description ?? this.problem_description,
+          problemDescription : problemDescription ?? this.problemDescription,
           nearbyMechanics : nearbyMechanics ?? this.nearbyMechanics,
           nearbyProviders : nearbyProviders ?? this.nearbyProviders,
           location : location ?? this.location,
-          rsa_id : rsa_id ?? this.RSA_id,
+          rsaID : rsaID ?? this.rsaID,
           user : user ?? this.user,
       );
 
-  // RSA(Mechanic mech,TowProvider tow, String s){
-  //  _mechanic = mech;
-  //  _towProvider = tow;
-  //  _problem_description = s;
-  // }
+  String getProblemDescription() => problemDescription!;
 
-  String getProblemDescription() => problem_description;
+  Mechanic getMechanic() => mechanic!;
 
-  _setLocation(CustomLocation ll) {
-    location = ll;
-  }
-
-  Mechanic getMechanic() => mechanic;
-
-  TowProvider getProvider() => towProvider;
+  TowProvider getProvider() => towProvider!;
 
   Future _checkLocationPermission() async {
     bool serviceEnabled;
@@ -139,11 +126,11 @@ class RSA {
     //uses location get nearby mechs
     nearbyProviders = [];
     await NearbyLocations.getNearbyProviders(
-        location.latitude,
-        location.longitude,
+        location!.latitude,
+        location!.longitude,
         // user.getSubscriptionRange()!.toDouble(),
         100,
-        nearbyProviders);
+        nearbyProviders!);
   }
 
   requestNearbyMechanics() async {
@@ -151,11 +138,11 @@ class RSA {
     nearbyMechanics = [];
 
     await NearbyLocations.getNearbyMechanics(
-        location.latitude,
-        location.longitude,
+        location!.latitude,
+        location!.longitude,
         // user.getSubscriptionRange()!.toDouble(),
         100,
-        nearbyMechanics);
+        nearbyMechanics!);
   }
 
   _setMechanic(Mechanic mech, bool stopListener) {
@@ -185,19 +172,17 @@ class RSA {
     ///TODO MAKE THIS FROM USER DATA
 
     DatabaseReference newRSA = dbRef.child("rsa").push();
-    if (newRSA != null) {
-      await newRSA.set({
-        "userID": user.id,
-        "latitude": location.latitude,
-        "longitude": location.longitude,
-        "towProviderID": towProvider.id,
-        "mechanic": mechanic.id,
-        "state": RSA_state.waiting_for_mech_response.toString()
-      });
-      state = RSA_state.waiting_for_mech_response;
-      RSA_id = newRSA.key.toString();
-      return true;
-    }
+    await newRSA.set({
+      "userID": user!.id,
+      "latitude": location!.latitude,
+      "longitude": location!.longitude,
+      "towProviderID": towProvider!.id,
+      "mechanic": mechanic!.id,
+      "state": RSA_state.waiting_for_mech_response.toString()
+    });
+    state = RSA_state.waiting_for_mech_response;
+    rsaID = newRSA.key.toString();
+    return true;
     return false;
   }
 }
