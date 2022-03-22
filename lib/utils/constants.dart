@@ -11,6 +11,9 @@ dynamic getGoogleMapsAPI() {
 
 final googleMapsAPI = "AIzaSyCuDZsh0WAgOreWhre_G2PlPJ61yLfGVc4";
 
+// geoCoding Key
+final geoCodingKey = "iuB50RlAEGAluJnwc4M4rDHBBQSbknBS";
+
 // For firebase emulator (don't touch)
 final localHostString = Platform.isAndroid? '10.0.2.2' : 'localhost';
 const int fbdbport = 9000;
