@@ -11,5 +11,11 @@
   "confirm_password": "confirm password",
   "sign_up": "sign up",
   "dont_have_account": "Dont have an account? Signup now",
-  "my_location": "My Location"
+  "my_location": "My Location",
+  "Enter Your Problem": "Enter Your Problem",
+  "Describe Your Problem": "Describe Your Problem",
+  "My car is broke and doesn't work": "My car is broke and doesn't work",
+  "Send": "Send",
+  "Cancel": "Cancel",
+  "Problem":"Problem"
 }
