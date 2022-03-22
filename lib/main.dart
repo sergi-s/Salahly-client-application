@@ -31,8 +31,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await EasyLocalization.ensureInitialized();
   await Firebase.initializeApp();
-  // await FirebaseCustom().connectToEmulator();
-
+  //await FirebaseCustom().connectToEmulator();
   runApp(
     EasyLocalization(
       supportedLocales: [Locale('en'), Locale('ar')],
