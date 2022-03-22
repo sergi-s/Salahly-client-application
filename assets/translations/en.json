@@ -11,5 +11,9 @@
   "confirm_password": "confirm password",
   "sign_up": "sign up",
   "dont_have_account": "Dont have an account? Signup now",
-  "my_location": "My Location"
+  "my_location": "My Location",
+  "confirm_or_edit_data": "Confirm or edit data",
+  "problem_description": "Problem description",
+  "mechanic": "Mechanic",
+  "provider": "Provider"
 }

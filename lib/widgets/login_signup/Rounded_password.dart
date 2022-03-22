@@ -16,6 +16,7 @@ final String hint;
   Widget build(BuildContext context) {
     return InputContainer(
       child:TextField(
+
         cursorColor: Colors.blue,
         obscureText: true,
         decoration:InputDecoration(

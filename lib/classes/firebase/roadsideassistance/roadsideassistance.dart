@@ -9,18 +9,84 @@ import 'package:slahly/main.dart';
 
 class RSA {
   RSA_state state = RSA_state.created;
-  late CustomLocation _location; // lazm yt2sm le long w lat
-  late String RSA_id;
-  late Client _user;
-  late TowProvider _towProvider;
-  late Mechanic _mechanic;
-  late DateTime _estimatedTime;
-  late List<Mechanic> nearbyMechanics; // not included in FB
-  late List<TowProvider> nearbyProviders; // not included in FB
+  late CustomLocation location = CustomLocation(latitude: 1, longitude: 1); // lazm yt2sm le long w lat
+  late String RSA_id = "";
+  late String problem_description = "";
+  late Client user = Client(name: "name", email:" email", subscription: SubscriptionTypes.silver);
+  late TowProvider towProvider = TowProvider(name: "name", email: "email", isCenter: false);
+  late Mechanic mechanic = Mechanic(name: "",email: "");
+  late DateTime estimatedTime;
+   List<Mechanic> nearbyMechanics = []; // not included in FB
+   List<TowProvider> nearbyProviders = []; // not included in FB
 
-  setLocation(CustomLocation ll){
-    _location = ll;
+  _setProblemDescription(String description) {
+    problem_description = description;
   }
+
+  RSA({
+    Mechanic? mechanic,
+    TowProvider? provider,
+    RSA_state? state,
+    String? problem_description,
+    List<Mechanic>? nearbyMechanics,
+    List<TowProvider>? nearbyProviders,
+    CustomLocation? location,
+    String? rsa_id,
+    Client? user,
+  }) {
+    this.mechanic = mechanic ?? this.mechanic;
+    this.towProvider = provider ?? this.towProvider;
+    this.state = state ?? this.state;
+    this.problem_description = problem_description ?? this.problem_description;
+    this.nearbyMechanics = nearbyMechanics ?? this.nearbyMechanics;
+    this.nearbyProviders = nearbyProviders ?? this.nearbyProviders;
+    this.location = location ?? this.location;
+    this.RSA_id = rsa_id ?? this.RSA_id;
+    this.user = user ?? this.user;
+  }
+
+  // RSA(Mechanic mechanic, TowProvider provider);
+
+  // RSA({this.location,this.mechanic,required this.towProvider,this.state,this.estimatedTime, this.problem_description, this.nearbyMechanics, this.nearbyProviders})
+
+  RSA copyWith({
+    Mechanic? mechanic,
+    TowProvider? provider,
+    RSA_state? state,
+    String? problem_description,
+    List<Mechanic>? nearbyMechanics,
+    List<TowProvider>? nearbyProviders,
+    CustomLocation? location,
+    String? rsa_id,
+    Client? user,
+  }) =>
+      RSA(
+          mechanic:mechanic ?? this.mechanic,
+          provider : provider ?? this.towProvider,
+          state : state ?? this.state,
+          problem_description : problem_description ?? this.problem_description,
+          nearbyMechanics : nearbyMechanics ?? this.nearbyMechanics,
+          nearbyProviders : nearbyProviders ?? this.nearbyProviders,
+          location : location ?? this.location,
+          rsa_id : rsa_id ?? this.RSA_id,
+          user : user ?? this.user,
+      );
+
+  // RSA(Mechanic mech,TowProvider tow, String s){
+  //  _mechanic = mech;
+  //  _towProvider = tow;
+  //  _problem_description = s;
+  // }
+
+  String getProblemDescription() => problem_description;
+
+  _setLocation(CustomLocation ll) {
+    location = ll;
+  }
+
+  Mechanic getMechanic() => mechanic;
+
+  TowProvider getProvider() => towProvider;
 
   Future _checkLocationPermission() async {
     bool serviceEnabled;
@@ -50,7 +116,8 @@ class RSA {
 
     if (permission == LocationPermission.deniedForever) {
       // Permissions are denied forever, handle appropriately.
-      print('Location permissions are permanently denied, we cannot request permissions.');
+      print(
+          'Location permissions are permanently denied, we cannot request permissions.');
       return Future.error(
           'Location permissions are permanently denied, we cannot request permissions.');
     }
@@ -58,60 +125,73 @@ class RSA {
   }
 
   Future<CustomLocation> getUserLocation() async {
-    _checkLocationPermission().onError((error, stackTrace)  {
+    _checkLocationPermission().onError((error, stackTrace) {
       print(error);
       return null;
     });
     print("sad");
     Position pos = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high);
-    return CustomLocation(longitude: pos.longitude,latitude: pos.latitude);
+    return CustomLocation(longitude: pos.longitude, latitude: pos.latitude);
   }
-  requestNearbyProviders() async{
+
+  requestNearbyProviders() async {
     //uses location get nearby mechs
     nearbyProviders = [];
-    await NearbyLocations.getNearbyProviders(_location.latitude, _location.longitude,
+    await NearbyLocations.getNearbyProviders(
+        location.latitude,
+        location.longitude,
         // user.getSubscriptionRange()!.toDouble(),
         100,
-        nearbyProviders
-    );
+        nearbyProviders);
   }
+
   requestNearbyMechanics() async {
     //uses location get nearby mechs
     nearbyMechanics = [];
 
-    await NearbyLocations.getNearbyMechanics(_location.latitude, _location.longitude,
-    // user.getSubscriptionRange()!.toDouble(),
-    100,
-     nearbyMechanics
-    );
+    await NearbyLocations.getNearbyMechanics(
+        location.latitude,
+        location.longitude,
+        // user.getSubscriptionRange()!.toDouble(),
+        100,
+        nearbyMechanics);
   }
 
-  setMechanic(Mechanic mech,bool stopListener) {
+  _setMechanic(Mechanic mech, bool stopListener) {
     //momken nbdlha b firebase ID aw ayan kan
-    _mechanic = mech;
-    if(stopListener)
-    NearbyLocations.stopListener();
+    mechanic = mech;
+    if (stopListener) {
+      NearbyLocations.stopListener();
+    }
   }
 
-  setProvider(TowProvider provider,bool stopListener) {
+  _setProvider(TowProvider provider, bool stopListener) {
     //momken nbdlha b firebase ID aw ayan kan
-    _towProvider = provider;
-    if(stopListener)
-    NearbyLocations.stopListener();
+    towProvider = provider;
+    if (stopListener) {
+      NearbyLocations.stopListener();
+    }
   }
+
   Future requestRSA() async {
     //testing purpose
-    _user = Client(email: 'momo',name: "sd",id: "3", subscription: SubscriptionTypes.silver);
+    user = Client(
+        email: 'momo',
+        name: "sd",
+        id: "3",
+        subscription: SubscriptionTypes.silver);
+
+    ///TODO MAKE THIS FROM USER DATA
 
     DatabaseReference newRSA = dbRef.child("rsa").push();
-    if(newRSA != null){
+    if (newRSA != null) {
       await newRSA.set({
-        "userID": _user.id,
-        "latitude" : _location.latitude,
-        "longitude" : _location.longitude,
-        "towProviderID" : _towProvider.id,
-        "mechanic" : _mechanic.id,
+        "userID": user.id,
+        "latitude": location.latitude,
+        "longitude": location.longitude,
+        "towProviderID": towProvider.id,
+        "mechanic": mechanic.id,
         "state": RSA_state.waiting_for_mech_response.toString()
       });
       state = RSA_state.waiting_for_mech_response;
@@ -121,17 +201,19 @@ class RSA {
     return false;
   }
 }
+
 enum RSA_state {
   canceled,
   created,
-  user_choosing_mech,
-  user_choosing_prov,
+  // user_choosing_mech,
+  // user_choosing_prov,
   waiting_for_arrival,
   confirmed_arrival,
   done,
   searching_for_nearby_mech,
   searching_for_nearby_prov,
   waiting_for_mech_response,
-  waiting_for_prov_response
+  waiting_for_prov_response,
+  requesting_rsa,
+  failed_to_request_rsa
 }
-

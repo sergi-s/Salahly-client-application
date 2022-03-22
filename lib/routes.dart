@@ -6,14 +6,16 @@ import 'package:slahly/screens/homescreen.dart';
 import 'package:slahly/screens/login_signup/signupscreen.dart';
 import 'package:slahly/screens/roadsideassistance/choosemechanic.dart';
 import 'package:slahly/screens/roadsideassistance/chooseprovider.dart';
+import 'package:slahly/screens/roadsideassistance/rsaconfirmationScreen.dart';
 import 'package:slahly/screens/roadsideassistance/waitforarrival.dart';
 import 'package:slahly/screens/splashScreen/splashscreen.dart';
 import 'package:slahly/screens/myLocation/mylocationscreen.dart';
+import 'package:slahly/screens/testscreen.dart';
 
 class Routing {
   get router => GoRouter(
 
-    initialLocation: HomePage.routeName,
+    initialLocation: TestScreen.routeName,
 
     routes: <GoRoute> [
       GoRoute(
@@ -51,6 +53,14 @@ class Routing {
       GoRoute(
         path: FirebaseEmulatorScreen.routeName,
         builder: (context, state) => FirebaseEmulatorScreen(),
+      ),
+      GoRoute(
+        path: TestScreen.routeName,
+        builder: (context, state) => TestScreen(),
+      ),
+      GoRoute(
+        path: RSAConfirmationScreen.routeName,
+        builder: (context, state) => RSAConfirmationScreen(),
       ),
     ],
   );
