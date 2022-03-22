@@ -82,12 +82,13 @@ class _HomeScreenState extends State<HomeScreen> {
                   Mechanic m = Mechanic(name: "",email: "",id: "123");
                   TowProvider p = TowProvider(name: "name", email: "email", isCenter: false,id: "456");
                   CustomLocation l = CustomLocation(longitude: 1,latitude: 2);
-                  RSA r = RSA();
-                  r.setLocation(l);
-                  r.setMechanic(m,false);
-                  r.setProvider(p,false);
-                  print("sad");
-                  r.requestRSA();
+                  // RSA r = RSA();
+                  // r.setLocation(l);
+                  // r.setMechanic(m,false);
+                  // r.setProvider(p,false);
+                  // print("sad");
+                  // r.requestRSA();
+                  ///TODO reimplement after reconstruction
                 },
                 child: Text('Test RSA request')),
 

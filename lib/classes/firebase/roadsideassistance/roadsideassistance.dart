@@ -13,21 +13,75 @@ import "package:http/http.dart" as http;
 import '../../../utils/constants.dart';
 
 class RSA {
-  RSA_state state = RSA_state.created;
-  late CustomLocation _location; // lazm yt2sm le long w lat
-  late String RSA_id;
-  late Client _user;
-  late TowProvider _towProvider;
-  late Mechanic _mechanic;
-  late DateTime _estimatedTime;
-  late List<Mechanic> nearbyMechanics; // not included in FB
-  late List<TowProvider> nearbyProviders; // not included in FB
 
-  setLocation(CustomLocation ll) {
-    _location = ll;
+  RSA_state state = RSA_state.created;
+  CustomLocation? location; // lazm yt2sm le long w lat
+  String? rsaID;
+  String? problemDescription;
+  Client? user;
+  TowProvider? towProvider;
+  Mechanic? mechanic;
+  DateTime? estimatedTime;
+  List<Mechanic>? nearbyMechanics; // not included in FB
+  List<TowProvider>? nearbyProviders; // not included in FB
+
+  _setProblemDescription(String description) {
+    problemDescription = description;
   }
 
-  static Future _checkLocationPermission() async {
+  RSA({
+    Mechanic? mechanic,
+    TowProvider? towProvider,
+    RSA_state? state,
+    String? problemDescription,
+    List<Mechanic>? nearbyMechanics,
+    List<TowProvider>? nearbyProviders,
+    CustomLocation? location,
+    String? rsaID,
+    Client? user,
+  }) {
+    this.mechanic = mechanic ?? this.mechanic;
+    this.towProvider = towProvider ?? this.towProvider;
+    this.state = state ?? this.state;
+    this.problemDescription = problemDescription ?? problemDescription;
+    this.nearbyMechanics = nearbyMechanics ?? this.nearbyMechanics;
+    this.nearbyProviders = nearbyProviders ?? this.nearbyProviders;
+    this.location = location ?? this.location;
+    this.rsaID = rsaID ?? this.rsaID;
+    this.user = user ?? this.user;
+  }
+
+  RSA copyWith({
+    Mechanic? mechanic,
+    TowProvider? provider,
+    RSA_state? state,
+    String? problemDescription,
+    List<Mechanic>? nearbyMechanics,
+    List<TowProvider>? nearbyProviders,
+    CustomLocation? location,
+    String? rsaID,
+    Client? user,
+  }) =>
+      RSA(
+          mechanic:mechanic ?? this.mechanic,
+          towProvider : provider ?? this.towProvider,
+          state : state ?? this.state,
+          problemDescription : problemDescription ?? this.problemDescription,
+          nearbyMechanics : nearbyMechanics ?? this.nearbyMechanics,
+          nearbyProviders : nearbyProviders ?? this.nearbyProviders,
+          location : location ?? this.location,
+          rsaID : rsaID ?? this.rsaID,
+          user : user ?? this.user,
+      );
+
+  String getProblemDescription() => problemDescription!;
+
+  Mechanic getMechanic() => mechanic!;
+
+  TowProvider getProvider() => towProvider!;
+
+  Future _checkLocationPermission() async {
+
     bool serviceEnabled;
     LocationPermission permission;
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
@@ -63,7 +117,7 @@ class RSA {
     return true;
   }
 
-  static Future<CustomLocation> getUserLocation() async {
+  Future<CustomLocation> getUserLocation() async {
     _checkLocationPermission().onError((error, stackTrace) {
       print(error);
       return null;
@@ -78,11 +132,12 @@ class RSA {
     //uses location get nearby mechs
     nearbyProviders = [];
     await NearbyLocations.getNearbyProviders(
-        _location.latitude,
-        _location.longitude,
+        location!.latitude,
+        location!.longitude,
         // user.getSubscriptionRange()!.toDouble(),
         100,
-        nearbyProviders);
+        nearbyProviders!);
+
   }
 
   requestNearbyMechanics() async {
@@ -90,47 +145,54 @@ class RSA {
     nearbyMechanics = [];
 
     await NearbyLocations.getNearbyMechanics(
-        _location.latitude,
-        _location.longitude,
+        location!.latitude,
+        location!.longitude,
         // user.getSubscriptionRange()!.toDouble(),
         100,
-        nearbyMechanics);
+        nearbyMechanics!);
   }
 
-  setMechanic(Mechanic mech, bool stopListener) {
+  _setMechanic(Mechanic mech, bool stopListener) {
     //momken nbdlha b firebase ID aw ayan kan
-    _mechanic = mech;
-    if (stopListener) NearbyLocations.stopListener();
+    mechanic = mech;
+    if (stopListener) {
+      NearbyLocations.stopListener();
+    }
   }
 
-  setProvider(TowProvider provider, bool stopListener) {
+  _setProvider(TowProvider provider, bool stopListener) {
     //momken nbdlha b firebase ID aw ayan kan
-    _towProvider = provider;
-    if (stopListener) NearbyLocations.stopListener();
+    towProvider = provider;
+    if (stopListener) {
+      NearbyLocations.stopListener();
+    }
+
   }
 
   Future requestRSA() async {
     //testing purpose
-    _user = Client(
+    user = Client(
+
         email: 'momo',
         name: "sd",
         id: "3",
         subscription: SubscriptionTypes.silver);
 
+    ///TODO MAKE THIS FROM USER DATA
+
     DatabaseReference newRSA = dbRef.child("rsa").push();
-    if (newRSA != null) {
-      await newRSA.set({
-        "userID": _user.id,
-        "latitude": _location.latitude,
-        "longitude": _location.longitude,
-        "towProviderID": _towProvider.id,
-        "mechanic": _mechanic.id,
-        "state": RSA_state.waiting_for_mech_response.toString()
-      });
-      state = RSA_state.waiting_for_mech_response;
-      RSA_id = newRSA.key.toString();
-      return true;
-    }
+    await newRSA.set({
+      "userID": user!.id,
+      "latitude": location!.latitude,
+      "longitude": location!.longitude,
+      "towProviderID": towProvider!.id,
+      "mechanic": mechanic!.id,
+      "state": RSA_state.waiting_for_mech_response.toString()
+    });
+    state = RSA_state.waiting_for_mech_response;
+    rsaID = newRSA.key.toString();
+    return true;
+
     return false;
   }
 
@@ -167,13 +229,15 @@ class RSA {
 enum RSA_state {
   canceled,
   created,
-  user_choosing_mech,
-  user_choosing_prov,
+  // user_choosing_mech,
+  // user_choosing_prov,
   waiting_for_arrival,
   confirmed_arrival,
   done,
   searching_for_nearby_mech,
   searching_for_nearby_prov,
   waiting_for_mech_response,
-  waiting_for_prov_response
+  waiting_for_prov_response,
+  requesting_rsa,
+  failed_to_request_rsa
 }

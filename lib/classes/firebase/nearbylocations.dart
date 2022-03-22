@@ -308,6 +308,8 @@ stt38c5j0s
     });
   }
   _getUserLocation() async {
-    return await RSA.getUserLocation();
+    ///TODO re implement after refactoring
+    // return await RSA().getUserLocation();
+
   }
 }
