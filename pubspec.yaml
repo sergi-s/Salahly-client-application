@@ -88,6 +88,11 @@ flutter:
     - assets/images/logo ta5arog white salahli.png
     - assets/images/Towing-amico copy.png
     - assets/images/wavy shape copy.png
+    - assets/images/mechanic.png
+    - assets/images/tow-truck 2.png
+    - assets/images/logo white.png
+    - assets/images/bot2.png
+    - assets/images/tarek.jpg
   #   - images/a_dot_ham.jpeg
 
 flutter_flavor:
