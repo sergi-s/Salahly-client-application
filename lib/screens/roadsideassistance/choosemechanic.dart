@@ -61,26 +61,39 @@ class ChooseMechanicScreen extends StatelessWidget {
         ),
       ),
       body: Center(
-        child: Column(
-          children: [
-            SizedBox(height: 10),
-            ListView.builder(
-              itemBuilder: (BuildContext, index) {
-                return ChooseTile(
-                    mechanics[index].email.toString(),
-                    mechanics[index].avatar.toString(),
-                    mechanics[index].phoneNumber.toString(),
-                    mechanics[index].name.toString(),
-                    mechanics[index].loc!.address.toString(),
-                    mechanics[index].type!,
-                    mechanics[index].isCenter!);
+        child: FloatingActionButton(
+          child: Icon(Icons.add),
+          onPressed: () {
+            showModalBottomSheet<void>(
+              context: context,
+              isScrollControlled: true,
+              enableDrag: true,
+              isDismissible: true,
+              builder: (BuildContext context) {
+                return Column(
+                  children: [
+                    SizedBox(height: 10),
+                    ListView.builder(
+                      itemBuilder: (BuildContext, index) {
+                        return ChooseTile(
+                            mechanics[index].email.toString(),
+                            mechanics[index].avatar.toString(),
+                            mechanics[index].phoneNumber.toString(),
+                            mechanics[index].name.toString(),
+                            mechanics[index].loc!.address.toString(),
+                            mechanics[index].type!,
+                            mechanics[index].isCenter!);
+                      },
+                      itemCount: mechanics.length,
+                      shrinkWrap: true,
+                      padding: EdgeInsets.all(5),
+                      scrollDirection: Axis.vertical,
+                    ),
+                  ],
+                );
               },
-              itemCount: mechanics.length,
-              shrinkWrap: true,
-              padding: const EdgeInsets.all(5),
-              scrollDirection: Axis.vertical,
-            ),
-          ],
+            );
+          },
         ),
       ),
     );

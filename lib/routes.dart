@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:go_router/go_router.dart';
 import 'package:slahly/screens/homepage.dart';
 import 'package:slahly/classes/firebase/nearbylocations.dart';
@@ -12,46 +13,44 @@ import 'package:slahly/screens/myLocation/mylocationscreen.dart';
 
 class Routing {
   get router => GoRouter(
-
-    initialLocation: ChooseProviderScreen.routeName,
-
-    routes: <GoRoute> [
-      GoRoute(
-        path: LoginSignupScreen.routeName,
-        builder: (context, state) => LoginSignupScreen(),
-      ),
-      GoRoute(
-        path: MyLocationScreen.routeName,
-        builder: (context, state) => MyLocationScreen(),
-      ),
-      GoRoute(
-        path: SplashScreen.routeName,
-        builder: (context, state) => SplashScreen(),
-      ),
-      GoRoute(
-        path: HomeScreen.routeName,
-        builder: (context, state) => HomeScreen(),
-      ),
-      GoRoute(
-        path: HomePage.routeName,
-        builder: (context, state) => HomePage(),
-      ),
-      GoRoute(
-        path: ChooseProviderScreen.routeName,
-        builder: (context, state) => ChooseProviderScreen(),
-      ),
-      GoRoute(
-        path: ChooseMechanicScreen.routeName,
-        builder: (context, state) => ChooseMechanicScreen(),
-      ),
-      GoRoute(
-        path: WaitForArrival.routeName,
-        builder: (context, state) => WaitForArrival(),
-      ),
-      GoRoute(
-        path: FirebaseEmulatorScreen.routeName,
-        builder: (context, state) => FirebaseEmulatorScreen(),
-      ),
-    ],
-  );
+        initialLocation: ChooseMechanicScreen.routeName,
+        routes: <GoRoute>[
+          GoRoute(
+            path: LoginSignupScreen.routeName,
+            builder: (context, state) => LoginSignupScreen(),
+          ),
+          GoRoute(
+            path: MyLocationScreen.routeName,
+            builder: (context, state) => MyLocationScreen(),
+          ),
+          GoRoute(
+            path: SplashScreen.routeName,
+            builder: (context, state) => SplashScreen(),
+          ),
+          GoRoute(
+            path: HomeScreen.routeName,
+            builder: (context, state) => HomeScreen(),
+          ),
+          GoRoute(
+            path: HomePage.routeName,
+            builder: (context, state) => HomePage(),
+          ),
+          GoRoute(
+            path: ChooseProviderScreen.routeName,
+            builder: (context, state) => ChooseProviderScreen(),
+          ),
+          GoRoute(
+            path: ChooseMechanicScreen.routeName,
+            builder: (context, state) => ChooseMechanicScreen(),
+          ),
+          GoRoute(
+            path: WaitForArrival.routeName,
+            builder: (context, state) => WaitForArrival(),
+          ),
+          GoRoute(
+            path: FirebaseEmulatorScreen.routeName,
+            builder: (context, state) => FirebaseEmulatorScreen(),
+          ),
+        ],
+      );
 }

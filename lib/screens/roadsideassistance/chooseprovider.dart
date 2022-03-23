@@ -23,8 +23,6 @@ class ChooseProviderScreen extends StatelessWidget {
         email: 'email@yahoo.com',
         type: Type.provider),
   ];
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -41,26 +39,39 @@ class ChooseProviderScreen extends StatelessWidget {
         ),
       ),
       body: Center(
-        child: Column(
-          children: [
-            SizedBox(height: 10),
-            ListView.builder(
-              itemBuilder: (BuildContext, index) {
-                return ChooseTile(
-                    providers[index].email.toString(),
-                    providers[index].avatar.toString(),
-                    providers[index].phoneNumber.toString(),
-                    providers[index].name.toString(),
-                    providers[index].loc!.address.toString(),
-                    providers[index].type!,
-                    false);
+        child: FloatingActionButton(
+          child: Icon(Icons.add),
+          onPressed: () {
+            showModalBottomSheet<void>(
+              context: context,
+              isScrollControlled: true,
+              enableDrag: true,
+              isDismissible: true,
+              builder: (BuildContext context) {
+                return Column(
+                  children: [
+                    SizedBox(height: 10),
+                    ListView.builder(
+                      itemBuilder: (BuildContext, index) {
+                        return ChooseTile(
+                            providers[index].email.toString(),
+                            providers[index].avatar.toString(),
+                            providers[index].phoneNumber.toString(),
+                            providers[index].name.toString(),
+                            providers[index].loc!.address.toString(),
+                            providers[index].type!,
+                            false);
+                      },
+                      itemCount: providers.length,
+                      shrinkWrap: true,
+                      padding: EdgeInsets.all(5),
+                      scrollDirection: Axis.vertical,
+                    ),
+                  ],
+                );
               },
-              itemCount: providers.length,
-              shrinkWrap: true,
-              padding: EdgeInsets.all(5),
-              scrollDirection: Axis.vertical,
-            ),
-          ],
+            );
+          },
         ),
       ),
     );
