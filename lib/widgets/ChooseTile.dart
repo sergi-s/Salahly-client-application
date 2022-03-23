@@ -95,7 +95,7 @@ class ChooseTile extends StatelessWidget {
                       children: [
                         Flexible(
                           child: Text(
-                            address,
+                            type != Type.provider ? address : "",
                             overflow: TextOverflow.ellipsis,
                             style: const TextStyle(
                                 fontWeight: FontWeight.bold, fontSize: 18),
