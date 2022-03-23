@@ -1,15 +1,19 @@
 {
   "appname": "صلحلي",
   "presshere": "اضغط هنا",
-  "login" : "تسجيل الدخخول",
-  "welcome_back":"مرحبا بك",
-  "username" : "اسم المستخدم",
-  "password" : "كلمة السر",
-  "email" : "البريد الإلكتروني",
+  "login": "تسجيل الدخخول",
+  "welcome_back": "مرحبا بك",
+  "username": "اسم المستخدم",
+  "password": "كلمة السر",
+  "email": "البريد الإلكتروني",
   "phone_number": "رقم الهاتف",
   "or": "أو",
   "confirm_password": "تأكيد كلمة السر",
   "sign_up": "انشاء حساب",
   "dont_have_account": "ليس لديك حساب؟ سجل الان",
-  "my_location": "موقعي"
+  "my_location": "موقعي",
+  "choose_provider": "أختر مزود",
+  "choose_mech": "أختر مكانيكي",
+  "mechanic": "ميكانيكي",
+  "center": "مركز صيانه"
 }
