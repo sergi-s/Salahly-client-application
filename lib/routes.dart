@@ -9,7 +9,7 @@ import 'package:slahly/screens/myLocation/getLocationComponent.dart';
 
 class Routing {
   get router => GoRouter(
-        initialLocation: ChooseMechanicScreen.routeName,
+        initialLocation: ChooseProviderScreen.routeName,
         routes: <GoRoute>[
           GoRoute(
             path: LoginSignupScreen.routeName,

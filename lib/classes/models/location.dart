@@ -4,5 +4,5 @@ class CustomLocation {
   String? address;
   String? name;
 
-  CustomLocation(this.longitude, this.latitude, this.address, this.name);
+  CustomLocation({this.longitude, this.latitude, this.address, this.name});
 }
