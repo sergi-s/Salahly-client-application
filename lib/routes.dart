@@ -10,10 +10,13 @@ import 'package:slahly/screens/roadsideassistance/chooseprovider.dart';
 import 'package:slahly/screens/roadsideassistance/waitforarrival.dart';
 import 'package:slahly/screens/splashScreen/splashscreen.dart';
 import 'package:slahly/screens/myLocation/mylocationscreen.dart';
+import 'package:slahly/screens/userMangament/addSubowner.dart';
+import 'package:slahly/screens/userMangament/manageSubowner.dart';
+import 'package:slahly/screens/userMangament/transferOwner.dart';
 
 class Routing {
   get router => GoRouter(
-        initialLocation: ChooseMechanicScreen.routeName,
+        initialLocation: ManageSubowner.routeName,
         routes: <GoRoute>[
           GoRoute(
             path: LoginSignupScreen.routeName,
@@ -46,6 +49,18 @@ class Routing {
           GoRoute(
             path: WaitForArrival.routeName,
             builder: (context, state) => WaitForArrival(),
+          ),
+          GoRoute(
+            path: ManageSubowner.routeName,
+            builder: (context, state) => ManageSubowner(),
+          ),
+          GoRoute(
+            path: TransferOwner.routeName,
+            builder: (context, state) => TransferOwner(),
+          ),
+          GoRoute(
+            path: AddSubowner.routeName,
+            builder: (context, state) => AddSubowner(),
           ),
           GoRoute(
             path: FirebaseEmulatorScreen.routeName,

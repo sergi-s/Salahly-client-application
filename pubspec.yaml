@@ -55,6 +55,7 @@ dependencies:
   geolocator: ^8.2.0
   http: ^0.13.4
   flutter_geofire: ^2.0.1
+  flutter_barcode_scanner: ^2.0.0
 
 
 
