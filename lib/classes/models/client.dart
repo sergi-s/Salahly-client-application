@@ -37,7 +37,7 @@ class Client extends UserType {
     super.setPassword = value;
   }
 
-  Map<SubscriptionTypes,double> _subscriptionData = {
+  final Map<SubscriptionTypes,double> _subscriptionData = {
     SubscriptionTypes.silver: 4,
     SubscriptionTypes.gold: 50,
     SubscriptionTypes.platinum: 200

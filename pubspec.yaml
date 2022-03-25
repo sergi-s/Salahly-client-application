@@ -53,11 +53,11 @@ dependencies:
   google_maps_flutter: ^2.1.2
   string_validator: ^0.3.0
   geolocator: ^8.2.0
-  place_picker: ^0.9.20-nullsafety
   google_fonts: ^2.1.0
   http: ^0.13.4
   flutter_geofire: ^2.0.1
-
+  firebase_messaging: ^11.2.11
+  firebase_analytics: ^9.1.2
 
 
 

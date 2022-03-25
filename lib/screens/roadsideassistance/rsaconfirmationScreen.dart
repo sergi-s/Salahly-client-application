@@ -81,8 +81,7 @@ class RSAConfirmationScreen extends ConsumerWidget {
                     ),
                     Tilee(
                         usr: ref
-                            .watch(rsaProvider.notifier)
-                            .getMechanic() //ref.watch(rsaProvider).getMechanic()
+                            .watch(rsaProvider).mechanic! //ref.watch(rsaProvider).getMechanic()
                         ),
 
                     ///TODO
@@ -95,7 +94,7 @@ class RSAConfirmationScreen extends ConsumerWidget {
                       "provider".tr(),
                       style: TextStyle(fontSize: 20),
                     ),
-                    TileeProv(usr: rsa.getProvider()),
+                    TileeProv(usr: rsa.towProvider!),
                   ],
                 ),
                 ElevatedButton(

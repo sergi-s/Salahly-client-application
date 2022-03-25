@@ -1,15 +1,15 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_flavor/flutter_flavor.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:slahly/MyApp.dart';
-import 'package:slahly/classes/firebase/firebase.dart';
-import 'package:slahly/screens/homepage.dart';
 
-DatabaseReference usersRef =  FirebaseDatabase.instance.ref().child("user");
+DatabaseReference usersRef = FirebaseDatabase.instance.ref().child("user");
 DatabaseReference dbRef = FirebaseDatabase.instance.ref();
+
 void main() async {
   FlavorConfig(
     name: "DEVELOPMENT",
@@ -33,12 +33,16 @@ void main() async {
   await EasyLocalization.ensureInitialized();
   await Firebase.initializeApp();
   //await FirebaseCustom().connectToEmulator();
+
+
   runApp(
     EasyLocalization(
       supportedLocales: [Locale('en'), Locale('ar')],
       path: 'assets/translations',
       fallbackLocale: Locale('en'),
-      child: ProviderScope(child: MyApp(),),
+      child: ProviderScope(
+        child: MyApp(),
+      ),
     ),
   );
 }
