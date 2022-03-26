@@ -1,8 +1,12 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:go_router/go_router.dart';
+import 'package:firebase_database/firebase_database.dart';
+import 'package:slahly/main.dart';
+import 'package:firebase_core/firebase_core.dart';
 
 class AddSubowner extends StatefulWidget {
   static final routeName = "/addSubowner";
@@ -12,6 +16,15 @@ class AddSubowner extends StatefulWidget {
 }
 
 class _AddSubownerState extends State<AddSubowner> {
+  DatabaseReference subowners =
+      FirebaseDatabase.instance.ref().child("subowners");
+  Future<void> addUser() async {
+    await subowners.set({
+      "user_id": "user id ", //user id
+      "Car_id": "car id" //car id
+    });
+  }
+
   Future showAlertbox(context) {
     return showDialog(
       context: context,
@@ -71,7 +84,10 @@ class _AddSubownerState extends State<AddSubowner> {
                 Row(
                   children: [
                     Text('Sergi Samir',
-                        style: TextStyle(fontSize: 25, color: Colors.black)),
+                        style: TextStyle(
+                            fontSize: 25,
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold)),
                     SizedBox(
                       width: 20,
                     ),

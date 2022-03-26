@@ -10,9 +10,19 @@ class Validator {
 
   static bool passValidator(String pass) {
     if (pass != "" &&
-        pass.contains(
-            r"^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$")) {
+        pass.contains(r'^(?=.*?[a-z])(?=.*?[0-9]).{5,}$') &&
+        pass.length > 5) {
       return true;
+      // 5 char and number
+
+      //******************
+      //r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{5,}$'
+      // one special , one capital , one number, number length > 4
+      // Vignesh123! : true
+      // vignesh123 : false
+      // VIGNESH123! : false
+      // vignesh@ : false
+      // 12345678? : false
     }
     return false;
   }
@@ -47,11 +57,9 @@ class Validator {
     return false;
   }
 
-  static bool ageValidator(String date) {
+  static bool ageValidator(DateTime dateTime) {
     // regex for validation of date format : dd.mm.yyyy, dd/mm/yyyy, dd-mm-yyyy
-    if (date != "" &&
-        date.contains(
-            r"^(?:(?:31(\/|-|\.)(?:0?[13578]|1[02]))\1|(?:(?:29|30)(\/|-|\.)(?:0?[13-9]|1[0-2])\2))(?:(?:1[6-9]|[2-9]\d)?\d{2})$|^(?:29(\/|-|\.)0?2\3(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00))))$|^(?:0?[1-9]|1\d|2[0-8])(\/|-|\.)(?:(?:0?[1-9])|(?:1[0-2]))\4(?:(?:1[6-9]|[2-9]\d)?\d{2})$")) {
+    if (dateTime != "" && dateTime.isBefore(DateTime.now())) {
       return true;
     }
     return false;
