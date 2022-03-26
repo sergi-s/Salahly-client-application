@@ -12,6 +12,8 @@ import 'package:slahly/screens/splashScreen/splashscreen.dart';
 import 'package:slahly/screens/myLocation/mylocationscreen.dart';
 import 'package:slahly/screens/testscreen.dart';
 import 'package:slahly/screens/Describeproblem.dart';
+import 'package:slahly/screens/viewcars.dart';
+import 'package:slahly/screens/addcarbutton.dart';
 import 'package:slahly/screens/waitforapproval/wait_for_approval_screen.dart';
 import 'package:slahly/screens/waitforarrvial.dart';
 
@@ -78,6 +80,12 @@ class Routing {
         builder: (context, state) => Registration(),
       ),
       GoRoute(
+        path: ViewCars.routeName,
+        builder: (context, state) => ViewCars(),
+      ),
+      GoRoute(
+        path: AddCars.routeName,
+        builder: (context, state) => AddCars(),
         path: WaitForApprovalScreen.routeName,
         builder: (context, state) => WaitForApprovalScreen(),
       ),
