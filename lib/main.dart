@@ -9,7 +9,7 @@ import 'package:slahly/MyApp.dart';
 
 DatabaseReference usersRef = FirebaseDatabase.instance.ref().child("user");
 DatabaseReference dbRef = FirebaseDatabase.instance.ref();
-
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 void main() async {
   FlavorConfig(
     name: "DEVELOPMENT",

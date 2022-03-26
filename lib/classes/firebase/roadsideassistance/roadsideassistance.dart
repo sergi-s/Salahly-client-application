@@ -119,12 +119,12 @@ class RSA {
 enum RSAStates {
   canceled,
 
-  searchingForNearbyMechanic,// started searching
-  userChoosingMechanic,// list loaded (at least 1) and user choosing
-  userChoseMechanic,// chose mechanic
-  searchingForNearbyProvider,// started searching
-  userChoosingProvider,// list loaded (at least 1) and user choosing
-  userChoseProvider,// chose provider
+  searchingForNearbyMechanic,// started searching                               App state
+  userChoosingMechanic,// list loaded (at least 1) and user choosing            App state
+  userChoseMechanic,// chose mechanic                                           RSA state
+  searchingForNearbyProvider,// started searching                               App state
+  userChoosingProvider,// list loaded (at least 1) and user choosing            App state
+  userChoseProvider,// chose provider                                           RSA state
 
   requestingRSA,
   failedToRequestRSA,

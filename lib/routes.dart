@@ -20,6 +20,10 @@ class Routing {
     initialLocation: TestScreenSM_nearbymechanics.routeName,
 
     routes: <GoRoute> [
+      GoRoute( //TESTING
+        path: TestScreenFBNotification.routeName,
+        builder: (context, state) => TestScreenFBNotification(),//TestScreenRSASMTest(),
+      ),
       GoRoute(
         path: LoginSignupScreen.routeName,
         builder: (context, state) => LoginSignupScreen(),
@@ -55,10 +59,6 @@ class Routing {
       GoRoute( //TESTING
         path: FirebaseEmulatorScreen.routeName,
         builder: (context, state) => FirebaseEmulatorScreen(),
-      ),
-      GoRoute( //TESTING
-        path: TestScreenSM_nearbymechanics.routeName,
-        builder: (context, state) => TestScreenSM_nearbymechanics(),//TestScreenRSASMTest(),
       ),
       GoRoute(
         path: RSAConfirmationScreen.routeName,

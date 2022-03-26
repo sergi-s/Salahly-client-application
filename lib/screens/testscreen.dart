@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -7,6 +10,7 @@ import 'package:slahly/classes/models/mechanic.dart';
 import 'package:slahly/classes/models/towProvider.dart';
 import 'package:slahly/classes/provider/rsadata.dart';
 import 'package:go_router/go_router.dart';
+import 'package:slahly/main.dart';
 import 'package:slahly/screens/roadsideassistance/rsaconfirmationScreen.dart';
 
 
@@ -187,8 +191,8 @@ class MechanicTile extends StatelessWidget {
   }
 }
 
-class TestScreenRSASMTest extends ConsumerWidget {
-  TestScreenRSASMTest({Key? key}) : super(key: key);
+class TestScreenFBNotification extends ConsumerWidget {
+  TestScreenFBNotification({Key? key}) : super(key: key);
   static final routeName = "/testscreen";
 
   @override
@@ -198,6 +202,7 @@ class TestScreenRSASMTest extends ConsumerWidget {
     FirebaseMessaging.onMessage.listen((RemoteMessage event) {
       print("message recieved");
       print(event.notification!.body);
+
       // showDialog(
       //     context: context,
       //     builder: (BuildContext context) {
@@ -217,6 +222,11 @@ class TestScreenRSASMTest extends ConsumerWidget {
     });
     FirebaseMessaging.onMessageOpenedApp.listen((message) {
       print('Message clicked!');
+    });
+
+    StreamSubscription <DatabaseEvent> rsaListener =
+    dbRef.child("rsa").child("-MyUNThvOQvuoy6HeOy-").onChildChanged.listen((event) {
+      print("USER ID CHANGED, NOW IT IS: "+event.snapshot.child("userID").value.toString());
     });
 
     // final value = ref.watch(valueProvider);
