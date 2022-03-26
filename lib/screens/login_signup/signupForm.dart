@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:slahly/screens/login_signup/registration.dart';
 import 'package:slahly/widgets/login_signup/Rounded_Bottom.dart';
 import 'package:slahly/widgets/login_signup/Rounded_password.dart';
 import 'package:slahly/widgets/login_signup/roundedInput.dart';
@@ -96,14 +98,18 @@ class SignUpForm extends StatelessWidget {
               }
               bool check = await fb.signup(email, password);
               if (check) {
-                return ScaffoldMessenger.of(context).showSnackBar(
+                 ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
                         content: Text('Account is Created Sucessfully ')));
-              } else
+              } else {
                 return ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(content: Text('Account is Already Used!!')));
+              }
+              // context.go(Registration.routeName+"/$email");
             },
+
           ),
+
         ],
       ),
     );

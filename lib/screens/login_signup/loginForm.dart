@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:slahly/screens/login_signup/registration.dart';
 import 'package:slahly/screens/myLocation/mylocationscreen.dart';
 import 'package:slahly/widgets/login_signup/Rounded_Bottom.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:slahly/utils/validation.dart';
-
-import '../../widgets/login_signup/Rounded_password.dart';
-import '../../widgets/login_signup/roundedInput.dart';
+import 'package:slahly/screens/login_signup/registration.dart';
+import 'package:slahly/widgets/login_signup/Rounded_password.dart';
+import 'package:slahly/widgets/login_signup/roundedInput.dart';
 import 'package:slahly/classes/firebase/firebase.dart';
 
 class LoginForm extends StatelessWidget {
@@ -69,7 +70,7 @@ class LoginForm extends StatelessWidget {
           SizedBox(height: 10),
           RoundedButton(
             title: 'login'.tr(),
-            onPressedFunction: () async{
+            onPressedFunction: () async {
               if (!Validator.emailValidator(email)) {
                 return ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
@@ -80,13 +81,18 @@ class LoginForm extends StatelessWidget {
               //       const SnackBar(
               //           content: Text('Invalid Password!! Please try again')));
               // }
-              bool check=await fb.login(email, password);
-              if(check){
-                return ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Account is Correct !!')));;
-              }else ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Account isnt Correct !!Please try again')));
-            },
+              bool check = await fb.login(email, password);
+              if (check) {
+
+                context.go(Registration.routeName, extra: "email@gmail.com");
+              } else {
+                ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text(
+                        'Account isnt Correct !!Please try again')));
+                };
+
+              },
+
           )
         ],
       ),

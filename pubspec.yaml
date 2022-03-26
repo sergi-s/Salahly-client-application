@@ -57,7 +57,7 @@ dependencies:
   google_fonts: ^2.1.0
   http: ^0.13.4
   flutter_geofire: ^2.0.1
-
+  syncfusion_flutter_datepicker: ^19.4.56
 
 
 

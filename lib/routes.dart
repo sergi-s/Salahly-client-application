@@ -2,6 +2,8 @@ import 'package:go_router/go_router.dart';
 import 'package:slahly/screens/homepage.dart';
 import 'package:slahly/screens/firebaseemulatortestscreen/firebaseemulatortestscreen.dart';
 import 'package:slahly/screens/homescreen.dart';
+import 'package:slahly/screens/login_signup/TryRegistration.dart';
+import 'package:slahly/screens/login_signup/TryScreen.dart';
 import 'package:slahly/screens/login_signup/registration.dart';
 import 'package:slahly/screens/login_signup/signupscreen.dart';
 import 'package:slahly/screens/roadsideassistance/choosemechanic.dart';
@@ -17,7 +19,7 @@ import 'package:slahly/screens/waitforarrvial.dart';
 class Routing {
   get router => GoRouter(
 
-    initialLocation: TestScreen.routeName,
+    initialLocation:LoginSignupScreen.routeName,
 
     routes: <GoRoute> [
       GoRoute(
@@ -73,8 +75,22 @@ class Routing {
         builder: (context, state) => WaitArrvial(),
       ),
       GoRoute(
-        path: Registration.routeName,
-        builder: (context, state) => Registration(),
+        path: TryScreen.routeName,
+        builder: (context, state) => TryScreen(),
+      ),
+      GoRoute(
+          path: Registration.routeName,
+          builder : (context,state) {
+            return Registration(emailobj: state.extra! as String);
+          }
+
+      ),
+      GoRoute(
+          path: TryRegistration.routeName,
+          builder : (context,state) {
+            return Registration(emailobj: state.extra! as String);
+          }
+
       ),
     ],
   );
