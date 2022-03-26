@@ -14,12 +14,13 @@ import 'package:slahly/screens/testscreen.dart';
 import 'package:slahly/screens/Describeproblem.dart';
 import 'package:slahly/screens/viewcars.dart';
 import 'package:slahly/screens/addcarbutton.dart';
+import 'package:slahly/screens/waitforapproval/wait_for_approval_screen.dart';
 import 'package:slahly/screens/waitforarrvial.dart';
 
 class Routing {
   get router => GoRouter(
 
-    initialLocation: TestScreen.routeName,
+    initialLocation: WaitForApprovalScreen.routeName,
 
     routes: <GoRoute> [
       GoRoute(
@@ -85,6 +86,8 @@ class Routing {
       GoRoute(
         path: AddCars.routeName,
         builder: (context, state) => AddCars(),
+        path: WaitForApprovalScreen.routeName,
+        builder: (context, state) => WaitForApprovalScreen(),
       ),
     ],
   );
