@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:go_router/go_router.dart';
 import 'package:slahly/screens/homepage.dart';
 import 'package:slahly/screens/firebaseemulatortestscreen/firebaseemulatortestscreen.dart';
@@ -10,6 +11,9 @@ import 'package:slahly/screens/roadsideassistance/rsaconfirmationScreen.dart';
 import 'package:slahly/screens/roadsideassistance/waitforarrival.dart';
 import 'package:slahly/screens/splashScreen/splashscreen.dart';
 import 'package:slahly/screens/myLocation/mylocationscreen.dart';
+import 'package:slahly/screens/userMangament/addSubowner.dart';
+import 'package:slahly/screens/userMangament/manageSubowner.dart';
+import 'package:slahly/screens/userMangament/transferOwner.dart';
 import 'package:slahly/screens/testscreen.dart';
 import 'package:slahly/screens/Describeproblem.dart';
 import 'package:slahly/screens/viewcars.dart';
@@ -27,6 +31,18 @@ class Routing {
         path: LoginSignupScreen.routeName,
         builder: (context, state) => LoginSignupScreen(),
       ),
+       GoRoute(
+            path: ManageSubowner.routeName,
+            builder: (context, state) => ManageSubowner(),
+          ),
+          GoRoute(
+            path: TransferOwner.routeName,
+            builder: (context, state) => TransferOwner(),
+          ),
+          GoRoute(
+            path: AddSubowner.routeName,
+            builder: (context, state) => AddSubowner(),
+          ),
       GoRoute(
         path: MyLocationScreen.routeName,
         builder: (context, state) => MyLocationScreen(),

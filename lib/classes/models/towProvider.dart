@@ -25,8 +25,8 @@ class TowProvider extends UserType {
     String? phoneNumber,
     CustomLocation? loc,
     this.isAccepted,
-    required this.isCenter,
-    this.nationalID,
+    this.isCenter,
+    required this.nationalID,
   }) : super(
             name: name,
             email: email,
