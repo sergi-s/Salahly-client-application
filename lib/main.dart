@@ -3,6 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_flavor/flutter_flavor.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:slahly/MyApp.dart';
 import 'package:slahly/classes/firebase/firebase.dart';
 import 'package:slahly/screens/homepage.dart';
@@ -31,16 +32,13 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await EasyLocalization.ensureInitialized();
   await Firebase.initializeApp();
-  // await FirebaseCustom().connectToEmulator();
-
+  //await FirebaseCustom().connectToEmulator();
   runApp(
     EasyLocalization(
       supportedLocales: [Locale('en'), Locale('ar')],
       path: 'assets/translations',
       fallbackLocale: Locale('en'),
-      child:
-      // LocationComponent()
-      MyApp(),
+      child: ProviderScope(child: MyApp(),),
     ),
   );
 }

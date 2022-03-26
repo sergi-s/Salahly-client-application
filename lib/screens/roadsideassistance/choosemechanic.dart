@@ -1,9 +1,12 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:slahly/classes/models/location.dart';
 import 'package:slahly/classes/models/mechanic.dart';
 import 'package:slahly/abstract_classes/user.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:slahly/widgets/ChooseTile.dart';
+import 'package:slahly/classes/models/mechanic.dart';
 
 class ChooseMechanicScreen extends StatelessWidget {
   ChooseMechanicScreen({Key? key}) : super(key: key);
@@ -29,6 +32,7 @@ class ChooseMechanicScreen extends StatelessWidget {
             address: "sedigabr,180 3omrt y3okbyan",
             latitude: 11,
             longitude: 12),
+
         isCenter: false,
         avatar:
             'https://thumbs.dreamstime.com/b/default-avatar-photo-placeholder-profile-image-default-avatar-photo-placeholder-profile-image-eps-file-easy-to-edit-124557892.jpg'),
@@ -39,10 +43,12 @@ class ChooseMechanicScreen extends StatelessWidget {
         phoneNumber: '01550164495',
         loc: CustomLocation(
             address: "Miami, mostshafa 3m ahmed", latitude: 11, longitude: 12),
+
         isCenter: true,
         avatar:
             'https://thumbs.dreamstime.com/b/default-avatar-photo-placeholder-profile-image-default-avatar-photo-placeholder-profile-image-eps-file-easy-to-edit-124557892.jpg')
   ];
+
   static const routeName = "/choosemechanicscreen";
 
   @override

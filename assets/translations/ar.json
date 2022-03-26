@@ -16,4 +16,15 @@
   "choose_mech": "أختر مكانيكي",
   "mechanic": "ميكانيكي",
   "center": "مركز صيانه"
+  "confirm_or_edit_data": "تأكيد او تعديل البيانات",
+  "problem_description": "وصف المشكلة",
+  "mechanic": "ميكانيكي",
+  "provider": "مزود السحابه"
+  "Enter Your Problem": "أدخل مشكلتك",
+  "Describe Your Problem": "صِف مشكلتك",
+  "My car is broke and doesn't work":"سيارتي معطلة ولا تعمل",
+  "Send": "إرسال",
+  "Cancel": "إِلغاء",
+  "Problem":"مشكلة"
+
 }

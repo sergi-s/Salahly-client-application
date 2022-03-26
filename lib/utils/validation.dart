@@ -60,6 +60,7 @@ class Validator {
   static bool ageValidator(DateTime dateTime) {
     // regex for validation of date format : dd.mm.yyyy, dd/mm/yyyy, dd-mm-yyyy
     if (dateTime != "" && dateTime.isBefore(DateTime.now())) {
+
       return true;
     }
     return false;
