@@ -1,131 +1,98 @@
-import 'dart:convert';
-
 import 'package:firebase_database/firebase_database.dart';
-import 'package:geolocator/geolocator.dart';
-import 'package:slahly/classes/firebase/nearbylocations.dart';
 import 'package:slahly/classes/models/client.dart';
 import 'package:slahly/classes/models/location.dart';
 import 'package:slahly/classes/models/mechanic.dart';
 import 'package:slahly/classes/models/towProvider.dart';
 import 'package:slahly/main.dart';
-import "package:http/http.dart" as http;
-
-import '../../../utils/constants.dart';
 
 class RSA {
 
-  RSA_state state = RSA_state.created;
-  CustomLocation? location; // lazm yt2sm le long w lat
-  String? rsaID;
-  String? problemDescription;
-  Client? user;
-  TowProvider? towProvider;
-  Mechanic? mechanic;
-  DateTime? estimatedTime;
-  List<Mechanic>? nearbyMechanics; // not included in FB
-  List<TowProvider>? nearbyProviders; // not included in FB
+  RSAStates _state = RSAStates.created;
+  CustomLocation? _location; // lazm yt2sm le long w lat
+  String? _rsaID;///
+  String? _problemDescription;
+  Client? _user;
+  TowProvider? _towProvider;
+  Mechanic? _mechanic;
+  DateTime? _estimatedTime;///
+  List<Mechanic>? _nearbyMechanics; // not included in FB
+  List<TowProvider>? _nearbyProviders; // not included in FB
 
-  _setProblemDescription(String description) {
-    problemDescription = description;
-  }
 
   RSA({
     Mechanic? mechanic,
     TowProvider? towProvider,
-    RSA_state? state,
+    RSAStates? state,
     String? problemDescription,
     List<Mechanic>? nearbyMechanics,
     List<TowProvider>? nearbyProviders,
     CustomLocation? location,
     String? rsaID,
     Client? user,
+    DateTime? estimatedTime
   }) {
-    this.mechanic = mechanic ?? this.mechanic;
-    this.towProvider = towProvider ?? this.towProvider;
-    this.state = state ?? this.state;
-    this.problemDescription = problemDescription ?? problemDescription;
-    this.nearbyMechanics = nearbyMechanics ?? this.nearbyMechanics;
-    this.nearbyProviders = nearbyProviders ?? this.nearbyProviders;
-    this.location = location ?? this.location;
-    this.rsaID = rsaID ?? this.rsaID;
-    this.user = user ?? this.user;
+    _mechanic = mechanic ?? _mechanic;
+    _towProvider = towProvider ?? _towProvider;
+    _state = state ?? _state;
+    _problemDescription = problemDescription ?? problemDescription;
+    _nearbyMechanics = nearbyMechanics ?? _nearbyMechanics;
+    _nearbyProviders = nearbyProviders ?? _nearbyProviders;
+    _location = location ?? _location;
+    _rsaID = rsaID ?? _rsaID;
+    _user = user ?? _user;
+    _estimatedTime = estimatedTime?? _estimatedTime;
   }
 
   RSA copyWith({
     Mechanic? mechanic,
     TowProvider? provider,
-    RSA_state? state,
+    RSAStates? state,
     String? problemDescription,
     List<Mechanic>? nearbyMechanics,
     List<TowProvider>? nearbyProviders,
     CustomLocation? location,
     String? rsaID,
     Client? user,
+    DateTime? estimatedTime
   }) =>
       RSA(
-          mechanic:mechanic ?? this.mechanic,
-          towProvider : provider ?? this.towProvider,
-          state : state ?? this.state,
-          problemDescription : problemDescription ?? this.problemDescription,
-          nearbyMechanics : nearbyMechanics ?? this.nearbyMechanics,
-          nearbyProviders : nearbyProviders ?? this.nearbyProviders,
-          location : location ?? this.location,
-          rsaID : rsaID ?? this.rsaID,
-          user : user ?? this.user,
+          mechanic:mechanic ?? _mechanic,
+          towProvider : provider ?? _towProvider,
+          state : state ?? _state,
+          problemDescription : problemDescription ?? _problemDescription,
+          nearbyMechanics : nearbyMechanics ?? _nearbyMechanics,
+          nearbyProviders : nearbyProviders ?? _nearbyProviders,
+          location : location ?? _location,
+          rsaID : rsaID ?? _rsaID,
+          user : user ?? _user,
+          estimatedTime : estimatedTime?? _estimatedTime
       );
 
-  String getProblemDescription() => problemDescription!;
 
-  Mechanic getMechanic() => mechanic!;
+  //Getters
+  CustomLocation? get location => _location;
 
-  TowProvider getProvider() => towProvider!;
+  String? get problemDescription => _problemDescription;
+
+  Client? get user => _user;
+
+  TowProvider? get towProvider => _towProvider;
+
+  Mechanic? get mechanic => _mechanic;
+
+  DateTime? get estimatedTime => _estimatedTime;
+
+  List<Mechanic>? get nearbyMechanics => _nearbyMechanics;
+
+  List<TowProvider>? get nearbyProviders => _nearbyProviders;
+
+  RSAStates get state => _state;
 
 
-
-  requestNearbyProviders() async {
-    //uses location get nearby mechs
-    nearbyProviders = [];
-    await NearbyLocations.getNearbyProviders(
-        location!.latitude,
-        location!.longitude,
-        // user.getSubscriptionRange()!.toDouble(),
-        100,
-        nearbyProviders!);
-
-  }
-
-  requestNearbyMechanics() async {
-    //uses location get nearby mechs
-    nearbyMechanics = [];
-
-    await NearbyLocations.getNearbyMechanics(
-        location!.latitude,
-        location!.longitude,
-        // user.getSubscriptionRange()!.toDouble(),
-        100,
-        nearbyMechanics!);
-  }
-
-  _setMechanic(Mechanic mech, bool stopListener) {
-    //momken nbdlha b firebase ID aw ayan kan
-    mechanic = mech;
-    if (stopListener) {
-      NearbyLocations.stopListener();
-    }
-  }
-
-  _setProvider(TowProvider provider, bool stopListener) {
-    //momken nbdlha b firebase ID aw ayan kan
-    towProvider = provider;
-    if (stopListener) {
-      NearbyLocations.stopListener();
-    }
-
-  }
 
   Future requestRSA() async {
     //testing purpose
-    user = Client(
+    _user = Client(
 
         email: 'momo',
         name: "sd",
@@ -135,63 +102,40 @@ class RSA {
     ///TODO MAKE THIS FROM USER DATA
 
     DatabaseReference newRSA = dbRef.child("rsa").push();
+
     await newRSA.set({
-      "userID": user!.id,
-      "latitude": location!.latitude,
-      "longitude": location!.longitude,
-      "towProviderID": towProvider!.id,
-      "mechanic": mechanic!.id,
-      "state": RSA_state.waiting_for_mech_response.toString()
+      "userID": _user!.id,
+      "latitude": _location!.latitude,
+      "longitude": _location!.longitude,
+      "towProviderID": _towProvider!.id,
+      "mechanic": _mechanic!.id,
+      "state": RSAStates.waitingForMechanicResponse.toString()
     });
-    state = RSA_state.waiting_for_mech_response;
-    rsaID = newRSA.key.toString();
-    return true;
+    return newRSA.key;
 
-    return false;
-  }
-
-  static Future<dynamic> getRequest(String url) async {
-    http.Response response = await http.get(Uri.parse(url));
-    try {
-      if (response.statusCode == 200) {
-        String jsonData = response.body;
-        var decodeData = jsonDecode(jsonData);
-        return decodeData;
-      } else {
-        return "failed";
-      }
-    } catch (e) {
-      return "failed";
-    }
-  }
-
-  static Future<String> searchCoordinateAddress(double long, double lat) async {
-    late String placeAddress;
-    String geoURL =
-        "https://open.mapquestapi.com/geocoding/v1/reverse?key=$geoCodingKey&includeRoadMetadata=true&includeNearestIntersection=true&location=${lat},${long}";
-
-    var response = await getRequest(geoURL);
-
-    if (response != "failed") {
-      placeAddress =
-          "${response["results"][0]["locations"][0]["street"]}, ${response["results"][0]["locations"][0]["adminArea3"]}, ${response["results"][0]["locations"][0]["adminArea1"]}";
-    }
-    return placeAddress;
   }
 }
 
-enum RSA_state {
+enum RSAStates {
   canceled,
-  created,
-  // user_choosing_mech,
-  // user_choosing_prov,
-  waiting_for_arrival,
-  confirmed_arrival,
-  done,
-  searching_for_nearby_mech,
-  searching_for_nearby_prov,
-  waiting_for_mech_response,
-  waiting_for_prov_response,
-  requesting_rsa,
-  failed_to_request_rsa
+
+  searchingForNearbyMechanic,// started searching                               App state
+  userChoosingMechanic,// list loaded (at least 1) and user choosing            App state
+  userChoseMechanic,// chose mechanic                                           RSA state
+  searchingForNearbyProvider,// started searching                               App state
+  userChoosingProvider,// list loaded (at least 1) and user choosing            App state
+  userChoseProvider,// chose provider                                           RSA state
+
+  requestingRSA,
+  failedToRequestRSA,
+  created,// created RSA
+
+  waitingForMechanicResponse,//
+  mechanicConfirmed,
+  waitingForProviderResponse,
+  providerConfirmed,
+
+  waitingForArrival,
+  confirmedArrival,
+  done
 }

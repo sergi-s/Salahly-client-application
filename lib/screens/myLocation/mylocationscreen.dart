@@ -3,9 +3,9 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:slahly/classes/firebase/roadsideassistance/roadsideassistance.dart';
 import 'package:slahly/classes/models/location.dart';
 import 'package:slahly/utils/location/getuserlocation.dart';
+import 'package:slahly/utils/location/search_coordinate_address.dart';
 
 class MyLocationScreen extends StatefulWidget {
   static const String routeName = "/locationComponent";
@@ -82,7 +82,7 @@ class _MyLocationScreenState extends State<MyLocationScreen> {
     currentCustomLoc = cus;
 
     //update address
-    currentCustomLoc.address = await RSA.searchCoordinateAddress(
+    currentCustomLoc.address = await searchCoordinateAddress(
         currentCustomLoc.latitude, currentCustomLoc.longitude);
 
     print(currentCustomLoc.address);

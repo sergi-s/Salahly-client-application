@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:go_router/go_router.dart';
 import 'package:slahly/screens/homepage.dart';
 import 'package:slahly/screens/firebaseemulatortestscreen/firebaseemulatortestscreen.dart';
@@ -12,20 +13,41 @@ import 'package:slahly/screens/roadsideassistance/rsaconfirmationScreen.dart';
 import 'package:slahly/screens/roadsideassistance/waitforarrival.dart';
 import 'package:slahly/screens/splashScreen/splashscreen.dart';
 import 'package:slahly/screens/myLocation/mylocationscreen.dart';
+import 'package:slahly/screens/userMangament/addSubowner.dart';
+import 'package:slahly/screens/userMangament/manageSubowner.dart';
+import 'package:slahly/screens/userMangament/transferOwner.dart';
 import 'package:slahly/screens/testscreen.dart';
 import 'package:slahly/screens/Describeproblem.dart';
+import 'package:slahly/screens/viewcars.dart';
+import 'package:slahly/screens/addcarbutton.dart';
+import 'package:slahly/screens/waitforapproval/wait_for_approval_screen.dart';
 import 'package:slahly/screens/waitforarrvial.dart';
 
 class Routing {
   get router => GoRouter(
 
-    initialLocation:LoginSignupScreen.routeName,
-
+    initialLocation: TestScreenSM_nearbymechanics.routeName,
     routes: <GoRoute> [
+      GoRoute( //TESTING
+        path: TestScreenFBNotification.routeName,
+        builder: (context, state) => TestScreenFBNotification(),//TestScreenRSASMTest(),
+      ),
       GoRoute(
         path: LoginSignupScreen.routeName,
         builder: (context, state) => LoginSignupScreen(),
       ),
+       GoRoute(
+            path: ManageSubowner.routeName,
+            builder: (context, state) => ManageSubowner(),
+          ),
+          GoRoute(
+            path: TransferOwner.routeName,
+            builder: (context, state) => TransferOwner(),
+          ),
+          GoRoute(
+            path: AddSubowner.routeName,
+            builder: (context, state) => AddSubowner(),
+          ),
       GoRoute(
         path: MyLocationScreen.routeName,
         builder: (context, state) => MyLocationScreen(),
@@ -58,10 +80,6 @@ class Routing {
         path: FirebaseEmulatorScreen.routeName,
         builder: (context, state) => FirebaseEmulatorScreen(),
       ),
-      GoRoute( //TESTING
-        path: TestScreen.routeName,
-        builder: (context, state) => TestScreen(),
-      ),
       GoRoute(
         path: RSAConfirmationScreen.routeName,
         builder: (context, state) => RSAConfirmationScreen(),
@@ -91,6 +109,16 @@ class Routing {
             return Registration(emailobj: state.extra! as String);
           }
 
+      ),
+      GoRoute(
+        path: ViewCars.routeName,
+        builder: (context, state) => ViewCars(),
+      ),
+      GoRoute(
+        path: AddCars.routeName,
+        builder: (context, state) => AddCars(),
+        path: WaitForApprovalScreen.routeName,
+        builder: (context, state) => WaitForApprovalScreen(),
       ),
     ],
   );
