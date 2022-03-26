@@ -16,7 +16,7 @@ class Mechanic extends UserType {
     String? birthDay,
     String? createdDate,
     AccountState? userState,
-    Sex? sex,
+    Gender? sex,
     Type? type,
     String? avatar,
     CustomLocation? loc,

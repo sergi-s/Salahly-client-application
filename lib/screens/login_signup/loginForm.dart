@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:slahly/screens/homepage.dart';
 import 'package:slahly/screens/login_signup/registration.dart';
 import 'package:slahly/screens/myLocation/mylocationscreen.dart';
 import 'package:slahly/widgets/login_signup/Rounded_Bottom.dart';
@@ -12,6 +13,9 @@ import 'package:slahly/widgets/login_signup/roundedInput.dart';
 import 'package:slahly/classes/firebase/firebase.dart';
 
 class LoginForm extends StatelessWidget {
+
+
+
   LoginForm({
     Key? key,
     required this.size,
@@ -28,7 +32,7 @@ class LoginForm extends StatelessWidget {
     email = e;
   }
 
-  updatepassword(String pass) {
+  updatePassword(String pass) {
     password = pass;
   }
 
@@ -66,7 +70,7 @@ class LoginForm extends StatelessWidget {
             hint: 'Email'.tr(),
             fn: updateEmail,
           ),
-          RounedPasswordInput(hint: 'password'.tr(), function: updatepassword),
+          RounedPasswordInput(hint: 'password'.tr(), function: updatePassword),
           SizedBox(height: 10),
           RoundedButton(
             title: 'login'.tr(),
@@ -84,7 +88,10 @@ class LoginForm extends StatelessWidget {
               bool check = await fb.login(email, password);
               if (check) {
 
-                context.go(Registration.routeName, extra: "email@gmail.com");
+                ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text(
+                        'Login successful')));
+                context.go(HomePage.routeName);
               } else {
                 ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(content: Text(

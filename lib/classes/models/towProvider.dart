@@ -18,7 +18,7 @@ class TowProvider extends UserType {
     String? birthDay,
     String? createdDate,
     AccountState? userState,
-    Sex? sex,
+    Gender? sex,
     Type? type,
     String? avatar,
     String? address,
@@ -26,7 +26,7 @@ class TowProvider extends UserType {
     CustomLocation? loc,
     this.isAccepted,
     this.isCenter,
-    required this.nationalID,
+    this.nationalID,
   }) : super(
             name: name,
             email: email,

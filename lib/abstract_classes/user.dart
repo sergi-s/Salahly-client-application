@@ -1,7 +1,7 @@
 import 'package:slahly/classes/models/location.dart';
 
 enum AccountState { active, block }
-enum Sex { none, male, female }
+enum Gender { none, male, female }
 enum Type { client, mechanic, provider, admin }
 enum Language { en, ar }
 
@@ -22,7 +22,7 @@ abstract class UserType {
   CustomLocation? loc;
 
   // final Language lang;
-  Sex? sex;
+  Gender? sex;
   AccountState? state;
 
   UserType({

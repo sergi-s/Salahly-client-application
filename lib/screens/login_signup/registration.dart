@@ -65,18 +65,14 @@ class Registration extends StatelessWidget {
     //           content:
     //           Text('Invalid age!! Please try again')));
     // }
-    print("aaaaaaaaaaaaaaaaaa");
     Client client=Client(name: username, email: emailobj,address: address,phoneNumber: phonenumber, subscription: SubscriptionTypes.silver);
-    print("bbbbbbbbbbbbbbbbbbbb");
+
     bool check = await fb.registration(client);
     if (check) {
-      print("ccccccccccc");
       ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
               content: Text(' Sucessfully ')));
-      print("ddddddddddddddddddddd");
     } else {
-      print("eeeeeeeeee");
       return ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Failed to Register!!')));
     }

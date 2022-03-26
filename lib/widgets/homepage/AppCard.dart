@@ -7,7 +7,9 @@ class CardWidget extends StatelessWidget {
     required this.title,
     required this.subtitle,
     required this.image,
+    required this.fun
   }) : super(key: key);
+  final Function fun;
   final String title;
   final String subtitle;
   final String image;
@@ -20,7 +22,7 @@ class CardWidget extends StatelessWidget {
         child: InkWell(
           splashColor: Colors.blue.withAlpha(30),
           onTap: () {
-            debugPrint('Card tapped.');
+            fun();
           },
           child: Column(
           mainAxisSize: MainAxisSize.min,

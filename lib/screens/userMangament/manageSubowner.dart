@@ -1,11 +1,11 @@
-import 'package:firebase_auth/firebase_auth.dart';
+import 'dart:math';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:slahly/main.dart';
 import 'package:slahly/classes/models/client.dart';
+import 'package:slahly/screens/userMangament/addSubowner.dart';
 
 class ManageSubowner extends StatelessWidget {
   static final routeName = "/manageSubowner";
@@ -28,8 +28,9 @@ class ManageSubowner extends StatelessWidget {
         subscription: SubscriptionTypes.gold,
         phoneNumber: "010292929223",
         address: "MONTAZAA m3omraaaa",
-        avatar:
-            "https://scontent.fcai19-5.fna.fbcdn.net/v/t39.30808-6/241676442_4279329582181382_2167552377324842210_n.jpg?_nc_cat=105&ccb=1-5&_nc_sid=09cbfe&_nc_eui2=AeGKq4FMZp3eGePXQ9yrDTBYkTuL3-uGRVeRO4vf64ZFVyifGvoEaCgfgms4jZSbNSNezryRH0GahKxAbVi2v_V5&_nc_ohc=2j1ZPLP0Oe0AX-V7zp-&_nc_ht=scontent.fcai19-5.fna&oh=00_AT8N6VsLIbTZGsJkVnDDHsebygQtlt5Ks1qS1ZTXL_oq0A&oe=6243CF2E"),
+        avatar: "https://pbs.twimg.com/profile_images/1440433307859111939/mG5NGNHn_400x400.jpg"),
+        // avatar:
+        //     "https://scontent.fcai19-5.fna.fbcdn.net/v/t39.30808-6/241676442_4279329582181382_2167552377324842210_n.jpg?_nc_cat=105&ccb=1-5&_nc_sid=09cbfe&_nc_eui2=AeGKq4FMZp3eGePXQ9yrDTBYkTuL3-uGRVeRO4vf64ZFVyifGvoEaCgfgms4jZSbNSNezryRH0GahKxAbVi2v_V5&_nc_ohc=2j1ZPLP0Oe0AX-V7zp-&_nc_ht=scontent.fcai19-5.fna&oh=00_AT8N6VsLIbTZGsJkVnDDHsebygQtlt5Ks1qS1ZTXL_oq0A&oe=6243CF2E"),
     Client(
         id: "55",
         name: "Aya Adel",
@@ -37,6 +38,7 @@ class ManageSubowner extends StatelessWidget {
         subscription: SubscriptionTypes.gold,
         phoneNumber: "01550123452",
         address: "Miami 45 sedigabrrrr ",
+        // avatar: "https://pbs.twimg.com/profile_images/1440433307859111939/mG5NGNHn_400x400.jpg")
         avatar:
             "https://scontent.fcai19-5.fna.fbcdn.net/v/t1.6435-1/120053014_3312976808750538_4906589982223067147_n.jpg?stp=dst-jpg_p320x320&_nc_cat=103&ccb=1-5&_nc_sid=7206a8&_nc_eui2=AeHMNvNnR3nl2ObBrXKSD-8UExuDCTt1Yb0TG4MJO3VhvTCrljjmoH9HIzkF3QGEe1f295mLUxwtP4hMO-wnXoB6&_nc_ohc=_H9LRDfeyAEAX-73M7h&_nc_ht=scontent.fcai19-5.fna&oh=00_AT-r5LC5Jqzt7LOR0UyKSoIN3rF9ogcG7d2kDrz75N7xIA&oe=62665C22")
   ];
@@ -57,12 +59,17 @@ class ManageSubowner extends StatelessWidget {
   }
 
   Widget rowItem(context, index) {
+    // Random random = new Random();
+    // int randomNumber = random.nextInt(1000000);
+    // Key k = Key(randomNumber.toString());
     return Dismissible(
         confirmDismiss: (DismissDirection) async {
           return await showAlertbox(context, client[index], index);
         },
         key: Key(client[index].id.toString()),
+        // key: Key(randomNumber.toString()),
         onDismissed: (direction) {
+          // _deleteRecord(k)
           var info = this.client[index];
         },
         background: deleteBgItem(),
@@ -182,7 +189,8 @@ class ManageSubowner extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          context.go('/addSubowner');
+          context.push(AddSubowner.routeName);
+
         },
         child: const Icon(Icons.add),
         backgroundColor: Colors.green,

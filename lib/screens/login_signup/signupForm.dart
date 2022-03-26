@@ -105,7 +105,7 @@ class SignUpForm extends StatelessWidget {
                 return ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(content: Text('Account is Already Used!!')));
               }
-              // context.go(Registration.routeName+"/$email");
+              context.go(Registration.routeName, extra: email);
             },
 
           ),
