@@ -16,3 +16,15 @@ exports.helloWorld = functions.https.onRequest((request, response) => {
   functions.logger.info("Hello logs!", {structuredData: true});
   response.send("Hello from Firebase!");
 });
+
+exports.simpleDbFunction = functions.database.ref('/rsa')
+    .onCreate((snap, context) => {
+//      if (context.authType === 'ADMIN') {
+//        // do something
+//      } else if (context.authType === 'USER') {
+//        console.log(snap.val(), 'written by', context.auth.uid);
+//      }
+
+       // send notification to all mechanics whose IDs are registered
+
+    });

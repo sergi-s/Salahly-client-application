@@ -54,7 +54,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 onPressed: ()async{
                   List<Mechanic> nearb = [];
                   // await FirebaseAuth.instance.signOut();
-                  NearbyLocations.getNearbyMechanics(31.206971, 29.919035,100,nearb);
+                  // NearbyLocations.getNearbyMechanics(31.206971, 29.919035,100,nearb);
 
 
                   // print("Keys retrieved "+NearbyLocations.keysRetrieved.length.toString());
@@ -68,7 +68,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 onPressed: ()async{
                   // await FirebaseAuth.instance.signOut();
                   List<TowProvider> nearb = [];
-                  NearbyLocations.getNearbyProviders(31.206971, 29.919035,100,nearb);
+                  // NearbyLocations.getNearbyProviders(31.206971, 29.919035,100,nearb);
 
 
                   // print("Keys retrieved "+NearbyLocations.keysRetrieved.length.toString());

@@ -24,9 +24,12 @@ import 'package:slahly/screens/waitforarrvial.dart';
 class Routing {
   get router => GoRouter(
 
-    initialLocation: WaitForApprovalScreen.routeName,
-
+    initialLocation: TestScreenSM_nearbymechanics.routeName,
     routes: <GoRoute> [
+      GoRoute( //TESTING
+        path: TestScreenFBNotification.routeName,
+        builder: (context, state) => TestScreenFBNotification(),//TestScreenRSASMTest(),
+      ),
       GoRoute(
         path: LoginSignupScreen.routeName,
         builder: (context, state) => LoginSignupScreen(),
@@ -74,10 +77,6 @@ class Routing {
       GoRoute( //TESTING
         path: FirebaseEmulatorScreen.routeName,
         builder: (context, state) => FirebaseEmulatorScreen(),
-      ),
-      GoRoute( //TESTING
-        path: TestScreen.routeName,
-        builder: (context, state) => TestScreen(),
       ),
       GoRoute(
         path: RSAConfirmationScreen.routeName,
