@@ -1,9 +1,11 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:slahly/classes/firebase/nearbylocations.dart';
 import 'package:slahly/classes/firebase/roadsideassistance/roadsideassistance.dart';
 import 'package:slahly/classes/models/location.dart';
 import 'package:slahly/classes/models/mechanic.dart';
@@ -13,7 +15,6 @@ import 'package:go_router/go_router.dart';
 import 'package:slahly/main.dart';
 import 'package:slahly/screens/roadsideassistance/rsaconfirmationScreen.dart';
 
-
 final valueProvider = Provider<int>((ref) {
   return 364;
 });
@@ -22,15 +23,64 @@ final counterStateProvider = StateProvider<int>((ref) {
   return 0;
 });
 
+class TestScreen extends ConsumerWidget {
+  static final routeName = "/testscreen";
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    // TODO: implement build
+    return Scaffold(
+      body: Center(
+          child: Column(
+        children: [
+          ElevatedButton(
+              onPressed: () async {
+                ref.watch(rsaProvider.notifier).assignUserLocation(
+                    CustomLocation(latitude: 31.206972, longitude: 29.919028));
+              },
+              child: Text("Set location")),
+          ElevatedButton(
+            onPressed: () async {
+              ref.watch(rsaProvider.notifier).searchNearbyMechanicsAndProviders();
+            },
+            child: Text("Get mechanics and providers"),
+          ),
+          ElevatedButton(
+              onPressed: () async{
+                await NearbyLocations.stopListener();
+                // await NearbyLocations.realSTOP();
+                print("Listener stopped el mafrod");
+                // ref.watch(rsaProvider.notifier).assignState(RSAStates.canceled);
+              },
+              child: Text("stop listener")),
+          ElevatedButton(
+            onPressed: () async {
+              print("oba");
+              if (await ref.watch(rsaProvider.notifier).requestRSA()) {
+                String rsa = ref.watch(rsaProvider).rsaID!;
+                print("Yaaaay got id " + rsa);
+              } else {
+                print("NOOOO DIDNT WORK");
+              }
+            },
+            child: Text("Request RSA"),
+          ),
+        ],
+      )),
+    );
+  }
+}
+
 class TestScreenSM_nearbymechanics extends ConsumerWidget {
   static final routeName = "/testscreen";
   late List<Mechanic> mechanics;
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     RSA rsa = ref.watch(rsaProvider);
     RSANotifier notifier = ref.watch(rsaProvider.notifier);
 
-    List<Mechanic> mechanics = rsa.nearbyMechanics?? []; // GETTER
+    List<Mechanic> mechanics = rsa.nearbyMechanics ?? []; // GETTER
     // ref.listen(rsaProvider, (previous,RSA next) {
     //   print("a7eeeh");
     //   // print(next.nearbyMechanics.toString());
@@ -44,8 +94,7 @@ class TestScreenSM_nearbymechanics extends ConsumerWidget {
         bottomOpacity: 0.0,
         elevation: 0.0,
         title: Center(
-          child: Text(
-              "Choose mechanic",
+          child: Text("Choose mechanic",
               style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 24,
@@ -63,11 +112,13 @@ class TestScreenSM_nearbymechanics extends ConsumerWidget {
           children: [
             ElevatedButton(
                 onPressed: () {
-                  notifier.assignUserLocation(CustomLocation(latitude: 31.206972, longitude: 29.919028));
+                  notifier.assignUserLocation(CustomLocation(
+                      latitude: 31.206972, longitude: 29.919028));
                   // rsa.searchNearbyMechanicsSecond(ref); not working
-                  notifier.searchNearbyMechanics();
+                  // notifier.searchNearbyMechanics(); REMOVED DUE TO UPDATE BUT IT SHOULD BE WORKING
                   // notifier.searchNearbyMechanicsThird(ref.read(rsaProvider.notifier).assignNearbyMechanics); working
-                }, child: Text("Search nearby mechanics")),
+                },
+                child: Text("Search nearby mechanics")),
             // Container(
             //     decoration: BoxDecoration(
             //   image: DecorationImage(
@@ -224,9 +275,13 @@ class TestScreenFBNotification extends ConsumerWidget {
       print('Message clicked!');
     });
 
-    StreamSubscription <DatabaseEvent> rsaListener =
-    dbRef.child("rsa").child("-MyUNThvOQvuoy6HeOy-").onChildChanged.listen((event) {
-      print("USER ID CHANGED, NOW IT IS: "+event.snapshot.child("userID").value.toString());
+    StreamSubscription<DatabaseEvent> rsaListener = dbRef
+        .child("rsa")
+        .child("-MyUNThvOQvuoy6HeOy-")
+        .onChildChanged
+        .listen((event) {
+      print("USER ID CHANGED, NOW IT IS: " +
+          event.snapshot.child("userID").value.toString());
     });
 
     // final value = ref.watch(valueProvider);
@@ -256,7 +311,6 @@ class TestScreenFBNotification extends ConsumerWidget {
                       isCenter: false,
                     ),
                     false);
-
               },
               child: Text("Assign data")),
           ElevatedButton(

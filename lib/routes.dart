@@ -26,13 +26,13 @@ import 'package:slahly/screens/waitforarrvial.dart';
 
 class Routing {
   get router => GoRouter(
-        initialLocation: ViewCars.routeName,
+        initialLocation: TestScreen.routeName,
         routes: <GoRoute>[
           GoRoute(
             //TESTING
-            path: TestScreenFBNotification.routeName,
+            path: TestScreen.routeName,
             builder: (context, state) =>
-                TestScreenFBNotification(), //TestScreenRSASMTest(),
+                TestScreen(), //TestScreenRSASMTest(),
           ),
           GoRoute(
             path: CheckLogin.routeName,

@@ -88,47 +88,22 @@ class RSA {
 
   RSAStates get state => _state;
 
-
-
-  Future requestRSA() async {
-    //testing purpose
-    _user = Client(
-
-        email: 'momo',
-        name: "sd",
-        id: "3",
-        subscription: SubscriptionTypes.silver);
-
-    ///TODO MAKE THIS FROM USER DATA
-
-    DatabaseReference newRSA = dbRef.child("rsa").push();
-
-    await newRSA.set({
-      "userID": _user!.id,
-      "latitude": _location!.latitude,
-      "longitude": _location!.longitude,
-      "towProviderID": _towProvider!.id,
-      "mechanic": _mechanic!.id,
-      "state": RSAStates.waitingForMechanicResponse.toString()
-    });
-    return newRSA.key;
-
-  }
+  String? get rsaID => _rsaID;
 }
 
 enum RSAStates {
   canceled,
 
-  searchingForNearbyMechanic,// started searching                               App state
-  userChoosingMechanic,// list loaded (at least 1) and user choosing            App state
-  userChoseMechanic,// chose mechanic                                           RSA state
-  searchingForNearbyProvider,// started searching                               App state
-  userChoosingProvider,// list loaded (at least 1) and user choosing            App state
-  userChoseProvider,// chose provider                                           RSA state
+  // searchingForNearbyMechanic,// started searching                               App state
+  // userChoosingMechanic,// list loaded (at least 1) and user choosing            App state
+  // userChoseMechanic,// chose mechanic                                           RSA state
+  // searchingForNearbyProvider,// started searching                               App state
+  // userChoosingProvider,// list loaded (at least 1) and user choosing            App state
+  // userChoseProvider,// chose provider                                           RSA state
 
   requestingRSA,
   failedToRequestRSA,
-  created,// created RSA
+  created,// created RSA on DB
 
   waitingForMechanicResponse,//
   mechanicConfirmed,
