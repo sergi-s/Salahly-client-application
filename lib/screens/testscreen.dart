@@ -23,7 +23,22 @@ final counterStateProvider = StateProvider<int>((ref) {
   return 0;
 });
 
-class TestScreen extends ConsumerWidget {
+class TestScreen_ extends ConsumerWidget {
+  static final routeName = "/testscreen";
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+return Scaffold(
+  body: Center(
+    child: Column(
+
+    ),
+  ),
+);
+  }
+}
+
+class TestScreen_nearbymechanics_and_create_rsa extends ConsumerWidget {
   static final routeName = "/testscreen";
 
   @override

@@ -89,7 +89,24 @@ class RSA {
   RSAStates get state => _state;
 
   String? get rsaID => _rsaID;
+
+  static String stateToString(RSAStates state){
+    return (state.toString()).isNotEmpty?(state.toString()).substring(10):"";
+    // deletes "RSAStates." at the beginning
+  }
+
 }
+/*
+ RSA_refactored
+  RSA_state_management_and_RSA_confirmation_screen_v1
+  for_sergi
+  main
+  my-location-feature
+  my-location-incomplete
+  nearby_locations
+  nearby_locations+create_RSA
+
+ */
 
 enum RSAStates {
   canceled,

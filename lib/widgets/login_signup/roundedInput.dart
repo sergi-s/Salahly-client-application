@@ -22,6 +22,7 @@ class RounedInput extends StatelessWidget {
           fn(value);
 
         },
+
         controller: _textEditingController,
         cursorColor: Colors.blue,
         decoration: InputDecoration(

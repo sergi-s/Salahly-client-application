@@ -3,7 +3,10 @@
 import 'dart:io';
 
 import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:overlay_support/overlay_support.dart';
 import 'package:slahly/abstract_classes/authentication.dart';
 import 'package:slahly/classes/models/client.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -22,6 +25,8 @@ class FirebaseCustom extends Authentication {
       final user = await _firebaseAuth.signInWithEmailAndPassword(
           email: emm, password: password);
       if (user != null) {
+        await _registerFCMToken(FirebaseAuth.instance.currentUser!.uid);
+        _registerNotficiations();
         return true;
       }
     } catch (e) {
@@ -31,14 +36,30 @@ class FirebaseCustom extends Authentication {
     return false;
   }
 
+  _registerFCMToken(String id) async {
+    return await FirebaseMessaging.instance
+        .getToken()
+        .then((value) => dbRef.child("FCMTokens").set({id: value}));
+  }
+
+  _registerNotficiations() {
+    FirebaseMessaging.onMessage.listen((RemoteMessage event) {
+      print("message recieved");
+      print(event.notification!.body);
+      showSimpleNotification(Text("Received a notification, rsaID: "+event.notification!.body.toString()),
+          background: Colors.green);
+    });
+    FirebaseMessaging.onMessageOpenedApp.listen((message) {
+      print('Message clicked!');
+    });
+  }
 
   @override
   Future<bool> signup(String email, String password) async {
     String emm = ((email) != null ? email : "").toString();
     final User? firebaseUser = (await _firebaseAuth
-        .createUserWithEmailAndPassword(
-        email: emm, password: password)
-        .catchError((errMsg) {
+            .createUserWithEmailAndPassword(email: emm, password: password)
+            .catchError((errMsg) {
       print(errMsg);
       print('5ara');
       return false;
@@ -59,7 +80,8 @@ class FirebaseCustom extends Authentication {
       //   "address": client.address,
       //   "phoneNumber": client.phoneNumber,
       //   "loc": client.loc
-    };
+    }
+    ;
     // usersRef.child(firebaseUser.uid).set(userDataMap);
     return false;
   }
@@ -84,7 +106,6 @@ class FirebaseCustom extends Authentication {
     return true;
   }
 
-
   final bool use_emulator = true;
 
   Future _connectToFirebaseEmulator() async {
@@ -98,8 +119,7 @@ class FirebaseCustom extends Authentication {
     if (use_emulator) {
       try {
         await _connectToFirebaseEmulator();
-      }
-      catch (Exception) {
+      } catch (Exception) {
         print(Exception);
       }
     } else

@@ -59,8 +59,8 @@ class RSANotifier extends StateNotifier<RSA> {
 
   Future _requestRSA() async {
     //testing purpose
-    // String userID = FirebaseAuth.instance.currentUser!.uid;
-    String userID = "met7at";
+    String userID = FirebaseAuth.instance.currentUser!.uid;
+    // String userID = "met7at";
     ///TODO MAKE THIS FROM USER DATA
 
     DatabaseReference newRSA = dbRef.child("rsa").push();
