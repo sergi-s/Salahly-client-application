@@ -21,9 +21,9 @@
   "provider": "مزود السحابه",
   "Enter Your Problem": "أدخل مشكلتك",
   "Describe Your Problem": "صِف مشكلتك",
-  "My car is broke and doesn't work":"سيارتي معطلة ولا تعمل",
+  "My car is broke and doesn't work": "سيارتي معطلة ولا تعمل",
   "Send": "إرسال",
   "Cancel": "إِلغاء",
-  "Problem":"مشكلة"
-
+  "Problem": "مشكلة",
+  "confirm_location": "تاكيد المكان"
 }

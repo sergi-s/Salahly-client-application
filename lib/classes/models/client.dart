@@ -1,9 +1,10 @@
-import 'package:flutter/cupertino.dart';
 import 'package:slahly/abstract_classes/user.dart';
 import 'package:slahly/classes/models/location.dart';
+import 'car.dart';
 
 class Client extends UserType {
   SubscriptionTypes subscription = SubscriptionTypes.silver;
+  List<Car> cars = [];
 
   Client({
     required String? name,
@@ -12,13 +13,14 @@ class Client extends UserType {
     String? birthDay,
     String? createdDate,
     AccountState? userState,
-    Gender? sex,
+    Gender? gender,
     Type? type,
     String? avatar,
     String? address,
     String? phoneNumber,
     CustomLocation? loc,
-     required this.subscription,
+    List<Car>? cars,
+    required this.subscription,
   }) : super(
             name: name,
             email: email,
@@ -26,7 +28,7 @@ class Client extends UserType {
             birthDay: birthDay,
             createdDate: createdDate,
             state: userState,
-            sex: sex,
+            gender: gender,
             type: type,
             avatar: avatar,
             loc: loc,
@@ -37,21 +39,23 @@ class Client extends UserType {
     super.setPassword = value;
   }
 
-  final Map<SubscriptionTypes,double> _subscriptionData = {
+  final Map<SubscriptionTypes, double> _subscriptionData = {
     SubscriptionTypes.silver: 4,
     SubscriptionTypes.gold: 50,
     SubscriptionTypes.platinum: 200
   };
 
-  double? getSubscriptionRange(){
-    return _subscriptionData.containsKey(subscription)?_subscriptionData[subscription]:0;
+  double? getSubscriptionRange() {
+    return _subscriptionData.containsKey(subscription)
+        ? _subscriptionData[subscription]
+        : 0;
   }
 
   @override
   bool isValid() {
     return (super.isValid()
         // && subscriptionValidate(subscription)
-    );
+        );
   }
 
   // Validation
@@ -60,6 +64,4 @@ class Client extends UserType {
   }
 }
 
-enum SubscriptionTypes{
-  silver,gold,platinum
-}
+enum SubscriptionTypes { silver, gold, platinum }

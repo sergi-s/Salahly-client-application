@@ -6,8 +6,6 @@ enum Type { client, mechanic, provider, admin }
 enum Language { en, ar }
 
 abstract class UserType {
-
-
   Type? type = Type.client;
 
   String? name;
@@ -22,7 +20,7 @@ abstract class UserType {
   CustomLocation? loc;
 
   // final Language lang;
-  Gender? sex;
+  Gender? gender;
   AccountState? state;
 
   UserType({
@@ -32,7 +30,7 @@ abstract class UserType {
     this.birthDay,
     this.createdDate,
     this.state,
-    this.sex,
+    this.gender,
     this.type,
     this.avatar,
     this.loc,
@@ -47,7 +45,6 @@ abstract class UserType {
   String? getUserType() {
     return _getType.containsKey(type) ? _getType[type] : "";
   }
-
 
   String get password => _password!;
 

@@ -24,5 +24,6 @@
   "My car is broke and doesn't work": "My car is broke and doesn't work",
   "Send": "Send",
   "Cancel": "Cancel",
-  "Problem":"Problem"
+  "Problem":"Problem",
+"confirm_location": "Confirm Location"
 }
