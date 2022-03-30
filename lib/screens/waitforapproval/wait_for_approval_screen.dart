@@ -5,7 +5,8 @@ import 'package:slahly/classes/models/location.dart';
 import 'package:slahly/classes/models/mechanic.dart';
 import 'package:slahly/classes/models/towProvider.dart';
 import 'package:slahly/utils/location/getuserlocation.dart';
-
+//TODO: Delete this file
+//replacement on SearchingMechanicProvider
 Client user = Client(
     name: "aya",
     email: "aya.emai",

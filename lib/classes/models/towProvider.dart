@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:slahly/abstract_classes/user.dart';
 import 'package:slahly/classes/models/location.dart';
 
@@ -18,7 +17,7 @@ class TowProvider extends UserType {
     String? birthDay,
     String? createdDate,
     AccountState? userState,
-    Gender? sex,
+    Gender? gender,
     Type? type,
     String? avatar,
     String? address,
@@ -34,7 +33,7 @@ class TowProvider extends UserType {
             birthDay: birthDay,
             createdDate: createdDate,
             state: userState,
-            sex: sex,
+            gender: gender,
             type: type,
             avatar: avatar,
             loc: loc,

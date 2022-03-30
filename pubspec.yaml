@@ -60,7 +60,7 @@ dependencies:
   firebase_messaging: ^11.2.11
   firebase_analytics: ^9.1.2
   flutter_barcode_scanner: ^2.0.0
-
+  overlay_support: ^1.2.1
 
 
 dev_dependencies:

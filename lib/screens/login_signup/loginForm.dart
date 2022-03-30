@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:slahly/screens/homepage.dart';
 import 'package:slahly/screens/login_signup/registration.dart';
 import 'package:slahly/screens/myLocation/mylocationscreen.dart';
+import 'package:slahly/screens/testscreen.dart';
 import 'package:slahly/widgets/login_signup/Rounded_Bottom.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:go_router/go_router.dart';
@@ -91,7 +92,7 @@ class LoginForm extends StatelessWidget {
                 ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(content: Text(
                         'Login successful')));
-                context.go(HomePage.routeName);
+                context.go(TestScreen_nearbymechanics_and_create_rsa.routeName);
               } else {
                 ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(content: Text(

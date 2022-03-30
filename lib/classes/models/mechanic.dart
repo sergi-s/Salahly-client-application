@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:slahly/abstract_classes/user.dart';
 import 'package:slahly/classes/models/location.dart';
 
@@ -16,7 +15,7 @@ class Mechanic extends UserType {
     String? birthDay,
     String? createdDate,
     AccountState? userState,
-    Gender? sex,
+    Gender? gender,
     Type? type,
     String? avatar,
     CustomLocation? loc,
@@ -31,7 +30,7 @@ class Mechanic extends UserType {
             birthDay: birthDay,
             createdDate: createdDate,
             state: userState,
-            sex: sex,
+            gender: gender,
             type: type,
             avatar: avatar,
             loc: loc,

@@ -1,15 +1,14 @@
 import 'dart:async';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:slahly/classes/models/location.dart';
-import 'package:slahly/classes/provider/rsadata.dart';
 import 'package:slahly/screens/roadsideassistance/waitforarrival.dart';
 import 'package:slahly/utils/location/getuserlocation.dart';
 import 'package:slahly/utils/location/search_coordinate_address.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class MyLocationScreen extends StatefulWidget {
   static const String routeName = "/locationComponent";
@@ -45,13 +44,18 @@ class _MyLocationScreenState extends State<MyLocationScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         floatingActionButton: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             ElevatedButton(
                 onPressed: locatePosition, child: Text('my_location'.tr())),
+            const SizedBox(width: 4),
             ElevatedButton(
-                onPressed: (){
-                  context.go(SearchingMechanicProvider.routeName,extra: currentCustomLoc);
-                }, child: Text("Confirm location")),/// TODO ADD TRANSLATION YA SERGi
+                onPressed: () {
+                  context.go(SearchingMechanicProvider.routeName,
+                      extra: currentCustomLoc);
+                },
+                child: Text("confirm_location".tr())),
+
           ],
         ),
         // FloatingActionButton.extended(
