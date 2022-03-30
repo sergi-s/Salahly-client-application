@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:overlay_support/overlay_support.dart';
 import 'package:slahly/classes/models/location.dart';
 import 'package:slahly/screens/roadsideassistance/waitforarrival.dart';
 import 'package:slahly/utils/location/getuserlocation.dart';
@@ -51,8 +52,12 @@ class _MyLocationScreenState extends State<MyLocationScreen> {
             const SizedBox(width: 4),
             ElevatedButton(
                 onPressed: () {
-                  context.go(SearchingMechanicProvider.routeName,
-                      extra: currentCustomLoc);
+                  showSimpleNotification(
+                      Text("CurrentCustom lat: " +
+                          currentCustomLoc.latitude.toString()+"  long:  "+currentCustomLoc.longitude.toString()),
+                      background: Colors.green);
+                  // context.go(SearchingMechanicProvider.routeName,
+                  //     extra: currentCustomLoc);
                 },
                 child: Text("confirm_location".tr())),
 
