@@ -67,7 +67,7 @@ class NearbyLocations {
         longitude: 29.918298,
         name: "3",
         type: LocationType.provider);
-    var locs = [loc_1,loc_2,loc_3];
+    var locs = [loc_1, loc_2, loc_3];
     //31.207545, 29.919915
     for (CustomLocation lolo in locs) {
       await _addLocToDB(lolo);
@@ -141,7 +141,8 @@ stt38c5j0s
         switch (callBack) {
           case Geofire.onKeyEntered:
             getMechanicOrProviderData(map["key"]).then((value) {
-              value.loc = CustomLocation(latitude: map['latitude'], longitude: map['longitude']);
+              value.loc = CustomLocation(
+                  latitude: map['latitude'], longitude: map['longitude']);
               if (value is Mechanic) {
                 nearbyMechanics.add(value);
                 rsa.assignNearbyMechanics(nearbyMechanics);
@@ -150,7 +151,7 @@ stt38c5j0s
                 nearbyProviders.add(value);
                 rsa.assignNearbyProviders(nearbyProviders);
                 print("Added provider: " + value.name!);
-              }else{
+              } else {
                 print("Not mechanic and not provider");
               }
             });
@@ -158,48 +159,59 @@ stt38c5j0s
             break;
 
           case Geofire.onKeyExited:
+            print("inside onKeyExited");
             // keysRetrieved.remove(map["key"]);
             for (var m in nearbyProviders) {
+              print(m.id == map["key"]);
               if (m.id == map["key"]) {
                 nearbyProviders.remove(m);
                 rsa.assignNearbyProviders(nearbyProviders);
-                print("Added provider: " + m.name.toString());
+                print("REMOVED provider: " + m.name.toString());
+                break;
               }
             }
+
             for (var m in nearbyMechanics) {
+              print("IN nearbymechnaics");
+              print(m.id == map["key"]);
               if (m.id == map["key"]) {
+                print("near by mech if condition");
                 nearbyMechanics.remove(m);
                 rsa.assignNearbyMechanics(nearbyMechanics);
-                print("Added provider: " + m.name.toString());
+                print("ALL NEARBY mECHS${nearbyMechanics.toString()}");
+                print("REMOVED MECHANICS: " + m.name.toString());
+                break;
               }
+              print("end IF");
             }
             break;
 
           case Geofire.onKeyMoved:
-
-            ///TODO to be tested
-            for (var m in nearbyProviders) {
-              if (m.id == map["key"]) {
-                nearbyProviders.remove(m);
-                getMechanicOrProviderData(map["key"]).then((value) {
-                  value.loc = CustomLocation(latitude: map['latitude'], longitude: map['longitude']);
-                  nearbyProviders.add(value);
-                  rsa.assignNearbyProviders(nearbyProviders);
-                  print("Added provider: " + m.name.toString());
-                });
-              }
-            }
-            for (var m in nearbyMechanics) {
-              if (m.id == map["key"]) {
-                nearbyMechanics.remove(m);
-                getMechanicOrProviderData(map["key"]).then((value) {
-                  value.loc = CustomLocation(latitude: map['latitude'], longitude: map['longitude']);
-                  nearbyMechanics.add(value);
-                  rsa.assignNearbyMechanics(nearbyMechanics);
-                  print("Added provider: " + m.name.toString());
-                });
-              }
-            }
+            // ///TODO to be tested
+            // for (var m in nearbyProviders) {
+            //   if (m.id == map["key"]) {
+            //     nearbyProviders.remove(m);
+            //     getMechanicOrProviderData(map["key"]).then((value) {
+            //       value.loc = CustomLocation(
+            //           latitude: map['latitude'], longitude: map['longitude']);
+            //       nearbyProviders.add(value);
+            //       rsa.assignNearbyProviders(nearbyProviders);
+            //       print("Update provider: " + m.name.toString());
+            //     });
+            //   }
+            // }
+            // for (var m in nearbyMechanics) {
+            //   if (m.id == map["key"]) {
+            //     nearbyMechanics.remove(m);
+            //     getMechanicOrProviderData(map["key"]).then((value) {
+            //       value.loc = CustomLocation(
+            //           latitude: map['latitude'], longitude: map['longitude']);
+            //       nearbyMechanics.add(value);
+            //       rsa.assignNearbyMechanics(nearbyMechanics);
+            //       print("Added provider: " + m.name.toString());
+            //     });
+            //   }
+            // }
             print("a7eh update");
             break;
 

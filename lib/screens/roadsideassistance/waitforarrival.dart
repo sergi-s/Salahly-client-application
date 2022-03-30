@@ -1,6 +1,3 @@
-import 'dart:convert';
-import 'dart:html';
-
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -12,9 +9,6 @@ import 'package:slahly/classes/models/location.dart';
 import 'package:slahly/classes/models/mechanic.dart';
 import 'package:slahly/classes/models/towProvider.dart';
 import 'package:slahly/classes/provider/rsadata.dart';
-import 'package:slahly/utils/location/getuserlocation.dart';
-import "package:slahly/classes/firebase/roadsideassistance/roadsideassistance.dart";
-
 
 Client user = Client(
     name: "aya",
@@ -54,90 +48,40 @@ class SearchingMechanicProvider extends ConsumerWidget {
       avatar:
           "https://imagesvc.meredithcorp.io/v3/mm/image?url=https%3A%2F%2Fstatic.onecms.io%2Fwp-content%2Fuploads%2Fsites%2F20%2F2021%2F03%2F29%2Fbrad-pitt.jpg");
 
-  late RSA rsa;
   late Mechanic? mechanic;
   late TowProvider? provider;
-  late String rsa_id;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    ref.watch(rsaProvider.notifier).assignUserLocation(userLocation);
+    RSA rsa = ref.watch(rsaProvider);
+    RSANotifier rsaNotifier = ref.watch(rsaProvider.notifier);
 
-    //TODO get Logged in user
-    ref.watch(rsaProvider.notifier).assignUser(user);
-
-    //DONE: create RSA
-
-    // requestRSA(ref);
-    //DONE:how to get RSA_ID
-    ref.watch(rsaProvider.notifier).requestRSA();
-
-    return _getRsaDataStream(ref);
+    // return Scaffold(
+    //     body: SafeArea(
+    //   child: Column(
+    //     children: [getMechWidget(ref), getProvWidget(ref)],
+    //   ),
+    // ));
+    return Scaffold(
+        backgroundColor: const Color(0xFFffffff),
+        body: SafeArea(
+          child: Container(
+            padding: const EdgeInsets.only(left: 40, right: 40),
+            // child: _getRsaDataStream(ref),,
+            child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  getMechWidget(ref),
+                  SizedBox(height: 20),
+                  getProvWidget(ref)
+                ]),
+          ),
+        ));
   }
 
 //"-MyUNThvOQvuoy6HeOy-"
 //       {latitude: 2, mechanic: 123, towProviderID: 456, state: RSA_state.waiting_for_mech_response, userID: 4, longitude: 1}
-  Widget _getRsaDataStream(ref) {
-    rsa = ref.watch(rsaProvider);
-
-    rsaRef.child(rsa.rsaID!).onValue.listen((event) {
-      //DONE replace with rsa_id
-
-      if (event.snapshot.value != null) {
-        //TODO update state(assign mech/prov)
-        //TODO try the code by assigning a mech
-        //Not working
-        ref.watch(rsaProvider.notifier).assignMechanic(choosenMech, false);
-
-
-
-        switch (event.snapshot.child("RSA_state").value) {
-          case RSA.stateToString(RSAStates.providerConfirmed):
-
-            break;
-
-        }
-      }
-    });
-
-    return Scaffold(
-      backgroundColor: const Color(0xFFffffff),
-      body: Container(
-        padding: const EdgeInsets.only(left: 40, right: 40),
-        // child: _getRsaDataStream(ref),,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              decoration: const BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(16)),
-                color: Colors.white,
-                boxShadow: [
-                  BoxShadow(
-                      spreadRadius: 0.5,
-                      blurRadius: 16,
-                      color: Colors.black54,
-                      offset: Offset(0.7, 0.7))
-                ],
-              ),
-              child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 24.0, vertical: 18),
-                  child: Column(
-                    children: [
-                      const SizedBox(height: 40),
-                      getMechWidget(),
-                      const SizedBox(height: 40),
-                      getProvWidget()
-                    ],
-                  )),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
 
   // Future requestRSA(ref) async {
   //   rsa = ref.watch(rsaProvider);
@@ -156,33 +100,39 @@ class SearchingMechanicProvider extends ConsumerWidget {
   //   return newRSA.key;
   // }
 
-  Widget getMechWidget() {
+  Widget getMechWidget(ref) {
+    RSA rsa = ref.watch(rsaProvider);
     return (rsa.mechanic != null
         ? mapMechtoWiget(rsa.mechanic!)
         : const HoldPlease(who: "Mechanic"));
+    // : Text("mech w8"));
   }
 
   Widget mapMechtoWiget(Mechanic mec) {
     return ServicesProviderCard(
-      serviceProviderAddress: mec.address!,
+      serviceProviderEmail: mec.email!,
       serviceProviderName: mec.name!,
-      serviceProviderAvatar: mec.avatar!,
+      serviceProviderIsCenter: mec.isCenter ?? false,
       serviceProviderType: mec.getUserType()!,
+      serviceProviderPhoneNumber: mec.phoneNumber!,
     );
   }
 
-  Widget getProvWidget() {
+  Widget getProvWidget(ref) {
+    RSA rsa = ref.watch(rsaProvider);
     return (rsa.towProvider != null
         ? mapProvetoWiget(rsa.towProvider!)
         : const HoldPlease(who: "Tow Provider"));
+    // : Text("prov w8"));
   }
 
   Widget mapProvetoWiget(TowProvider prov) {
     return ServicesProviderCard(
-      serviceProviderAddress: prov.address!,
+      serviceProviderEmail: prov.address!,
       serviceProviderName: prov.name!,
-      serviceProviderAvatar: prov.avatar!,
+      serviceProviderPhoneNumber: prov.avatar!,
       serviceProviderType: prov.getUserType()!,
+      serviceProviderIsCenter: prov.isCenter ?? false,
     );
   }
 }
@@ -222,18 +172,20 @@ class HoldPlease extends StatelessWidget {
 }
 
 class ServicesProviderCard extends StatelessWidget {
-  const ServicesProviderCard({
+  ServicesProviderCard({
     Key? key,
     required this.serviceProviderType,
     required this.serviceProviderName,
-    required this.serviceProviderAddress,
-    required this.serviceProviderAvatar,
+    required this.serviceProviderEmail,
+    required this.serviceProviderIsCenter,
+    required this.serviceProviderPhoneNumber,
   }) : super(key: key);
 
   final String serviceProviderType,
       serviceProviderName,
-      serviceProviderAddress,
-      serviceProviderAvatar;
+      serviceProviderEmail,
+      serviceProviderPhoneNumber;
+  bool serviceProviderIsCenter;
 
   @override
   Widget build(BuildContext context) {
@@ -248,12 +200,14 @@ class ServicesProviderCard extends StatelessWidget {
         Row(
           children: [
             CircleAvatar(
-              backgroundImage: Image.network(serviceProviderAvatar).image,
+              backgroundImage: serviceProviderIsCenter
+                  ? Image.network(
+                          "https://www.biography.com/.image/ar_1:1%2Cc_fill%2Ccs_srgb%2Cfl_progressive%2Cq_auto:good%2Cw_1200/MTY3MDUxMjkzMjI1OTIwMTcz/brad-pitt-attends-the-premiere-of-20th-century-foxs--square.jpg")
+                      .image
+                  : null,
               radius: 25,
             ),
-            SizedBox(
-              width: 10,
-            ),
+            SizedBox(width: 10),
             const Text(
               "Name:",
               textAlign: TextAlign.justify,
@@ -275,7 +229,7 @@ class ServicesProviderCard extends StatelessWidget {
               width: 50,
             ),
             const Text(
-              "Location:",
+              "Email:",
               textAlign: TextAlign.justify,
               style: TextStyle(fontSize: 20),
             ),
@@ -283,7 +237,28 @@ class ServicesProviderCard extends StatelessWidget {
               width: 15,
             ),
             Text(
-              serviceProviderAddress,
+              serviceProviderEmail,
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 15),
+              overflow: TextOverflow.ellipsis,
+            )
+          ],
+        ),
+        Row(
+          children: [
+            const SizedBox(
+              width: 50,
+            ),
+            const Text(
+              "Phone:",
+              textAlign: TextAlign.justify,
+              style: TextStyle(fontSize: 20),
+            ),
+            const SizedBox(
+              width: 15,
+            ),
+            Text(
+              serviceProviderPhoneNumber,
               textAlign: TextAlign.center,
               style: TextStyle(fontSize: 15),
               overflow: TextOverflow.ellipsis,
