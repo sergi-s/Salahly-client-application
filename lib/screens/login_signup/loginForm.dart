@@ -76,17 +76,18 @@ class LoginForm extends StatelessWidget {
           RoundedButton(
             title: 'login'.tr(),
             onPressedFunction: () async {
-              if (!Validator.emailValidator(email)) {
-                return ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                        content: Text('Invalid Email!! Please try again')));
-              }
+              // if (!Validator.emailValidator(email)) {
+              //   return ScaffoldMessenger.of(context).showSnackBar(
+              //       const SnackBar(
+              //           content: Text('Invalid Email!! Please try again')));
+              // }
               // if (!Validator.passValidator(password)) {
               //   return ScaffoldMessenger.of(context).showSnackBar(
               //       const SnackBar(
               //           content: Text('Invalid Password!! Please try again')));
               // }
-              bool check = await fb.login(email, password);
+              // bool check = await fb.login(email, password);
+              bool check = await fb.login("mo@mo.mo", "momomo");
               if (check) {
 
                 ScaffoldMessenger.of(context).showSnackBar(

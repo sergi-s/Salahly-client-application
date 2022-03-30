@@ -39,14 +39,16 @@ class FirebaseCustom extends Authentication {
   _registerFCMToken(String id) async {
     return await FirebaseMessaging.instance
         .getToken()
-        .then((value) => dbRef.child("FCMTokens").set({id: value}));
+        .then((value) => dbRef.child("FCMTokens").child(id).set(value));
   }
 
   _registerNotficiations() {
     FirebaseMessaging.onMessage.listen((RemoteMessage event) {
       print("message recieved");
       print(event.notification!.body);
-      showSimpleNotification(Text("Received a notification, rsaID: "+event.notification!.body.toString()),
+      showSimpleNotification(
+          Text("Received a notification, rsaID: " +
+              event.notification!.body.toString()),
           background: Colors.green);
     });
     FirebaseMessaging.onMessageOpenedApp.listen((message) {
