@@ -26,7 +26,7 @@ import 'package:slahly/screens/waitforarrvial.dart';
 
 class Routing {
   get router => GoRouter(
-        initialLocation: CheckLogin.routeName,
+        initialLocation: LoginSignupScreen.routeName,
         routes: <GoRoute>[
           GoRoute(
             //TESTING
