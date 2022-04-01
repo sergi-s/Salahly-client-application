@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:go_router/go_router.dart';
 import 'package:slahly/classes/models/location.dart';
+import 'package:slahly/screens/WSA_screens/wsa_search_screen.dart';
 import 'package:slahly/screens/allScreens.dart';
 import 'package:slahly/screens/homepage.dart';
 import 'package:slahly/screens/firebaseemulatortestscreen/firebaseemulatortestscreen.dart';
@@ -9,6 +10,7 @@ import 'package:slahly/screens/login_signup/TryScreen.dart';
 import 'package:slahly/screens/login_signup/check_login.dart';
 import 'package:slahly/screens/login_signup/registration.dart';
 import 'package:slahly/screens/login_signup/signupscreen.dart';
+import 'package:slahly/screens/WSA_screens/WSA_location_screen.dart';
 import 'package:slahly/screens/roadsideassistance/choosemechanic.dart';
 import 'package:slahly/screens/roadsideassistance/chooseprovider.dart';
 import 'package:slahly/screens/roadsideassistance/rsaconfirmationScreen.dart';
@@ -82,7 +84,8 @@ class Routing {
           ),
           GoRoute(
             path: SearchingMechanicProvider.routeName,
-            builder: (context, state) => SearchingMechanicProvider(userLocation: CustomLocation( latitude: 1,longitude: 2)),
+            builder: (context, state) => SearchingMechanicProvider(
+                userLocation: CustomLocation(latitude: 1, longitude: 2)),
             // builder: (context, state) => SearchingMechanicProvider(userLocation: state.extra! as CustomLocation),
           ),
           GoRoute(
@@ -130,7 +133,18 @@ class Routing {
           GoRoute(
             path: AllScreens.routeName,
             builder: (context, state) => AllScreens(),
-          )
+          ),
+          GoRoute(
+            path: WSALocationScreen.routeName,
+            builder: (context, state) => WSALocationScreen(),
+          ),
+          GoRoute(
+            path: WSASearchScreen.routeName,
+            builder: (context, state) {
+              return WSASearchScreen(
+                  pikUpLocation: state.extra as CustomLocation);
+            },
+          ),
         ],
       );
 }
