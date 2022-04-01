@@ -11,17 +11,16 @@ abstract class UserType {
   String? name;
   String? id;
   String? avatar;
-  String? birthDay;
-  String? createdDate;
+  DateTime? birthDay;
+  DateTime? createdDate;
   String? email;
-  String? _password;
   String? phoneNumber;
   String? address;
   CustomLocation? loc;
 
   // final Language lang;
   Gender? gender;
-  AccountState? state;
+  AccountState? userState;
 
   UserType({
     this.id,
@@ -29,12 +28,13 @@ abstract class UserType {
     required this.email,
     this.birthDay,
     this.createdDate,
-    this.state,
+    this.userState,
     this.gender,
     this.type,
     this.avatar,
     this.loc,
     this.phoneNumber,
+    this.address,
   });
 
   final Map<Type, String> _getType = {
@@ -46,16 +46,9 @@ abstract class UserType {
     return _getType.containsKey(type) ? _getType[type] : "";
   }
 
-  String get password => _password!;
-
-  set setPassword(String value) {
-    _password = value;
-  }
-
   bool isValid() {
     return (emailValidate(email!) &&
-        nameValidate(name!) &&
-        passValidate(password));
+        nameValidate(name!));
   }
 
   //Validation

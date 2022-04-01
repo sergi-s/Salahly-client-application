@@ -18,6 +18,7 @@ import 'package:slahly/screens/roadsideassistance/waitforarrival.dart';
 import 'package:slahly/screens/splashScreen/splashscreen.dart';
 import 'package:slahly/screens/myLocation/mylocationscreen.dart';
 import 'package:slahly/screens/switchLanguage.dart';
+import 'package:slahly/screens/test_user_SM.dart';
 import 'package:slahly/screens/userMangament/addSubowner.dart';
 import 'package:slahly/screens/userMangament/manageSubowner.dart';
 import 'package:slahly/screens/userMangament/transferOwner.dart';
@@ -144,6 +145,10 @@ class Routing {
               return WSASearchScreen(
                   pikUpLocation: state.extra as CustomLocation);
             },
+          ),
+          GoRoute(
+            path: TestUserSM.routeName,
+            builder: (context, state) => TestUserSM(),
           ),
         ],
       );

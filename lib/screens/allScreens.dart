@@ -5,6 +5,7 @@ import 'package:slahly/screens/roadsideassistance/choosemechanic.dart';
 import 'package:slahly/screens/roadsideassistance/waitforarrival.dart';
 import 'package:slahly/screens/splashScreen/splashscreen.dart';
 import 'package:slahly/screens/switchLanguage.dart';
+import 'package:slahly/screens/test_user_SM.dart';
 import 'package:slahly/screens/userMangament/manageSubowner.dart';
 import 'package:slahly/screens/waitforapproval/wait_for_approval_screen.dart';
 
@@ -34,7 +35,7 @@ class AllScreens extends StatelessWidget {
                   btn(MyLocationScreen.routeName, context),
                   btn(ChooseMechanicScreen.routeName, context),
                   btn(SplashScreen.routeName, context),
-                  btn(WaitForApprovalScreen.routeName, context),
+                  btn(TestUserSM.routeName, context),
                   btn(SwitchLanguageScreen.routeName, context),
                   btn(SearchingMechanicProvider.routeName, context),
                   btn(ManageSubowner.routeName, context),

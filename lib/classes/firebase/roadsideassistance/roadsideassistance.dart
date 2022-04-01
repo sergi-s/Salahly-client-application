@@ -5,6 +5,7 @@ import 'package:slahly/classes/models/mechanic.dart';
 import 'package:slahly/classes/models/towProvider.dart';
 import 'package:slahly/main.dart';
 
+//TODO delete this and make the one in the model folder the primary one or the one in the packge
 class RSA {
   RSAStates _state = RSAStates.created;
   CustomLocation? _location; // lazm yt2sm le long w lat
