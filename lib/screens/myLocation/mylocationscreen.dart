@@ -9,7 +9,7 @@ import 'package:overlay_support/overlay_support.dart';
 import 'package:slahly/classes/models/location.dart';
 import 'package:slahly/screens/roadsideassistance/waitforarrival.dart';
 import 'package:slahly/utils/location/getuserlocation.dart';
-import 'package:slahly/utils/location/search_coordinate_address.dart';
+import 'package:slahly/utils/location/geocoding.dart';
 
 class MyLocationScreen extends StatefulWidget {
   static const String routeName = "/locationComponent";
@@ -54,22 +54,16 @@ class _MyLocationScreenState extends State<MyLocationScreen> {
                 onPressed: () {
                   showSimpleNotification(
                       Text("CurrentCustom lat: " +
-                          currentCustomLoc.latitude.toString()+"  long:  "+currentCustomLoc.longitude.toString()),
+                          currentCustomLoc.latitude.toString() +
+                          "  long:  " +
+                          currentCustomLoc.longitude.toString()),
                       background: Colors.green);
                   // context.go(SearchingMechanicProvider.routeName,
                   //     extra: currentCustomLoc);
                 },
                 child: Text("confirm_location".tr())),
-
           ],
         ),
-        // FloatingActionButton.extended(
-        //   onPressed: () {
-        //     locatePosition();
-        //   },
-        //   label: Text('my_location'.tr()),
-        //   icon: const Icon(Icons.location_on),
-        // ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
         body: Stack(
           children: [
@@ -105,10 +99,15 @@ class _MyLocationScreenState extends State<MyLocationScreen> {
     currentCustomLoc = cus;
 
     //update address
-    currentCustomLoc.address = await searchCoordinateAddress(
+    // currentCustomLoc.address = await searchCoordinateAddress(
+    //     currentCustomLoc.latitude, currentCustomLoc.longitude);
+
+    currentCustomLoc.address = await searchCoordinateAddress_google(
         currentCustomLoc.latitude, currentCustomLoc.longitude);
 
-    print(currentCustomLoc.address);
+    print(
+        "lat:${currentCustomLoc.latitude} - long:${currentCustomLoc.longitude}");
+    print("address: ${currentCustomLoc.address}");
 
     LatLng latLatPosition =
         LatLng(currentCustomLoc.latitude, currentCustomLoc.longitude);

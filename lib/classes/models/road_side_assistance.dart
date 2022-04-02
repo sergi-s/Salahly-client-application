@@ -4,20 +4,24 @@ import 'package:slahly/classes/models/location.dart';
 import 'package:slahly/classes/models/mechanic.dart';
 import 'package:slahly/classes/models/towProvider.dart';
 import 'package:slahly/main.dart';
-
+//TODO make this the primary one and delete the one in the firebase/roadsideassistance file
 class RSA {
-
   RSAStates _state = RSAStates.created;
   CustomLocation? _location; // lazm yt2sm le long w lat
-  String? _rsaID;///
+  String? _rsaID;
+
+  ///
   String? _problemDescription;
   Client? _user;
   TowProvider? _towProvider;
   Mechanic? _mechanic;
-  DateTime? _estimatedTime;///
+  DateTime? _estimatedTime;
+
+  ///
   List<Mechanic>? _nearbyMechanics; // not included in FB
   List<TowProvider>? _nearbyProviders; // not included in FB
 
+  CustomLocation? _dropOffLocation;
 
   RSA({
     Mechanic? mechanic,
@@ -29,7 +33,8 @@ class RSA {
     CustomLocation? location,
     String? rsaID,
     Client? user,
-    DateTime? estimatedTime
+    DateTime? estimatedTime,
+    CustomLocation? dropOffLocation,
   }) {
     _mechanic = mechanic ?? _mechanic;
     _towProvider = towProvider ?? _towProvider;
@@ -40,7 +45,8 @@ class RSA {
     _location = location ?? _location;
     _rsaID = rsaID ?? _rsaID;
     _user = user ?? _user;
-    _estimatedTime = estimatedTime?? _estimatedTime;
+    _estimatedTime = estimatedTime ?? _estimatedTime;
+    _dropOffLocation = dropOffLocation ?? _dropOffLocation;
   }
 
   RSA copyWith({
@@ -53,21 +59,22 @@ class RSA {
     CustomLocation? location,
     String? rsaID,
     Client? user,
-    DateTime? estimatedTime
+    DateTime? estimatedTime,
+    CustomLocation? dropOffLocation,
   }) =>
       RSA(
-          mechanic:mechanic ?? _mechanic,
-          towProvider : provider ?? _towProvider,
-          state : state ?? _state,
-          problemDescription : problemDescription ?? _problemDescription,
-          nearbyMechanics : nearbyMechanics ?? _nearbyMechanics,
-          nearbyProviders : nearbyProviders ?? _nearbyProviders,
-          location : location ?? _location,
-          rsaID : rsaID ?? _rsaID,
-          user : user ?? _user,
-          estimatedTime : estimatedTime?? _estimatedTime
+        mechanic: mechanic ?? _mechanic,
+        towProvider: provider ?? _towProvider,
+        state: state ?? _state,
+        problemDescription: problemDescription ?? _problemDescription,
+        nearbyMechanics: nearbyMechanics ?? _nearbyMechanics,
+        nearbyProviders: nearbyProviders ?? _nearbyProviders,
+        location: location ?? _location,
+        rsaID: rsaID ?? _rsaID,
+        user: user ?? _user,
+        estimatedTime: estimatedTime ?? _estimatedTime,
+        dropOffLocation: dropOffLocation ?? _dropOffLocation,
       );
-
 
   //Getters
   CustomLocation? get location => _location;
@@ -90,11 +97,14 @@ class RSA {
 
   String? get rsaID => _rsaID;
 
-  static String stateToString(RSAStates state){
-    return (state.toString()).isNotEmpty?(state.toString()).substring(10):"";
+  CustomLocation? get dropOffLocation => _dropOffLocation;
+
+  static String stateToString(RSAStates state) {
+    return (state.toString()).isNotEmpty
+        ? (state.toString()).substring(10)
+        : "";
     // deletes "RSAStates." at the beginning
   }
-
 }
 /*
  RSA_refactored
@@ -120,13 +130,12 @@ enum RSAStates {
 
   requestingRSA,
   failedToRequestRSA,
-  created,// created RSA on DB
+  created, // created RSA on DB
 
-  waitingForMechanicResponse,//
+  waitingForMechanicResponse, //
   mechanicConfirmed,
   waitingForProviderResponse,
   providerConfirmed,
-
   waitingForArrival,
   confirmedArrival,
   done
