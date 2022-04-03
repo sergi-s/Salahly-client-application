@@ -25,5 +25,18 @@
   "Send": "إرسال",
   "Cancel": "إِلغاء",
   "Problem": "مشكلة",
-  "confirm_location": "تاكيد المكان"
+  "confirm_location": "تاكيد المكان",
+  "hi_there": "مرحبا",
+  "where_to": "الي اين؟",
+  "your_current_location": "موقعك الحالي",
+  "set_where_to": "حدد الي اين!",
+  "rsa_placed": "لقد تم وضع طلب خدمه الطريق",
+  "help_on_way": "المساعده في طاريقها اليك",
+  "searching_for_provider": "جاري البحث عن سياره سحب",
+  "searching_for_mechanic": "جاري البحث عن ميكانيكي",
+  "found_Mechanic": "لقد وجدنا ميكانيكي",
+  "found_tow_provider": "لقد وجدنا سياره سحب",
+  "Phone": "هاتف",
+  "Email": "البريد",
+  "Name": "الاسم"
 }

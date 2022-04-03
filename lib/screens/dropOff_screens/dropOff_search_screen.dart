@@ -1,28 +1,26 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import "package:go_router/go_router.dart";
 import 'package:slahly/classes/models/location.dart';
-import 'package:slahly/widgets/WSA/prediction_tile.dart';
+import 'package:slahly/widgets/dropOff/prediction_tile.dart';
 import 'package:slahly/utils/constants.dart';
-
 import 'package:slahly/utils/http_request.dart';
-
 import 'package:slahly/classes/models/place_predictions.dart';
-import 'package:slahly/widgets/WSA/search_text_field.dart';
+import 'package:slahly/widgets/dropOff/search_text_field.dart';
+import 'package:easy_localization/easy_localization.dart';
 
-class WSASearchScreen extends StatefulWidget {
-  static const String routeName = "/WSASearchScreen";
+class DropOffSearchScreen extends StatefulWidget {
+  static const String routeName = "/DropOffSearchScreen";
 
   final CustomLocation pikUpLocation;
 
-  WSASearchScreen({Key? key, required this.pikUpLocation}) : super(key: key);
+  DropOffSearchScreen({Key? key, required this.pikUpLocation})
+      : super(key: key);
 
   @override
-  _WSASearchScreenState createState() => _WSASearchScreenState();
+  _DropOffSearchScreenState createState() => _DropOffSearchScreenState();
 }
 
-class _WSASearchScreenState extends State<WSASearchScreen> {
+class _DropOffSearchScreenState extends State<DropOffSearchScreen> {
   TextEditingController pickUpTextEditingController = TextEditingController();
   TextEditingController dropOffTextEditingController = TextEditingController();
 
@@ -56,10 +54,10 @@ class _WSASearchScreenState extends State<WSASearchScreen> {
                         child: const Icon(Icons.arrow_back),
                         onTap: context.pop,
                       ),
-                      const Center(
+                      Center(
                         child: Text(
-                          "Set Where to",
-                          style: TextStyle(
+                          "set_where_to".tr(),
+                          style: const TextStyle(
                             fontSize: 18,
                           ),
                         ),
@@ -69,14 +67,14 @@ class _WSASearchScreenState extends State<WSASearchScreen> {
                   const SizedBox(height: 16),
                   SearchTextField(
                     icon: const Icon(Icons.my_location),
-                    hint: "Your current location",
+                    hint: "your_current_location".tr(),
                     textEditingController: pickUpTextEditingController,
                     onTap: findPlace,
                   ),
                   const SizedBox(height: 16),
                   SearchTextField(
                     icon: const Icon(Icons.pin_drop),
-                    hint: "Where to?",
+                    hint: "where_to".tr(),
                     textEditingController: dropOffTextEditingController,
                     onTap: findPlace,
                   )
@@ -92,7 +90,8 @@ class _WSASearchScreenState extends State<WSASearchScreen> {
                   padding:
                       const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
                   child: ListView.separated(
-                    keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.manual,
+                    keyboardDismissBehavior:
+                        ScrollViewKeyboardDismissBehavior.manual,
                     padding: EdgeInsets.zero,
                     itemBuilder: (context, index) {
                       return PredictionTile(

@@ -1,8 +1,8 @@
-import 'package:flutter/cupertino.dart';
 import 'package:go_router/go_router.dart';
 import 'package:slahly/classes/models/location.dart';
-import 'package:slahly/screens/WSA_screens/wsa_search_screen.dart';
+import 'package:slahly/screens/DropOff_screens/dropOff_search_screen.dart';
 import 'package:slahly/screens/allScreens.dart';
+import 'package:slahly/screens/dropOff_screens/dropOff_location_screen.dart';
 import 'package:slahly/screens/homepage.dart';
 import 'package:slahly/screens/firebaseemulatortestscreen/firebaseemulatortestscreen.dart';
 import 'package:slahly/screens/homescreen.dart';
@@ -10,7 +10,6 @@ import 'package:slahly/screens/login_signup/TryScreen.dart';
 import 'package:slahly/screens/login_signup/check_login.dart';
 import 'package:slahly/screens/login_signup/registration.dart';
 import 'package:slahly/screens/login_signup/signupscreen.dart';
-import 'package:slahly/screens/WSA_screens/WSA_location_screen.dart';
 import 'package:slahly/screens/roadsideassistance/choosemechanic.dart';
 import 'package:slahly/screens/roadsideassistance/chooseprovider.dart';
 import 'package:slahly/screens/roadsideassistance/rsaconfirmationScreen.dart';
@@ -136,13 +135,13 @@ class Routing {
             builder: (context, state) => AllScreens(),
           ),
           GoRoute(
-            path: WSALocationScreen.routeName,
-            builder: (context, state) => WSALocationScreen(),
+            path: DropOffLocationScreen.routeName,
+            builder: (context, state) => DropOffLocationScreen(),
           ),
           GoRoute(
-            path: WSASearchScreen.routeName,
+            path: DropOffSearchScreen.routeName,
             builder: (context, state) {
-              return WSASearchScreen(
+              return DropOffSearchScreen(
                   pikUpLocation: state.extra as CustomLocation);
             },
           ),
