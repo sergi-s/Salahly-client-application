@@ -7,7 +7,7 @@ import 'package:go_router/go_router.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:overlay_support/overlay_support.dart';
 import 'package:slahly/classes/models/location.dart';
-import 'package:slahly/screens/roadsideassistance/waitforarrival.dart';
+import 'package:slahly/screens/roadsideassistance/searching_mechanic_provider_screen.dart';
 import 'package:slahly/utils/location/getuserlocation.dart';
 import 'package:slahly/utils/location/geocoding.dart';
 

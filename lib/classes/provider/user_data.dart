@@ -15,8 +15,8 @@ class ClientNotifier extends StateNotifier<Client> {
 
   setEmail(String email) => state = state.copyWith(email: email);
 
-  setSubscription(SubscriptionTypes subscripe) =>
-      state = state.copyWith(subscription: subscripe);
+  setSubscription(SubscriptionTypes subscription) =>
+      state = state.copyWith(subscription: subscription);
 
   setLocation(CustomLocation loc) => state = state.copyWith(loc: loc);
 
@@ -25,15 +25,17 @@ class ClientNotifier extends StateNotifier<Client> {
   setPhoneNumber(String phone) => state = state.copyWith(phoneNumber: phone);
 
   setAddress(String address) =>
-      state = state.copyWith(address: address); //34an 5atr hesham
+      state = state.copyWith(address: address);
 
   addCar(Car car) => state = state.copyWith(cars: [...state.cars, car]);
 
   removeCar(Car car) {
-    state = state.copyWith(cars: [
-      for (final carInf in state.cars)
-        if (car != carInf) carInf
-    ]);
+    // state = state.copyWith(cars: [
+    //   for (final carInf in state.cars)
+    //     if (car != carInf) carInf
+    // ]);
+    state.cars.remove(car);
+    state = state.copyWith(cars: state.cars);
   }
 
   addAvatar(String avatarInf) {

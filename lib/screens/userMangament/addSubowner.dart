@@ -17,7 +17,7 @@ class AddSubowner extends StatefulWidget {
 
 class _AddSubownerState extends State<AddSubowner> {
   DatabaseReference subowners =
-      FirebaseDatabase.instance.ref().child("subowners");
+  FirebaseDatabase.instance.ref().child("subowners");
   Future<void> addUser() async {
     await subowners.set({
       "user_id": "user id ", //user id
@@ -31,7 +31,7 @@ class _AddSubownerState extends State<AddSubowner> {
       barrierDismissible: false,
       builder: (context) => AlertDialog(
         title: Text('Warning'),
-        content: Text('are u sure want to add subowner ?'),
+        content: Text('Are u sure want to add Subowner ?'),
         actions: [
           ElevatedButton(
               onPressed: () {
@@ -59,86 +59,144 @@ class _AddSubownerState extends State<AddSubowner> {
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
+
     return Scaffold(
-        backgroundColor: Color(0xFFffffff),
-        body: Container(
-          padding: const EdgeInsets.only(left: 40, right: 40),
-          child: Form(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(
-                  height: 40,
-                ),
-                Text(
-                  "Welcome!",
-                  style: TextStyle(fontSize: 30, color: Colors.black),
-                ),
-                Text(
-                  "Here you can Add Subowner",
-                  style: TextStyle(fontSize: 20, color: Colors.black),
-                ),
-                SizedBox(
-                  height: 100,
-                ),
-                Row(
-                  children: [
-                    Text('Sergi Samir',
-                        style: TextStyle(
-                            fontSize: 25,
-                            color: Colors.black,
-                            fontWeight: FontWeight.bold)),
-                    SizedBox(
-                      width: 20,
+        resizeToAvoidBottomInset: false,
+        backgroundColor: const Color(0xFFd1d9e6),
+        appBar: AppBar(
+          elevation: 0.0,
+          backgroundColor: const Color(0xFF193566),
+          title: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+            // Image.asset(
+            //   'assets/images/logo ta5arog white car.png',
+            //   fit: BoxFit.contain,
+            //   height: 32,
+            // ),
+          ]),
+        ),
+        body: CustomPaint(
+          child: Container(
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height,
+            padding: const EdgeInsets.only(left: 40, right: 40),
+            child: Form(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Text(
+                          "Add Subowner",
+                          style: TextStyle(fontSize: 40, color: Colors.white),
+                          textAlign: TextAlign.center,
+                        ),
+                      ]),
+                  SizedBox(
+                    height: 100,
+                  ),
+
+                  // Text(
+                  //   " Sergi Samir",
+                  //   style: TextStyle(fontSize: 30, color: Colors.black),
+                  //   textAlign: TextAlign.center,
+                  // ),
+                  SizedBox(
+                    width: 50,
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Row(children: [
+                    Container(
+                      width: 250,
+                      child: TextFormField(
+                        decoration: InputDecoration(
+                          labelText: "Enter Subowner Email",
+                          filled: true,
+                          fillColor: Color(0xFFd1d9e6).withOpacity(0.1),
+                        ),
+                      ),
                     ),
-                    FloatingActionButton.extended(
-                        onPressed: () => scanQRcode(),
-                        label: Text('Qr Scanner'),
-                        icon: Icon(Icons.qr_code))
-                  ],
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                TextFormField(
-                  decoration: InputDecoration(labelText: "Enter subwner email"),
-                ),
-                SizedBox(
-                  height: 30,
-                ),
-                Row(
-                  children: [
-                    Text('Choose Car',
-                        style: TextStyle(fontSize: 20, color: Colors.black)),
-                    SizedBox(width: 20),
-                    DropdownButton(
-                      value: dropdownvalue,
-                      icon: Icon(Icons.keyboard_arrow_down),
-                      items: items.map((String items) {
-                        return DropdownMenuItem(
-                            value: items, child: Text(items));
-                      }).toList(),
-                      onChanged: (String? value) {
-                        setState(() {
-                          this.dropdownvalue = value!;
-                        });
-                      },
+                    FloatingActionButton(
+                      onPressed: () => scanQRcode(),
+                      child: const Icon(Icons.qr_code),
+                      backgroundColor: Color(0xFF193566),
                     ),
-                  ],
-                ),
-                SizedBox(height: 20),
-              ],
+                  ]),
+                  SizedBox(
+                    height: 30,
+                  ),
+                  Row(
+                    children: [
+                      Text('Choose Car',
+                          style: TextStyle(fontSize: 25, color: Colors.black)),
+                      SizedBox(width: 20),
+                      DropdownButton(
+                        value: dropdownvalue,
+                        icon: Icon(Icons.keyboard_arrow_down),
+                        items: items.map((String items) {
+                          return DropdownMenuItem(
+                              value: items,
+                              child: Text(
+                                items,
+                                style: TextStyle(
+                                    fontSize: 20, color: Colors.black),
+                              ));
+                        }).toList(),
+                        onChanged: (String? value) {
+                          setState(() {
+                            this.dropdownvalue = value!;
+                          });
+                        },
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 20),
+
+                  Row(
+                    children: [
+                      CircleAvatar(
+                        radius: 30.0,
+                        backgroundImage: NetworkImage(""),
+                        backgroundColor: Colors.blue,
+                      ),
+                      SizedBox(width: 50),
+                      Text("Aya Adel", style: TextStyle(fontSize: 25))
+                    ],
+                  )
+                  // Row(
+                  //   children: [
+                  //     Text('Scan To Add Subowner',
+                  //         style: TextStyle(
+                  //             fontSize: 22,
+                  //             color: Colors.black,
+                  //             fontWeight: FontWeight.bold)),
+                  //     SizedBox(
+                  //       width: 20,
+                  //     ),
+                  //     // FloatingActionButton.extended(
+                  //     //     onPressed: () => scanQRcode(),
+                  //     //     label: Text(''),
+                  //     //     icon: Icon(Icons.qr_code))
+                  //
+                  //   ],
+                  // ),
+                ],
+              ),
             ),
           ),
+          painter: HeaderCurvedContainer(),
         ),
         floatingActionButton: FloatingActionButton(
           onPressed: () {
             showAlertbox(context);
           },
           child: const Icon(Icons.add),
-          backgroundColor: Colors.green,
+          backgroundColor: Color(0xFF193566),
         ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat);
+        floatingActionButtonLocation: FloatingActionButtonLocation.endFloat);
   }
 
   Future<void> scanQRcode() async {
@@ -150,4 +208,20 @@ class _AddSubownerState extends State<AddSubowner> {
       qrCode = 'failed to get version';
     }
   }
+}
+
+class HeaderCurvedContainer extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    Paint paint = Paint()..color = const Color(0xFF193566);
+    Path path = Path()
+      ..relativeLineTo(0, 90)
+      ..quadraticBezierTo(size.width / 2, 150, size.width, 90)
+      ..relativeLineTo(0, -90)
+      ..close();
+    canvas.drawPath(path, paint);
+  }
+
+  @override
+  bool shouldRepaint(CustomPainter oldDelegate) => false;
 }

@@ -22,10 +22,10 @@ Client user = Client(
 
 DatabaseReference rsaRef = FirebaseDatabase.instance.ref().child("rsa");
 
-class SearchingMechanicProvider extends ConsumerWidget {
+class SearchingMechanicProviderScreen extends ConsumerWidget {
   static const String routeName = "/searchingmechanicprovider";
 
-  SearchingMechanicProvider({required this.userLocation});
+  SearchingMechanicProviderScreen({required this.userLocation});
 
   final CustomLocation userLocation;
 
@@ -123,11 +123,11 @@ class SearchingMechanicProvider extends ConsumerWidget {
 
   Widget getMechWidget(ref) {
     RSA rsa = ref.watch(rsaProvider);
-    // return (rsa.mechanic != null
-    //     ? mapMechtoWiget(rsa.mechanic!)
+    return (rsa.mechanic != null
+        ? mapMechtoWiget(rsa.mechanic!)
         //NOTE: un-comment if you want to see selected mechanics
-        return (choosenMech != null
-            ? mapMechtoWiget(choosenMech)
+        // return (choosenMech != null
+        //     ? mapMechtoWiget(choosenMech)
         : const HoldPlease(who: "mechanic"));
   }
 

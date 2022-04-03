@@ -13,15 +13,15 @@ import 'package:slahly/screens/login_signup/signupscreen.dart';
 import 'package:slahly/screens/roadsideassistance/choosemechanic.dart';
 import 'package:slahly/screens/roadsideassistance/chooseprovider.dart';
 import 'package:slahly/screens/roadsideassistance/rsaconfirmationScreen.dart';
-import 'package:slahly/screens/roadsideassistance/waitforarrival.dart';
+import 'package:slahly/screens/roadsideassistance/searching_mechanic_provider_screen.dart';
 import 'package:slahly/screens/splashScreen/splashscreen.dart';
 import 'package:slahly/screens/myLocation/mylocationscreen.dart';
 import 'package:slahly/screens/switchLanguage.dart';
-import 'package:slahly/screens/test_user_SM.dart';
+import 'package:slahly/screens/test_screens/test_user_SM.dart';
 import 'package:slahly/screens/userMangament/addSubowner.dart';
 import 'package:slahly/screens/userMangament/manageSubowner.dart';
 import 'package:slahly/screens/userMangament/transferOwner.dart';
-import 'package:slahly/screens/testscreen.dart';
+import 'package:slahly/screens/test_screens/testscreen_foula.dart';
 import 'package:slahly/screens/Describeproblem.dart';
 import 'package:slahly/screens/viewcars.dart';
 import 'package:slahly/screens/addcarbutton.dart';
@@ -30,7 +30,7 @@ import 'package:slahly/screens/waitforarrvial.dart';
 
 class Routing {
   get router => GoRouter(
-        initialLocation: AllScreens.routeName,
+        initialLocation: TestUserSM.routeName,
         routes: <GoRoute>[
           GoRoute(
             //TESTING
@@ -83,8 +83,8 @@ class Routing {
             builder: (context, state) => ChooseMechanicScreen(),
           ),
           GoRoute(
-            path: SearchingMechanicProvider.routeName,
-            builder: (context, state) => SearchingMechanicProvider(
+            path: SearchingMechanicProviderScreen.routeName,
+            builder: (context, state) => SearchingMechanicProviderScreen(
                 userLocation: CustomLocation(latitude: 1, longitude: 2)),
             // builder: (context, state) => SearchingMechanicProvider(userLocation: state.extra! as CustomLocation),
           ),
