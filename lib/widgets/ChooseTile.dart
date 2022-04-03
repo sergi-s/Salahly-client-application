@@ -34,12 +34,12 @@ class ChooseTile extends StatelessWidget {
                     backgroundImage: AssetImage(
                       avatar,
                     ),
-                    radius: 30,
+                    radius: 25,
                   ),
                   title: Text(
                     name,
                     style: const TextStyle(
-                        fontWeight: FontWeight.bold, fontSize: 25),
+                        fontWeight: FontWeight.bold, fontSize: 20),
                   ),
                   subtitle: Column(children: [
                     Row(
@@ -51,7 +51,7 @@ class ChooseTile extends StatelessWidget {
                                   ? ("center".tr())
                                   : ("mechanic".tr()),
                           style: const TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 18),
+                              fontWeight: FontWeight.bold, fontSize: 16),
                         )
                       ],
                     ),
@@ -67,7 +67,7 @@ class ChooseTile extends StatelessWidget {
                               style: const TextStyle(
                                   color: Colors.black,
                                   fontWeight: FontWeight.bold,
-                                  fontSize: 16),
+                                  fontSize: 14),
                             ),
                             style: ElevatedButton.styleFrom(
                               primary: Colors.white,
@@ -91,6 +91,9 @@ class ChooseTile extends StatelessWidget {
                         ),
                       ],
                     ),
+                    SizedBox(
+                      height: 5,
+                    ),
                     Row(
                       children: [
                         Flexible(
@@ -98,7 +101,7 @@ class ChooseTile extends StatelessWidget {
                             type != Type.provider ? address : "",
                             overflow: TextOverflow.ellipsis,
                             style: const TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 18),
+                                fontWeight: FontWeight.bold, fontSize: 16),
                           ),
                         ),
                         // SizedBox(height: 20),

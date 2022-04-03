@@ -20,7 +20,7 @@ class ManageSubowner extends StatelessWidget {
         phoneNumber: "015234451112",
         address: "Smouha",
         avatar:
-            "https://scontent.fcai19-5.fna.fbcdn.net/v/t1.6435-1/79130787_2501294306773024_4727773538419736576_n.jpg?stp=dst-jpg_s320x320&_nc_cat=101&ccb=1-5&_nc_sid=7206a8&_nc_eui2=AeFR7t8qkSCbSzIwQrEdNmypdm9IP7mRJk12b0g_uZEmTfsvFBUmIrMyx0CDyUtb-MtPfZLzIT610DV62umXiaf4&_nc_ohc=JtjiUUDQ8fEAX-9QUIY&_nc_ht=scontent.fcai19-5.fna&oh=00_AT-EJxgm6ArplPwzkFIR0YPf7NfIxtRvMyY4CtrdnzZmRg&oe=62640722"),
+            "https://scontent-hbe1-1.xx.fbcdn.net/v/t1.6435-1/79130787_2501294306773024_4727773538419736576_n.jpg?stp=dst-jpg_s320x320&_nc_cat=101&ccb=1-5&_nc_sid=7206a8&_nc_ohc=TStj9OkVc68AX9r5iXm&_nc_ht=scontent-hbe1-1.xx&oh=00_AT85JFYVsgGCK_t9dtbdu0vMH6zliaL5tgiTaIQCtgjJGg&oe=626BF022"),
     Client(
         id: "2",
         name: "Mahmoud Magdy",
@@ -28,9 +28,10 @@ class ManageSubowner extends StatelessWidget {
         subscription: SubscriptionTypes.gold,
         phoneNumber: "010292929223",
         address: "MONTAZAA m3omraaaa",
-        avatar: "https://pbs.twimg.com/profile_images/1440433307859111939/mG5NGNHn_400x400.jpg"),
-        // avatar:
-        //     "https://scontent.fcai19-5.fna.fbcdn.net/v/t39.30808-6/241676442_4279329582181382_2167552377324842210_n.jpg?_nc_cat=105&ccb=1-5&_nc_sid=09cbfe&_nc_eui2=AeGKq4FMZp3eGePXQ9yrDTBYkTuL3-uGRVeRO4vf64ZFVyifGvoEaCgfgms4jZSbNSNezryRH0GahKxAbVi2v_V5&_nc_ohc=2j1ZPLP0Oe0AX-V7zp-&_nc_ht=scontent.fcai19-5.fna&oh=00_AT8N6VsLIbTZGsJkVnDDHsebygQtlt5Ks1qS1ZTXL_oq0A&oe=6243CF2E"),
+        avatar:
+            "https://see.news/wp-content/uploads/2019/09/8872540_1531078574.jpg"),
+    // avatar:
+    //     "https://scontent.fcai19-5.fna.fbcdn.net/v/t39.30808-6/241676442_4279329582181382_2167552377324842210_n.jpg?_nc_cat=105&ccb=1-5&_nc_sid=09cbfe&_nc_eui2=AeGKq4FMZp3eGePXQ9yrDTBYkTuL3-uGRVeRO4vf64ZFVyifGvoEaCgfgms4jZSbNSNezryRH0GahKxAbVi2v_V5&_nc_ohc=2j1ZPLP0Oe0AX-V7zp-&_nc_ht=scontent.fcai19-5.fna&oh=00_AT8N6VsLIbTZGsJkVnDDHsebygQtlt5Ks1qS1ZTXL_oq0A&oe=6243CF2E"),
     Client(
         id: "55",
         name: "Aya Adel",
@@ -40,7 +41,7 @@ class ManageSubowner extends StatelessWidget {
         address: "Miami 45 sedigabrrrr ",
         // avatar: "https://pbs.twimg.com/profile_images/1440433307859111939/mG5NGNHn_400x400.jpg")
         avatar:
-            "https://scontent.fcai19-5.fna.fbcdn.net/v/t1.6435-1/120053014_3312976808750538_4906589982223067147_n.jpg?stp=dst-jpg_p320x320&_nc_cat=103&ccb=1-5&_nc_sid=7206a8&_nc_eui2=AeHMNvNnR3nl2ObBrXKSD-8UExuDCTt1Yb0TG4MJO3VhvTCrljjmoH9HIzkF3QGEe1f295mLUxwtP4hMO-wnXoB6&_nc_ohc=_H9LRDfeyAEAX-73M7h&_nc_ht=scontent.fcai19-5.fna&oh=00_AT-r5LC5Jqzt7LOR0UyKSoIN3rF9ogcG7d2kDrz75N7xIA&oe=62665C22")
+            "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.egypttoday.com%2FArticle%2F4%2F78359%2FTamer-Hosny-to-break-a-Guinness-World-Record-for-the&psig=AOvVaw1KakqcJ-fDoulAiCEEB-ZN&ust=1648993859676000&source=images&cd=vfe&ved=0CAsQjRxqFwoTCIjo5fzC9fYCFQAAAAAdAAAAABAD")
   ];
 
   // Addinfo() {
@@ -50,12 +51,29 @@ class ManageSubowner extends StatelessWidget {
   // }
 
   Widget showList() {
-    return ListView.builder(
-        padding: EdgeInsets.all(10),
-        itemCount: client.length,
-        itemBuilder: (BuildContext context, index) {
-          return rowItem(context, index);
-        });
+    return SingleChildScrollView(
+        child: Column(children: [
+      Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+        Text(
+          "Manage Ownership",
+          style: TextStyle(fontSize: 35, color: Colors.white),
+          textAlign: TextAlign.center,
+        ),
+      ]),
+      SizedBox(
+        height: 150,
+      ),
+      ListView.builder(
+          padding: EdgeInsets.all(17),
+          shrinkWrap: true,
+          itemCount: client.length,
+          itemBuilder: (BuildContext context, index) {
+            return Column(children: [
+              Container(
+                  padding: EdgeInsets.all(5.0), child: rowItem(context, index))
+            ]);
+          }),
+    ]));
   }
 
   Widget rowItem(context, index) {
@@ -66,42 +84,45 @@ class ManageSubowner extends StatelessWidget {
         confirmDismiss: (DismissDirection) async {
           return await showAlertbox(context, client[index], index);
         },
-        key: Key(client[index].id.toString()),
+        key: ValueKey(client[index]),
         // key: Key(randomNumber.toString()),
         onDismissed: (direction) {
           // _deleteRecord(k)
           var info = this.client[index];
         },
         background: deleteBgItem(),
-        child: Card(
-          child: ListTile(
-            leading: CircleAvatar(
-              radius: 30,
-              backgroundImage: NetworkImage(
-                client[index].avatar.toString(),
-              ),
-              backgroundColor: Colors.transparent,
-            ),
-            title: Text(client[index].name.toString(),
-                style: TextStyle(
-                    fontSize: 20,
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold)),
-            subtitle: Column(
-              children: [
-                Row(
-                  children: [
-                    Text(client[index].email.toString(),
-                        style: TextStyle(fontSize: 17, color: Colors.black))
-                  ],
+        child: Container(
+          height: 100,
+          child: Card(
+            child: ListTile(
+              leading: CircleAvatar(
+                radius: 30,
+                backgroundImage: NetworkImage(
+                  client[index].avatar.toString(),
                 ),
-                Row(
-                  children: [
-                    Text(client[index].phoneNumber.toString(),
-                        style: TextStyle(fontSize: 17, color: Colors.black)),
-                  ],
-                )
-              ],
+                backgroundColor: Colors.blue,
+              ),
+              title: Text(client[index].name.toString(),
+                  style: TextStyle(
+                      fontSize: 20,
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold)),
+              subtitle: Column(
+                children: [
+                  Row(
+                    children: [
+                      Text(client[index].email.toString(),
+                          style: TextStyle(fontSize: 17, color: Colors.black))
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Text(client[index].phoneNumber.toString(),
+                          style: TextStyle(fontSize: 17, color: Colors.black)),
+                    ],
+                  )
+                ],
+              ),
             ),
           ),
         ));
@@ -174,62 +195,54 @@ class ManageSubowner extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
+
     return Scaffold(
+      backgroundColor: const Color(0xFFd1d9e6),
       appBar: AppBar(
         elevation: 0,
-        backgroundColor: Colors.transparent,
         bottomOpacity: 0.0,
-        title: Center(
-          child: Text('Manage Ownership',
-              style: TextStyle(fontSize: 30, color: Colors.black)),
-        ),
+        backgroundColor: const Color(0xFF193566),
+        // title: Center(
+        //   child: Text('Manage Ownership',
+        //       style: TextStyle(fontSize: 30, color: Colors.black)),
+        // ),
+        title: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: const []),
       ),
-      body: Container(
-        child: showList(),
+      body: CustomPaint(
+        child: Container(
+          width: MediaQuery.of(context).size.width,
+          height: MediaQuery.of(context).size.height,
+          child: showList(),
+        ),
+        painter: HeaderCurvedContainer(),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           context.push(AddSubowner.routeName);
-
         },
         child: const Icon(Icons.add),
-        backgroundColor: Colors.green,
+        backgroundColor: Color(0xFF193566),
       ),
     );
   }
 }
 //
-// class Dismiss extends StatelessWidget {
-//   @override
-//   Widget build(BuildContext context) {
-//     return Dismissible(
-//         key: Key(),
-//         child: Card(
-//           child: ListTile(
-//             title: Text(info),
-//           ),
-//         ),
-//       confirmDismiss: (DismissDirection direction) async {
-//         return await showDialog(
-//           context: context,
-//           builder: (BuildContext context) {
-//             return AlertDialog(
-//               title: const Text("Confirm"),
-//               content: const Text("Are you sure you wish to delete this item?"),
-//               actions: <Widget>[
-//                 FlatButton(
-//                     onPressed: () => Navigator.of(context).pop(true),
-//                     child: const Text("DELETE")
-//                 ),
-//                 FlatButton(
-//                   onPressed: () => Navigator.of(context).pop(false),
-//                   child: const Text("CANCEL"),
-//                 ),
-//               ],
-//             );
-//           },
-//         );
-//       },
-//     );
-//   }
-// }
+
+class HeaderCurvedContainer extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    Paint paint = Paint()..color = const Color(0xFF193566);
+    Path path = Path()
+      ..relativeLineTo(0, 90)
+      ..quadraticBezierTo(size.width / 2, 150, size.width, 90)
+      ..relativeLineTo(0, -90)
+      ..close();
+    canvas.drawPath(path, paint);
+  }
+
+  @override
+  bool shouldRepaint(CustomPainter oldDelegate) => false;
+}
