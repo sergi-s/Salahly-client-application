@@ -1,6 +1,8 @@
-import 'package:flutter/cupertino.dart';
 import 'package:go_router/go_router.dart';
 import 'package:slahly/classes/models/location.dart';
+import 'package:slahly/screens/DropOff_screens/dropOff_search_screen.dart';
+import 'package:slahly/screens/allScreens.dart';
+import 'package:slahly/screens/dropOff_screens/dropOff_location_screen.dart';
 import 'package:slahly/screens/homepage.dart';
 import 'package:slahly/screens/firebaseemulatortestscreen/firebaseemulatortestscreen.dart';
 import 'package:slahly/screens/homescreen.dart';
@@ -14,6 +16,8 @@ import 'package:slahly/screens/roadsideassistance/rsaconfirmationScreen.dart';
 import 'package:slahly/screens/roadsideassistance/waitforarrival.dart';
 import 'package:slahly/screens/splashScreen/splashscreen.dart';
 import 'package:slahly/screens/myLocation/mylocationscreen.dart';
+import 'package:slahly/screens/switchLanguage.dart';
+import 'package:slahly/screens/test_user_SM.dart';
 import 'package:slahly/screens/userMangament/addSubowner.dart';
 import 'package:slahly/screens/userMangament/manageSubowner.dart';
 import 'package:slahly/screens/userMangament/transferOwner.dart';
@@ -26,7 +30,7 @@ import 'package:slahly/screens/waitforarrvial.dart';
 
 class Routing {
   get router => GoRouter(
-        initialLocation: ChooseMechanicScreen.routeName,
+        initialLocation: AllScreens.routeName,
         routes: <GoRoute>[
           GoRoute(
             //TESTING
@@ -121,6 +125,29 @@ class Routing {
           GoRoute(
             path: WaitForApprovalScreen.routeName,
             builder: (context, state) => WaitForApprovalScreen(),
+          ),
+          GoRoute(
+            path: SwitchLanguageScreen.routeName,
+            builder: (context, state) => SwitchLanguageScreen(),
+          ),
+          GoRoute(
+            path: AllScreens.routeName,
+            builder: (context, state) => AllScreens(),
+          ),
+          GoRoute(
+            path: DropOffLocationScreen.routeName,
+            builder: (context, state) => DropOffLocationScreen(),
+          ),
+          GoRoute(
+            path: DropOffSearchScreen.routeName,
+            builder: (context, state) {
+              return DropOffSearchScreen(
+                  pikUpLocation: state.extra as CustomLocation);
+            },
+          ),
+          GoRoute(
+            path: TestUserSM.routeName,
+            builder: (context, state) => TestUserSM(),
           ),
         ],
       );

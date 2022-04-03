@@ -11,7 +11,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    context.setLocale(Locale("en"));
+    // context.setLocale(Locale("en"));
     // FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
     // firebaseCloudMessaging_Listeners(_firebaseMessaging);
 

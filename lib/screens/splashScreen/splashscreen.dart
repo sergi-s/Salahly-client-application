@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
+import 'package:slahly/screens/allScreens.dart';
 import 'package:slahly/screens/login_signup/signupscreen.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -112,7 +113,7 @@ class _SplashScreenState extends State<SplashScreen>with TickerProviderStateMixi
  _navigatetohome()async{
    await Future.delayed(Duration(seconds:9),(){});
    // Navigator.pushReplacement(context,MaterialPageRoute(builder: (context)=>SignUpScreen()));
-   context.go(LoginSignupScreen.routeName);
+   context.go(AllScreens.routeName);
    //TODO check already signed in
  }
 }
