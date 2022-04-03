@@ -1,15 +1,14 @@
-import 'package:firebase_database/firebase_database.dart';
 import 'package:slahly/classes/models/client.dart';
 import 'package:slahly/classes/models/location.dart';
 import 'package:slahly/classes/models/mechanic.dart';
+import 'package:slahly/classes/models/report.dart';
 import 'package:slahly/classes/models/towProvider.dart';
-import 'package:slahly/main.dart';
 //TODO make this the primary one and delete the one in the firebase/roadsideassistance file
 class RSA {
   RSAStates _state = RSAStates.created;
   CustomLocation? _location; // lazm yt2sm le long w lat
   String? _rsaID;
-
+  Report? _report;
   ///
   String? _problemDescription;
   Client? _user;
@@ -24,6 +23,7 @@ class RSA {
   CustomLocation? _dropOffLocation;
 
   RSA({
+    Report? report,
     Mechanic? mechanic,
     TowProvider? towProvider,
     RSAStates? state,
@@ -36,6 +36,7 @@ class RSA {
     DateTime? estimatedTime,
     CustomLocation? dropOffLocation,
   }) {
+    _report = report ?? _report;
     _mechanic = mechanic ?? _mechanic;
     _towProvider = towProvider ?? _towProvider;
     _state = state ?? _state;
@@ -50,6 +51,7 @@ class RSA {
   }
 
   RSA copyWith({
+    Report? report,
     Mechanic? mechanic,
     TowProvider? provider,
     RSAStates? state,
@@ -63,6 +65,7 @@ class RSA {
     CustomLocation? dropOffLocation,
   }) =>
       RSA(
+        report: report ?? _report,
         mechanic: mechanic ?? _mechanic,
         towProvider: provider ?? _towProvider,
         state: state ?? _state,

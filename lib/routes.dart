@@ -2,7 +2,11 @@ import 'package:go_router/go_router.dart';
 import 'package:slahly/classes/models/location.dart';
 import 'package:slahly/screens/DropOff_screens/dropOff_search_screen.dart';
 import 'package:slahly/screens/allScreens.dart';
+import 'package:slahly/screens/car_management/add_car_screen.dart';
+import 'package:slahly/screens/car_management/view_cars_screen.dart';
 import 'package:slahly/screens/dropOff_screens/dropOff_location_screen.dart';
+import 'package:slahly/screens/history_management/add_custom_history.dart';
+import 'package:slahly/screens/history_management/view_history.dart';
 import 'package:slahly/screens/homepage.dart';
 import 'package:slahly/screens/firebaseemulatortestscreen/firebaseemulatortestscreen.dart';
 import 'package:slahly/screens/homescreen.dart';
@@ -23,14 +27,11 @@ import 'package:slahly/screens/userMangament/manageSubowner.dart';
 import 'package:slahly/screens/userMangament/transferOwner.dart';
 import 'package:slahly/screens/test_screens/testscreen_foula.dart';
 import 'package:slahly/screens/Describeproblem.dart';
-import 'package:slahly/screens/viewcars.dart';
-import 'package:slahly/screens/addcarbutton.dart';
-import 'package:slahly/screens/waitforapproval/wait_for_approval_screen.dart';
 import 'package:slahly/screens/waitforarrvial.dart';
 
 class Routing {
   get router => GoRouter(
-        initialLocation: TestUserSM.routeName,
+        initialLocation: ChooseMechanicScreen.routeName,
         routes: <GoRoute>[
           GoRoute(
             //TESTING
@@ -123,10 +124,6 @@ class Routing {
             builder: (context, state) => AddCars(),
           ),
           GoRoute(
-            path: WaitForApprovalScreen.routeName,
-            builder: (context, state) => WaitForApprovalScreen(),
-          ),
-          GoRoute(
             path: SwitchLanguageScreen.routeName,
             builder: (context, state) => SwitchLanguageScreen(),
           ),
@@ -148,6 +145,14 @@ class Routing {
           GoRoute(
             path: TestUserSM.routeName,
             builder: (context, state) => TestUserSM(),
+          ),
+          GoRoute(
+              path: AddCustomHistory.routeName,
+            builder: (context,state) => AddCustomHistory(),
+          ),
+          GoRoute(
+            path: ViewHistory.routeName,
+            builder: (context,state) => ViewHistory(),
           ),
         ],
       );
