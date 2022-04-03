@@ -27,6 +27,7 @@ import 'package:slahly/screens/viewcars.dart';
 import 'package:slahly/screens/addcarbutton.dart';
 import 'package:slahly/screens/waitforapproval/wait_for_approval_screen.dart';
 import 'package:slahly/screens/waitforarrvial.dart';
+import 'package:slahly/screens/viewhistory.dart';
 
 class Routing {
   get router => GoRouter(
@@ -148,6 +149,10 @@ class Routing {
           GoRoute(
             path: TestUserSM.routeName,
             builder: (context, state) => TestUserSM(),
+          ),
+          GoRoute(
+            path: ViewHistory.routeName,
+            builder: (context, state) => ViewHistory(),
           ),
         ],
       );
