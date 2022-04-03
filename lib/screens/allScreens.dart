@@ -7,9 +7,8 @@ import 'package:slahly/screens/splashScreen/splashscreen.dart';
 import 'package:slahly/screens/switchLanguage.dart';
 import 'package:slahly/screens/test_user_SM.dart';
 import 'package:slahly/screens/userMangament/manageSubowner.dart';
-import 'package:slahly/screens/waitforapproval/wait_for_approval_screen.dart';
 
-import 'WSA_screens/WSA_location_screen.dart';
+import 'dropOff_screens/dropOff_location_screen.dart';
 
 class AllScreens extends StatelessWidget {
   static final routeName = "/allscreens";
@@ -39,7 +38,7 @@ class AllScreens extends StatelessWidget {
                   btn(SwitchLanguageScreen.routeName, context),
                   btn(SearchingMechanicProvider.routeName, context),
                   btn(ManageSubowner.routeName, context),
-                  btn(WSALocationScreen.routeName, context)
+                  btn(DropOffLocationScreen.routeName, context)
                 ],
               ))),
     ));

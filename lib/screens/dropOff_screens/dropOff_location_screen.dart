@@ -1,24 +1,23 @@
 import 'dart:async';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:slahly/classes/models/location.dart';
-import 'package:slahly/screens/WSA_screens/wsa_search_screen.dart';
+import 'package:slahly/screens/DropOff_screens/dropOff_search_screen.dart';
 import 'package:slahly/utils/location/getuserlocation.dart';
 import 'package:slahly/utils/location/geocoding.dart';
-import "package:slahly/widgets/WSA/TextFieldOnMap.dart";
+import "package:slahly/widgets/dropOff/TextFieldOnMap.dart";
 
-class WSALocationScreen extends StatefulWidget {
-  static const String routeName = "/WSALocationScreen";
+class DropOffLocationScreen extends StatefulWidget {
+  static const String routeName = "/DropOffLocationScreen";
 
   @override
-  _WSALocationScreenState createState() => _WSALocationScreenState();
+  _DropOffLocationScreenState createState() => _DropOffLocationScreenState();
 }
 
-class _WSALocationScreenState extends State<WSALocationScreen> {
+class _DropOffLocationScreenState extends State<DropOffLocationScreen> {
   //Google maps
   final Completer<GoogleMapController> _controllerGoogleMap = Completer();
   late GoogleMapController newGoogleMapController;
@@ -44,27 +43,6 @@ class _WSALocationScreenState extends State<WSALocationScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        // Row(
-        //   mainAxisAlignment: MainAxisAlignment.center,
-        //   children: [
-        //     ElevatedButton(
-        //         onPressed: locatePosition, child: Icon(Icons.my_location)),
-        // const SizedBox(width: 4),
-        // ElevatedButton(
-        //     onPressed: () {
-        //       showSimpleNotification(
-        //           Text("CurrentCustom lat: " +
-        //               currentCustomLoc.latitude.toString() +
-        //               "  long:  " +
-        //               currentCustomLoc.longitude.toString()),
-        //           background: Colors.green);
-        //       // context.go(SearchingMechanicProvider.routeName,
-        //       //     extra: currentCustomLoc);
-        //     },
-        //     child: Text("confirm_location".tr())),
-        //   ],
-        // ),
-        // floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
         body: Stack(
       children: [
         GoogleMap(
@@ -122,20 +100,20 @@ class _WSALocationScreenState extends State<WSALocationScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const SizedBox(height: 6),
-                    Text("Hi there", style: TextStyle(fontSize: 12)),
-                    Text("Where to?", style: TextStyle(fontSize: 20)),
+                    Text(("hi_there".tr()), style: TextStyle(fontSize: 12)),
+                    Text(("where_to".tr()), style: TextStyle(fontSize: 20)),
                     const SizedBox(height: 20),
                     GestureDetector(
                       onTap: () {
                         print(
                             "before next scree${currentCustomLoc.toString()}");
-                        context.push(WSASearchScreen.routeName,
+                        context.push(DropOffSearchScreen.routeName,
                             extra: currentCustomLoc);
                       },
-                      child: const TextFieldOnMap(
+                      child: TextFieldOnMap(
                         isSelected: false,
-                        textToDisplay: "You Current Location",
-                        iconToDisplay: Icon(
+                        textToDisplay: ("your_current_location".tr()),
+                        iconToDisplay: const Icon(
                           Icons.my_location,
                           color: Colors.blue,
                         ),
@@ -144,10 +122,10 @@ class _WSALocationScreenState extends State<WSALocationScreen> {
                     const SizedBox(
                       height: 15,
                     ),
-                    const TextFieldOnMap(
+                    TextFieldOnMap(
                       isSelected: true,
-                      textToDisplay: "Where to?",
-                      iconToDisplay: Icon(
+                      textToDisplay: ("where_to".tr()),
+                      iconToDisplay: const Icon(
                         Icons.search,
                         color: Colors.blue,
                       ),
@@ -164,8 +142,8 @@ class _WSALocationScreenState extends State<WSALocationScreen> {
     currentCustomLoc = await getUserLocation();
 
     print(
-        "lat:${currentCustomLoc.latitude} - long:${currentCustomLoc.longitude}");
-    print("address: ${currentCustomLoc.address}");
+        "::lat:${currentCustomLoc.latitude} - long:${currentCustomLoc.longitude}");
+    print("::address: ${currentCustomLoc.address}");
 
     moveCamera(currentCustomLoc);
   }
