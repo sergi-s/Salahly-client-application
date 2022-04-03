@@ -16,79 +16,123 @@ class AddCars extends StatelessWidget {
     );
   }
 }
+class AddCarDialog extends StatelessWidget {
+  String car = "Mg 6";
+  String model = "2022";
+  String noplate = "س ق ه | 2544";
+  String color= "YELLOW";
+  String Chassis = "SV30-01xxxx";
 
-class AddCarDialog extends StatefulWidget {
-  @override
-  _AddCarDialogState createState() => _AddCarDialogState();
-}
+  _displayDialog(BuildContext context) async {
+    return showDialog(
+        barrierDismissible: false,
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            insetPadding: EdgeInsets.all(8.0),
+            shape:
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
+            title: Text('Add Car'),
+            content: Container(
+                width: MediaQuery.of(context).size.width,
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      Image.asset
+                        ('assets/images/addcar.png',
+                        fit: BoxFit.contain,
+                        height: 150,),
+                      TextField(
+                        enabled: false,
+                        readOnly: true,
 
-class _AddCarDialogState extends State<AddCarDialog> {
-  var _addCard = 0;
+                        decoration: InputDecoration(
+                          labelText: 'Car Model:',
+                        ),
+                        controller: TextEditingController(text: car),
+                        textInputAction: TextInputAction.newline,
+                        maxLines: null,
+                        keyboardType: TextInputType.multiline,
+                      ),
+                      TextField(
+                        enabled: false,
+                        readOnly: true,
+                        decoration: InputDecoration(
+                          labelText: 'Model Year',
+                        ),
+                        controller: TextEditingController(text: model),
+                        textInputAction: TextInputAction.newline,
+                        maxLines: null,
+                        keyboardType: TextInputType.multiline,
+                      ),
+                      TextField(
+                        enabled: false,
+                        readOnly: true,
+                        decoration: InputDecoration(
+                          labelText: 'Number Plate',
+                        ),
+                        controller: TextEditingController(text: noplate),
+                        textInputAction: TextInputAction.newline,
+                        maxLines: null,
+                        keyboardType: TextInputType.multiline,
+                      ),
+                      TextField(
+                        enabled: false,
+                        readOnly: true,
+                        decoration: InputDecoration(
+                          labelText: 'Color Pickes',
+                        ),
+                        controller: TextEditingController(text: color),
+                        textInputAction: TextInputAction.newline,
+                        maxLines: null,
+                        keyboardType: TextInputType.multiline,
+                      ),
+                      TextField(
+                        enabled: false,
+                        readOnly: true,
+                        decoration: InputDecoration(
+                          labelText: 'Chassis Number',
+                        ),
+                        controller: TextEditingController(text: Chassis),
+                        textInputAction: TextInputAction.newline,
+                        maxLines: null,
+                        keyboardType: TextInputType.multiline,
+                      ),
 
-  void _incrementCard() {
-    setState(() {
-      _addCard++;
-    });
+                    ],
+                  ),
+                ) ),
+            actions: <Widget>[
+              new FlatButton(
+                textColor: Colors.white,
+                child: new Text('Send'),
+                color: Colors.black,
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+              new FlatButton(
+                child: new Text('Cancel'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              )
+            ],
+          );
+        });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Add Car"),
+        title: Text('Add Car'),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCard,
+        onPressed:() =>_displayDialog(context),
         child: Icon(Icons.add),
       ),
-      body: ListView.builder(
-          itemCount: _addCard,
-          itemBuilder: (context, index) {
-            return AlertDialog(
-              title: Text('New Car'),
-              content: Column(
-                children: [
-                  TextField(
-                    autofocus: true,
-                    decoration: InputDecoration(
-                        border: InputBorder.none, labelText: "Car Model"),
-                  ),
-                  TextField(
-                    decoration: InputDecoration(
-                        border: InputBorder.none, labelText: "Model Year"),
-                  ),
-                  TextField(
-                    decoration: InputDecoration(
-                        border: InputBorder.none, labelText: "Number Plate"),
-                  ),
-                  TextField(
-                    decoration: InputDecoration(
-                        border: InputBorder.none, labelText: "Color Pickes"),
-                  ),
-                  TextField(
-                    decoration: InputDecoration(
-                        border: InputBorder.none, labelText: " Chassis Number"),
-                  ),
-                ],
-              ),
-              actions: <Widget>[
-                FlatButton(
-                  child: Text('Cancel'),
-                  onPressed: () {
-                    setState(() {
-                      Navigator.of(context).pop();
-                    });
-                  },
-                ),
-                FlatButton(
-                  child: Text('Add'),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                ),
-              ],
-            );
-          }),
     );
   }
 }
+

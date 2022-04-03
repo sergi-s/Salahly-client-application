@@ -7,8 +7,9 @@ class ViewHistory extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
+      backgroundColor: const Color(0xFFd1d9e6),
       appBar: new AppBar(
-        backgroundColor: Colors.purple,
+        backgroundColor: const Color(0xFF193566),
         title: new Text("View History"),
       ), // appBar
       body: new Container(
@@ -40,6 +41,14 @@ class myCardLayout extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       child: new Card(
+
+
+        elevation:3,
+        margin: EdgeInsets.all(10),
+        color: Color(0xFFE8E8E8),
+        shape: BeveledRectangleBorder(
+          borderRadius: BorderRadius.circular(15.0),
+        ),
         child: new Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
@@ -47,11 +56,16 @@ class myCardLayout extends StatelessWidget {
               leading: new Icon(theIcon,
                   size: 40.0, color: Colors.grey),
               title: new Text(
+
                 theText,
-                style: new TextStyle(fontSize: 20.0),
+                style: new TextStyle(
+
+                    fontSize: 20.0),
               ),
+
               subtitle:
-              const Text('Date: 20/2/2022'),
+
+              const Text('Date: 20/2/2022 \n Car: MG 6 \n Number Plate:س ق ه | 2544'),
             ),
 
             new ButtonTheme(

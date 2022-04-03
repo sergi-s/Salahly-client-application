@@ -1,8 +1,10 @@
 import 'package:go_router/go_router.dart';
 import 'package:slahly/classes/models/location.dart';
 import 'package:slahly/screens/DropOff_screens/dropOff_search_screen.dart';
+
 import 'package:slahly/screens/allScreens.dart';
 import 'package:slahly/screens/dropOff_screens/dropOff_location_screen.dart';
+import 'package:slahly/screens/history/addcustomhistroy.dart';
 import 'package:slahly/screens/homepage.dart';
 import 'package:slahly/screens/firebaseemulatortestscreen/firebaseemulatortestscreen.dart';
 import 'package:slahly/screens/homescreen.dart';
@@ -27,11 +29,11 @@ import 'package:slahly/screens/viewcars.dart';
 import 'package:slahly/screens/addcarbutton.dart';
 import 'package:slahly/screens/waitforapproval/wait_for_approval_screen.dart';
 import 'package:slahly/screens/waitforarrvial.dart';
-import 'package:slahly/screens/viewhistory.dart';
+import 'package:slahly/screens/history/viewhistory.dart';
 
 class Routing {
   get router => GoRouter(
-        initialLocation: AllScreens.routeName,
+        initialLocation: ViewHistory.routeName,
         routes: <GoRoute>[
           GoRoute(
             //TESTING
@@ -153,6 +155,10 @@ class Routing {
           GoRoute(
             path: ViewHistory.routeName,
             builder: (context, state) => ViewHistory(),
+          ),
+          GoRoute(
+            path: CustomHistory.routeName,
+            builder: (context, state) => CustomHistory(),
           ),
         ],
       );
