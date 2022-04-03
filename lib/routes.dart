@@ -26,7 +26,7 @@ import 'package:slahly/screens/waitforarrvial.dart';
 
 class Routing {
   get router => GoRouter(
-        initialLocation: LoginSignupScreen.routeName,
+        initialLocation: ChooseMechanicScreen.routeName,
         routes: <GoRoute>[
           GoRoute(
             //TESTING
@@ -80,7 +80,8 @@ class Routing {
           ),
           GoRoute(
             path: SearchingMechanicProvider.routeName,
-            builder: (context, state) => SearchingMechanicProvider(userLocation: CustomLocation( latitude: 1,longitude: 2)),
+            builder: (context, state) => SearchingMechanicProvider(
+                userLocation: CustomLocation(latitude: 1, longitude: 2)),
             // builder: (context, state) => SearchingMechanicProvider(userLocation: state.extra! as CustomLocation),
           ),
           GoRoute(
