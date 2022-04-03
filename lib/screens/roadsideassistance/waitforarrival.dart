@@ -61,10 +61,10 @@ class SearchingMechanicProvider extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     RSANotifier rsaNotifier = ref.watch(rsaProvider.notifier);
     return Scaffold(
-      backgroundColor: const Color(0xFF193566),
+      backgroundColor: const Color(0xFFd1d9e6),
       body: SafeArea(
         child: DefaultTextStyle(
-          style: const TextStyle(color: Colors.white),
+          style: const TextStyle(color: Colors.black),
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 18),
             child: Column(
@@ -88,7 +88,7 @@ class SearchingMechanicProvider extends ConsumerWidget {
                   },
                   child: Text("Cancel".tr()),
                   style: ElevatedButton.styleFrom(
-                    primary: const Color(0xFFd1d9e6),
+                    primary: const Color(0xFF193566),
                   ),
                 )
               ],
@@ -123,11 +123,11 @@ class SearchingMechanicProvider extends ConsumerWidget {
 
   Widget getMechWidget(ref) {
     RSA rsa = ref.watch(rsaProvider);
-    return (rsa.mechanic != null
-        ? mapMechtoWiget(rsa.mechanic!)
+    // return (rsa.mechanic != null
+    //     ? mapMechtoWiget(rsa.mechanic!)
         //NOTE: un-comment if you want to see selected mechanics
-        // return (choosenMech != null
-        //     ? mapMechtoWiget(choosenMech)
+        return (choosenMech != null
+            ? mapMechtoWiget(choosenMech)
         : const HoldPlease(who: "mechanic"));
   }
 
@@ -144,11 +144,11 @@ class SearchingMechanicProvider extends ConsumerWidget {
   Widget getProvWidget(ref) {
     RSA rsa = ref.watch(rsaProvider);
 
-    return (rsa.towProvider != null
-        ? mapProvetoWiget(rsa.towProvider!)
+    // return (rsa.towProvider != null
+    //     ? mapProvetoWiget(rsa.towProvider!)
         //NOTE: un-comment if you want to see selected provider
-        // return (choosenTowProvider != null
-        //     ? mapProvetoWiget(choosenTowProvider)
+        return (choosenTowProvider != null
+            ? mapProvetoWiget(choosenTowProvider)
         : const HoldPlease(who: "provider"));
   }
 

@@ -26,22 +26,25 @@ class ServicesProviderCard extends StatelessWidget {
   void customDialog(context) {
     showDialog(
         context: context,
-        builder: (BuildContext context) => AlertDialog(
-          title: Row(
-            children: [
-              Text(serviceProviderType),
-              Icon(serviceProviderIsCenter ? Icons.badge : null)
-            ],
-          ),
-          content: getContent(),
-          actions: <Widget>[
-            IconButton(
-                icon: const Icon(Icons.close),
-                onPressed: () {
-                  Navigator.pop(context);
-                })
-          ],
-        ));
+        builder: (BuildContext context) =>
+            AlertDialog(
+              title: Row(
+                children: [
+                  Text(serviceProviderType),
+                  Icon(serviceProviderIsCenter ? Icons.badge : null)
+                ],
+              ),
+              content: getContent(),
+              actions: <Widget>[
+                ElevatedButton(onPressed: () => Navigator.pop(context),
+                    child: Text("Cancel".tr()))
+                // IconButton(
+                //     icon: const Icon(Icons.close),
+                //     onPressed: () {
+                //       Navigator.pop(context);
+                //     })
+              ],
+            ));
   }
 
   Widget getContent() {
@@ -52,7 +55,8 @@ class ServicesProviderCard extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           CircleAvatar(
-            backgroundImage: Image.network(
+            backgroundImage: Image
+                .network(
                 "https://www.biography.com/.image/ar_1:1%2Cc_fill%2Ccs_srgb%2Cfl_progressive%2Cq_auto:good%2Cw_1200/MTY3MDUxMjkzMjI1OTIwMTcz/brad-pitt-attends-the-premiere-of-20th-century-foxs--square.jpg")
                 .image,
             radius: 25,
