@@ -18,110 +18,118 @@ class ChooseTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 180,
+      height: MediaQuery.of(context).size.height * 0.25,
       width: 100,
       child: GestureDetector(
         onTap: () {
           print('card tapped');
         },
-        child: Card(
-          // color: Color(0xFFd1d9e6), //#D3D3D3 Color(0xFFf7f7f7)
-          // shape: RoundedRectangleBorder(
-          //     borderRadius: new BorderRadius.circular(30.0)),
-          elevation: 5,
-          color: Color(0xFFF2F1F0),
-          child: Column(
-            children: [
-              Flexible(
-                child: ListTile(
-                  // horizontalTitleGap: 50.0,
-                  leading: CircleAvatar(
-                    backgroundImage: NetworkImage(
-                      avatar,
+        child: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(8.0),
+            color: const Color(0xFFd1d9e6),
+          ),
+          child: Card(
+            // color: Color(0xFFd1d9e6), //#D3D3D3 Color(0xFFf7f7f7)
+            // shape: RoundedRectangleBorder(
+            //     borderRadius: new BorderRadius.circular(30.0)),
+            elevation: 5,
+            color: Color(0xFFF2F1F0),
+            child: Column(
+              children: [
+                Flexible(
+                  child: ListTile(
+                    // horizontalTitleGap: 50.0,
+                    leading: CircleAvatar(
+                      backgroundImage: NetworkImage(
+                        avatar,
+                      ),
+                      radius: 30,
                     ),
-                    radius: 30,
-                  ),
-                  title: Padding(
-                    padding: const EdgeInsets.only(top: 20),
-                    child: Text(
-                      name,
-                      style: const TextStyle(
-                          fontWeight: FontWeight.bold, fontSize: 20),
+                    title: Padding(
+                      padding: const EdgeInsets.only(top: 20),
+                      child: Text(
+                        name,
+                        style: const TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 20),
+                      ),
                     ),
-                  ),
-                  subtitle: Padding(
-                    padding: const EdgeInsets.only(left: 0),
-                    child: Column(children: [
-                      Row(
-                        children: [
-                          Text(
-                            type != Type.mechanic
-                                ? ""
-                                : (isCenter)
-                                    ? ("center".tr())
-                                    : ("mechanic".tr()),
-                            style: const TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 16),
-                          )
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          Container(
-                            child: ElevatedButton.icon(
-                              onPressed: () {
-                                Clipboard.setData(ClipboardData(text: phone));
-                              },
-                              label: Text(
-                                phone,
-                                style: const TextStyle(
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 14),
-                              ),
-                              style: ElevatedButton.styleFrom(
-                                primary: Color(0xFFff193566).withOpacity(0),
-                                elevation: 0,
-                                animationDuration: Duration.zero,
-                              ),
-                              icon: const Icon(
-                                Icons.copy,
-                                color: Colors.black,
-                              ),
-                            ),
-                          )
-                        ],
-                      ),
-                      Row(
-                        children: const [
-                          Text(
-                            'Rating : 4.8',
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 16),
-                          ),
-                        ],
-                      ),
-                      SizedBox(
-                        height: 5,
-                      ),
-                      Row(
-                        children: [
-                          Flexible(
-                            child: Text(
-                              type != Type.provider ? address : "",
-                              overflow: TextOverflow.ellipsis,
+                    subtitle: Padding(
+                      padding: const EdgeInsets.only(left: 0),
+                      child: Column(children: [
+                        Row(
+                          children: [
+                            Text(
+                              type != Type.mechanic
+                                  ? ""
+                                  : (isCenter)
+                                      ? ("center".tr())
+                                      : ("mechanic".tr()),
                               style: const TextStyle(
                                   fontWeight: FontWeight.bold, fontSize: 16),
+                            )
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            Container(
+                              child: ElevatedButton.icon(
+                                onPressed: () {
+                                  Scaffold.of(context).showSnackBar(
+                                      new SnackBar(
+                                          content: new Text("Number Copied")));
+                                  Clipboard.setData(ClipboardData(text: phone));
+                                },
+                                label: Text(
+                                  phone,
+                                  style: const TextStyle(
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 14),
+                                ),
+                                style: ElevatedButton.styleFrom(
+                                  primary: Color(0xFFff193566).withOpacity(0),
+                                  elevation: 0,
+                                  animationDuration: Duration.zero,
+                                ),
+                                icon: const Icon(
+                                  Icons.copy,
+                                  color: Colors.black,
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
+                        Row(
+                          children: const [
+                            Text(
+                              'Rating : 4.8',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 16),
                             ),
-                          ),
-                          // SizedBox(height: 20),
-                        ],
-                      ),
-                    ]),
+                          ],
+                        ),
+                        SizedBox(
+                          height: 5,
+                        ),
+                        Row(
+                          children: [
+                            Flexible(
+                              child: Text(
+                                type != Type.provider ? address : "",
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.bold, fontSize: 16),
+                              ),
+                            ),
+                            // SizedBox(height: 20),
+                          ],
+                        ),
+                      ]),
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

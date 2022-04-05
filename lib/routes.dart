@@ -16,6 +16,7 @@ import 'package:slahly/screens/splashScreen/splashscreen.dart';
 import 'package:slahly/screens/myLocation/mylocationscreen.dart';
 import 'package:slahly/screens/userMangament/addSubowner.dart';
 import 'package:slahly/screens/userMangament/manageSubowner.dart';
+import 'package:slahly/screens/userMangament/select.dart';
 import 'package:slahly/screens/userMangament/transferOwner.dart';
 import 'package:slahly/screens/testscreen.dart';
 import 'package:slahly/screens/Describeproblem.dart';
@@ -23,10 +24,11 @@ import 'package:slahly/screens/viewcars.dart';
 import 'package:slahly/screens/addcarbutton.dart';
 import 'package:slahly/screens/waitforapproval/wait_for_approval_screen.dart';
 import 'package:slahly/screens/waitforarrvial.dart';
+import 'package:slahly/screens/userMangament/choose_car.dart';
 
 class Routing {
   get router => GoRouter(
-        initialLocation: ChooseMechanicScreen.routeName,
+        initialLocation: SearchingMechanicProvider.routeName,
         routes: <GoRoute>[
           GoRoute(
             //TESTING
@@ -121,6 +123,14 @@ class Routing {
           GoRoute(
             path: WaitForApprovalScreen.routeName,
             builder: (context, state) => WaitForApprovalScreen(),
+          ),
+          GoRoute(
+            path: Choose_car.routeName,
+            builder: (context, state) => Choose_car(),
+          ),
+          GoRoute(
+            path: Select.routeName,
+            builder: (context, state) => Select(),
           ),
         ],
       );

@@ -166,23 +166,6 @@ class _AddSubownerState extends State<AddSubowner> {
                       Text("Aya Adel", style: TextStyle(fontSize: 25))
                     ],
                   )
-                  // Row(
-                  //   children: [
-                  //     Text('Scan To Add Subowner',
-                  //         style: TextStyle(
-                  //             fontSize: 22,
-                  //             color: Colors.black,
-                  //             fontWeight: FontWeight.bold)),
-                  //     SizedBox(
-                  //       width: 20,
-                  //     ),
-                  //     // FloatingActionButton.extended(
-                  //     //     onPressed: () => scanQRcode(),
-                  //     //     label: Text(''),
-                  //     //     icon: Icon(Icons.qr_code))
-                  //
-                  //   ],
-                  // ),
                 ],
               ),
             ),
