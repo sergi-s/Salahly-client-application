@@ -18,6 +18,7 @@ class AddSubowner extends StatefulWidget {
 class _AddSubownerState extends State<AddSubowner> {
   DatabaseReference subowners =
       FirebaseDatabase.instance.ref().child("subowners");
+
   Future<void> addUser() async {
     await subowners.set({
       "user_id": "user id ", //user id
@@ -166,6 +167,26 @@ class _AddSubownerState extends State<AddSubowner> {
                       Text("Aya Adel", style: TextStyle(fontSize: 25))
                     ],
                   )
+// <<<<<<< HEAD
+// =======
+                  // Row(
+                  //   children: [
+                  //     Text('Scan To Add Subowner',
+                  //         style: TextStyle(
+                  //             fontSize: 22,
+                  //             color: Colors.black,
+                  //             fontWeight: FontWeight.bold)),
+                  //     SizedBox(
+                  //       width: 20,
+                  //     ),
+                  //     // FloatingActionButton.extended(
+                  //     //     onPressed: () => scanQRcode(),
+                  //     //     label: Text(''),
+                  //     //     icon: Icon(Icons.qr_code))
+                  //
+                  //   ],
+                  // ),
+// >>>>>>> 931e111d966e6532a25d6451b6fa85ee81a45bd7
                 ],
               ),
             ),

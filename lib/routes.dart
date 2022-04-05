@@ -1,6 +1,12 @@
-import 'package:flutter/cupertino.dart';
 import 'package:go_router/go_router.dart';
 import 'package:slahly/classes/models/location.dart';
+import 'package:slahly/screens/DropOff_screens/dropOff_search_screen.dart';
+import 'package:slahly/screens/allScreens.dart';
+import 'package:slahly/screens/car_management/add_car_screen.dart';
+import 'package:slahly/screens/car_management/view_cars_screen.dart';
+import 'package:slahly/screens/dropOff_screens/dropOff_location_screen.dart';
+import 'package:slahly/screens/history_management/add_custom_history.dart';
+import 'package:slahly/screens/history_management/view_history.dart';
 import 'package:slahly/screens/homepage.dart';
 import 'package:slahly/screens/firebaseemulatortestscreen/firebaseemulatortestscreen.dart';
 import 'package:slahly/screens/homescreen.dart';
@@ -11,24 +17,23 @@ import 'package:slahly/screens/login_signup/signupscreen.dart';
 import 'package:slahly/screens/roadsideassistance/choosemechanic.dart';
 import 'package:slahly/screens/roadsideassistance/chooseprovider.dart';
 import 'package:slahly/screens/roadsideassistance/rsaconfirmationScreen.dart';
-import 'package:slahly/screens/roadsideassistance/waitforarrival.dart';
+import 'package:slahly/screens/roadsideassistance/searching_mechanic_provider_screen.dart';
 import 'package:slahly/screens/splashScreen/splashscreen.dart';
 import 'package:slahly/screens/myLocation/mylocationscreen.dart';
+import 'package:slahly/screens/switchLanguage.dart';
+import 'package:slahly/screens/test_screens/test_user_SM.dart';
 import 'package:slahly/screens/userMangament/addSubowner.dart';
 import 'package:slahly/screens/userMangament/manageSubowner.dart';
 import 'package:slahly/screens/userMangament/select.dart';
 import 'package:slahly/screens/userMangament/transferOwner.dart';
-import 'package:slahly/screens/testscreen.dart';
+import 'package:slahly/screens/test_screens/testscreen_foula.dart';
 import 'package:slahly/screens/Describeproblem.dart';
-import 'package:slahly/screens/viewcars.dart';
-import 'package:slahly/screens/addcarbutton.dart';
-import 'package:slahly/screens/waitforapproval/wait_for_approval_screen.dart';
 import 'package:slahly/screens/waitforarrvial.dart';
 import 'package:slahly/screens/userMangament/choose_car.dart';
 
 class Routing {
   get router => GoRouter(
-        initialLocation: SearchingMechanicProvider.routeName,
+        initialLocation: ManageSubowner.routeName,
         routes: <GoRoute>[
           GoRoute(
             //TESTING
@@ -81,8 +86,8 @@ class Routing {
             builder: (context, state) => ChooseMechanicScreen(),
           ),
           GoRoute(
-            path: SearchingMechanicProvider.routeName,
-            builder: (context, state) => SearchingMechanicProvider(
+            path: SearchingMechanicProviderScreen.routeName,
+            builder: (context, state) => SearchingMechanicProviderScreen(
                 userLocation: CustomLocation(latitude: 1, longitude: 2)),
             // builder: (context, state) => SearchingMechanicProvider(userLocation: state.extra! as CustomLocation),
           ),
@@ -121,8 +126,35 @@ class Routing {
             builder: (context, state) => AddCars(),
           ),
           GoRoute(
-            path: WaitForApprovalScreen.routeName,
-            builder: (context, state) => WaitForApprovalScreen(),
+            path: SwitchLanguageScreen.routeName,
+            builder: (context, state) => SwitchLanguageScreen(),
+          ),
+          GoRoute(
+            path: AllScreens.routeName,
+            builder: (context, state) => AllScreens(),
+          ),
+          GoRoute(
+            path: DropOffLocationScreen.routeName,
+            builder: (context, state) => DropOffLocationScreen(),
+          ),
+          GoRoute(
+            path: DropOffSearchScreen.routeName,
+            builder: (context, state) {
+              return DropOffSearchScreen(
+                  pikUpLocation: state.extra as CustomLocation);
+            },
+          ),
+          GoRoute(
+            path: TestUserSM.routeName,
+            builder: (context, state) => TestUserSM(),
+          ),
+          GoRoute(
+            path: AddCustomHistory.routeName,
+            builder: (context, state) => AddCustomHistory(),
+          ),
+          GoRoute(
+            path: ViewHistory.routeName,
+            builder: (context, state) => ViewHistory(),
           ),
           GoRoute(
             path: Choose_car.routeName,

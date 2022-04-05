@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -21,6 +19,7 @@ class ManageSubowner extends StatelessWidget {
         address: "Smouha",
         avatar:
             "https://scontent-hbe1-1.xx.fbcdn.net/v/t1.6435-1/79130787_2501294306773024_4727773538419736576_n.jpg?stp=dst-jpg_s320x320&_nc_cat=101&ccb=1-5&_nc_sid=7206a8&_nc_ohc=TStj9OkVc68AX9r5iXm&_nc_ht=scontent-hbe1-1.xx&oh=00_AT85JFYVsgGCK_t9dtbdu0vMH6zliaL5tgiTaIQCtgjJGg&oe=626BF022"),
+
     Client(
         id: "2",
         name: "Mahmoud Magdy",
@@ -41,7 +40,11 @@ class ManageSubowner extends StatelessWidget {
         address: "Miami 45 sedigabrrrr ",
         // avatar: "https://pbs.twimg.com/profile_images/1440433307859111939/mG5NGNHn_400x400.jpg")
         avatar:
+// <<<<<<< HEAD
+//             "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.egypttoday.com%2FArticle%2F4%2F78359%2FTamer-Hosny-to-break-a-Guinness-World-Record-for-the&psig=AOvVaw1KakqcJ-fDoulAiCEEB-ZN&ust=1648993859676000&source=images&cd=vfe&ved=0CAsQjRxqFwoTCIjo5fzC9fYCFQAAAAAdAAAAABAD")
+// =======
             "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.egypttoday.com%2FArticle%2F4%2F78359%2FTamer-Hosny-to-break-a-Guinness-World-Record-for-the&psig=AOvVaw1KakqcJ-fDoulAiCEEB-ZN&ust=1648993859676000&source=images&cd=vfe&ved=0CAsQjRxqFwoTCIjo5fzC9fYCFQAAAAAdAAAAABAD")
+// >>>>>>> 931e111d966e6532a25d6451b6fa85ee81a45bd7
   ];
 
   // Addinfo() {
@@ -53,6 +56,30 @@ class ManageSubowner extends StatelessWidget {
   Widget showList() {
     return SingleChildScrollView(
         child: Column(children: [
+      // <<<<<<< HEAD
+      //     Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+      //       Text(
+      //         "Manage Ownership",
+      //         style: TextStyle(fontSize: 35, color: Colors.white),
+      //         textAlign: TextAlign.center,
+      //       ),
+      //     ]),
+      //     SizedBox(
+      //       height: 150,
+      //     ),
+      //     ListView.builder(
+      //         padding: EdgeInsets.all(17),
+      //         shrinkWrap: true,
+      //         itemCount: client.length,
+      //         itemBuilder: (BuildContext context, index) {
+      //           return Column(children: [
+      //             Container(
+      //                 padding: EdgeInsets.all(5.0),
+      //                 child: rowItem(context, index))
+      //           ]);
+      //         }),
+      //     ]));
+      // =======
       Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
         Text(
           "Manage Ownership",
@@ -127,6 +154,7 @@ class ManageSubowner extends StatelessWidget {
           ),
         ));
   }
+
   //
   // Widget rowItem(context, info, index) {
   //   // var info = this.info[index];
@@ -176,9 +204,11 @@ class ManageSubowner extends StatelessWidget {
   }
 
   DatabaseReference car_userRef = FirebaseDatabase.instance.ref().child("user");
+
   _deleteRecord(var key) async {
     await car_userRef.child(key).remove();
   }
+
   // UndoDelete(index, info) {}
 
   Widget deleteBgItem() {

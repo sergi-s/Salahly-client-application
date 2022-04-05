@@ -127,7 +127,9 @@ class _TransferOwnerState extends State<TransferOwner> {
                     child: TextButton(
                         child: Text("Confirm Transfer",
                             style:
+                                // <<<<<<< HEAD
                                 TextStyle(fontSize: 15, color: Colors.white)),
+                        // >>>>>>> 931e111d966e6532a25d6451b6fa85ee81a45bd7
                         style: ButtonStyle(
                             padding: MaterialStateProperty.all<EdgeInsets>(
                                 EdgeInsets.all(15)),
@@ -135,8 +137,7 @@ class _TransferOwnerState extends State<TransferOwner> {
                                 Color(0xFF193566)),
                             backgroundColor: MaterialStateProperty.all<Color>(
                                 Color(0xFF193566)),
-                            shape: MaterialStateProperty.all<
-                                    RoundedRectangleBorder>(
+                            shape: MaterialStateProperty.all(
                                 RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(18.0),
                                     side: BorderSide(color: Colors.blue)))),

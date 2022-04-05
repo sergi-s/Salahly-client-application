@@ -17,9 +17,9 @@ import 'package:slahly/classes/provider/rsadata.dart';
 import 'package:go_router/go_router.dart';
 import 'package:slahly/main.dart';
 import 'package:slahly/screens/roadsideassistance/rsaconfirmationScreen.dart';
-import 'package:slahly/screens/roadsideassistance/waitforarrival.dart';
+import 'package:slahly/screens/roadsideassistance/searching_mechanic_provider_screen.dart';
 
-import 'login_signup/signupscreen.dart';
+import '../login_signup/signupscreen.dart';
 
 final valueProvider = Provider<int>((ref) {
   return 364;
@@ -140,7 +140,7 @@ class TestScreen_nearbymechanics_and_create_rsa extends ConsumerWidget {
           ),
           ElevatedButton(
             onPressed: () async {
-              context.push(SearchingMechanicProvider.routeName);
+              context.push(SearchingMechanicProviderScreen.routeName);
             },
             child: Text("Searching Screen"),
           ),

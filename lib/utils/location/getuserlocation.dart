@@ -43,7 +43,6 @@ Future<CustomLocation> getUserLocation() async {
     print(error);
     return null;
   });
-  print("sad");
   Position pos = await Geolocator.getCurrentPosition(
       desiredAccuracy: LocationAccuracy.high);
   return CustomLocation(longitude: pos.longitude, latitude: pos.latitude);

@@ -2,42 +2,76 @@ import 'package:slahly/abstract_classes/user.dart';
 import 'package:slahly/classes/models/location.dart';
 import 'car.dart';
 
+enum SubscriptionTypes { silver, gold, platinum }
+
 class Client extends UserType {
-  SubscriptionTypes subscription = SubscriptionTypes.silver;
-  List<Car> cars = [];
+  SubscriptionTypes _subscription = SubscriptionTypes.silver;
+  List<Car> _cars = [];
 
   Client({
-    required String? name,
-    required String? email,
+    String? name,
+    String? email,
     String? id,
-    String? birthDay,
-    String? createdDate,
+    DateTime? birthDay,
+    DateTime? createdDate,
     AccountState? userState,
     Gender? gender,
     Type? type,
     String? avatar,
-    String? address,
-    String? phoneNumber,
     CustomLocation? loc,
+    String? phoneNumber,
     List<Car>? cars,
-    required this.subscription,
+    SubscriptionTypes? subscription,
+    String? address,
   }) : super(
             name: name,
             email: email,
             id: id,
             birthDay: birthDay,
             createdDate: createdDate,
-            state: userState,
+            userState: userState,
             gender: gender,
             type: type,
             avatar: avatar,
             loc: loc,
-            phoneNumber: phoneNumber);
-
-  @override
-  set setPassword(String value) {
-    super.setPassword = value;
+            phoneNumber: phoneNumber,
+            address: address) {
+    _subscription = subscription ?? _subscription;
+    _cars = cars ?? _cars;
   }
+
+  Client copyWith({
+    String? name,
+    String? email,
+    String? id,
+    DateTime? birthDay,
+    DateTime? createdDate,
+    AccountState? userState,
+    Gender? gender,
+    Type? type,
+    String? avatar,
+    CustomLocation? loc,
+    String? phoneNumber,
+    List<Car>? cars,
+    SubscriptionTypes? subscription,
+    String? address,
+  }) =>
+      Client(
+        name: name ?? this.name,
+        email: email ?? this.email,
+        id: id ?? this.id,
+        birthDay: birthDay ?? this.birthDay,
+        createdDate: createdDate ?? this.createdDate,
+        userState: userState ?? this.userState,
+        gender: gender ?? this.gender,
+        type: type ?? this.type,
+        avatar: avatar ?? this.avatar,
+        loc: loc ?? this.loc,
+        phoneNumber: phoneNumber ?? this.phoneNumber,
+        address: address ?? this.address,
+        cars: cars ?? _cars,
+        subscription: subscription ?? _subscription,
+      );
 
   final Map<SubscriptionTypes, double> _subscriptionData = {
     SubscriptionTypes.silver: 4,
@@ -46,10 +80,18 @@ class Client extends UserType {
   };
 
   double? getSubscriptionRange() {
-    return _subscriptionData.containsKey(subscription)
-        ? _subscriptionData[subscription]
+    return _subscriptionData.containsKey(_subscription)
+        ? _subscriptionData[_subscription]
         : 0;
   }
+
+
+
+  SubscriptionTypes get subscription => _subscription;
+
+  List<Car> get cars => _cars;
+
+  Map<SubscriptionTypes, double> get subscriptionData => _subscriptionData;
 
   @override
   bool isValid() {
@@ -63,5 +105,3 @@ class Client extends UserType {
     return subscription > 0;
   }
 }
-
-enum SubscriptionTypes { silver, gold, platinum }

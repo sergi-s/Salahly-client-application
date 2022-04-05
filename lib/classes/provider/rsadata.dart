@@ -49,6 +49,11 @@ class RSANotifier extends StateNotifier<RSA> {
   assignUserLocation(CustomLocation location) =>
       state = state.copyWith(location: location);
 
+  assignDropOffLocation(CustomLocation location) {
+    state = state.copyWith(dropOffLocation: location);
+    print("the new dropoff place is:: ${location.toString()}");
+  }
+
   assignProblemDescription(String description) =>
       state = state.copyWith(problemDescription: description);
 

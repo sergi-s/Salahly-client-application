@@ -5,7 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:overlay_support/overlay_support.dart';
 import 'package:slahly/screens/homepage.dart';
 import 'package:slahly/screens/login_signup/signupscreen.dart';
-import 'package:slahly/screens/testscreen.dart';
+import 'package:slahly/screens/test_screens/testscreen_foula.dart';
 
 class CheckLogin extends StatelessWidget {
   const CheckLogin({Key? key}) : super(key: key);
