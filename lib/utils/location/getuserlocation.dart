@@ -2,6 +2,8 @@ import 'package:geolocator/geolocator.dart';
 import 'package:slahly/classes/models/location.dart';
 import 'dart:math' show cos, sqrt, asin;
 
+import '../http_request.dart';
+
 Future _checkLocationPermission() async {
   bool serviceEnabled;
   LocationPermission permission;
@@ -56,3 +58,36 @@ double calculateDistance(lat1, lon1, lat2, lon2) {
       c(lat1 * p) * c(lat2 * p) * (1 - c((lon2 - lon1) * p)) / 2;
   return 12742 * asin(sqrt(a));
 }
+
+Future<List> getApproximateLocation() async {
+  List retValu = [];
+  var response = await httpRequest("http://ip-api.com/json/");
+  if (response != "failed") {
+    retValu.add(response["lat"] as double);
+
+    retValu.add(response["lon"] as double);
+  }
+  return retValu;
+}
+
+/*
+  String placeAddress = "";
+  String geoURL =
+      "https://maps.googleapis.com/maps/api/geocode/json?&key=$googleMapsAPI&latlng=${lat},${long}";
+
+  String str1, str2, str3, str4;
+
+  var response = await httpRequest(geoURL);
+
+  if (response != "failed") {
+    str1 = "${response["results"][0]["address_components"][1]["long_name"]}";
+    str2 = "${response["results"][0]["address_components"][2]["long_name"]}";
+    str3 = "${response["results"][0]["address_components"][3]["long_name"]}";
+    // str4 = "${response["results"][0]["address_components"][6]["long_name"]}";
+
+    placeAddress = "$str1, $str2, $str3";
+  }
+  return placeAddress;
+}
+
+* */

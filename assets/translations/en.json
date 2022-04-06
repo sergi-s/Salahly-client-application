@@ -38,5 +38,8 @@
   "found_tow_provider": "We found A Tow truck",
   "Phone": "Phone",
   "Email": "Email",
-  "Name": "Name"
+  "Name": "Name",
+  "are_you_sure": "Are you sure?",
+  "confirm_cancellation": "Confirm cancellation",
+  "confirm": "Confirm"
 }

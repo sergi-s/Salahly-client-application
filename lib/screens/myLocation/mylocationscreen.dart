@@ -23,7 +23,8 @@ class _MyLocationScreenState extends State<MyLocationScreen> {
   final Completer<GoogleMapController> _controllerGoogleMap = Completer();
   late GoogleMapController newGoogleMapController;
 
-  static const double cameraZoom = 20;
+  static const double initialCameraZoom = 15;
+  double cameraZoom = 14;
 
   // Current Location
   // late Position currentPos;
@@ -34,9 +35,16 @@ class _MyLocationScreenState extends State<MyLocationScreen> {
 
   //initial Camera position
   final CameraPosition _kGooglePlex = const CameraPosition(
-    target: LatLng(37.42796133580664, -122.085749655962),
-    zoom: cameraZoom,
+    target: LatLng(30.0444, 31.2357),
+    zoom: initialCameraZoom,
   );
+
+  @override
+  void initState() {
+    initialLocation();
+    locatePosition();
+    super.initState();
+  }
 
   //Markers
   List<Marker> myMarkers = [];
@@ -87,6 +95,7 @@ class _MyLocationScreenState extends State<MyLocationScreen> {
 
   void locatePosition() async {
     currentCustomLoc = await getUserLocation();
+    cameraZoom = 19;
     // currentPos = pos;
 
     LatLng latLatPosition =
@@ -120,6 +129,7 @@ class _MyLocationScreenState extends State<MyLocationScreen> {
 
   _handleTap(LatLng tappedPoint) {
     setState(() {
+      cameraZoom = 19;
       moveCamera(CustomLocation(
           latitude: tappedPoint.latitude, longitude: tappedPoint.longitude));
       myMarkers = [];
@@ -135,5 +145,13 @@ class _MyLocationScreenState extends State<MyLocationScreen> {
             }),
       );
     });
+  }
+
+  initialLocation() async {
+    List temp = await getApproximateLocation();
+    CustomLocation initialPos =
+        CustomLocation(latitude: temp[0], longitude: temp[1]);
+
+    moveCamera(initialPos);
   }
 }

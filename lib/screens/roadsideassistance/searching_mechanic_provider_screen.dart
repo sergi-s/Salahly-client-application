@@ -16,7 +16,7 @@ import 'package:slahly/widgets/roadsideassistance/services_provider_card.dart';
 
 Client user = Client(
     name: "aya",
-    email: "aya.emai",
+    email: "aya@email.com",
     subscription: SubscriptionTypes.silver,
     loc: CustomLocation(latitude: 55, longitude: 55));
 
@@ -25,13 +25,13 @@ DatabaseReference rsaRef = FirebaseDatabase.instance.ref().child("rsa");
 class SearchingMechanicProviderScreen extends ConsumerWidget {
   static const String routeName = "/searchingmechanicprovider";
 
-  SearchingMechanicProviderScreen({required this.userLocation});
+  SearchingMechanicProviderScreen({Key? key, required this.userLocation}) : super(key: key);
 
   final CustomLocation userLocation;
 
 //TODO static data to be removed
 
-  Mechanic choosenMech = Mechanic(
+  final Mechanic chosenMechanic = Mechanic(
       name: "Mohamed",
       email: "mohamed@gmail.com",
       nationalID: "123",
@@ -42,7 +42,7 @@ class SearchingMechanicProviderScreen extends ConsumerWidget {
       avatar:
           "https://imagesvc.meredithcorp.io/v3/mm/image?url=https%3A%2F%2Fstatic.onecms.io%2Fwp-content%2Fuploads%2Fsites%2F20%2F2021%2F03%2F29%2Fbrad-pitt.jpg");
 
-  TowProvider choosenTowProvider = TowProvider(
+  final TowProvider chosenTowProvider = TowProvider(
       name: "Sergi",
       email: "sergi@email.net",
       nationalID: "123",
@@ -77,14 +77,16 @@ class SearchingMechanicProviderScreen extends ConsumerWidget {
                 Text(("help_on_way".tr()),
                     style: const TextStyle(fontSize: 14)),
                 const SizedBox(height: 20),
-                getMechWidget(ref),
+                getMechanicWidget(ref),
                 const SizedBox(height: 15),
                 getProvWidget(ref),
                 const SizedBox(height: 50),
                 ElevatedButton(
                   onPressed: () {
                     rsaNotifier.assignState(RSAStates.canceled);
-                    context.pop();
+                    // context.pop();
+                    // Navigator.pop(context);
+                    confirmCancellation(context, ref);
                   },
                   child: Text("Cancel".tr()),
                   style: ElevatedButton.styleFrom(
@@ -97,6 +99,33 @@ class SearchingMechanicProviderScreen extends ConsumerWidget {
         ),
       ),
     );
+  }
+
+  void confirmCancellation(context, ref) {
+    RSANotifier rsaNotifier = ref.watch(rsaProvider.notifier);
+
+    RSA rsa = ref.watch(rsaProvider);
+    showDialog(
+        context: context,
+        builder: (BuildContext context) => AlertDialog(
+              title: Text("are_you_sure".tr()),
+              content: Text("confirm_cancellation".tr()),
+              actions: <Widget>[
+                ElevatedButton(
+                    onPressed: () => Navigator.pop(context),
+                    child: Text("Cancel".tr())),
+                ElevatedButton(
+                    onPressed: () async {
+                      //Cancel RSA request
+                      //From State Management and Firebase
+                      rsaNotifier.assignState(RSAStates.canceled);
+                      await rsaRef.child(rsa.rsaID!).update(
+                          {"state": RSA.stateToString(RSAStates.canceled)});
+                      context.pop();
+                    },
+                    child: Text("confirm".tr()))
+              ],
+            ));
   }
 
 //"-MyUNThvOQvuoy6HeOy-"
@@ -121,17 +150,17 @@ class SearchingMechanicProviderScreen extends ConsumerWidget {
 
   //Helper Function
 
-  Widget getMechWidget(ref) {
+  Widget getMechanicWidget(ref) {
     RSA rsa = ref.watch(rsaProvider);
     return (rsa.mechanic != null
-        ? mapMechtoWiget(rsa.mechanic!)
+        ? mapMechanicToWidget(rsa.mechanic!)
         //NOTE: un-comment if you want to see selected mechanics
-        // return (choosenMech != null
-        //     ? mapMechtoWiget(choosenMech)
+        // return (chosenMechanic != null
+        //     ? mapMechanicToWidget(chosenMechanic)
         : const HoldPlease(who: "mechanic"));
   }
 
-  Widget mapMechtoWiget(Mechanic mec) {
+  Widget mapMechanicToWidget(Mechanic mec) {
     return ServicesProviderCard(
       serviceProviderEmail: mec.email!,
       serviceProviderName: mec.name!,
@@ -144,15 +173,15 @@ class SearchingMechanicProviderScreen extends ConsumerWidget {
   Widget getProvWidget(ref) {
     RSA rsa = ref.watch(rsaProvider);
 
-    // return (rsa.towProvider != null
-    //     ? mapProvetoWiget(rsa.towProvider!)
+    return (rsa.towProvider != null
+        ? mapProviderToWidget(rsa.towProvider!)
         //NOTE: un-comment if you want to see selected provider
-        return (choosenTowProvider != null
-            ? mapProvetoWiget(choosenTowProvider)
+        // return (chosenTowProvider != null
+        //     ? mapProviderToWidget(chosenTowProvider)
         : const HoldPlease(who: "provider"));
   }
 
-  Widget mapProvetoWiget(TowProvider prov) {
+  Widget mapProviderToWidget(TowProvider prov) {
     return ServicesProviderCard(
       serviceProviderEmail: prov.email!,
       serviceProviderName: prov.name!,

@@ -26,8 +26,7 @@ class ServicesProviderCard extends StatelessWidget {
   void customDialog(context) {
     showDialog(
         context: context,
-        builder: (BuildContext context) =>
-            AlertDialog(
+        builder: (BuildContext context) => AlertDialog(
               title: Row(
                 children: [
                   Text(serviceProviderType),
@@ -36,7 +35,8 @@ class ServicesProviderCard extends StatelessWidget {
               ),
               content: getContent(),
               actions: <Widget>[
-                ElevatedButton(onPressed: () => Navigator.pop(context),
+                ElevatedButton(
+                    onPressed: () => Navigator.pop(context),
                     child: Text("Cancel".tr()))
                 // IconButton(
                 //     icon: const Icon(Icons.close),
@@ -55,9 +55,8 @@ class ServicesProviderCard extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           CircleAvatar(
-            backgroundImage: Image
-                .network(
-                "https://www.biography.com/.image/ar_1:1%2Cc_fill%2Ccs_srgb%2Cfl_progressive%2Cq_auto:good%2Cw_1200/MTY3MDUxMjkzMjI1OTIwMTcz/brad-pitt-attends-the-premiere-of-20th-century-foxs--square.jpg")
+            backgroundImage: Image.network(
+                    "https://www.biography.com/.image/ar_1:1%2Cc_fill%2Ccs_srgb%2Cfl_progressive%2Cq_auto:good%2Cw_1200/MTY3MDUxMjkzMjI1OTIwMTcz/brad-pitt-attends-the-premiere-of-20th-century-foxs--square.jpg")
                 .image,
             radius: 25,
           ),
@@ -115,29 +114,39 @@ class ServicesProviderCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      child: SizedBox(
-        height: 70,
-        child: Center(
-          child: GestureDetector(
-            onTap: () {
-              customDialog(context);
-            },
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Image.asset(
-                  'assets/images/Checkmark.png',
-                  fit: BoxFit.contain,
-                  height: 33,
-                ),
-                const SizedBox(width: 15),
-                Text(
-                  foundType.tr(),
-                  style: TextStyle(fontSize: 17),
-                )
-              ],
-            ),
+    return Container(
+      decoration: const BoxDecoration(
+        color: Color(0xFFd1d9e6),
+        borderRadius: BorderRadius.all(Radius.circular(10)),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey,
+            spreadRadius: 5,
+            blurRadius: 7,
+            offset: Offset(0, 3), // changes position of shadow
+          ),
+        ],
+      ),
+      height: 70,
+      child: Center(
+        child: GestureDetector(
+          onTap: () {
+            customDialog(context);
+          },
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Image.asset(
+                'assets/images/Checkmark.png',
+                fit: BoxFit.contain,
+                height: 33,
+              ),
+              const SizedBox(width: 15),
+              Text(
+                foundType.tr(),
+                style: TextStyle(fontSize: 17),
+              )
+            ],
           ),
         ),
       ),

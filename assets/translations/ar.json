@@ -38,5 +38,8 @@
   "found_tow_provider": "لقد وجدنا سياره سحب",
   "Phone": "هاتف",
   "Email": "البريد",
-  "Name": "الاسم"
+  "Name": "الاسم",
+  "are_you_sure": "هل انت متاكد",
+  "confirm_cancellation": "أكد الالغاء",
+  "confirm": "تاكد"
 }

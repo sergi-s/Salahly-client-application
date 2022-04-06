@@ -31,7 +31,7 @@ import 'package:slahly/screens/waitforarrvial.dart';
 
 class Routing {
   get router => GoRouter(
-        initialLocation: ChooseMechanicScreen.routeName,
+        initialLocation: AllScreens.routeName,
         routes: <GoRoute>[
           GoRoute(
             //TESTING
