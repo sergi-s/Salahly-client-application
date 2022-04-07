@@ -23,6 +23,7 @@ class ChooseProviderScreen extends StatelessWidget {
         email: 'email@yahoo.com',
         type: Type.provider),
   ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -54,17 +55,17 @@ class ChooseProviderScreen extends StatelessWidget {
                     ListView.builder(
                       itemBuilder: (BuildContext, index) {
                         return ChooseTile(
-                            providers[index].email.toString(),
-                            providers[index].avatar.toString(),
-                            providers[index].phoneNumber.toString(),
-                            providers[index].name.toString(),
-                            providers[index].loc!.address.toString(),
-                            providers[index].type!,
-                            false);
+                            email: providers[index].email.toString(),
+                            avatar: providers[index].avatar.toString(),
+                            phone: providers[index].phoneNumber.toString(),
+                            name: providers[index].name.toString(),
+                            address: providers[index].loc!.address.toString(),
+                            type: providers[index].type!,
+                            isCenter: false);
                       },
                       itemCount: providers.length,
                       shrinkWrap: true,
-                      padding: EdgeInsets.all(5),
+                      padding: const EdgeInsets.all(5),
                       scrollDirection: Axis.vertical,
                     ),
                   ],

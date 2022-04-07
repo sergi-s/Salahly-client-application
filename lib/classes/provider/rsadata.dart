@@ -29,6 +29,10 @@ class RSANotifier extends StateNotifier<RSA> {
     print("loooooooola");
   }
 
+  void assignAcceptedNearbyMechanics(List<Mechanic> acceptedNearbyMechanics) {
+    state = state.copyWith(acceptedNearbyMechanics: acceptedNearbyMechanics);
+  }
+
   void assignMechanic(Mechanic mechanic, bool stopListener) {
     state = state.copyWith(mechanic: mechanic);
     if (stopListener) {
@@ -82,7 +86,7 @@ class RSANotifier extends StateNotifier<RSA> {
       "state": RSA.stateToString(RSAStates.waitingForMechanicResponse)
     };
     print("Ayoohew");
-    print(state.nearbyMechanics!.toString());
+    // print(state.nearbyMechanics!.toString());
     print("Ayooh");
     for (var mech in state.nearbyMechanics!) {
       // rsadata.update("mechanicsResponses", (value) => value[]);
@@ -108,6 +112,7 @@ class RSANotifier extends StateNotifier<RSA> {
     String? rsaID = await _requestRSA();
     if (rsaID != null) {
       state = state.copyWith(state: RSAStates.created, rsaID: rsaID);
+      print("AyoohID::${rsaID} ==== ${state.rsaID}");
       return true;
     } else {
       assignState(RSAStates.failedToRequestRSA);

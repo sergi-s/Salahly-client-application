@@ -111,6 +111,15 @@ class _DropOffLocationScreenState extends State<DropOffLocationScreen> {
                     Text(("hi_there".tr()), style: TextStyle(fontSize: 12)),
                     Text(("where_to".tr()), style: TextStyle(fontSize: 20)),
                     const SizedBox(height: 20),
+                    TextFieldOnMap(
+                      isSelected: false,
+                      textToDisplay: ("your_current_location".tr()),
+                      iconToDisplay: const Icon(
+                        Icons.my_location,
+                        color: Colors.blue,
+                      ),
+                    ),
+                    const SizedBox(height: 15),
                     GestureDetector(
                       onTap: () {
                         print(
@@ -119,23 +128,12 @@ class _DropOffLocationScreenState extends State<DropOffLocationScreen> {
                             extra: currentCustomLoc);
                       },
                       child: TextFieldOnMap(
-                        isSelected: false,
-                        textToDisplay: ("your_current_location".tr()),
+                        isSelected: true,
+                        textToDisplay: ("where_to".tr()),
                         iconToDisplay: const Icon(
-                          Icons.my_location,
+                          Icons.search,
                           color: Colors.blue,
                         ),
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 15,
-                    ),
-                    TextFieldOnMap(
-                      isSelected: true,
-                      textToDisplay: ("where_to".tr()),
-                      iconToDisplay: const Icon(
-                        Icons.search,
-                        color: Colors.blue,
                       ),
                     ),
                   ],

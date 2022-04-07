@@ -6,11 +6,13 @@ class TextFieldOnMap extends StatelessWidget {
     required this.textToDisplay,
     required this.iconToDisplay,
     required this.isSelected,
+    this.child,
   }) : super(key: key);
 
   final String textToDisplay;
   final Icon iconToDisplay;
   final bool isSelected;
+  final Widget? child;
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +40,9 @@ class TextFieldOnMap extends StatelessWidget {
           Text(
             textToDisplay,
             style: const TextStyle(fontSize: 17),
-          )
+          ),
+          const SizedBox(width: 5),
+          child ?? const SizedBox(),
         ],
       ),
     );

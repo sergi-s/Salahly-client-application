@@ -1,6 +1,7 @@
 import 'package:go_router/go_router.dart';
 import 'package:slahly/classes/models/location.dart';
 import 'package:slahly/screens/DropOff_screens/dropOff_search_screen.dart';
+import 'package:slahly/screens/WSA/WSA_screen.dart';
 import 'package:slahly/screens/allScreens.dart';
 import 'package:slahly/screens/car_management/add_car_screen.dart';
 import 'package:slahly/screens/car_management/view_cars_screen.dart';
@@ -12,6 +13,7 @@ import 'package:slahly/screens/firebaseemulatortestscreen/firebaseemulatortestsc
 import 'package:slahly/screens/homescreen.dart';
 import 'package:slahly/screens/login_signup/TryScreen.dart';
 import 'package:slahly/screens/login_signup/check_login.dart';
+import 'package:slahly/screens/login_signup/loginForm.dart';
 import 'package:slahly/screens/login_signup/registration.dart';
 import 'package:slahly/screens/login_signup/signupscreen.dart';
 import 'package:slahly/screens/roadsideassistance/choosemechanic.dart';
@@ -31,7 +33,7 @@ import 'package:slahly/screens/waitforarrvial.dart';
 
 class Routing {
   get router => GoRouter(
-        initialLocation: AllScreens.routeName,
+        initialLocation: LoginSignupScreen.routeName,
         routes: <GoRoute>[
           GoRoute(
             //TESTING
@@ -153,6 +155,10 @@ class Routing {
           GoRoute(
             path: ViewHistory.routeName,
             builder: (context,state) => ViewHistory(),
+          ),
+          GoRoute(
+            path: WSAScreen.routeName,
+            builder: (context,state) => WSAScreen(),
           ),
         ],
       );

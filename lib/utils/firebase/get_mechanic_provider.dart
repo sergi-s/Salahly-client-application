@@ -3,6 +3,7 @@ import 'package:slahly/classes/models/mechanic.dart';
 import 'package:slahly/classes/models/towProvider.dart';
 import 'package:slahly/main.dart';
 import 'package:string_validator/string_validator.dart';
+import 'package:slahly/abstract_classes/user.dart';
 
 Future getMechanicOrProviderData(String id) async {
   DataSnapshot ds = await dbRef.child("users").child(id).get();
@@ -16,7 +17,8 @@ Future getMechanicOrProviderData(String id) async {
         id: id,
         name: (ds.child("name").value).toString(),
         email: (ds.child("email").value).toString(),
-        rating: toDouble((ds.child("rating").value).toString()));
+        rating: toDouble((ds.child("rating").value).toString()),
+        type: Type.mechanic);
   } else {
     return TowProvider(
         isCenter: toBoolean((ds.child("name").value).toString()),
@@ -25,6 +27,7 @@ Future getMechanicOrProviderData(String id) async {
         id: id,
         name: (ds.child("name").value).toString(),
         email: (ds.child("email").value).toString(),
-        rating: toDouble((ds.child("rating").value).toString()));
+        rating: toDouble((ds.child("rating").value).toString()),
+        type: Type.provider);
   }
 }

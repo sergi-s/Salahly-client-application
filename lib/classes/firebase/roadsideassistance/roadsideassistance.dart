@@ -21,6 +21,7 @@ class RSA {
   ///
   List<Mechanic>? _nearbyMechanics; // not included in FB
   List<TowProvider>? _nearbyProviders; // not included in FB
+  List<Mechanic>? _acceptedNearbyMechanics; // not included in FB
 
   CustomLocation? _dropOffLocation;
 
@@ -31,6 +32,7 @@ class RSA {
     String? problemDescription,
     List<Mechanic>? nearbyMechanics,
     List<TowProvider>? nearbyProviders,
+    List<Mechanic>? acceptedNearbyMechanics,
     CustomLocation? location,
     String? rsaID,
     Client? user,
@@ -43,6 +45,8 @@ class RSA {
     _problemDescription = problemDescription ?? problemDescription;
     _nearbyMechanics = nearbyMechanics ?? _nearbyMechanics;
     _nearbyProviders = nearbyProviders ?? _nearbyProviders;
+    _acceptedNearbyMechanics =
+        acceptedNearbyMechanics ?? _acceptedNearbyMechanics;
     _location = location ?? _location;
     _rsaID = rsaID ?? _rsaID;
     _user = user ?? _user;
@@ -57,6 +61,7 @@ class RSA {
     String? problemDescription,
     List<Mechanic>? nearbyMechanics,
     List<TowProvider>? nearbyProviders,
+    List<Mechanic>? acceptedNearbyMechanics,
     CustomLocation? location,
     String? rsaID,
     Client? user,
@@ -70,6 +75,8 @@ class RSA {
         problemDescription: problemDescription ?? _problemDescription,
         nearbyMechanics: nearbyMechanics ?? _nearbyMechanics,
         nearbyProviders: nearbyProviders ?? _nearbyProviders,
+        acceptedNearbyMechanics:
+            acceptedNearbyMechanics ?? _acceptedNearbyMechanics,
         location: location ?? _location,
         rsaID: rsaID ?? _rsaID,
         user: user ?? _user,
@@ -93,6 +100,8 @@ class RSA {
   List<Mechanic>? get nearbyMechanics => _nearbyMechanics;
 
   List<TowProvider>? get nearbyProviders => _nearbyProviders;
+
+  List<Mechanic>? get acceptedNearbyMechanics => _acceptedNearbyMechanics;
 
   RSAStates get state => _state;
 
