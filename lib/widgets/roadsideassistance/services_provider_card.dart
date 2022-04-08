@@ -136,15 +136,20 @@ class ServicesProviderCard extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Image.asset(
-                'assets/images/Checkmark.png',
-                fit: BoxFit.contain,
-                height: 33,
+              // Image.asset(
+              //   'assets/images/Checkmark.png',
+              //   fit: BoxFit.contain,
+              //   height: 33,
+              // ),
+              const Icon(
+                Icons.check_circle,
+                color: Colors.green,
+                size: 40,
               ),
               const SizedBox(width: 15),
               Text(
                 foundType.tr(),
-                style: TextStyle(fontSize: 17),
+                style: TextStyle(fontSize: 21),
               )
             ],
           ),
