@@ -8,10 +8,9 @@ import 'package:slahly/classes/models/location.dart';
 import 'package:slahly/classes/models/mechanic.dart';
 import 'package:slahly/classes/models/towProvider.dart';
 import 'package:slahly/main.dart';
+import 'package:slahly/utils/constants.dart';
 
 // import 'package:slahly/classes/models/road_side_assistance.dart';
-
-DatabaseReference wsaRef = FirebaseDatabase.instance.ref().child("wsa");
 
 // Global for anyone to use it
 final rsaProvider = StateNotifierProvider<RSANotifier, RSA>((ref) {
@@ -24,6 +23,7 @@ class RSANotifier extends StateNotifier<RSA> {
             location:
                 CustomLocation(latitude: 31.206972, longitude: 29.919028)));
   final Ref ref;
+  _RequestType? _requestType;
 
   // Setters
   void assignNearbyMechanics(List<Mechanic> nearbyMechanics) {
@@ -31,8 +31,15 @@ class RSANotifier extends StateNotifier<RSA> {
     print("loooooooola");
   }
 
-  void newAssignNearbyMechanics(Mechanic nearbyMechanic) async {
+  void assignAcceptedNearbyMechanics(List<Mechanic> acceptedNearbyMechanics) {
+    state = state.copyWith(acceptedNearbyMechanics: acceptedNearbyMechanics);
+  }
+
+//Sergi Samir Boules Rizkallah
+  void onFindNewMechanic(Mechanic nearbyMechanic) async {
     //I dont want to mess up the old code.
+
+    if (_requestType == _RequestType.TTA) return;
 
     //copy to new map (make sure their is no conflict between call by ref and call by value) and not null
     Map<String, Mechanic> tempMap = {...state.newNearbyMechanics ?? {}};
@@ -40,31 +47,32 @@ class RSANotifier extends StateNotifier<RSA> {
     if (!tempMap.containsKey(nearbyMechanic.id)) {
       tempMap[nearbyMechanic.id!] = nearbyMechanic;
 
-      DataSnapshot dataSnapshot =
-          await wsaRef.child(state.rsaID!).child("mechanicsResponses").get();
+      // DataSnapshot dataSnapshot =
+      //     await wsaRef.child(state.rsaID!).child("mechanicsResponses").get();
 
-      for (var mechanicID in state.newNearbyMechanics!.keys) {
-        bool flag = false;
+      // for (var mechanicID in state.newNearbyMechanics!.keys) {
+      //   bool flag = false;
+      //
+      //   dataSnapshot.children.forEach((mechanicResponse) {
+      //     if (mechanicID == mechanicResponse.key) {
+      //       flag = true;
+      //     }
+      //   });
+      //
+      // if (!flag) {
+      DatabaseReference localRef =
+          _requestType == _RequestType.WSA ? wsaRef : rsaRef;
 
-        dataSnapshot.children.forEach((mechanicResponse) {
-          if (mechanicID == mechanicResponse.key) {
-            flag = true;
-          }
-        });
-
-        if (!flag) {
-          wsaRef
-              .child(state.rsaID!)
-              .child("mechanicsResponses")
-              .update({mechanicID: "pending"});
-        }
-      }
+      localRef
+          .child(state.rsaID!)
+          .child("mechanicsResponses")
+          .child(nearbyMechanic.id!)
+          .set("pending");
     }
-    state = state.copyWith(newNearbyMechanics: state.newNearbyMechanics);
-  }
+    // }
+    // }
 
-  void assignAcceptedNearbyMechanics(List<Mechanic> acceptedNearbyMechanics) {
-    state = state.copyWith(acceptedNearbyMechanics: acceptedNearbyMechanics);
+    state = state.copyWith(newNearbyMechanics: state.newNearbyMechanics);
   }
 
   void assignMechanic(Mechanic mechanic, bool stopListener) {
@@ -199,4 +207,12 @@ class RSANotifier extends StateNotifier<RSA> {
         state.user != null ? state.user!.getSubscriptionRange()! : 100;
     // NearbyLocations.getNearbyProviders(state.location!.latitude, state.location!.longitude, radius, ref);
   }
+
+  assignRequestType(_RequestType type) {
+    _requestType = type;
+  }
+
+  getRequestType() => _requestType;
 }
+
+enum _RequestType { RSA, WSA, TTA }

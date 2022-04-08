@@ -147,7 +147,7 @@ stt38c5j0s
                 nearbyMechanics.add(value);
                 rsa.assignNearbyMechanics(nearbyMechanics);
 
-                rsa.newAssignNearbyMechanics(value);
+                rsa.onFindNewMechanic(value);
                 print("Added mechanic: " + value.name!);
               } else if (value is TowProvider) {
                 nearbyProviders.add(value);

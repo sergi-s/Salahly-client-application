@@ -1,6 +1,7 @@
 
 import 'dart:io';
 
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter_flavor/flutter_flavor.dart';
 
 dynamic getGoogleMapsAPI() {
@@ -8,6 +9,10 @@ dynamic getGoogleMapsAPI() {
   // return FlavorConfig.instance.variables["maps_api"];
   // return await DotEnv().env['GOOGLE_MAPS_API'];
 }
+
+
+DatabaseReference wsaRef = FirebaseDatabase.instance.ref().child("wsa");
+DatabaseReference rsaRef = FirebaseDatabase.instance.ref().child("rsa");
 
 final googleMapsAPI = "AIzaSyCuDZsh0WAgOreWhre_G2PlPJ61yLfGVc4";
 
