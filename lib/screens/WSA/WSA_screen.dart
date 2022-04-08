@@ -148,19 +148,6 @@ class _WSAScreenState extends State<WSAScreen> {
                       );
                     },
                   ),
-                  Consumer(
-                    builder: (context, ref, child) {
-                      return GestureDetector(
-                        child: getMechanicWidget(ref),
-                        onTap: () async {
-                          await ref.watch(rsaProvider.notifier).requestRSA();
-                          print("after");
-                          print("LOVE::${ref.watch(rsaProvider).rsaID}");
-                          _pc.open();
-                        },
-                      );
-                    },
-                  ),
                   const SizedBox(height: 15),
                   GestureDetector(
                     child: TextFieldOnMap(
@@ -191,7 +178,6 @@ class _WSAScreenState extends State<WSAScreen> {
         Consumer(builder: (context, ref, child) {
           print("HEEEEEE");
           RSA rsa = ref.watch(rsaProvider);
-          getAcceptedMechanic(ref);
           return ChooseMechanicSlider(
               pc: _pc, mechanics: rsa.acceptedNearbyMechanics ?? []);
         })
@@ -202,34 +188,38 @@ class _WSAScreenState extends State<WSAScreen> {
   //request work shop assistance
   requestWSA(ref) async {
     print("Requesting WSA::");
-    RSA rsa = ref.watch(rsaProvider);
     RSANotifier rsaNotifier = ref.watch(rsaProvider.notifier);
+
+    RSA rsa = ref.watch(rsaProvider);
     rsaNotifier.assignUserLocation(currentCustomLoc);
 
+    await rsaNotifier.requestWSA();
     if (!gotMechanics) {
       gotMechanics = true;
       await rsaNotifier.searchNearbyMechanicsAndProviders();
       print("again?");
     }
+    print("ID::${rsa.rsaID}");
+    getAcceptedMechanic(ref);
   }
 
-  bool flagFoula = false;
+  // bool flagFoula = false;
 
   getAcceptedMechanic(ref) {
-    if (flagFoula) {
-      return;
-    }
-    flagFoula = true;
+    // if (flagFoula) {
+    //   return;
+    // }
+    // flagFoula = true;
 
     print("IN STREAM FUNCTION ::");
-    DatabaseReference rsaRef = FirebaseDatabase.instance.ref().child("rsa");
+    DatabaseReference wsaRef = FirebaseDatabase.instance.ref().child("wsa");
     RSANotifier rsaNotifier = ref.watch(rsaProvider.notifier);
     RSA rsa = ref.watch(rsaProvider);
     if (rsa.rsaID == null) return [];
 
-    rsaRef.child(rsa.rsaID!).onValue.listen((event) {
+    wsaRef.child(rsa.rsaID!).onValue.listen((event) {
       List<Mechanic> acceptedMechanic = [];
-      print("LISTENER");
+      print("WSA LISTENER");
       print("${event.snapshot.value}");
       if (event.snapshot.value != null) {
         DataSnapshot dataSnapshot = event.snapshot;
@@ -237,11 +227,12 @@ class _WSAScreenState extends State<WSAScreen> {
         if (dataSnapshot.child("state").value.toString() ==
             RSA.stateToString(RSAStates.waitingForMechanicResponse)) {
           dataSnapshot.child("mechanicsResponses").children.forEach((mechanic) {
-            print("Stream::${mechanic}");
+            print("Stream::$mechanic");
             if (mechanic.value == "accepted") {
-              print("ADDED ${mechanic.key}");
-              for (var mech in rsa.nearbyMechanics!) {
-                if (mech.id == mechanic.key) acceptedMechanic.add(mech);
+              for (var mechanicID in rsa.newNearbyMechanics!.keys) {
+                if (mechanicID == mechanic.key) {
+                  acceptedMechanic.add(rsa.newNearbyMechanics![mechanicID]!);
+                }
               }
             }
           });
@@ -263,8 +254,8 @@ class _WSAScreenState extends State<WSAScreen> {
           // }
           // flag
           //     ?
-      rsaNotifier.assignAcceptedNearbyMechanics(acceptedMechanic);
-              // : "";
+          rsaNotifier.assignAcceptedNearbyMechanics(acceptedMechanic);
+          // : "";
         }
       }
     });

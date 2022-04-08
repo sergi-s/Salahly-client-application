@@ -21,7 +21,7 @@ Future getMechanicOrProviderData(String id) async {
         type: Type.mechanic);
   } else {
     return TowProvider(
-        isCenter: toBoolean((ds.child("name").value).toString()),
+        isCenter: toBoolean((ds.child("isCenter").value).toString()),
         avatar: "",
         phoneNumber: "1231231234",
         id: id,

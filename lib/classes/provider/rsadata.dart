@@ -11,6 +11,8 @@ import 'package:slahly/main.dart';
 
 // import 'package:slahly/classes/models/road_side_assistance.dart';
 
+DatabaseReference wsaRef = FirebaseDatabase.instance.ref().child("wsa");
+
 // Global for anyone to use it
 final rsaProvider = StateNotifierProvider<RSANotifier, RSA>((ref) {
   return RSANotifier(ref);
@@ -27,6 +29,38 @@ class RSANotifier extends StateNotifier<RSA> {
   void assignNearbyMechanics(List<Mechanic> nearbyMechanics) {
     state = state.copyWith(nearbyMechanics: nearbyMechanics);
     print("loooooooola");
+  }
+
+  void newAssignNearbyMechanics(Mechanic nearbyMechanic) async {
+    //I dont want to mess up the old code.
+
+    //copy to new map (make sure their is no conflict between call by ref and call by value) and not null
+    Map<String, Mechanic> tempMap = {...state.newNearbyMechanics ?? {}};
+
+    if (!tempMap.containsKey(nearbyMechanic.id)) {
+      tempMap[nearbyMechanic.id!] = nearbyMechanic;
+
+      DataSnapshot dataSnapshot =
+          await wsaRef.child(state.rsaID!).child("mechanicsResponses").get();
+
+      for (var mechanicID in state.newNearbyMechanics!.keys) {
+        bool flag = false;
+
+        dataSnapshot.children.forEach((mechanicResponse) {
+          if (mechanicID == mechanicResponse.key) {
+            flag = true;
+          }
+        });
+
+        if (!flag) {
+          wsaRef
+              .child(state.rsaID!)
+              .child("mechanicsResponses")
+              .update({mechanicID: "pending"});
+        }
+      }
+    }
+    state = state.copyWith(newNearbyMechanics: state.newNearbyMechanics);
   }
 
   void assignAcceptedNearbyMechanics(List<Mechanic> acceptedNearbyMechanics) {
@@ -106,7 +140,36 @@ class RSANotifier extends StateNotifier<RSA> {
     return newRSA.key;
   }
 
-  //Functionalities
+//Functionalities
+  Future requestWSA() async {
+    assignState(RSAStates.requestingRSA);
+    String? rsaID = await _requestWSA();
+    if (rsaID != null) {
+      state = state.copyWith(state: RSAStates.created, rsaID: rsaID);
+      print("WSA::${rsaID} ==== ${state.rsaID}");
+      return true;
+    } else {
+      assignState(RSAStates.failedToRequestRSA);
+      return false;
+    }
+  }
+
+  Future _requestWSA() async {
+    String userID = FirebaseAuth.instance.currentUser!.uid;
+    DatabaseReference newWSA = dbRef.child("wsa").push();
+    Map<String, dynamic> rsaData = {
+      "userID": userID,
+      "latitude": state.location!.latitude,
+      "longitude": state.location!.longitude,
+      "mechanicsResponses": {},
+      "providersResponses": {},
+      "state": RSA.stateToString(RSAStates.waitingForMechanicResponse)
+    };
+    await newWSA.set(rsaData);
+    return newWSA.key;
+  }
+
+//Functionalities
   Future requestRSA() async {
     assignState(RSAStates.requestingRSA);
     String? rsaID = await _requestRSA();
@@ -120,7 +183,7 @@ class RSANotifier extends StateNotifier<RSA> {
     }
   }
 
-  // customRefresh() => state = state.copyWith(); Testing
+// customRefresh() => state = state.copyWith(); Testing
 
   searchNearbyMechanicsAndProviders() {
     // _assignState(RSAStates.searchingForNearbyMechanic);
