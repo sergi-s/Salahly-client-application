@@ -55,7 +55,6 @@ class ChooseMechanicScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         body: SlidingUpPanel(
-      // <<<<<<< HEAD
       color: Color(0xFFd1d9e6),
       backdropEnabled: true,
       panelSnapping: true,
@@ -81,68 +80,31 @@ class ChooseMechanicScreen extends StatelessWidget {
             ),
           ),
         ),
-        // SizedBox(
-        //   height: 40,
-        // ),
         Container(
           child: SafeArea(
-            child:
-                // ListView.separated(
-                // // =======
-                // color: Color(0xFFd1d9e6),
-                // backdropEnabled: true,
-                // panelSnapping: true,
-                // minHeight: 50,
-                // borderRadius: BorderRadius.vertical(
-                // top: Radius.circular(50),
-                // ),
-                // defaultPanelState: PanelState.CLOSED,
-                // panelBuilder: (ScrollController sc) => Stack(children: [
-                // Padding(
-                // padding: const EdgeInsets.only(left: 160.0, top: 10),
-                // child: Container(
-                // //first container
-                // height: 20,
-                // width: 60,
-                // child: Padding(
-                // padding: EdgeInsets.only(bottom: 5, top: 5),
-                // child: RaisedButton(
-                // color: Colors.white,
-                // onPressed: () {},
-                // shape: RoundedRectangleBorder(
-                // borderRadius: new BorderRadius.circular(30.0))),
-                // ),
-                // ),
-                // ),
-                // SizedBox(
-                //   height: 40,
-                // ),
-
-                ListView.separated(
+            child: ListView.separated(
               itemCount: mechanics.length,
               controller: sc,
               itemBuilder: (BuildContext context, int index) {
                 return ChooseTile(
-                    mechanics[index].email.toString(),
-                    mechanics[index].avatar.toString(),
-                    mechanics[index].phoneNumber.toString(),
-                    mechanics[index].name.toString(),
-                    mechanics[index].loc!.address.toString(),
-                    mechanics[index].type!,
-                    mechanics[index].isCenter!);
+                    email: mechanics[index].email.toString(),
+                    avatar: mechanics[index].avatar.toString(),
+                    phone: mechanics[index].phoneNumber.toString(),
+                    name: mechanics[index].name.toString(),
+                    address: mechanics[index].loc!.address.toString(),
+                    type: mechanics[index].type!,
+                    isCenter: mechanics[index].isCenter!);
               },
               separatorBuilder: (BuildContext context, int index) {
                 return Divider(
                   height: 5,
                 );
               },
-              // <<<<<<< HEAD
             ),
           ),
         )
       ]),
       collapsed: Container(),
     ));
-    // =======
   }
 }

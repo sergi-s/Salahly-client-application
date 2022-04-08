@@ -26,12 +26,7 @@
   "Cancel": "إِلغاء",
   "Problem": "مشكلة",
   "confirm_location": "تاكيد المكان",
-<<<<<<< HEAD
-  "Rating": "التقيم",
-  "Choose_Mechanic": "اختر ميكانيكي",
-  "Choose_Car": "اختر السياره"
 
-=======
   "hi_there": "مرحبا",
   "where_to": "الي اين؟",
   "your_current_location": "موقعك الحالي",
@@ -44,6 +39,7 @@
   "found_tow_provider": "لقد وجدنا سياره سحب",
   "Phone": "هاتف",
   "Email": "البريد",
-  "Name": "الاسم"
->>>>>>> 931e111d966e6532a25d6451b6fa85ee81a45bd7
-}
+  "Name": "الاسم",
+  "Rating": "التقيم",
+  "Choose_Mechanic": "اختر ميكانيكي",
+  "Choose_Car": "اختر السياره"}

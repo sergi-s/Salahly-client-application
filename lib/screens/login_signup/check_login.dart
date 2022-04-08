@@ -3,6 +3,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:overlay_support/overlay_support.dart';
+import 'package:slahly/screens/allScreens.dart';
 import 'package:slahly/screens/homepage.dart';
 import 'package:slahly/screens/login_signup/signupscreen.dart';
 import 'package:slahly/screens/test_screens/testscreen_foula.dart';
@@ -12,12 +13,11 @@ class CheckLogin extends StatelessWidget {
   static const routeName = "/checklogin";
   @override
   Widget build(BuildContext context) {
-
     // FirebaseAuth.instance.signOut();
     if (FirebaseAuth.instance.currentUser == null) {
       context.go(LoginSignupScreen.routeName);
     } else {
-      context.go(TestScreen_nearbymechanics_and_create_rsa.routeName);
+      context.go(AllScreens.routeName);
     }
     return const Scaffold(body: Text("Checking logged in user error"));
   }

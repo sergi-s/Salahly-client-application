@@ -33,7 +33,7 @@ import 'package:slahly/screens/userMangament/choose_car.dart';
 
 class Routing {
   get router => GoRouter(
-        initialLocation: ManageSubowner.routeName,
+        initialLocation: CheckLogin.routeName,
         routes: <GoRoute>[
           GoRoute(
             //TESTING
@@ -162,7 +162,8 @@ class Routing {
           ),
           GoRoute(
             path: Select.routeName,
-            builder: (context, state) => Select(),
+            // builder: (context, state) => Select(state.extra as bool),
+            builder: (context, state) => Select(type: state.extra as bool),
           ),
         ],
       );

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 import "package:slahly/classes/models/place_predictions.dart";
 
@@ -8,6 +9,10 @@ import 'package:slahly/classes/provider/rsadata.dart';
 import 'package:slahly/utils/constants.dart';
 import 'package:slahly/utils/http_request.dart';
 import 'package:slahly/widgets/location/progressDialog.dart';
+import 'package:slahly/classes/provider/rsadata.dart';
+
+import '../../classes/firebase/roadsideassistance/roadsideassistance.dart';
+import '../../screens/roadsideassistance/chooseprovider.dart';
 
 class PredictionTile extends ConsumerWidget {
   const PredictionTile({Key? key, required this.placePredictions})
@@ -18,7 +23,18 @@ class PredictionTile extends ConsumerWidget {
   Widget build(BuildContext context, ref) {
     return TextButton(
       onPressed: () {
+        final rsaNotifier = ref.watch(rsaProvider.notifier);
+        final RSA rsa = ref.watch(rsaProvider);
+
         getPlaceAddressDetails(placePredictions.place_id!, ref, context);
+        rsaNotifier.searchNearbyMechanicsAndProviders();
+        print("xxxxxxxx");
+        // print(rsa.nearbyProviders);
+        print("hiii");
+        context.go(ChooseProviderScreen.routeName);
+
+        // searchNearbyMechanicsAndProviders()
+        // context.go();
       },
       child: Container(
           child: Column(

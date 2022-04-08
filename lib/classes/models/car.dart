@@ -6,6 +6,8 @@ class Car {
   String? noChassis;
   CarAccess? carAccess;
 
+  List<String> usersId = [];
+
   Car(
       {this.id,
       this.model,
@@ -13,6 +15,17 @@ class Car {
       required this.noPlate,
       this.noChassis,
       this.carAccess});
+
+  addSubOwner(String userID) {
+    usersId.add(userID);
+  }
+
+  removeSubOwner(String userID) {
+    usersId = [
+      for (var id in usersId)
+        if (userID != id) id
+    ];
+  }
 
   final Map<CarAccess, String> _CarAccess = {
     CarAccess.owner: "Owner",

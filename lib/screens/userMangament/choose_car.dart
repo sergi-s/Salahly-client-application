@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:slahly/classes/models/car.dart';
 import 'package:vertical_card_pager/vertical_card_pager.dart';
 
@@ -77,11 +78,15 @@ class Choose_car extends StatelessWidget {
     return Scaffold(
         backgroundColor: const Color(0xFFd1d9e6),
         appBar: AppBar(
+          automaticallyImplyLeading: true,
           elevation: 0.0,
           backgroundColor: const Color(0xFF193566),
-          title: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [Text("Choose Car")]),
+          title: Padding(
+            padding: const EdgeInsets.only(right: 40),
+            child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [Text("Choose Car")]),
+          ),
         ),
         body: CustomPaint(
           child: Container(
@@ -91,82 +96,87 @@ class Choose_car extends StatelessWidget {
               color: const Color(0xFFd1d9e6),
             ), // red as border color
             child: SafeArea(
-                child: ListView.builder(
-              itemCount: car.length,
-              itemBuilder: (context, index) => Card(
-                elevation: 6,
-                margin: EdgeInsets.all(10),
-                child: Container(
-                  decoration: BoxDecoration(
-                    boxShadow: [
-                      new BoxShadow(
-                        blurRadius: 20.0,
-                      ),
-                    ],
-                    borderRadius: BorderRadius.circular(8.0),
-                    color: const Color(0xFFd1d9e6),
-                  ),
-                  child: SingleChildScrollView(
-                    child: GestureDetector(
-                      child: ListTile(
-                        leading: CircleAvatar(
-                          radius: 30,
-                          backgroundColor: btncolor[car[index].color],
-                          child: Icon(Icons.directions_car_filled, size: 40),
+                child: AnimationLimiter(
+              child: ListView.builder(
+                itemCount: car.length,
+                itemBuilder: (context, index) => Card(
+                  elevation: 6,
+                  margin: EdgeInsets.all(10),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      boxShadow: [
+                        new BoxShadow(
+                          blurRadius: 10.0,
                         ),
-                        title: Text(car[index].model.toString(),
-                            style: TextStyle(
-                                fontSize: 25, fontWeight: FontWeight.bold)),
-                        subtitle: Padding(
-                          padding: const EdgeInsets.all(0),
-                          child: Column(children: [
-                            Row(
-                              children: [
-                                Text(
-                                  "Plate Number : ",
-                                  style: TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.black),
-                                ),
-                                Text(
-                                  car[index].noPlate.toString(),
-                                  style: TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                Text(
-                                  "Chassis Number : ",
-                                  style: TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.black),
-                                ),
-                                Text(car[index].noChassis.toString(),
+                      ],
+                      borderRadius: BorderRadius.circular(8.0),
+                      color: const Color(0xFFd1d9e6),
+                    ),
+                    child: SingleChildScrollView(
+                      child: GestureDetector(
+                        onTap: () {
+                          print('welcome');
+                        },
+                        child: ListTile(
+                          leading: CircleAvatar(
+                            radius: 30,
+                            backgroundColor: btncolor[car[index].color],
+                            child: Icon(Icons.directions_car_filled, size: 40),
+                          ),
+                          title: Text(car[index].model.toString(),
+                              style: TextStyle(
+                                  fontSize: 25, fontWeight: FontWeight.bold)),
+                          subtitle: Padding(
+                            padding: const EdgeInsets.all(0),
+                            child: Column(children: [
+                              Row(
+                                children: [
+                                  Text(
+                                    "Plate Number : ",
                                     style: TextStyle(
                                         fontSize: 18,
-                                        fontWeight: FontWeight.bold)),
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                Text("Color ",
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black),
+                                  ),
+                                  Text(
+                                    car[index].noPlate.toString(),
                                     style: TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 19,
-                                        fontWeight: FontWeight.bold)),
-                                Text(car[index].color.toString(),
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  Text(
+                                    "Chassis Number : ",
                                     style: TextStyle(
-                                        fontSize: 19,
-                                        color: btncolor[car[index].color],
-                                        fontWeight: FontWeight.bold)),
-                              ],
-                            ),
-                          ]),
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black),
+                                  ),
+                                  Text(car[index].noChassis.toString(),
+                                      style: TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold)),
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  Text("Color ",
+                                      style: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 19,
+                                          fontWeight: FontWeight.bold)),
+                                  Text(car[index].color.toString(),
+                                      style: TextStyle(
+                                          fontSize: 19,
+                                          color: btncolor[car[index].color],
+                                          fontWeight: FontWeight.bold)),
+                                ],
+                              ),
+                            ]),
+                          ),
                         ),
                       ),
                     ),

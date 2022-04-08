@@ -87,14 +87,14 @@ class _AddSubownerState extends State<AddSubowner> {
                 children: [
                   Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
+                      children: const [
                         Text(
                           "Add Subowner",
                           style: TextStyle(fontSize: 40, color: Colors.white),
                           textAlign: TextAlign.center,
                         ),
                       ]),
-                  SizedBox(
+                  const SizedBox(
                     height: 100,
                   ),
 
@@ -103,12 +103,8 @@ class _AddSubownerState extends State<AddSubowner> {
                   //   style: TextStyle(fontSize: 30, color: Colors.black),
                   //   textAlign: TextAlign.center,
                   // ),
-                  SizedBox(
-                    width: 50,
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
+                  const SizedBox(width: 50),
+                  const SizedBox(height: 20),
                   Row(children: [
                     Container(
                       width: 250,
@@ -116,19 +112,17 @@ class _AddSubownerState extends State<AddSubowner> {
                         decoration: InputDecoration(
                           labelText: "Enter Subowner Email",
                           filled: true,
-                          fillColor: Color(0xFFd1d9e6).withOpacity(0.1),
+                          fillColor: const Color(0xFFd1d9e6).withOpacity(0.1),
                         ),
                       ),
                     ),
                     FloatingActionButton(
                       onPressed: () => scanQRcode(),
                       child: const Icon(Icons.qr_code),
-                      backgroundColor: Color(0xFF193566),
+                      backgroundColor: const Color(0xFF193566),
                     ),
                   ]),
-                  SizedBox(
-                    height: 30,
-                  ),
+                  const SizedBox(height: 30),
                   Row(
                     children: [
                       Text('Choose Car',
