@@ -7,6 +7,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:slahly/classes/models/location.dart';
 import 'package:slahly/abstract_classes/user.dart';
+import 'package:slahly/classes/models/towProvider.dart';
 import 'package:slahly/classes/provider/rsadata.dart';
 import 'package:slahly/utils/location/getuserlocation.dart';
 import 'package:slahly/utils/location/geocoding.dart';
@@ -18,6 +19,8 @@ import 'package:slahly/classes/firebase/roadsideassistance/roadsideassistance.da
 import 'package:slahly/classes/models/mechanic.dart';
 import 'package:slahly/widgets/WSA/choose_mech_slider.dart';
 import 'package:slahly/widgets/roadsideassistance/services_provider_card.dart';
+
+import '../../utils/constants.dart';
 
 class WSAScreen extends StatefulWidget {
   static const String routeName = "/WSAScreen";
@@ -65,7 +68,9 @@ class _WSAScreenState extends State<WSAScreen> {
   bool needProvider = false;
   bool gotMechanics = false;
 
-  final PanelController _pc = PanelController();
+  final PanelController _pcMechanic = PanelController();
+
+  final PanelController _pcTowProvider = PanelController();
 
   @override
   Widget build(BuildContext context) {
@@ -89,15 +94,15 @@ class _WSAScreenState extends State<WSAScreen> {
         Positioned(
           left: MediaQuery.of(context).size.width * 0.8,
           right: 0,
-          bottom: MediaQuery.of(context).size.height * 0.4,
+          bottom: MediaQuery.of(context).size.height * 0.45,
           child: ElevatedButton(
             onPressed: locatePosition,
             child: const Icon(
               Icons.location_on,
             ),
             style: ElevatedButton.styleFrom(
-              shape: CircleBorder(),
-              padding: EdgeInsets.all(10),
+              shape: const CircleBorder(),
+              padding: const EdgeInsets.all(10),
             ),
           ),
         ),
@@ -106,7 +111,7 @@ class _WSAScreenState extends State<WSAScreen> {
           right: 0,
           bottom: 0,
           child: Container(
-            height: MediaQuery.of(context).size.height * 0.39,
+            height: MediaQuery.of(context).size.height * 0.42,
             decoration: const BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.only(
@@ -126,8 +131,8 @@ class _WSAScreenState extends State<WSAScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const SizedBox(height: 6),
-                  Text(("hi_there".tr()), style: TextStyle(fontSize: 12)),
-                  Text(("where_to".tr()), style: TextStyle(fontSize: 20)),
+                  Text(("hi_there".tr()), style: const TextStyle(fontSize: 12)),
+                  Text(("where_to".tr()), style: const TextStyle(fontSize: 20)),
                   const SizedBox(height: 20),
                   TextFieldOnMap(
                     isSelected: false,
@@ -143,32 +148,26 @@ class _WSAScreenState extends State<WSAScreen> {
                       return GestureDetector(
                         child: getMechanicWidget(ref),
                         onTap: () async {
-                          // await requestWSA(ref);
-                          _pc.open();
+                          if (ref.watch(rsaProvider).mechanic == null) {
+                            _pcMechanic.open();
+                          }
+                          await requestWSA(ref);
                         },
                       );
                     },
                   ),
                   const SizedBox(height: 15),
-                  GestureDetector(
-                    child: TextFieldOnMap(
-                      textToDisplay: "Do you need a Tow truck",
-                      iconToDisplay: const Icon(Icons.wheelchair_pickup_sharp),
-                      isSelected: !needProvider,
-                      child: Switch(
-                        value: !needProvider,
-                        onChanged: (value) {
-                          setState(() => needProvider = !needProvider);
-                        },
-                        activeTrackColor: Colors.lightGreenAccent,
-                        activeColor: Colors.green,
-                      ),
-                    ),
-                    onTap: () {
-                      if (needProvider) {
-                        return;
-                      }
-                      //TODO: SAME LOGIC FOR PROVIDERS
+                  Consumer(
+                    builder:
+                        (BuildContext context, WidgetRef ref, Widget? child) {
+                      return GestureDetector(
+                          child: getProviderWidget(ref),
+                          onTap: () {
+                            if (needProvider) return;
+                            if (ref.watch(rsaProvider).mechanic == null) {
+                              _pcTowProvider.open();
+                            }
+                          });
                     },
                   )
                 ],
@@ -177,128 +176,134 @@ class _WSAScreenState extends State<WSAScreen> {
           ),
         ),
         Consumer(builder: (context, ref, child) {
-          print("HEEEEEE");
           RSA rsa = ref.watch(rsaProvider);
+          print("HEEEEEE${rsa.acceptedNearbyMechanics}");
           return ChooseMechanicSlider(
-              // pc: _pc, mechanics: rsa.acceptedNearbyMechanics ?? []);
-              pc:_pc, mechanics: mechanics,);
-        })
+              pc: _pcMechanic, mechanics: rsa.acceptedNearbyMechanics ?? []
+              // pc: _pc, mechanics: mechanics,
+              );
+        }),
+        Consumer(builder: (context, ref, child) {
+          RSA rsa = ref.watch(rsaProvider);
+          print("PROVIDER:HEEEEEE${rsa}");
+          return ChooseTowProviderSlider(
+              pc: _pcTowProvider,
+              towProviders: rsa.acceptedNearbyProviders ?? []
+              // pc: _pc, mechanics: mechanics,
+              );
+        }),
       ],
     ));
   }
-
-  List<Mechanic> mechanics = [
-    Mechanic(
-        name: 'Ahmed tarek',
-        phoneNumber: '01115612314',
-        isCenter: true,
-        type: Type.mechanic,
-        loc: CustomLocation(
-            address:
-            "Factorya, shar3 45 odam mtafy 12311321312312hasdhdashjss221",
-            latitude: 11,
-            longitude: 12),
-        avatar:
-        'https://thumbs.dreamstime.com/b/default-avatar-photo-placeholder-profile-image-default-avatar-photo-placeholder-profile-image-eps-file-easy-to-edit-124557892.jpg',
-        email: 'email@yahoo.com'),
-    Mechanic(
-        name: 'Sergi Samir',
-        email: 'mechanic@yahoo.com',
-        type: Type.mechanic,
-        phoneNumber: '0122321099',
-        loc: CustomLocation(
-            address: "sedigabr,180 3omrt y3okbyan",
-            latitude: 11,
-            longitude: 12),
-        isCenter: false,
-        avatar:
-        'https://thumbs.dreamstime.com/b/default-avatar-photo-placeholder-profile-image-default-avatar-photo-placeholder-profile-image-eps-file-easy-to-edit-124557892.jpg'),
-    Mechanic(
-        name: 'Mahmoud Magdy',
-        type: Type.mechanic,
-        email: 'Workshop@gmail.com',
-        phoneNumber: '01550164495',
-        loc: CustomLocation(
-            address: "Miami, mostshafa 3m ahmed", latitude: 11, longitude: 12),
-        isCenter: true,
-        avatar:
-        'https://thumbs.dreamstime.com/b/default-avatar-photo-placeholder-profile-image-default-avatar-photo-placeholder-profile-image-eps-file-easy-to-edit-124557892.jpg')
-  ];
 
   //request work shop assistance
   requestWSA(ref) async {
     print("Requesting WSA::");
     RSANotifier rsaNotifier = ref.watch(rsaProvider.notifier);
-
-    RSA rsa = ref.watch(rsaProvider);
+    rsaNotifier.assignRequestTypeToWSA();
     rsaNotifier.assignUserLocation(currentCustomLoc);
 
     await rsaNotifier.requestWSA();
     if (!gotMechanics) {
       gotMechanics = true;
       await rsaNotifier.searchNearbyMechanicsAndProviders();
-      print("again?");
     }
-    print("ID::${rsa.rsaID}");
     getAcceptedMechanic(ref);
   }
 
-  // bool flagFoula = false;
-
   getAcceptedMechanic(ref) {
-    // if (flagFoula) {
-    //   return;
-    // }
-    // flagFoula = true;
-
     print("IN STREAM FUNCTION ::");
-    DatabaseReference wsaRef = FirebaseDatabase.instance.ref().child("wsa");
-    RSANotifier rsaNotifier = ref.watch(rsaProvider.notifier);
     RSA rsa = ref.watch(rsaProvider);
     if (rsa.rsaID == null) return [];
 
     wsaRef.child(rsa.rsaID!).onValue.listen((event) {
-      List<Mechanic> acceptedMechanic = [];
       print("WSA LISTENER");
       print("${event.snapshot.value}");
       if (event.snapshot.value != null) {
         DataSnapshot dataSnapshot = event.snapshot;
+        print("1111111");
+        // if (dataSnapshot.child("state").value.toString() ==
+        //     RSA.stateToString(RSAStates.waitingForMechanicResponse)) {
+        print("2222222");
+        dataSnapshot
+            .child("mechanicsResponses")
+            .children
+            .forEach((dataSnapShotMechanic) {
+          print("333333333333");
+          print("Stream::${dataSnapShotMechanic.value}");
+          if (dataSnapShotMechanic.value == "accepted") {
+            print(
+                "inside if accepted and ${dataSnapShotMechanic.key} accepted");
 
-        if (dataSnapshot.child("state").value.toString() ==
-            RSA.stateToString(RSAStates.waitingForMechanicResponse)) {
-          dataSnapshot.child("mechanicsResponses").children.forEach((mechanic) {
-            print("Stream::$mechanic");
-            if (mechanic.value == "accepted") {
-              for (var mechanicID in rsa.newNearbyMechanics!.keys) {
-                if (mechanicID == mechanic.key) {
-                  acceptedMechanic.add(rsa.newNearbyMechanics![mechanicID]!);
-                }
+            print(
+                "AAAAAAAAAAAAAAAAAAAAA${ref.watch(rsaProvider).newNearbyMechanics}");
+            for (var mech in ref.watch(rsaProvider).newNearbyMechanics.keys) {
+              print(
+                  "${mech} ====== ${dataSnapShotMechanic.key}-> ${dataSnapShotMechanic.key == mech}");
+              print("do I already have him?");
+              if (dataSnapShotMechanic.key == mech) {
+                print(
+                    "YESSSSSSSSSSSSS->${ref.watch(rsaProvider).newNearbyMechanics[mech].name}");
+                ref.watch(rsaProvider.notifier).addAcceptedNearbyMechanic(
+                    ref.watch(rsaProvider).newNearbyMechanics[mech]);
+                // print(ref.watch(rsaProvider).);
               }
             }
-          });
+          }
+        });
+        // }
 
-          //If a new mechanic entered in the range of the geoFire
-          //check the mechanic in the sm same as the geoFire
-          // if the arr is the same
-          //don't do anything
-          //
-          // bool flag = true;
-          // if (acceptedMechanic.length == rsa.acceptedNearbyMechanics?.length) {
-          //   for (int index = 0; index < acceptedMechanic.length; index++) {
-          //     if (acceptedMechanic[index].id !=
-          //         rsa.acceptedNearbyMechanics?[index].id) {
-          //       flag = false;
-          //       break;
-          //     }
-          //   }
-          // }
-          // flag
-          //     ?
-          rsaNotifier.assignAcceptedNearbyMechanics(acceptedMechanic);
-          // : "";
-        }
+        dataSnapshot
+            .child("providersResponses")
+            .children
+            .forEach((dataSnapShotProvider) {
+          print("PROV::333333333333");
+          print("PROV::Stream::${dataSnapShotProvider.value}");
+          if (dataSnapShotProvider.value == "accepted") {
+            print(
+                "PROV::inside if accepted and ${dataSnapShotProvider.key} accepted");
+
+            print(
+                "PROV::AAAAAAAAAAAAAAAAAAAAA${ref.watch(rsaProvider).newNearbyProviders}");
+            for (var towProvider
+                in ref.watch(rsaProvider).newNearbyProviders.keys) {
+              print(
+                  "${towProvider} ====== ${dataSnapShotProvider.key}-> ${dataSnapShotProvider.key == towProvider}");
+              print("PROV::do I already have him?");
+              if (dataSnapShotProvider.key == towProvider) {
+                print(
+                    "PROV::YESSSSSSSSSSSSS->${ref.watch(rsaProvider).newNearbyProviders[towProvider].name}");
+                ref.watch(rsaProvider.notifier).addAcceptedNearbyProvider(
+                    ref.watch(rsaProvider).newNearbyProviders[towProvider]);
+                // print(ref.watch(rsaProvider).);
+              }
+            }
+          }
+        });
       }
     });
+  }
+
+  // Get assigned Provider
+  Widget getProviderWidget(ref) {
+    RSA rsa = ref.watch(rsaProvider);
+    return (rsa.towProvider != null
+        ? mapTowProviderToWidget(rsa.towProvider!)
+        // ? Container(child: Text("Mech exits"))
+        : TextFieldOnMap(
+            textToDisplay: "Do you need a Tow truck",
+            imageIconTodisplay:
+                const ImageIcon(AssetImage('assets/images/tow-truck 2.png')),
+            isSelected: !needProvider,
+            child: Switch(
+              value: !needProvider,
+              onChanged: (value) {
+                setState(() => needProvider = !needProvider);
+              },
+              activeTrackColor: Colors.lightGreenAccent,
+              activeColor: Colors.green,
+            ),
+          ));
   }
 
   //Get assigned mechanic
@@ -326,6 +331,17 @@ class _WSAScreenState extends State<WSAScreen> {
       serviceProviderIsCenter: mec.isCenter ?? false,
       serviceProviderType: mec.getUserType()!,
       serviceProviderPhoneNumber: mec.phoneNumber!,
+    );
+  }
+
+  Widget mapTowProviderToWidget(TowProvider towProvider) {
+    print("MECHH::${towProvider.toString()}");
+    return ServicesProviderCard(
+      serviceProviderEmail: towProvider.email!,
+      serviceProviderName: towProvider.name!,
+      serviceProviderIsCenter: towProvider.isCenter ?? false,
+      serviceProviderType: towProvider.getUserType()!,
+      serviceProviderPhoneNumber: towProvider.phoneNumber!,
     );
   }
 
@@ -385,4 +401,42 @@ class _WSAScreenState extends State<WSAScreen> {
 
     moveCamera(initialPos);
   }
+
+  List<Mechanic> mechanics = [
+    Mechanic(
+        name: 'Ahmed tarek',
+        phoneNumber: '01115612314',
+        isCenter: true,
+        type: Type.mechanic,
+        loc: CustomLocation(
+            address:
+                "Factorya, shar3 45 odam mtafy 12311321312312hasdhdashjss221",
+            latitude: 11,
+            longitude: 12),
+        avatar:
+            'https://thumbs.dreamstime.com/b/default-avatar-photo-placeholder-profile-image-default-avatar-photo-placeholder-profile-image-eps-file-easy-to-edit-124557892.jpg',
+        email: 'email@yahoo.com'),
+    Mechanic(
+        name: 'Sergi Samir',
+        email: 'mechanic@yahoo.com',
+        type: Type.mechanic,
+        phoneNumber: '0122321099',
+        loc: CustomLocation(
+            address: "sedigabr,180 3omrt y3okbyan",
+            latitude: 11,
+            longitude: 12),
+        isCenter: false,
+        avatar:
+            'https://thumbs.dreamstime.com/b/default-avatar-photo-placeholder-profile-image-default-avatar-photo-placeholder-profile-image-eps-file-easy-to-edit-124557892.jpg'),
+    Mechanic(
+        name: 'Mahmoud Magdy',
+        type: Type.mechanic,
+        email: 'Workshop@gmail.com',
+        phoneNumber: '01550164495',
+        loc: CustomLocation(
+            address: "Miami, mostshafa 3m ahmed", latitude: 11, longitude: 12),
+        isCenter: true,
+        avatar:
+            'https://thumbs.dreamstime.com/b/default-avatar-photo-placeholder-profile-image-default-avatar-photo-placeholder-profile-image-eps-file-easy-to-edit-124557892.jpg')
+  ];
 }

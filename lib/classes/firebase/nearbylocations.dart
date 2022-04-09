@@ -151,6 +151,7 @@ stt38c5j0s
                 print("Added mechanic: " + value.name!);
               } else if (value is TowProvider) {
                 nearbyProviders.add(value);
+                rsa.onFindNewProvider(value);
                 rsa.assignNearbyProviders(nearbyProviders);
                 print("Added provider: " + value.name!);
               } else {

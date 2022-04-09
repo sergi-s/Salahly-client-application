@@ -21,9 +21,12 @@ class RSA {
   ///
   List<Mechanic>? _nearbyMechanics; // not included in FB
   List<TowProvider>? _nearbyProviders; // not included in FB
-  List<Mechanic>? _acceptedNearbyMechanics; // not included in FB
 
   Map<String, Mechanic>? _newNearbyMechanics = {}; //make sure it exists
+  List<Mechanic>? _acceptedNearbyMechanics = []; // not included in FB
+
+  Map<String, TowProvider> _newNearbyProviders = {};
+  List<TowProvider> _acceptedNearbyProviders = [];
 
   CustomLocation? _dropOffLocation;
 
@@ -34,13 +37,15 @@ class RSA {
     String? problemDescription,
     List<Mechanic>? nearbyMechanics,
     List<TowProvider>? nearbyProviders,
-    List<Mechanic>? acceptedNearbyMechanics,
     CustomLocation? location,
     String? rsaID,
     Client? user,
     DateTime? estimatedTime,
     CustomLocation? dropOffLocation,
+    List<Mechanic>? acceptedNearbyMechanics,
     Map<String, Mechanic>? newNearbyMechanics,
+    List<TowProvider>? acceptedNearbyProviders,
+    Map<String, TowProvider>? newNearbyProviders,
   }) {
     _mechanic = mechanic ?? _mechanic;
     _towProvider = towProvider ?? _towProvider;
@@ -48,14 +53,19 @@ class RSA {
     _problemDescription = problemDescription ?? problemDescription;
     _nearbyMechanics = nearbyMechanics ?? _nearbyMechanics;
     _nearbyProviders = nearbyProviders ?? _nearbyProviders;
-    _acceptedNearbyMechanics =
-        acceptedNearbyMechanics ?? _acceptedNearbyMechanics;
     _location = location ?? _location;
     _rsaID = rsaID ?? _rsaID;
     _user = user ?? _user;
     _estimatedTime = estimatedTime ?? _estimatedTime;
     _dropOffLocation = dropOffLocation ?? _dropOffLocation;
+
+    _acceptedNearbyMechanics =
+        acceptedNearbyMechanics ?? _acceptedNearbyMechanics;
     _newNearbyMechanics = newNearbyMechanics ?? _newNearbyMechanics;
+
+    _acceptedNearbyProviders =
+        acceptedNearbyProviders ?? _acceptedNearbyProviders;
+    _newNearbyProviders = newNearbyProviders ?? _newNearbyProviders;
   }
 
   RSA copyWith({
@@ -65,13 +75,15 @@ class RSA {
     String? problemDescription,
     List<Mechanic>? nearbyMechanics,
     List<TowProvider>? nearbyProviders,
-    List<Mechanic>? acceptedNearbyMechanics,
     CustomLocation? location,
     String? rsaID,
     Client? user,
     DateTime? estimatedTime,
     CustomLocation? dropOffLocation,
     Map<String, Mechanic>? newNearbyMechanics,
+    List<Mechanic>? acceptedNearbyMechanics,
+    Map<String, TowProvider>? newNearbyProviders,
+    List<TowProvider>? acceptedNearbyProviders,
   }) =>
       RSA(
         mechanic: mechanic ?? _mechanic,
@@ -80,14 +92,17 @@ class RSA {
         problemDescription: problemDescription ?? _problemDescription,
         nearbyMechanics: nearbyMechanics ?? _nearbyMechanics,
         nearbyProviders: nearbyProviders ?? _nearbyProviders,
-        acceptedNearbyMechanics:
-            acceptedNearbyMechanics ?? _acceptedNearbyMechanics,
         location: location ?? _location,
         rsaID: rsaID ?? _rsaID,
         user: user ?? _user,
         estimatedTime: estimatedTime ?? _estimatedTime,
         dropOffLocation: dropOffLocation ?? _dropOffLocation,
+        acceptedNearbyMechanics:
+            acceptedNearbyMechanics ?? _acceptedNearbyMechanics,
         newNearbyMechanics: newNearbyMechanics ?? _newNearbyMechanics,
+        acceptedNearbyProviders:
+            acceptedNearbyProviders ?? _acceptedNearbyProviders,
+        newNearbyProviders: newNearbyProviders ?? _newNearbyProviders,
       );
 
   //Getters
@@ -107,15 +122,19 @@ class RSA {
 
   List<TowProvider>? get nearbyProviders => _nearbyProviders;
 
-  List<Mechanic>? get acceptedNearbyMechanics => _acceptedNearbyMechanics;
-
   RSAStates get state => _state;
 
   String? get rsaID => _rsaID;
 
   CustomLocation? get dropOffLocation => _dropOffLocation;
 
+  List<Mechanic>? get acceptedNearbyMechanics => _acceptedNearbyMechanics;
+
   Map<String, Mechanic>? get newNearbyMechanics => _newNearbyMechanics;
+
+  List<TowProvider>? get acceptedNearbyProviders => _acceptedNearbyProviders;
+
+  Map<String, TowProvider>? get newNearbyProviders => _newNearbyProviders;
 
   static String stateToString(RSAStates state) {
     return (state.toString()).isNotEmpty
