@@ -19,8 +19,7 @@ import 'package:slahly/classes/firebase/roadsideassistance/roadsideassistance.da
 import 'package:slahly/classes/models/mechanic.dart';
 import 'package:slahly/widgets/WSA/choose_mech_slider.dart';
 import 'package:slahly/widgets/roadsideassistance/services_provider_card.dart';
-
-import '../../utils/constants.dart';
+import 'package:slahly/utils/constants.dart';
 
 class WSAScreen extends StatefulWidget {
   static const String routeName = "/WSAScreen";
@@ -59,9 +58,6 @@ class _WSAScreenState extends State<WSAScreen> {
     // initialLocation();
     locatePosition();
 
-    // WidgetRef ref= WidgetRef();
-    // getAcceptedMechanic();
-
     super.initState();
   }
 
@@ -92,26 +88,11 @@ class _WSAScreenState extends State<WSAScreen> {
           onTap: _handleTap,
         ),
         Positioned(
-          left: MediaQuery.of(context).size.width * 0.8,
-          right: 0,
-          bottom: MediaQuery.of(context).size.height * 0.45,
-          child: ElevatedButton(
-            onPressed: locatePosition,
-            child: const Icon(
-              Icons.location_on,
-            ),
-            style: ElevatedButton.styleFrom(
-              shape: const CircleBorder(),
-              padding: const EdgeInsets.all(10),
-            ),
-          ),
-        ),
-        Positioned(
           left: 0,
           right: 0,
           bottom: 0,
           child: Container(
-            height: MediaQuery.of(context).size.height * 0.42,
+            height: MediaQuery.of(context).size.height * 0.40,
             decoration: const BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.only(
@@ -163,8 +144,9 @@ class _WSAScreenState extends State<WSAScreen> {
                       return GestureDetector(
                           child: getProviderWidget(ref),
                           onTap: () {
+                            print("The bool value::$needProvider");
                             if (needProvider) return;
-                            if (ref.watch(rsaProvider).mechanic == null) {
+                            if (ref.watch(rsaProvider).towProvider == null) {
                               _pcTowProvider.open();
                             }
                           });
@@ -172,6 +154,21 @@ class _WSAScreenState extends State<WSAScreen> {
                   )
                 ],
               ),
+            ),
+          ),
+        ),
+        Positioned(
+          left: MediaQuery.of(context).size.width * 0.8,
+          right: 0,
+          bottom: MediaQuery.of(context).size.height * 0.29,
+          child: ElevatedButton(
+            onPressed: locatePosition,
+            child: const Icon(
+              Icons.location_on,
+            ),
+            style: ElevatedButton.styleFrom(
+              shape: const CircleBorder(),
+              padding: const EdgeInsets.all(10),
             ),
           ),
         ),
@@ -203,8 +200,8 @@ class _WSAScreenState extends State<WSAScreen> {
     rsaNotifier.assignRequestTypeToWSA();
     rsaNotifier.assignUserLocation(currentCustomLoc);
 
-    await rsaNotifier.requestWSA();
     if (!gotMechanics) {
+      await rsaNotifier.requestWSA();
       gotMechanics = true;
       await rsaNotifier.searchNearbyMechanicsAndProviders();
     }
@@ -298,6 +295,7 @@ class _WSAScreenState extends State<WSAScreen> {
             child: Switch(
               value: !needProvider,
               onChanged: (value) {
+                print("The switch value is $needProvider");
                 setState(() => needProvider = !needProvider);
               },
               activeTrackColor: Colors.lightGreenAccent,
@@ -324,24 +322,30 @@ class _WSAScreenState extends State<WSAScreen> {
 
   //Get UI of assigned mechanic
   Widget mapMechanicToWidget(Mechanic mec) {
+    _pcMechanic.close();
     print("MECHH::${mec.toString()}");
     return ServicesProviderCard(
-      serviceProviderEmail: mec.email!,
-      serviceProviderName: mec.name!,
-      serviceProviderIsCenter: mec.isCenter ?? false,
-      serviceProviderType: mec.getUserType()!,
-      serviceProviderPhoneNumber: mec.phoneNumber!,
+      serviceProviderEmail: mec.email,
+      serviceProviderName: mec.name,
+      serviceProviderIsCenter: mec.isCenter,
+      serviceProviderType: mec.getUserType(),
+      serviceProviderPhoneNumber: mec.phoneNumber,
+      serviceProviderRating: mec.rating,
+      serviceProviderAddress: mec.address,
     );
   }
 
   Widget mapTowProviderToWidget(TowProvider towProvider) {
+    _pcTowProvider.close();
     print("MECHH::${towProvider.toString()}");
     return ServicesProviderCard(
-      serviceProviderEmail: towProvider.email!,
-      serviceProviderName: towProvider.name!,
-      serviceProviderIsCenter: towProvider.isCenter ?? false,
-      serviceProviderType: towProvider.getUserType()!,
-      serviceProviderPhoneNumber: towProvider.phoneNumber!,
+      serviceProviderEmail: towProvider.email,
+      serviceProviderName: towProvider.name,
+      serviceProviderIsCenter: towProvider.isCenter,
+      serviceProviderType: towProvider.getUserType(),
+      serviceProviderPhoneNumber: towProvider.phoneNumber,
+      serviceProviderRating: towProvider.rating,
+      serviceProviderAddress: towProvider.address,
     );
   }
 

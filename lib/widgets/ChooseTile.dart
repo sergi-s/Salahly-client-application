@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:slahly/abstract_classes/user.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/services.dart';
 
 class ChooseTile extends StatelessWidget {
   String? email;
@@ -9,7 +8,7 @@ class ChooseTile extends StatelessWidget {
   String? phone;
   String? name;
   bool? isCenter;
-
+  double? rating;
   String? address;
   Type? type;
 
@@ -20,12 +19,13 @@ class ChooseTile extends StatelessWidget {
       this.name,
       this.address,
       this.type,
-      this.isCenter});
+      this.isCenter,
+      this.rating});
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 180,
+      height: 130,
       width: 100,
       child: Card(
         // color: Color(0xFFd1d9e6), //#D3D3D3 Color(0xFFf7f7f7)
@@ -39,10 +39,7 @@ class ChooseTile extends StatelessWidget {
               child: ListTile(
                 // horizontalTitleGap: 50.0,
                 leading: CircleAvatar(
-                  backgroundImage: NetworkImage(
-                    avatar ??
-                        "https://thumbs.dreamstime.com/b/default-avatar-photo-placeholder-profile-image-default-avatar-photo-placeholder-profile-image-eps-file-easy-to-edit-124557892.jpg",
-                  ),
+                  backgroundImage: NetworkImage(avatar ?? ""),
                   radius: 30,
                 ),
                 title: Padding(
@@ -71,36 +68,9 @@ class ChooseTile extends StatelessWidget {
                     ),
                     Row(
                       children: [
-                        Container(
-                          child: ElevatedButton.icon(
-                            onPressed: () {
-                              Clipboard.setData(ClipboardData(text: phone));
-                            },
-                            label: Text(
-                              phone ?? "01...",
-                              style: const TextStyle(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 14),
-                            ),
-                            style: ElevatedButton.styleFrom(
-                              primary: const Color(0xFFff193566).withOpacity(0),
-                              elevation: 0,
-                              animationDuration: Duration.zero,
-                            ),
-                            icon: const Icon(
-                              Icons.copy,
-                              color: Colors.black,
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
-                    Row(
-                      children: const [
                         Text(
-                          'Rating : 4.8',
-                          style: TextStyle(
+                          'Rating : ${rating.toString()}',
+                          style: const TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 16),
                         ),
                       ],
@@ -110,7 +80,10 @@ class ChooseTile extends StatelessWidget {
                       children: [
                         Flexible(
                           child: Text(
-                            type != Type.provider ? (address ?? "address") : "",
+                            type != Type.provider
+                                ? ("${'Address'.tr()}:\t" +
+                                    (address ?? 'address'))
+                                : '',
                             overflow: TextOverflow.ellipsis,
                             style: const TextStyle(
                                 fontWeight: FontWeight.bold, fontSize: 16),

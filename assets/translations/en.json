@@ -34,12 +34,14 @@
   "help_on_way": "Help is on it's way",
   "searching_for_provider": "Searching for Tow Truck",
   "searching_for_mechanic": "Searching for Mechanic",
-  "found_Mechanic": "We found a mechanic",
-  "found_tow_provider": "We found a tow truck",
+  "found_Mechanic": "Mechanic is waiting For You",
+  "found_tow_provider": "Tow truck on it's way",
   "Phone": "Phone",
   "Email": "Email",
   "Name": "Name",
   "are_you_sure": "Are you sure?",
   "confirm_cancellation": "Confirm cancellation",
-  "confirm": "Confirm"
+  "confirm": "Confirm",
+  "Rating": "Rating",
+  "Address": "Address"
 }

@@ -1,48 +1,54 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class ServicesProviderCard extends StatelessWidget {
   late String foundType;
 
   ServicesProviderCard({
     Key? key,
-    required this.serviceProviderType,
-    required this.serviceProviderName,
-    required this.serviceProviderEmail,
-    required this.serviceProviderIsCenter,
-    required this.serviceProviderPhoneNumber,
+    this.serviceProviderType,
+    this.serviceProviderName,
+    this.serviceProviderEmail,
+    this.serviceProviderIsCenter,
+    this.serviceProviderPhoneNumber,
+    this.serviceProviderRating,
+    this.serviceProviderAddress,
   }) : super(key: key) {
     foundType = serviceProviderType == "Mechanic"
         ? "found_Mechanic"
         : "found_tow_provider";
   }
 
-  final String serviceProviderType,
+  String? serviceProviderType,
       serviceProviderName,
       serviceProviderEmail,
-      serviceProviderPhoneNumber;
-  bool serviceProviderIsCenter;
+      serviceProviderPhoneNumber,
+      serviceProviderAddress;
+  bool? serviceProviderIsCenter;
+  double? serviceProviderRating;
 
   void customDialog(context) {
     showDialog(
         context: context,
         builder: (BuildContext context) => AlertDialog(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(30),
+              ),
               title: Row(
                 children: [
-                  Text(serviceProviderType),
-                  Icon(serviceProviderIsCenter ? Icons.badge : null)
+                  Text(serviceProviderType!),
+                  Icon((serviceProviderIsCenter ?? false) ? Icons.badge : null)
                 ],
               ),
               content: getContent(),
               actions: <Widget>[
-                ElevatedButton(
-                    onPressed: () => Navigator.pop(context),
-                    child: Text("Cancel".tr()))
-                // IconButton(
-                //     icon: const Icon(Icons.close),
-                //     onPressed: () {
-                //       Navigator.pop(context);
-                //     })
+                IconButton(
+                    icon: const Icon(Icons.close),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    })
               ],
             ));
   }
@@ -60,6 +66,7 @@ class ServicesProviderCard extends StatelessWidget {
                 .image,
             radius: 25,
           ),
+          SizedBox(height: 15),
           Row(
             children: [
               Text(
@@ -69,44 +76,118 @@ class ServicesProviderCard extends StatelessWidget {
               ),
               const SizedBox(width: 15),
               Text(
-                serviceProviderName,
+                serviceProviderName ?? "name",
                 textAlign: TextAlign.center,
                 style: const TextStyle(fontSize: 20),
               )
             ],
           ),
-          Row(
-            children: [
-              Text(
-                "${"Email".tr()}:",
-                textAlign: TextAlign.justify,
-                style: const TextStyle(fontSize: 20),
-              ),
-              const SizedBox(width: 15),
-              Text(
-                serviceProviderEmail,
-                textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: 15),
-                overflow: TextOverflow.ellipsis,
-              )
-            ],
-          ),
+          //email
+          // Row(
+          //   children: [
+          //     Text(
+          //       "${"Email".tr()}:",
+          //       textAlign: TextAlign.justify,
+          //       style: const TextStyle(fontSize: 20),
+          //     ),
+          //     const SizedBox(width: 15),
+          //     Text(
+          //       serviceProviderEmail,
+          //       textAlign: TextAlign.center,
+          //       style: const TextStyle(fontSize: 15),
+          //       overflow: TextOverflow.ellipsis,
+          //     )
+          //   ],
+          // ),
+          //end email
+          // Row(
+          //   children: [
+          //     Text(
+          //       "${"Phone".tr()}:",
+          //       textAlign: TextAlign.justify,
+          //       style: const TextStyle(fontSize: 20),
+          //     ),
+          //     const SizedBox(width: 15),
+          //     Text(
+          //       serviceProviderPhoneNumber,
+          //       textAlign: TextAlign.center,
+          //       style: const TextStyle(fontSize: 15),
+          //       overflow: TextOverflow.ellipsis,
+          //     )
+          //   ],
+          // )
+          //phone number
           Row(
             children: [
               Text(
                 "${"Phone".tr()}:",
                 textAlign: TextAlign.justify,
-                style: const TextStyle(fontSize: 20),
+                style: const TextStyle(fontSize: 25),
+              ),
+              // const SizedBox(width: ),
+              Container(
+                child: ElevatedButton.icon(
+                  onPressed: () {
+                    Clipboard.setData(
+                        ClipboardData(text: serviceProviderPhoneNumber));
+                  },
+                  label: Text(
+                    serviceProviderPhoneNumber ?? "01..",
+                    style: const TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 14),
+                  ),
+                  style: ElevatedButton.styleFrom(
+                    primary: const Color(0xFFff193566).withOpacity(0),
+                    elevation: 0,
+                    animationDuration: Duration.zero,
+                  ),
+                  icon: const Icon(
+                    Icons.copy,
+                    color: Colors.black,
+                  ),
+                ),
+              )
+            ],
+          ),
+          //end phone number
+
+          //rating
+          Row(
+            children: [
+              Text(
+                "${"Rating".tr()}:",
+                textAlign: TextAlign.justify,
+                style: const TextStyle(fontSize: 25),
               ),
               const SizedBox(width: 15),
               Text(
-                serviceProviderPhoneNumber,
+                serviceProviderRating.toString(),
                 textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: 15),
-                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(fontSize: 20),
               )
             ],
-          )
+          ),
+          //end rating
+
+          //address
+          Row(
+            children: [
+              Text(
+                "${"Address".tr()}:",
+                textAlign: TextAlign.justify,
+                style: const TextStyle(fontSize: 25),
+              ),
+              const SizedBox(width: 15),
+              Text(
+                serviceProviderAddress ?? "address",
+                textAlign: TextAlign.center,
+                style: const TextStyle(fontSize: 20),
+              )
+            ],
+          ),
+          //end address
         ],
       ),
     );
@@ -116,18 +197,18 @@ class ServicesProviderCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: const BoxDecoration(
-        color: Color(0xFFd1d9e6),
+        color: Color(0xD3D3D3D4),
         borderRadius: BorderRadius.all(Radius.circular(10)),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey,
+            color: Color(0xFFD3D3D3),
             spreadRadius: 5,
             blurRadius: 7,
             offset: Offset(0, 3), // changes position of shadow
           ),
         ],
       ),
-      height: 70,
+      height: 50,
       child: Center(
         child: GestureDetector(
           onTap: () {

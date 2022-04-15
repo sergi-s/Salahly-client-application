@@ -55,13 +55,15 @@ class ChooseProviderScreen extends StatelessWidget {
                     ListView.builder(
                       itemBuilder: (BuildContext, index) {
                         return ChooseTile(
-                            email: providers[index].email.toString(),
-                            avatar: providers[index].avatar.toString(),
-                            phone: providers[index].phoneNumber.toString(),
-                            name: providers[index].name.toString(),
-                            address: providers[index].loc!.address.toString(),
-                            type: providers[index].type!,
-                            isCenter: false);
+                          email: providers[index].email.toString(),
+                          avatar: providers[index].avatar.toString(),
+                          phone: providers[index].phoneNumber.toString(),
+                          name: providers[index].name.toString(),
+                          address: providers[index].loc!.address.toString(),
+                          type: providers[index].type!,
+                          isCenter: false,
+                          rating: providers[index].rating,
+                        );
                       },
                       itemCount: providers.length,
                       shrinkWrap: true,

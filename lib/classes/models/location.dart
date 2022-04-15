@@ -17,7 +17,7 @@ class CustomLocation {
 
   @override
   String toString() {
-    return "ToString: ${name} at lat:$latitude, long:$longitude, address:$address";
+    return "ToString: $name at lat:$latitude, long:$longitude, address:$address";
   }
 }
 

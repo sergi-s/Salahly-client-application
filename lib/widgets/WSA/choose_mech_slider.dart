@@ -30,12 +30,7 @@ class ChooseMechanicSlider extends ConsumerWidget {
       defaultPanelState: PanelState.CLOSED,
       panelBuilder: (ScrollController sc) => Stack(children: [
         mechanics.isEmpty
-            ? Text(
-                "Search ...",
-                style: TextStyle(
-                  fontSize: 20,
-                ),
-              )
+            ? SearchingWidget()
             : Padding(
                 padding: const EdgeInsets.only(left: 160.0, top: 10),
                 child: SizedBox(
@@ -59,21 +54,24 @@ class ChooseMechanicSlider extends ConsumerWidget {
           controller: sc,
           itemBuilder: (BuildContext context, int index) {
             return GestureDetector(
-                onTap: () {
-                  print("${mechanics[index].name.toString()} is selected");
-                  //TODO assign mechanic
-                  ref
-                      .watch(rsaProvider.notifier)
-                      .assignMechanic(mechanics[index], false);
-                },
-                child: ChooseTile(
-                    email: mechanics[index].email.toString(),
-                    avatar: mechanics[index].avatar.toString(),
-                    phone: mechanics[index].phoneNumber.toString(),
-                    name: mechanics[index].name.toString(),
-                    address: mechanics[index].loc!.address.toString(),
-                    type: mechanics[index].type!,
-                    isCenter: mechanics[index].isCenter));
+              onTap: () {
+                print("${mechanics[index].name.toString()} is selected");
+                //TODO assign mechanic
+                ref
+                    .watch(rsaProvider.notifier)
+                    .assignMechanic(mechanics[index], false);
+              },
+              child: ChooseTile(
+                email: mechanics[index].email.toString(),
+                avatar: mechanics[index].avatar.toString(),
+                phone: mechanics[index].phoneNumber.toString(),
+                name: mechanics[index].name.toString(),
+                type: mechanics[index].type!,
+                isCenter: mechanics[index].isCenter,
+                address: mechanics[index].address.toString(),
+                rating: mechanics[index].rating,
+              ),
+            );
           },
           separatorBuilder: (BuildContext context, int index) {
             return const Divider(height: 5);
@@ -102,12 +100,7 @@ class ChooseTowProviderSlider extends ConsumerWidget {
       defaultPanelState: PanelState.CLOSED,
       panelBuilder: (ScrollController sc) => Stack(children: [
         towProviders.isEmpty
-            ? Text(
-                "Search ...",
-                style: TextStyle(
-                  fontSize: 20,
-                ),
-              )
+            ? SearchingWidget()
             : Padding(
                 padding: const EdgeInsets.only(left: 160.0, top: 10),
                 child: SizedBox(
@@ -131,21 +124,24 @@ class ChooseTowProviderSlider extends ConsumerWidget {
           controller: sc,
           itemBuilder: (BuildContext context, int index) {
             return GestureDetector(
-                onTap: () {
-                  print("${towProviders[index].name.toString()} is selected");
-                  //TODO assign mechanic
-                  ref
-                      .watch(rsaProvider.notifier)
-                      .assignProvider(towProviders[index], false);
-                },
-                child: ChooseTile(
-                    email: towProviders[index].email.toString(),
-                    avatar: towProviders[index].avatar.toString(),
-                    phone: towProviders[index].phoneNumber.toString(),
-                    name: towProviders[index].name.toString(),
-                    address: towProviders[index].loc!.address.toString(),
-                    type: towProviders[index].type!,
-                    isCenter: towProviders[index].isCenter));
+              onTap: () {
+                print("${towProviders[index].name.toString()} is selected");
+                //TODO assign mechanic
+                ref
+                    .watch(rsaProvider.notifier)
+                    .assignProvider(towProviders[index], false);
+              },
+              child: ChooseTile(
+                email: towProviders[index].email.toString(),
+                avatar: towProviders[index].avatar.toString(),
+                phone: towProviders[index].phoneNumber.toString(),
+                name: towProviders[index].name.toString(),
+                address: towProviders[index].address.toString(),
+                type: towProviders[index].type!,
+                isCenter: towProviders[index].isCenter,
+                rating: towProviders[index].rating,
+              ),
+            );
           },
           separatorBuilder: (BuildContext context, int index) {
             return const Divider(height: 5);
@@ -153,6 +149,26 @@ class ChooseTowProviderSlider extends ConsumerWidget {
         )
       ]),
       collapsed: Container(),
+    );
+  }
+}
+
+class SearchingWidget extends StatelessWidget {
+  const SearchingWidget({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      alignment: Alignment.center,
+      color: Color(0xFFd1d9e6),
+      child: Text(
+        "Searching...",
+        style: TextStyle(
+          fontSize: 20,
+        ),
+      ),
     );
   }
 }

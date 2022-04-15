@@ -25,7 +25,8 @@ DatabaseReference rsaRef = FirebaseDatabase.instance.ref().child("rsa");
 class SearchingMechanicProviderScreen extends ConsumerWidget {
   static const String routeName = "/searchingmechanicprovider";
 
-  SearchingMechanicProviderScreen({Key? key, required this.userLocation}) : super(key: key);
+  SearchingMechanicProviderScreen({Key? key, required this.userLocation})
+      : super(key: key);
 
   final CustomLocation userLocation;
 
@@ -162,11 +163,13 @@ class SearchingMechanicProviderScreen extends ConsumerWidget {
 
   Widget mapMechanicToWidget(Mechanic mec) {
     return ServicesProviderCard(
-      serviceProviderEmail: mec.email!,
-      serviceProviderName: mec.name!,
-      serviceProviderIsCenter: mec.isCenter ?? false,
-      serviceProviderType: mec.getUserType()!,
-      serviceProviderPhoneNumber: mec.phoneNumber!,
+      serviceProviderEmail: mec.email,
+      serviceProviderName: mec.name,
+      serviceProviderIsCenter: mec.isCenter,
+      serviceProviderType: mec.getUserType(),
+      serviceProviderPhoneNumber: mec.phoneNumber,
+      serviceProviderRating: mec.rating,
+      serviceProviderAddress: mec.address,
     );
   }
 
@@ -183,11 +186,13 @@ class SearchingMechanicProviderScreen extends ConsumerWidget {
 
   Widget mapProviderToWidget(TowProvider prov) {
     return ServicesProviderCard(
-      serviceProviderEmail: prov.email!,
-      serviceProviderName: prov.name!,
-      serviceProviderIsCenter: prov.isCenter ?? false,
-      serviceProviderType: prov.getUserType()!,
-      serviceProviderPhoneNumber: prov.phoneNumber!,
+      serviceProviderEmail: prov.email,
+      serviceProviderName: prov.name,
+      serviceProviderIsCenter: prov.isCenter,
+      serviceProviderType: prov.getUserType(),
+      serviceProviderPhoneNumber: prov.phoneNumber,
+      serviceProviderRating: prov.rating,
+      serviceProviderAddress: prov.address,
     );
   }
 }
