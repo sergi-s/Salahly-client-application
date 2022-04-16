@@ -38,9 +38,9 @@ class CarCard extends State<ViewCards> {
 
     return Scaffold(
         backgroundColor: const Color(0xFFd1d9e6),
-        appBar: new AppBar(
+        appBar: AppBar(
           backgroundColor: const Color(0xFF193566),
-          title: new Text("View Cars"),
+          title: Text("View Cars"),
         ), // appBar
         body: Container(
           alignment: Alignment.center,
