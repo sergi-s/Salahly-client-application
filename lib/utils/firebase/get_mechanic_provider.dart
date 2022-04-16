@@ -20,7 +20,6 @@ Future getMechanicOrProviderData(String id) async {
         type: Type.mechanic,
         email: (ds.child("email").value).toString(),
         rating: toDouble((ds.child("rating").value).toString()),
-        type: Type.mechanic,
         address: "address");
   } else {
     return TowProvider(
@@ -32,7 +31,6 @@ Future getMechanicOrProviderData(String id) async {
         name: (ds.child("name").value).toString(),
         email: (ds.child("email").value).toString(),
         rating: toDouble((ds.child("rating").value).toString()),
-        type: Type.provider,
         address: "address");
   }
 }

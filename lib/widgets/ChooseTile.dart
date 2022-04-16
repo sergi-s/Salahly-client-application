@@ -52,7 +52,6 @@ class ChooseTile extends StatelessWidget {
                     style: const TextStyle(
                         fontWeight: FontWeight.bold, fontSize: 20),
                   ),
-
                 ),
                 subtitle: Padding(
                   padding: const EdgeInsets.only(left: 0),
@@ -139,8 +138,9 @@ class ChooseTile extends StatelessWidget {
                                 fontWeight: FontWeight.bold, fontSize: 16),
 //                           ),
 // >>>>>>> main
-                        ),
-                        const SizedBox(height: 20),
+                          ),
+                          // const SizedBox(height: 20),
+                        )
                       ],
                     ),
                   ]),
