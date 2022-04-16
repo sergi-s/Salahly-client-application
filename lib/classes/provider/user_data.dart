@@ -11,23 +11,23 @@ final StateNotifierProvider<ClientNotifier, Client> userProvider =
 class ClientNotifier extends StateNotifier<Client> {
   ClientNotifier() : super(Client(type: Type.client));
 
-  setName(String name) => state = state.copyWith(name: name);
+  assignName(String name) => state = state.copyWith(name: name);
 
-  setEmail(String email) => state = state.copyWith(email: email);
+  assignEmail(String email) => state = state.copyWith(email: email);
 
-  setSubscription(SubscriptionTypes subscription) =>
+  assignSubscription(SubscriptionTypes subscription) =>
       state = state.copyWith(subscription: subscription);
 
-  setLocation(CustomLocation loc) => state = state.copyWith(loc: loc);
+  assignLocation(CustomLocation loc) => state = state.copyWith(loc: loc);
 
-  setBirthDay(DateTime birthDay) => state = state.copyWith(birthDay: birthDay);
+  assignBirthDay(DateTime birthDay) =>
+      state = state.copyWith(birthDay: birthDay);
 
-  setPhoneNumber(String phone) => state = state.copyWith(phoneNumber: phone);
+  assignPhoneNumber(String phone) => state = state.copyWith(phoneNumber: phone);
 
-  setAddress(String address) =>
-      state = state.copyWith(address: address);
+  assignAddress(String address) => state = state.copyWith(address: address);
 
-  addCar(Car car) => state = state.copyWith(cars: [...state.cars, car]);
+  assignCar(Car car) => state = state.copyWith(cars: [...state.cars, car]);
 
   removeCar(Car car) {
     // state = state.copyWith(cars: [
@@ -38,7 +38,7 @@ class ClientNotifier extends StateNotifier<Client> {
     state = state.copyWith(cars: state.cars);
   }
 
-  addAvatar(String avatarInf) {
+  assignAvatar(String avatarInf) {
     state = state.copyWith(avatar: avatarInf);
   }
 }

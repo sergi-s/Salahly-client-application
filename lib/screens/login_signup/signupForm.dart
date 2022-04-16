@@ -81,9 +81,8 @@ class SignUpForm extends StatelessWidget {
             title: 'sign_up'.tr(),
             onPressedFunction: () async {
               if (!Validator.emailValidator(email)) {
-                return ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                        content: Text('Invalid Email!! Please try again')));
+                return ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    content: Text('Invalid_Email_Please_try_again'.tr())));
               }
               // if (!Validator.passValidator(password)) {
               //   return ScaffoldMessenger.of(context).showSnackBar(
@@ -91,25 +90,21 @@ class SignUpForm extends StatelessWidget {
               //           content: Text('Invalid Password!! Please try again')));
               // }
               if (confirmpassword != password) {
-                return ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                        content:
-                            Text('Invalid Confirmation!! Please try again')));
+                return ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    content:
+                        Text('Invalid_Confirmation_Please_try_again'.tr())));
               }
               bool check = await fb.signup(email, password);
               if (check) {
-                 ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                        content: Text('Account is Created Sucessfully ')));
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    content: Text('Account_is_Created_Sucessfully'.tr())));
               } else {
                 return ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Account is Already Used!!')));
+                    SnackBar(content: Text('Account_is_Already_Used'.tr())));
               }
               context.go(Registration.routeName, extra: email);
             },
-
           ),
-
         ],
       ),
     );

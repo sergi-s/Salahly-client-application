@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 
-
-class  AddCustomHistory extends StatelessWidget {
+class AddCustomHistory extends StatelessWidget {
   static final routeName = "/addcustomhistory";
   @override
   Widget build(BuildContext context) {
@@ -27,23 +26,23 @@ class TextFieldAlertDialog extends StatelessWidget {
           return AlertDialog(
             insetPadding: EdgeInsets.all(8.0),
             shape:
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
-            title: Text('Add History'),
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
+            title: Text('Add_History'.tr()),
             content: Container(
                 width: MediaQuery.of(context).size.width,
                 child: SingleChildScrollView(
                   child: Column(
                     children: [
-                      Image.asset
-                        ('assets/images/car_management/report.png',
+                      Image.asset(
+                        'assets/images/car_management/report.png',
                         fit: BoxFit.contain,
-                        height: 150,),
+                        height: 150,
+                      ),
                       TextField(
                         enabled: false,
                         readOnly: true,
-
                         decoration: InputDecoration(
-                          labelText: 'Date:',
+                          labelText: 'Date'.tr(),
                         ),
                         controller: TextEditingController(text: date),
                         textInputAction: TextInputAction.newline,
@@ -54,7 +53,7 @@ class TextFieldAlertDialog extends StatelessWidget {
                         enabled: false,
                         readOnly: true,
                         decoration: InputDecoration(
-                          labelText: 'Car',
+                          labelText: 'Car'.tr(),
                         ),
                         controller: TextEditingController(text: car),
                         textInputAction: TextInputAction.newline,
@@ -65,7 +64,7 @@ class TextFieldAlertDialog extends StatelessWidget {
                         enabled: false,
                         readOnly: true,
                         decoration: InputDecoration(
-                          labelText: 'Number Plate',
+                          labelText: 'Number_Plate'.tr(),
                         ),
                         controller: TextEditingController(text: noplate),
                         textInputAction: TextInputAction.newline,
@@ -76,7 +75,7 @@ class TextFieldAlertDialog extends StatelessWidget {
                         enabled: false,
                         readOnly: true,
                         decoration: InputDecoration(
-                          labelText: 'Location',
+                          labelText: 'Location'.tr(),
                         ),
                         controller: TextEditingController(text: location),
                         textInputAction: TextInputAction.newline,
@@ -87,28 +86,27 @@ class TextFieldAlertDialog extends StatelessWidget {
                         enabled: false,
                         readOnly: true,
                         decoration: InputDecoration(
-                          labelText: 'Mechanic Report',
+                          labelText: 'Mechanic_Report'.tr(),
                         ),
                         controller: TextEditingController(text: mechanic),
                         textInputAction: TextInputAction.newline,
                         maxLines: null,
                         keyboardType: TextInputType.multiline,
                       ),
-
                     ],
                   ),
-                ) ),
+                )),
             actions: <Widget>[
               new FlatButton(
                 textColor: Colors.white,
-                child: new Text('Send'),
+                child: new Text('Send'.tr()),
                 color: Colors.black,
                 onPressed: () {
                   Navigator.of(context).pop();
                 },
               ),
               new FlatButton(
-                child: new Text('Cancel'),
+                child: new Text('Cancel'.tr()),
                 onPressed: () {
                   Navigator.of(context).pop();
                 },
@@ -122,12 +120,12 @@ class TextFieldAlertDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Add History'),
+        title: Text('Add_History'.tr()),
       ),
       body: Center(
         child: RaisedButton(
           child: Text(
-            'Problem',
+            'Problem'.tr(),
             style: TextStyle(color: Colors.white),
           ),
           color: Colors.blueAccent,

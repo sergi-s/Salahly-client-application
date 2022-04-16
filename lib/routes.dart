@@ -26,10 +26,12 @@ import 'package:slahly/screens/switchLanguage.dart';
 import 'package:slahly/screens/test_screens/test_user_SM.dart';
 import 'package:slahly/screens/userMangament/addSubowner.dart';
 import 'package:slahly/screens/userMangament/manageSubowner.dart';
+import 'package:slahly/screens/userMangament/select.dart';
 import 'package:slahly/screens/userMangament/transferOwner.dart';
 import 'package:slahly/screens/test_screens/testscreen_foula.dart';
 import 'package:slahly/screens/Describeproblem.dart';
 import 'package:slahly/screens/waitforarrvial.dart';
+import 'package:slahly/screens/userMangament/choose_car.dart';
 
 class Routing {
   get router => GoRouter(
@@ -149,12 +151,21 @@ class Routing {
             builder: (context, state) => TestUserSM(),
           ),
           GoRoute(
-              path: AddCustomHistory.routeName,
-            builder: (context,state) => AddCustomHistory(),
+            path: AddCustomHistory.routeName,
+            builder: (context, state) => AddCustomHistory(),
           ),
           GoRoute(
             path: ViewHistory.routeName,
-            builder: (context,state) => ViewHistory(),
+            builder: (context, state) => ViewHistory(),
+          ),
+          GoRoute(
+            path: Choose_car.routeName,
+            builder: (context, state) => Choose_car(),
+          ),
+          GoRoute(
+            path: Select.routeName,
+            // builder: (context, state) => Select(state.extra as bool),
+            builder: (context, state) => Select(type: state.extra as bool),
           ),
           GoRoute(
             path: WSAScreen.routeName,
