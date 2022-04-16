@@ -20,7 +20,8 @@ class NearbyLocations {
         longitude: 29.918180,
         name: "1",
         // name: "mech 1",
-        type: LocationType.mechanic);
+        type: LocationType.mechanic
+    );
     CustomLocation loc_2 = CustomLocation(
         latitude: 31.207545,
         longitude: 29.919915,

@@ -1,0 +1,6 @@
+
+    // "start": "npm run shell",
+
+    "scripts": {
+  "start": "npx functions-framework --target=onMechanicOrProviderResponse [--signature-type=event]"
+}
