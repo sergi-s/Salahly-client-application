@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:slahly/widgets/location/divider.dart';
 
@@ -13,14 +14,13 @@ class WhereToWidget extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           SizedBox(height: 6),
-          const Text(
-            "Hi there, ",
+          Text(
+            "Hi_there".tr(),
             style: TextStyle(fontSize: 12),
           ),
-          const Text(
-            "where to? ",
-            style:
-            TextStyle(fontSize: 20),
+          Text(
+            "where_to".tr(),
+            style: TextStyle(fontSize: 20),
           ),
           SizedBox(height: 20),
           Container(
@@ -32,7 +32,7 @@ class WhereToWidget extends StatelessWidget {
                   SizedBox(
                     width: 10,
                   ),
-                  Text("Search drop off"),
+                  Text("Search_drop_off".tr()),
                 ],
               ),
             ),
@@ -60,14 +60,13 @@ class WhereToWidget extends StatelessWidget {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text("Add home"),
+                  Text("Add_home".tr()),
                   SizedBox(
                     height: 4,
                   ),
                   Text(
-                    "Your living home address",
-                    style: TextStyle(
-                        color: Colors.black54, fontSize: 12),
+                    "Your_living_home_address".tr(),
+                    style: TextStyle(color: Colors.black54, fontSize: 12),
                   ),
                 ],
               )
@@ -85,14 +84,13 @@ class WhereToWidget extends StatelessWidget {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text("Add work"),
+                  Text("Add_work".tr()),
                   SizedBox(
                     height: 4,
                   ),
                   Text(
-                    "Your work address",
-                    style: TextStyle(
-                        color: Colors.black54, fontSize: 12),
+                    "Your_work_address".tr(),
+                    style: TextStyle(color: Colors.black54, fontSize: 12),
                   ),
                 ],
               )

@@ -13,7 +13,7 @@ class DropOffSearchScreen extends StatefulWidget {
 
   final CustomLocation pikUpLocation;
 
-  DropOffSearchScreen({Key? key, required this.pikUpLocation})
+  const DropOffSearchScreen({Key? key, required this.pikUpLocation})
       : super(key: key);
 
   @override
@@ -86,22 +86,26 @@ class _DropOffSearchScreenState extends State<DropOffSearchScreen> {
           //predictions
           const SizedBox(height: 10),
           (dropOffPlacePredictionList.length > 0
-              ? Padding(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-                  child: ListView.separated(
-                    keyboardDismissBehavior:
-                        ScrollViewKeyboardDismissBehavior.manual,
-                    padding: EdgeInsets.zero,
-                    itemBuilder: (context, index) {
-                      return PredictionTile(
-                          placePredictions: dropOffPlacePredictionList[index]);
-                    },
-                    separatorBuilder: (BuildContext context, int index) =>
-                        Divider(),
-                    itemCount: dropOffPlacePredictionList.length,
-                    shrinkWrap: true,
-                    physics: ClampingScrollPhysics(),
+              ? Container(
+                  height: MediaQuery.of(context).size.height * 0.6,
+                  child: Padding(
+                    padding:
+                        const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                    child: ListView.separated(
+                      keyboardDismissBehavior:
+                          ScrollViewKeyboardDismissBehavior.manual,
+                      padding: EdgeInsets.zero,
+                      itemBuilder: (context, index) {
+                        return PredictionTile(
+                            placePredictions:
+                                dropOffPlacePredictionList[index]);
+                      },
+                      separatorBuilder: (BuildContext context, int index) =>
+                          Divider(),
+                      itemCount: dropOffPlacePredictionList.length,
+                      shrinkWrap: true,
+                      physics: ClampingScrollPhysics(),
+                    ),
                   ),
                 )
               : Container()),
@@ -115,7 +119,7 @@ class _DropOffSearchScreenState extends State<DropOffSearchScreen> {
     if (placeName.length > 1) {
       //TODO get user subscription
       String autoCompleteURL =
-          "https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${placeName}&&radius=500&key=${googleMapsAPI}&location=${widget.pikUpLocation.latitude},${widget.pikUpLocation.longitude}&radius=500";
+          "https://maps.googleapis.com/maps/api/place/autocomplete/json?input=$placeName&&radius=500&key=$googleMapsAPI&location=${widget.pikUpLocation.latitude},${widget.pikUpLocation.longitude}&radius=500";
 
       var res = await httpRequest(autoCompleteURL);
 

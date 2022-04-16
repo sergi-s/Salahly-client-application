@@ -147,9 +147,12 @@ stt38c5j0s
               if (value is Mechanic) {
                 nearbyMechanics.add(value);
                 rsa.assignNearbyMechanics(nearbyMechanics);
+
+                rsa.onFindNewMechanic(value);
                 print("Added mechanic: " + value.name!);
               } else if (value is TowProvider) {
                 nearbyProviders.add(value);
+                rsa.onFindNewProvider(value);
                 rsa.assignNearbyProviders(nearbyProviders);
                 print("Added provider: " + value.name!);
               } else {
