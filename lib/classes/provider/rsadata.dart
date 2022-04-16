@@ -97,7 +97,9 @@ class RSANotifier extends StateNotifier<RSA> {
     }
     print("Ayooh");
     print(rsadata["providersResponses"].toString());
+    print("kimoooo");
     await newRSA.set(rsadata);
+    print("lolaaddddd");
     print("Ayooh");
     return newRSA.key;
   }
@@ -107,9 +109,11 @@ class RSANotifier extends StateNotifier<RSA> {
     assignState(RSAStates.requestingRSA);
     String? rsaID = await _requestRSA();
     if (rsaID != null) {
+      print("aywaaaaaaaaaaa");
       state = state.copyWith(state: RSAStates.created, rsaID: rsaID);
       return true;
     } else {
+      print("l2222");
       assignState(RSAStates.failedToRequestRSA);
       return false;
     }
@@ -130,5 +134,29 @@ class RSANotifier extends StateNotifier<RSA> {
     double radius =
         state.user != null ? state.user!.getSubscriptionRange()! : 100;
     // NearbyLocations.getNearbyProviders(state.location!.latitude, state.location!.longitude, radius, ref);
+  }
+
+  Future requestTta() async {
+    String userID = FirebaseAuth.instance.currentUser!.uid;
+    DatabaseReference newRSA = dbRef.child("tta").push();
+    print("ssssss");
+    Map<String, dynamic> ttadata = {
+      "userID": userID,
+      "latitude": state.location!.latitude,
+      "longitude": state.location!.longitude,
+      "providersResponses": {},
+      "state": RSA.stateToString(RSAStates.waitingForProviderResponse)
+    };
+    print("b4 for");
+    for (var prov in state.nearbyProviders!) {
+      ttadata["providersResponses"][prov.id.toString()] = "pending";
+    }
+    print(ttadata["providersResponses"].toString());
+
+    print("kimoooo");
+    await newRSA.set(ttadata);
+    print("lolaaddddd");
+    state = state.copyWith(rsaID: newRSA.key);
+    return newRSA.key;
   }
 }

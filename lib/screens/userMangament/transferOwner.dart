@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -17,8 +18,8 @@ class _TransferOwnerState extends State<TransferOwner> {
       context: context,
       barrierDismissible: false,
       builder: (context) => AlertDialog(
-        title: Text('Result'),
-        content: Text('press confirm to confirm ownership transfer'),
+        title: Text('Result'.tr()),
+        content: Text('are you sure u want to+ confirm ownership transfer'),
         actions: [
           ElevatedButton(
               onPressed: () {
@@ -26,12 +27,12 @@ class _TransferOwnerState extends State<TransferOwner> {
 
                 // ShowSnackbar(context, info, index);
               },
-              child: Text('Confirm')),
+              child: Text('Confirm'.tr())),
           ElevatedButton(
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: Text('Back'))
+              child: Text('back'.tr()))
         ],
       ),
     );
@@ -65,7 +66,7 @@ class _TransferOwnerState extends State<TransferOwner> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   Text(
-                    "Transfer Ownership",
+                    "Transfer Ownership".tr(),
                     style: TextStyle(fontSize: 35, color: Colors.white),
                     textAlign: TextAlign.center,
                   ),
@@ -83,7 +84,7 @@ class _TransferOwnerState extends State<TransferOwner> {
               ),
               Row(
                 children: [
-                  Text('Choose Car',
+                  Text('Choose_Car'.tr(),
                       style: TextStyle(fontSize: 25, color: Colors.black)),
                   SizedBox(width: 20),
                   DropdownButton(
@@ -125,7 +126,7 @@ class _TransferOwnerState extends State<TransferOwner> {
                   width: 300,
                   child: Center(
                     child: TextButton(
-                        child: Text("Confirm Transfer",
+                        child: Text("Confirm_Transfer".tr(),
                             style:
                                 // <<<<<<< HEAD
                                 TextStyle(fontSize: 15, color: Colors.white)),

@@ -86,22 +86,26 @@ class _DropOffSearchScreenState extends State<DropOffSearchScreen> {
           //predictions
           const SizedBox(height: 10),
           (dropOffPlacePredictionList.length > 0
-              ? Padding(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-                  child: ListView.separated(
-                    keyboardDismissBehavior:
-                        ScrollViewKeyboardDismissBehavior.manual,
-                    padding: EdgeInsets.zero,
-                    itemBuilder: (context, index) {
-                      return PredictionTile(
-                          placePredictions: dropOffPlacePredictionList[index]);
-                    },
-                    separatorBuilder: (BuildContext context, int index) =>
-                        Divider(),
-                    itemCount: dropOffPlacePredictionList.length,
-                    shrinkWrap: true,
-                    physics: ClampingScrollPhysics(),
+              ? Container(
+                  height: MediaQuery.of(context).size.height * 0.6,
+                  child: Padding(
+                    padding:
+                        const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                    child: ListView.separated(
+                      keyboardDismissBehavior:
+                          ScrollViewKeyboardDismissBehavior.manual,
+                      padding: EdgeInsets.zero,
+                      itemBuilder: (context, index) {
+                        return PredictionTile(
+                            placePredictions:
+                                dropOffPlacePredictionList[index]);
+                      },
+                      separatorBuilder: (BuildContext context, int index) =>
+                          Divider(),
+                      itemCount: dropOffPlacePredictionList.length,
+                      shrinkWrap: true,
+                      physics: ClampingScrollPhysics(),
+                    ),
                   ),
                 )
               : Container()),

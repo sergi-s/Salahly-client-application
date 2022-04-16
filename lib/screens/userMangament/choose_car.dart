@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
@@ -85,7 +86,7 @@ class Choose_car extends StatelessWidget {
             padding: const EdgeInsets.only(right: 40),
             child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [Text("Choose Car")]),
+                children: [Text("Choose_Car".tr())]),
           ),
         ),
         body: CustomPaint(
@@ -115,7 +116,7 @@ class Choose_car extends StatelessWidget {
                     child: SingleChildScrollView(
                       child: GestureDetector(
                         onTap: () {
-                          print('welcome');
+                          print('welcome'.tr());
                         },
                         child: ListTile(
                           leading: CircleAvatar(
@@ -132,7 +133,7 @@ class Choose_car extends StatelessWidget {
                               Row(
                                 children: [
                                   Text(
-                                    "Plate Number : ",
+                                    "Plate_Number".tr(),
                                     style: TextStyle(
                                         fontSize: 18,
                                         fontWeight: FontWeight.bold,
@@ -149,7 +150,7 @@ class Choose_car extends StatelessWidget {
                               Row(
                                 children: [
                                   Text(
-                                    "Chassis Number : ",
+                                    "Chassis_Number".tr(),
                                     style: TextStyle(
                                         fontSize: 18,
                                         fontWeight: FontWeight.bold,
@@ -163,7 +164,7 @@ class Choose_car extends StatelessWidget {
                               ),
                               Row(
                                 children: [
-                                  Text("Color ",
+                                  Text("Color".tr(),
                                       style: TextStyle(
                                           color: Colors.black,
                                           fontSize: 19,

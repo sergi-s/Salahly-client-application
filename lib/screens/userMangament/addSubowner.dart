@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -31,8 +32,8 @@ class _AddSubownerState extends State<AddSubowner> {
       context: context,
       barrierDismissible: false,
       builder: (context) => AlertDialog(
-        title: Text('Warning'),
-        content: Text('Are u sure want to add Subowner ?'),
+        title: Text('Warning'.tr()),
+        content: Text('Are_u_sure_want_to_add_Subowner'.tr()),
         actions: [
           ElevatedButton(
               onPressed: () {
@@ -40,12 +41,12 @@ class _AddSubownerState extends State<AddSubowner> {
 
                 // ShowSnackbar(context, info, index);
               },
-              child: Text('Confirm')),
+              child: Text('Confirm'.tr())),
           ElevatedButton(
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: Text('Back'))
+              child: Text('Back'.tr()))
         ],
       ),
     );
@@ -87,9 +88,9 @@ class _AddSubownerState extends State<AddSubowner> {
                 children: [
                   Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: const [
+                      children: [
                         Text(
-                          "Add Subowner",
+                          "Add_Subowner".tr(),
                           style: TextStyle(fontSize: 40, color: Colors.white),
                           textAlign: TextAlign.center,
                         ),
@@ -110,7 +111,7 @@ class _AddSubownerState extends State<AddSubowner> {
                       width: 250,
                       child: TextFormField(
                         decoration: InputDecoration(
-                          labelText: "Enter Subowner Email",
+                          labelText: "Enter_Subowner_Email".tr(),
                           filled: true,
                           fillColor: const Color(0xFFd1d9e6).withOpacity(0.1),
                         ),
@@ -125,7 +126,7 @@ class _AddSubownerState extends State<AddSubowner> {
                   const SizedBox(height: 30),
                   Row(
                     children: [
-                      Text('Choose Car',
+                      Text('Choose_Car'.tr(),
                           style: TextStyle(fontSize: 25, color: Colors.black)),
                       SizedBox(width: 20),
                       DropdownButton(
@@ -161,26 +162,6 @@ class _AddSubownerState extends State<AddSubowner> {
                       Text("Aya Adel", style: TextStyle(fontSize: 25))
                     ],
                   )
-// <<<<<<< HEAD
-// =======
-                  // Row(
-                  //   children: [
-                  //     Text('Scan To Add Subowner',
-                  //         style: TextStyle(
-                  //             fontSize: 22,
-                  //             color: Colors.black,
-                  //             fontWeight: FontWeight.bold)),
-                  //     SizedBox(
-                  //       width: 20,
-                  //     ),
-                  //     // FloatingActionButton.extended(
-                  //     //     onPressed: () => scanQRcode(),
-                  //     //     label: Text(''),
-                  //     //     icon: Icon(Icons.qr_code))
-                  //
-                  //   ],
-                  // ),
-// >>>>>>> 931e111d966e6532a25d6451b6fa85ee81a45bd7
                 ],
               ),
             ),

@@ -6,6 +6,7 @@ import 'package:slahly/screens/roadsideassistance/searching_mechanic_provider_sc
 import 'package:slahly/screens/splashScreen/splashscreen.dart';
 import 'package:slahly/screens/switchLanguage.dart';
 import 'package:slahly/screens/test_screens/test_user_SM.dart';
+import 'package:slahly/screens/test_screens/testscreen_foula.dart';
 import 'package:slahly/screens/userMangament/choose_car.dart';
 import 'package:slahly/screens/userMangament/manageSubowner.dart';
 import 'package:slahly/screens/userMangament/select.dart';
@@ -34,7 +35,7 @@ class AllScreens extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   btn(MyLocationScreen.routeName, context),
-                  btn(Choose_car.routeName, context),
+                  btn(TestScreen_.routeName, context),
                   btn(ChooseMechanicScreen.routeName, context),
                   btn(Select.routeName, context),
                   btn(TestUserSM.routeName, context),

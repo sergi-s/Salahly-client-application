@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:animate_icons/animate_icons.dart';
@@ -6,6 +7,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:slahly/classes/firebase/roadsideassistance/roadsideassistance.dart';
+import 'package:slahly/screens/roadsideassistance/chooseprovider.dart';
 
 import '../../classes/provider/rsadata.dart';
 import '../../classes/provider/user_data.dart';
@@ -69,90 +71,113 @@ class _SelectState extends State<Select> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        backgroundColor: const Color(0xFFd1d9e6),
-        body: CustomPaint(
-          child: Stack(
-            children: [
-              Padding(
-                padding: EdgeInsets.only(left: 70, top: 130),
-                child: Image.asset(
-                  'assets/images/clouds.png',
-                  height: 150,
-                  width: 250,
-                ),
-              ),
-              SlideTransition(
-                position: _animation,
-                child: Padding(
-                  padding: EdgeInsets.only(left: 70, top: 130),
-                  child: Image.asset(
-                    !widget.type!
-                        ? 'assets/images/mechanic.png'
-                        : "assets/images/tow-truck 2.png",
-                    height: 150,
-                    width: 250,
+    return Consumer(
+      builder: (context, ref, child) {
+        final RSA rsa = ref.watch(rsaProvider);
+        if (rsa.towProvider?.name == null) {
+          print("sleep");
+
+          context.go(ChooseProviderScreen.routeName);
+          print("mama 7elwa");
+        }
+        return Scaffold(
+            backgroundColor: const Color(0xFFd1d9e6),
+            body: CustomPaint(
+              child: Stack(
+                children: [
+                  Padding(
+                    padding: EdgeInsets.only(left: 70, top: 130),
+                    child: Image.asset(
+                      'assets/images/clouds.png',
+                      height: 150,
+                      width: 250,
+                    ),
                   ),
-                ),
-              ),
-              Container(
-                  padding: EdgeInsets.only(left: 10, top: 300, right: 10),
-                  child: Card(
-                    color: Colors.transparent,
-                    child: Container(
-                      color: const Color(0xFFd1d9e6),
-                      height: 200,
-                      width: 500,
-                      child: Column(
-                        children: [
-                          Row(
-                            children: [
-                              SizedBox(
-                                width: 10,
-                                height: 100,
-                              ),
-                              Text(
-                                "Booking successful",
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 40,
-                                    color: Color(0xFF193566)),
-                              ),
-                            ],
-                          ),
-                          Row(children: [
-                            // CircleAvatar(
-                            //   radius: 25,
-                            //   child: Icon(Icons.check, size: 25),
-                            //   backgroundColor: Colors.green,
-                            // ),
-                            SizedBox(
-                              width: 20,
-                            ),
-                            Flexible(
-                                child: Text(
-                              widget.type!
-                                  ? "Provider is coming"
-                                  : "Mechanic is waiting",
-                              style: const TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 30,
-                                  color: Color(0xFF193566)),
-                            )),
-                            SpinKitThreeBounce(
-                              color: Color(0xFF193566),
-                              size: 30,
-                            )
-                          ]),
-                        ],
+                  SlideTransition(
+                    position: _animation,
+                    child: Padding(
+                      padding: EdgeInsets.only(left: 70, top: 130),
+                      child: Image.asset(
+                        !widget.type!
+                            ? 'assets/images/mechanic.png'
+                            : "assets/images/tow-truck 2.png",
+                        height: 150,
+                        width: 250,
                       ),
                     ),
-                    elevation: 0,
-                  ))
-            ],
-          ),
-          // painter: HeaderCurvedContainer(),
-        ));
+                  ),
+                  Container(
+                      padding: EdgeInsets.only(left: 10, top: 300, right: 10),
+                      child: Card(
+                        color: Colors.transparent,
+                        child: Container(
+                          color: const Color(0xFFd1d9e6),
+                          height: 200,
+                          width: 500,
+                          child: Column(
+                            children: [
+                              Consumer(
+                                builder: (context, ref, child) {
+                                  final RSA rsa = ref.watch(rsaProvider);
+
+                                  return Text(rsa.towProvider?.name ??
+                                      "searching for provider");
+
+                                  // rsa.towProvider?.name == null
+                                  //     ? context.go(ChooseProviderScreen.routeName)
+                                  //     : null;
+                                },
+                              ),
+                              Row(
+                                children: [
+                                  SizedBox(
+                                    width: 10,
+                                    height: 100,
+                                  ),
+                                  Text(
+                                    "Booking_successful".tr(),
+                                    style: const TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 40,
+                                        color: Color(0xFF193566)),
+                                  ),
+                                ],
+                              ),
+                              Row(children: [
+                                // CircleAvatar(
+                                //   radius: 25,
+                                //   child: Icon(Icons.check, size: 25),
+                                //   backgroundColor: Colors.green,
+                                // ),
+                                SizedBox(
+                                  width: 20,
+                                ),
+                                Flexible(
+                                    child: Text(
+                                  widget.type!
+                                      ? "Provider is coming"
+                                      : "Mechanic is waiting",
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 30,
+                                      color: Color(0xFF193566)),
+                                )),
+                                SpinKitThreeBounce(
+                                  color: Color(0xFF193566),
+                                  size: 30,
+                                )
+                              ]),
+                            ],
+                          ),
+                        ),
+                        elevation: 0,
+                      ))
+                ],
+              ),
+              // painter: HeaderCurvedContainer(),
+            ));
+      },
+    );
   }
 }
 

@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -56,33 +57,9 @@ class ManageSubowner extends StatelessWidget {
   Widget showList() {
     return SingleChildScrollView(
         child: Column(children: [
-      // <<<<<<< HEAD
-      //     Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-      //       Text(
-      //         "Manage Ownership",
-      //         style: TextStyle(fontSize: 35, color: Colors.white),
-      //         textAlign: TextAlign.center,
-      //       ),
-      //     ]),
-      //     SizedBox(
-      //       height: 150,
-      //     ),
-      //     ListView.builder(
-      //         padding: EdgeInsets.all(17),
-      //         shrinkWrap: true,
-      //         itemCount: client.length,
-      //         itemBuilder: (BuildContext context, index) {
-      //           return Column(children: [
-      //             Container(
-      //                 padding: EdgeInsets.all(5.0),
-      //                 child: rowItem(context, index))
-      //           ]);
-      //         }),
-      //     ]));
-      // =======
       Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
         Text(
-          "Manage Ownership",
+          "Manage_Ownership".tr(),
           style: TextStyle(fontSize: 35, color: Colors.white),
           textAlign: TextAlign.center,
         ),
@@ -177,8 +154,8 @@ class ManageSubowner extends StatelessWidget {
       context: context,
       barrierDismissible: false,
       builder: (context) => AlertDialog(
-        title: Text('Result'),
-        content: Text('are u sure to delete this user'),
+        title: Text('Result'.tr()),
+        content: Text('are_u_sure_to_delete_this_user'.tr()),
         actions: [
           ElevatedButton(
               onPressed: () {
@@ -186,12 +163,12 @@ class ManageSubowner extends StatelessWidget {
 
                 // ShowSnackbar(context, info, index);
               },
-              child: Text('Confirm')),
+              child: Text('Confirm'.tr())),
           ElevatedButton(
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: Text('Back'))
+              child: Text('back'.tr()))
         ],
       ),
     );

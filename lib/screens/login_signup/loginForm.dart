@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:slahly/screens/allScreens.dart';
 import 'package:slahly/screens/homepage.dart';
 import 'package:slahly/screens/login_signup/registration.dart';
 import 'package:slahly/screens/myLocation/mylocationscreen.dart';
@@ -14,9 +15,6 @@ import 'package:slahly/widgets/login_signup/roundedInput.dart';
 import 'package:slahly/classes/firebase/firebase.dart';
 
 class LoginForm extends StatelessWidget {
-
-
-
   LoginForm({
     Key? key,
     required this.size,
@@ -89,19 +87,15 @@ class LoginForm extends StatelessWidget {
               // bool check = await fb.login(email, password);
               bool check = await fb.login("mo@mo.mo", "momomo");
               if (check) {
-
                 ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text(
-                        'Login successful')));
-                context.go(TestScreen_nearbymechanics_and_create_rsa.routeName);
+                    SnackBar(content: Text('Login_successful'.tr())));
+                context.go(AllScreens.routeName);
               } else {
-                ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text(
-                        'Account isnt Correct !!Please try again')));
-                };
-
-              },
-
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    content: Text('Account_invalid_please_try_again'.tr())));
+              }
+              ;
+            },
           )
         ],
       ),

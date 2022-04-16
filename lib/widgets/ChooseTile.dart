@@ -97,9 +97,9 @@ class ChooseTile extends StatelessWidget {
                       ],
                     ),
                     Row(
-                      children: const [
+                      children: [
                         Text(
-                          'Rating : 4.8',
+                          'Rating'.tr(),
                           style: TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 16),
                         ),
