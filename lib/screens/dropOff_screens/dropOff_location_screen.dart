@@ -22,7 +22,8 @@ class _DropOffLocationScreenState extends State<DropOffLocationScreen> {
   final Completer<GoogleMapController> _controllerGoogleMap = Completer();
   late GoogleMapController newGoogleMapController;
 
-  static const double cameraZoom = 20;
+  static const double initialCameraZoom = 15;
+  double cameraZoom = 14;
 
   // Current Location
   // late Position currentPos;
@@ -33,12 +34,19 @@ class _DropOffLocationScreenState extends State<DropOffLocationScreen> {
 
   //initial Camera position
   final CameraPosition _kGooglePlex = const CameraPosition(
-    target: LatLng(37.42796133580664, -122.085749655962),
-    zoom: cameraZoom,
+    target: LatLng(30.0444, 31.2357),
+    zoom: initialCameraZoom,
   );
 
   //Markers
   List<Marker> myMarkers = [];
+
+  @override
+  void initState() {
+    initialLocation();
+    locatePosition();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -103,6 +111,15 @@ class _DropOffLocationScreenState extends State<DropOffLocationScreen> {
                     Text(("hi_there".tr()), style: TextStyle(fontSize: 12)),
                     Text(("where_to".tr()), style: TextStyle(fontSize: 20)),
                     const SizedBox(height: 20),
+                    TextFieldOnMap(
+                      isSelected: false,
+                      textToDisplay: ("your_current_location".tr()),
+                      iconToDisplay: const Icon(
+                        Icons.my_location,
+                        color: Colors.blue,
+                      ),
+                    ),
+                    const SizedBox(height: 15),
                     GestureDetector(
                       onTap: () {
                         print(
@@ -111,23 +128,12 @@ class _DropOffLocationScreenState extends State<DropOffLocationScreen> {
                             extra: currentCustomLoc);
                       },
                       child: TextFieldOnMap(
-                        isSelected: false,
-                        textToDisplay: ("your_current_location".tr()),
+                        isSelected: true,
+                        textToDisplay: ("where_to".tr()),
                         iconToDisplay: const Icon(
-                          Icons.my_location,
+                          Icons.search,
                           color: Colors.blue,
                         ),
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 15,
-                    ),
-                    TextFieldOnMap(
-                      isSelected: true,
-                      textToDisplay: ("where_to".tr()),
-                      iconToDisplay: const Icon(
-                        Icons.search,
-                        color: Colors.blue,
                       ),
                     ),
                   ],
@@ -140,7 +146,7 @@ class _DropOffLocationScreenState extends State<DropOffLocationScreen> {
 
   void locatePosition() async {
     currentCustomLoc = await getUserLocation();
-
+    cameraZoom = 19;
     print(
         "::lat:${currentCustomLoc.latitude} - long:${currentCustomLoc.longitude}");
     print("::address: ${currentCustomLoc.address}");
@@ -165,6 +171,7 @@ class _DropOffLocationScreenState extends State<DropOffLocationScreen> {
 
   _handleTap(LatLng tappedPoint) {
     setState(() {
+      cameraZoom = 19;
       moveCamera(CustomLocation(
           latitude: tappedPoint.latitude, longitude: tappedPoint.longitude));
       myMarkers = [];
@@ -180,5 +187,13 @@ class _DropOffLocationScreenState extends State<DropOffLocationScreen> {
             }),
       );
     });
+  }
+
+  initialLocation() async {
+    List temp = await getApproximateLocation();
+    CustomLocation initialPos =
+        CustomLocation(latitude: temp[0], longitude: temp[1]);
+
+    moveCamera(initialPos);
   }
 }

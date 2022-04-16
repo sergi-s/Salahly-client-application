@@ -1,8 +1,8 @@
 {
-  "appname": "salahly",
-  "presshere": "press here",
-  "login": "login",
-  "welcome_back": "welcome back",
+  "appname": "Salahly",
+  "presshere": "Press here",
+  "login": "Login",
+  "welcome_back": "Welcome back",
   "username": "username",
   "password": "password",
   "email": "email",
@@ -34,9 +34,14 @@
   "help_on_way": "Help is on it's way",
   "searching_for_provider": "Searching for Tow Truck",
   "searching_for_mechanic": "Searching for Mechanic",
-  "found_Mechanic": "We found A Mechanic",
-  "found_tow_provider": "We found A Tow truck",
+  "found_Mechanic": "Mechanic is waiting For You",
+  "found_tow_provider": "Tow truck on it's way",
   "Phone": "Phone",
   "Email": "Email",
-  "Name": "Name"
+  "Name": "Name",
+  "are_you_sure": "Are you sure?",
+  "confirm_cancellation": "Confirm cancellation",
+  "confirm": "Confirm",
+  "Rating": "Rating",
+  "Address": "Address"
 }

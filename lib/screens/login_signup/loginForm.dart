@@ -13,6 +13,8 @@ import 'package:slahly/widgets/login_signup/Rounded_password.dart';
 import 'package:slahly/widgets/login_signup/roundedInput.dart';
 import 'package:slahly/classes/firebase/firebase.dart';
 
+import '../allScreens.dart';
+
 class LoginForm extends StatelessWidget {
 
 
@@ -93,7 +95,7 @@ class LoginForm extends StatelessWidget {
                 ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(content: Text(
                         'Login successful')));
-                context.go(TestScreen_nearbymechanics_and_create_rsa.routeName);
+                context.go(AllScreens.routeName);
               } else {
                 ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(content: Text(

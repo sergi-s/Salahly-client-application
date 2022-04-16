@@ -13,7 +13,7 @@ class DropOffSearchScreen extends StatefulWidget {
 
   final CustomLocation pikUpLocation;
 
-  DropOffSearchScreen({Key? key, required this.pikUpLocation})
+  const DropOffSearchScreen({Key? key, required this.pikUpLocation})
       : super(key: key);
 
   @override
@@ -85,7 +85,8 @@ class _DropOffSearchScreenState extends State<DropOffSearchScreen> {
 
           //predictions
           const SizedBox(height: 10),
-          (dropOffPlacePredictionList.length > 0
+          //TODO onPress display location on map
+          (dropOffPlacePredictionList.isNotEmpty
               ? Padding(
                   padding:
                       const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
@@ -98,10 +99,10 @@ class _DropOffSearchScreenState extends State<DropOffSearchScreen> {
                           placePredictions: dropOffPlacePredictionList[index]);
                     },
                     separatorBuilder: (BuildContext context, int index) =>
-                        Divider(),
+                        const Divider(),
                     itemCount: dropOffPlacePredictionList.length,
                     shrinkWrap: true,
-                    physics: ClampingScrollPhysics(),
+                    physics: const ClampingScrollPhysics(),
                   ),
                 )
               : Container()),
@@ -115,7 +116,7 @@ class _DropOffSearchScreenState extends State<DropOffSearchScreen> {
     if (placeName.length > 1) {
       //TODO get user subscription
       String autoCompleteURL =
-          "https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${placeName}&&radius=500&key=${googleMapsAPI}&location=${widget.pikUpLocation.latitude},${widget.pikUpLocation.longitude}&radius=500";
+          "https://maps.googleapis.com/maps/api/place/autocomplete/json?input=$placeName&&radius=500&key=$googleMapsAPI&location=${widget.pikUpLocation.latitude},${widget.pikUpLocation.longitude}&radius=500";
 
       var res = await httpRequest(autoCompleteURL);
 

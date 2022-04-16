@@ -23,7 +23,7 @@ class PredictionTile extends ConsumerWidget {
       child: Container(
           child: Column(
         children: [
-          SizedBox(width: 10),
+          const SizedBox(width: 10),
           Row(
             children: [
               const Icon(Icons.add_location),
@@ -54,20 +54,20 @@ class PredictionTile extends ConsumerWidget {
     );
   }
 
-  void getPlaceAddressDetails(String place_id, ref, context) async {
+  void getPlaceAddressDetails(String placeId, ref, context) async {
     showDialog(
         context: context,
         builder: (BuildContext context) =>
             ProgressDialog(message: "Setting Drop off, please wait"));
 
     String placeDetailsURL =
-        "https://maps.googleapis.com/maps/api/place/details/json?place_id=${place_id}&key=${googleMapsAPI}";
+        "https://maps.googleapis.com/maps/api/place/details/json?place_id=$placeId&key=$googleMapsAPI";
 
     var res = await httpRequest(placeDetailsURL);
 
     if (res == "failed" || res["status"] != "OK") return;
     CustomLocation customLocation = CustomLocation(
-        id: place_id,
+        id: placeId,
         name: res["result"]["name"],
         latitude: res["result"]["geometry"]["location"]["lat"],
         longitude: res["result"]["geometry"]["location"]["lng"]);
