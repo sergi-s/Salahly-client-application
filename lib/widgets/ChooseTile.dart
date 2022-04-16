@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:slahly/abstract_classes/user.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/services.dart';
 
 class ChooseTile extends StatelessWidget {
   String? email;
@@ -9,7 +8,7 @@ class ChooseTile extends StatelessWidget {
   String? phone;
   String? name;
   bool? isCenter;
-
+  double? rating;
   String? address;
   Type? type;
 
@@ -20,12 +19,13 @@ class ChooseTile extends StatelessWidget {
       this.name,
       this.address,
       this.type,
-      this.isCenter});
+      this.isCenter,
+      this.rating});
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 180,
+      height: 130,
       width: 100,
       child: Card(
         // color: Color(0xFFd1d9e6), //#D3D3D3 Color(0xFFf7f7f7)
@@ -52,6 +52,7 @@ class ChooseTile extends StatelessWidget {
                     style: const TextStyle(
                         fontWeight: FontWeight.bold, fontSize: 20),
                   ),
+
                 ),
                 subtitle: Padding(
                   padding: const EdgeInsets.only(left: 0),
@@ -71,36 +72,55 @@ class ChooseTile extends StatelessWidget {
                     ),
                     Row(
                       children: [
-                        Container(
-                          child: ElevatedButton.icon(
-                            onPressed: () {
-                              Clipboard.setData(ClipboardData(text: phone));
-                            },
-                            label: Text(
-                              phone ?? "01...",
-                              style: const TextStyle(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 14),
-                            ),
-                            style: ElevatedButton.styleFrom(
-                              primary: const Color(0xFFff193566).withOpacity(0),
-                              elevation: 0,
-                              animationDuration: Duration.zero,
-                            ),
-                            icon: const Icon(
-                              Icons.copy,
-                              color: Colors.black,
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
-                    Row(
-                      children: [
+// <<<<<<< lol
+//                         Container(
+//                           child: ElevatedButton.icon(
+//                             onPressed: () {
+//                               Clipboard.setData(ClipboardData(text: phone));
+//                             },
+//                             label: Text(
+//                               phone ?? "01...",
+//                               style: const TextStyle(
+//                                   color: Colors.black,
+//                                   fontWeight: FontWeight.bold,
+//                                   fontSize: 14),
+//                             ),
+//                             style: ElevatedButton.styleFrom(
+//                               primary: const Color(0xFFff193566).withOpacity(0),
+//                               elevation: 0,
+//                               animationDuration: Duration.zero,
+//                             ),
+//                             icon: const Icon(
+//                               Icons.copy,
+//                               color: Colors.black,
+//                             ),
+//                           ),
+//                         )
+//                       ],
+//                     ),
+//                     Row(
+//                       children: [
+//                         Text(
+//                           'Rating'.tr(),
+//                           style: TextStyle(
+//                               fontWeight: FontWeight.bold, fontSize: 16),
+//                         ),
+//                       ],
+//                     ),
+//                     const SizedBox(height: 5),
+//                     Row(
+//                       children: [
+//                         Flexible(
+//                           child: Text(
+//                             type != Type.provider ? (address ?? "address") : "",
+//                             overflow: TextOverflow.ellipsis,
+//                             style: const TextStyle(
+//                                 fontWeight: FontWeight.bold, fontSize: 16),
+//                           ),
+// =======
                         Text(
-                          'Rating'.tr(),
-                          style: TextStyle(
+                          'Rating : ${rating.toString()}',
+                          style: const TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 16),
                         ),
                       ],
@@ -110,11 +130,15 @@ class ChooseTile extends StatelessWidget {
                       children: [
                         Flexible(
                           child: Text(
-                            type != Type.provider ? (address ?? "address") : "",
+                            type != Type.provider
+                                ? ("${'Address'.tr()}:\t" +
+                                    (address ?? 'address'))
+                                : '',
                             overflow: TextOverflow.ellipsis,
                             style: const TextStyle(
                                 fontWeight: FontWeight.bold, fontSize: 16),
-                          ),
+//                           ),
+// >>>>>>> main
                         ),
                         const SizedBox(height: 20),
                       ],

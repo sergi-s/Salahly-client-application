@@ -14,6 +14,8 @@ import 'package:slahly/widgets/login_signup/Rounded_password.dart';
 import 'package:slahly/widgets/login_signup/roundedInput.dart';
 import 'package:slahly/classes/firebase/firebase.dart';
 
+import '../allScreens.dart';
+
 class LoginForm extends StatelessWidget {
   LoginForm({
     Key? key,
@@ -89,6 +91,8 @@ class LoginForm extends StatelessWidget {
               if (check) {
                 ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(content: Text('Login_successful'.tr())));
+                    const SnackBar(content: Text(
+                        'Login successful')));
                 context.go(AllScreens.routeName);
               } else {
                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(

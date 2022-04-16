@@ -113,5 +113,10 @@
   "Your_work_address": "عنوان عملك",
   "Account_invalid_please_try_again": " حساب خاطئ برجاء المحاوله مره اخري",
 
-  "Choose_Car": "اختر السياره"
+  "Choose_Car": "اختر السياره",
+  "are_you_sure": "هل انت متاكد",
+  "confirm_cancellation": "أكد الالغاء",
+  "confirm": "تاكد",
+  "Rating": "تقيم",
+  "Address": "عنوان"
 }

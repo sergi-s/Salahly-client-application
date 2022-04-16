@@ -13,7 +13,7 @@ class DropOffSearchScreen extends StatefulWidget {
 
   final CustomLocation pikUpLocation;
 
-  DropOffSearchScreen({Key? key, required this.pikUpLocation})
+  const DropOffSearchScreen({Key? key, required this.pikUpLocation})
       : super(key: key);
 
   @override
@@ -119,7 +119,7 @@ class _DropOffSearchScreenState extends State<DropOffSearchScreen> {
     if (placeName.length > 1) {
       //TODO get user subscription
       String autoCompleteURL =
-          "https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${placeName}&&radius=500&key=${googleMapsAPI}&location=${widget.pikUpLocation.latitude},${widget.pikUpLocation.longitude}&radius=500";
+          "https://maps.googleapis.com/maps/api/place/autocomplete/json?input=$placeName&&radius=500&key=$googleMapsAPI&location=${widget.pikUpLocation.latitude},${widget.pikUpLocation.longitude}&radius=500";
 
       var res = await httpRequest(autoCompleteURL);
 

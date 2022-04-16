@@ -14,21 +14,25 @@ Future getMechanicOrProviderData(String id) async {
     return Mechanic(
         isCenter: false,
         avatar: "",
-        phoneNumber: "1231231234",
+        phoneNumber: (ds.child("phoneNumber").value).toString(),
         id: id,
         name: (ds.child("name").value).toString(),
         type: Type.mechanic,
         email: (ds.child("email").value).toString(),
-        rating: toDouble((ds.child("rating").value).toString()));
+        rating: toDouble((ds.child("rating").value).toString()),
+        type: Type.mechanic,
+        address: "address");
   } else {
     return TowProvider(
         isCenter: toBoolean((ds.child("isCenter").value).toString()),
         avatar: "",
-        phoneNumber: "1231231234",
+        phoneNumber: (ds.child("phoneNumber").value).toString(),
         id: id,
         type: Type.provider,
         name: (ds.child("name").value).toString(),
         email: (ds.child("email").value).toString(),
-        rating: toDouble((ds.child("rating").value).toString()));
+        rating: toDouble((ds.child("rating").value).toString()),
+        type: Type.provider,
+        address: "address");
   }
 }

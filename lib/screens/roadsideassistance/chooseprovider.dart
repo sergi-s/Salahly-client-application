@@ -131,11 +131,22 @@ class ChooseProviderScreen extends ConsumerWidget {
                               address: "",
                               type: Type.provider,
                               isCenter: false),
+// =======
+//                         return ChooseTile(
+//                           email: providers[index].email.toString(),
+//                           avatar: providers[index].avatar.toString(),
+//                           phone: providers[index].phoneNumber.toString(),
+//                           name: providers[index].name.toString(),
+//                           address: providers[index].loc!.address.toString(),
+//                           type: providers[index].type!,
+//                           isCenter: false,
+//                           rating: providers[index].rating,
+// >>>>>>> main
                         );
                       },
                       itemCount: providers.length,
                       shrinkWrap: true,
-                      padding: EdgeInsets.all(5),
+                      padding: const EdgeInsets.all(5),
                       scrollDirection: Axis.vertical,
                     ),
                   ],
