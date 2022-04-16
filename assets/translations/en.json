@@ -44,13 +44,6 @@
 
 
 
-
-
-
-
-
-
-
   "hi_there": "Hi there",
   "where_to": "Where to?",
   "your_current_location": "Your Current Location",
@@ -111,8 +104,6 @@
   "Your_work_address": "Your work address",
   "Login_successful": "Login successful",
   "Choose_Car": "Choose Car",
-
   "Account_invalid_please_try_again": "Account invalid please try again",
-
   "Name": "Name"
 }

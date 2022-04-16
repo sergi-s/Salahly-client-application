@@ -59,8 +59,14 @@ class ChooseProviderScreen extends ConsumerWidget {
               for (var provider in rsa.nearbyProviders!) {
                 if (provider.id == prov.key) {
                   print("msh 7ro7");
-                  rsaNotifier.assignProvider(
-                      TowProvider(name: null, email: null), false);
+                  // rsaNotifier.assignProvider(
+                  //     TowProvider(name: null, email: null), false);
+
+                  while (navigatorKey.currentContext != null) {
+                    navigatorKey.currentContext?.pop();
+                  }
+                  navigatorKey.currentState
+                      ?.pushNamed(ChooseProviderScreen.routeName);
 
                   print("msh 7tegy");
                 }
