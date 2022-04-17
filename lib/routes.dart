@@ -1,7 +1,7 @@
 import 'package:go_router/go_router.dart';
 import 'package:slahly/classes/models/location.dart';
 import 'package:slahly/screens/DropOff_screens/dropOff_search_screen.dart';
-import 'package:slahly/screens/WSA/WSA_screen.dart';
+import 'package:slahly/screens/workshop_assistance/workshop_assistance_screen.dart';
 import 'package:slahly/screens/allScreens.dart';
 import 'package:slahly/screens/car_management/add_car_screen.dart';
 import 'package:slahly/screens/car_management/view_cars_screen.dart';
@@ -90,7 +90,8 @@ class Routing {
           GoRoute(
             path: SearchingMechanicProviderScreen.routeName,
             builder: (context, state) => SearchingMechanicProviderScreen(
-                userLocation: CustomLocation(latitude: 1, longitude: 2)),
+                userLocation: state.extra! as CustomLocation),
+            // userLocation: CustomLocation(latitude: 1, longitude: 2)),
             // builder: (context, state) => SearchingMechanicProvider(userLocation: state.extra! as CustomLocation),
           ),
           GoRoute(
@@ -117,7 +118,7 @@ class Routing {
           GoRoute(
               path: Registration.routeName,
               builder: (context, state) {
-                return Registration(emailobj: state.extra! as String);
+                return Registration(emailObj: state.extra! as String);
               }),
           GoRoute(
             path: ViewCars.routeName,
@@ -169,7 +170,7 @@ class Routing {
           ),
           GoRoute(
             path: WSAScreen.routeName,
-            builder: (context,state) => WSAScreen(),
+            builder: (context, state) => WSAScreen(),
           ),
         ],
       );

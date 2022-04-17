@@ -11,36 +11,36 @@ import 'package:slahly/classes/firebase/firebase.dart';
 class SignUpForm extends StatelessWidget {
   SignUpForm({
     Key? key,
-    required this.defaultlogin,
+    required this.defaultLogin,
   }) : super(key: key);
 
-  final double defaultlogin;
+  final double defaultLogin;
   Validator validation = Validator();
   FirebaseCustom fb = FirebaseCustom();
 
   //late TextEditingController emailController = TextEditingController();
   String email = "";
   String password = "";
-  String confirmpassword = "";
+  String confirmPassword = "";
 
   updateEmail(String e) {
     email = e;
     print("ana ana ana moza" + email);
   }
 
-  updatepassword(String pass) {
+  updatePassword(String pass) {
     password = pass;
   }
 
-  updateconfirmpassword(String confpass) {
-    confirmpassword = confpass;
+  updateConfirmPassword(String confPass) {
+    confirmPassword = confPass;
   }
 
   @override
   Widget build(BuildContext context) {
     return Container(
       width: MediaQuery.of(context).size.width,
-      height: defaultlogin,
+      height: defaultLogin,
       //color: Colors.blue,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -53,10 +53,10 @@ class SignUpForm extends StatelessWidget {
           //     fontSize: 24,
           //   ),
           // ),
-          SizedBox(height: 40),
+          const SizedBox(height: 40),
           Image.asset('assets/images/logo ta5arog 2.png'),
           //SvgPicture.assets('assets/images/icon.svg'),
-          SizedBox(height: 40),
+          const SizedBox(height: 40),
           // RounedInput(
           //   icon: Icons.face,
           //   hint: 'username'.tr(),
@@ -69,14 +69,14 @@ class SignUpForm extends StatelessWidget {
           ),
           RounedPasswordInput(
             hint: 'password'.tr(),
-            function: updatepassword,
+            function: updatePassword,
           ),
           RounedPasswordInput(
             hint: 'confirm_password'.tr(),
-            function: updateconfirmpassword,
+            function: updateConfirmPassword,
           ),
           //RounedInput(icon: Icons.phone, hint: 'phone_number'.tr(), fn:updatePhonenumber,),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           RoundedButton(
             title: 'sign_up'.tr(),
             onPressedFunction: () async {
@@ -89,7 +89,7 @@ class SignUpForm extends StatelessWidget {
               //       const SnackBar(
               //           content: Text('Invalid Password!! Please try again')));
               // }
-              if (confirmpassword != password) {
+              if (confirmPassword != password) {
                 return ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                     content:
                         Text('Invalid_Confirmation_Please_try_again'.tr())));

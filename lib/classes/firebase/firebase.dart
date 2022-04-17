@@ -26,7 +26,7 @@ class FirebaseCustom extends Authentication {
           email: emm, password: password);
       if (user != null) {
         await _registerFCMToken(FirebaseAuth.instance.currentUser!.uid);
-        _registerNotficiations();
+        _registerNotifications();
         return true;
       }
     } catch (e) {
@@ -42,7 +42,7 @@ class FirebaseCustom extends Authentication {
         .then((value) => dbRef.child("FCMTokens").child(id).set(value));
   }
 
-  _registerNotficiations() {
+  _registerNotifications() {
     FirebaseMessaging.onMessage.listen((RemoteMessage event) {
       print("message recieved");
       print(event.notification!.body);
@@ -83,7 +83,6 @@ class FirebaseCustom extends Authentication {
       //   "phoneNumber": client.phoneNumber,
       //   "loc": client.loc
     }
-    ;
     // usersRef.child(firebaseUser.uid).set(userDataMap);
     return false;
   }

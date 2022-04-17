@@ -14,53 +14,38 @@ import 'package:go_router/go_router.dart';
 import 'package:slahly/widgets/roadsideassistance/HoldPlease.dart';
 import 'package:slahly/widgets/roadsideassistance/services_provider_card.dart';
 
-Client user = Client(
-    name: "aya",
-    email: "aya@email.com",
-    subscription: SubscriptionTypes.silver,
-    loc: CustomLocation(latitude: 55, longitude: 55));
+import '../../utils/constants.dart';
 
-DatabaseReference rsaRef = FirebaseDatabase.instance.ref().child("rsa");
-
-class SearchingMechanicProviderScreen extends ConsumerWidget {
+class SearchingMechanicProviderScreen extends ConsumerStatefulWidget {
   static const String routeName = "/searchingmechanicprovider";
 
-  SearchingMechanicProviderScreen({Key? key, required this.userLocation})
+  SearchingMechanicProviderScreen({Key? key, this.userLocation})
       : super(key: key);
 
-  final CustomLocation userLocation;
-
-//TODO static data to be removed
-
-  final Mechanic chosenMechanic = Mechanic(
-      name: "Mohamed",
-      email: "mohamed@gmail.com",
-      nationalID: "123",
-      phoneNumber: "012",
-      isCenter: true,
-      type: Type.mechanic,
-      loc: CustomLocation(latitude: 50, longitude: 50, address: "hello WOrld"),
-      avatar:
-          "https://imagesvc.meredithcorp.io/v3/mm/image?url=https%3A%2F%2Fstatic.onecms.io%2Fwp-content%2Fuploads%2Fsites%2F20%2F2021%2F03%2F29%2Fbrad-pitt.jpg");
-
-  final TowProvider chosenTowProvider = TowProvider(
-      name: "Sergi",
-      email: "sergi@email.net",
-      nationalID: "123",
-      phoneNumber: "012",
-      type: Type.provider,
-      isCenter: false,
-      loc: CustomLocation(
-          latitude: 50, longitude: 50, address: "Khaled ebn el walid"),
-      avatar:
-          "https://imagesvc.meredithcorp.io/v3/mm/image?url=https%3A%2F%2Fstatic.onecms.io%2Fwp-content%2Fuploads%2Fsites%2F20%2F2021%2F03%2F29%2Fbrad-pitt.jpg");
-
-  late Mechanic? mechanic;
-  late TowProvider? provider;
+  CustomLocation? userLocation;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  _SearchingMechanicProviderScreenState createState() =>
+      _SearchingMechanicProviderScreenState();
+}
+
+class _SearchingMechanicProviderScreenState
+    extends ConsumerState<SearchingMechanicProviderScreen> {
+  @override
+  void initState() {
+    super.initState();
+
+    Future.delayed(Duration.zero, () {
+      ref.watch(rsaProvider.notifier).assignUserLocation(widget.userLocation!);
+      requestRSA();
+    });
+  }
+
+//TODO static data to be removed
+  @override
+  Widget build(BuildContext context) {
     RSANotifier rsaNotifier = ref.watch(rsaProvider.notifier);
+    // requestRSA();
     return Scaffold(
       backgroundColor: const Color(0xFFd1d9e6),
       body: SafeArea(
@@ -194,5 +179,90 @@ class SearchingMechanicProviderScreen extends ConsumerWidget {
       serviceProviderRating: prov.rating,
       serviceProviderAddress: prov.address,
     );
+  }
+
+  _getRsaDataStream() async {
+    DatabaseReference rsaRef = FirebaseDatabase.instance.ref().child("rsa");
+    RSANotifier rsaNotifier = ref.watch(rsaProvider.notifier);
+    RSA rsa = ref.watch(rsaProvider);
+
+    // await rsaNotifier.requestRSA();
+
+    rsaRef.child(rsa.rsaID!).onValue.listen((event) {
+      print("LISTENER");
+      print("${event.snapshot.value}");
+      if (event.snapshot.value != null) {
+        print("data not null");
+        DataSnapshot dataSnapshot = event.snapshot;
+
+        print(dataSnapshot.child("state").value.toString() ==
+                RSA.stateToString(RSAStates.waitingForMechanicResponse)
+            ? "Mech will activate"
+            : "Prov will activate");
+
+        if (dataSnapshot.child("state").value.toString() ==
+            RSA.stateToString(RSAStates.waitingForMechanicResponse)) {
+          print("waiting for Mech is activated");
+
+          dataSnapshot.child("mechanicsResponses").children.forEach((mechanic) {
+            print("MECH $mechanic:\t ${mechanic.value} ${mechanic.key}");
+            if (mechanic.value == "accepted") {
+              print("Someone is accepted");
+              for (var mech
+                  in ref.watch(rsaProvider).newNearbyMechanics!.keys) {
+                print("l2it 7ad");
+                if (mech == mechanic.key) {
+                  print("this is the mechanic${mechanic.key}");
+                  rsaNotifier.assignMechanic(
+                      ref.watch(rsaProvider).newNearbyMechanics![mech]!, false);
+                  rsaNotifier.assignState(RSAStates.waitingForProviderResponse);
+                  print(rsa.mechanic!.name.toString());
+                  print("mech got assigned");
+                }
+                print("end of mech loop");
+              }
+            }
+          });
+        }
+
+        if (dataSnapshot.child("state").value.toString() ==
+            RSA.stateToString(RSAStates.waitingForProviderResponse)) {
+          print("waiting for prov is activated");
+
+          dataSnapshot.child("providersResponses").children.forEach((prov) {
+            print("PROV $prov:\t ${prov.value} ${prov.key}");
+            if (prov.value == "accepted") {
+              print("Someone is accepted");
+              print(rsa.newNearbyProviders);
+              print("Someone is accepted2");
+              for (var provider
+                  in ref.watch(rsaProvider).newNearbyProviders!.keys) {
+                print("l2it 7ad");
+                if (provider == prov.key) {
+                  print("this is the provider${prov.key}");
+                  rsaNotifier.assignProvider(
+                      ref.watch(rsaProvider).newNearbyProviders![provider]!,
+                      false);
+                  print(rsa.towProvider!.name);
+                  print("prov got assigned");
+                }
+                print("end of prov loop");
+              }
+            }
+          });
+        }
+      }
+      print(rsa.mechanic.toString());
+    });
+  }
+
+  requestRSA() async {
+    print("Requesting RSA::");
+    RSANotifier rsaNotifier = ref.watch(rsaProvider.notifier);
+    rsaNotifier.assignRequestTypeToRSA();
+
+    await rsaNotifier.requestRSA();
+    await rsaNotifier.searchNearbyMechanicsAndProviders();
+    _getRsaDataStream();
   }
 }

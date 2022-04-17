@@ -230,7 +230,7 @@ class ServicesProviderCard extends StatelessWidget {
               const SizedBox(width: 15),
               Text(
                 foundType.tr(),
-                style: TextStyle(fontSize: 21),
+                style: const TextStyle(fontSize: 21),
               )
             ],
           ),

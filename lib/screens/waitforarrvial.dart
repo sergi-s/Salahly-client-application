@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 
 class WaitArrvial extends StatelessWidget {
@@ -25,7 +24,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-
   // we have initialized active step to 0 so that
   // our stepper widget will start from first step
   int _activeCurrentStep = 0;
@@ -33,84 +31,68 @@ class _MyHomePageState extends State<MyHomePage> {
   TextEditingController Time = TextEditingController();
   TextEditingController Mi = TextEditingController();
 
-
   // Here we have created list of steps
   // that are required to complete the form
   List<Step> stepList() => [
-    // This is step1 which is called Account.
-    // Here we will fill our personal details
-    Step(
-      state: _activeCurrentStep <= 0 ? StepState.editing : StepState.complete,
-      isActive: _activeCurrentStep >= 0,
-      title: const Text('Received'),
-      content: Container(
-        child: Column(
-          children: [
-            Image.asset('assets/images/tow-truck.png'),
-
-
-
-            Container(
-              child:
-              Text('Your Tow Truck is being prepared..',
-                textAlign: TextAlign.start,
-                style: const TextStyle(fontWeight: FontWeight.bold,fontSize: 18),
-
-
-
-              ),
-            ),
-
-
-          ],
-
-        ),
-      ),
-    ),
-    // This is Step2 here we will enter our address
-
-
-    // This is Step3 here we will display all the details
-    // that are entered by the user
-    Step(
-        state: StepState.complete,
-        isActive: _activeCurrentStep >= 1,
-        title: const Text('On The Way'),
-        content: Container(
+        // This is step1 which is called Account.
+        // Here we will fill our personal details
+        Step(
+          state:
+              _activeCurrentStep <= 0 ? StepState.editing : StepState.complete,
+          isActive: _activeCurrentStep >= 0,
+          title: const Text('Received'),
+          content: Container(
             child: Column(
+              children: [
+                Image.asset('assets/images/tow-truck.png'),
+                Container(
+                  child: Text(
+                    'Your Tow Truck is being prepared..',
+                    textAlign: TextAlign.start,
+                    style: const TextStyle(
+                        fontWeight: FontWeight.bold, fontSize: 18),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+        // This is Step2 here we will enter our address
+
+        // This is Step3 here we will display all the details
+        // that are entered by the user
+        Step(
+            state: StepState.complete,
+            isActive: _activeCurrentStep >= 1,
+            title: const Text('On The Way'),
+            content: Container(
+                child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-
                 Image.asset('assets/images/tow-truck.png'),
                 Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Container(
-
-                child:
-                  Text('Estimated time: ${Time.text}',
-                  textAlign: TextAlign.center,
-                    style: const TextStyle(fontWeight: FontWeight.bold,fontSize: 16),
-
-                ),
-                ),
-                Container(
-                    child: Text(' ${Mi.text}mi',
-                  textAlign: TextAlign.center,
-                      style: const TextStyle(fontWeight: FontWeight.bold,fontSize: 16),
-
-                )
-
-
-
-                ),
-
-          ])
-
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Container(
+                        child: Text(
+                          'Estimated time: ${Time.text}',
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 16),
+                        ),
+                      ),
+                      Container(
+                          child: Text(
+                        ' ${Mi.text}mi',
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 16),
+                      )),
+                    ])
               ],
             )))
-  ];
+      ];
 
   @override
   Widget build(BuildContext context) {
@@ -118,7 +100,10 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         centerTitle: true,
         backgroundColor: Colors.deepPurpleAccent,
-        title: const Text('Waiting For Arrival',style: TextStyle(color: Colors.white), ),
+        title: const Text(
+          'Waiting For Arrival',
+          style: TextStyle(color: Colors.white),
+        ),
       ),
       // Here we have initialized the stepper widget
       body: Stepper(
@@ -133,7 +118,6 @@ class _MyHomePageState extends State<MyHomePage> {
                 onPressed: details.onStepCancel,
                 child: const Text('CANCEL'),
               ),
-
             ],
           );
         },
@@ -163,11 +147,7 @@ class _MyHomePageState extends State<MyHomePage> {
         },
 
         // onStepTap allows to directly click on the particular step we want
-
-
       ),
     );
   }
 }
-
-
