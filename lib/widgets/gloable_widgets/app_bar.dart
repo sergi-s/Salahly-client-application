@@ -8,13 +8,22 @@ PreferredSizeWidget salahlyAppBar({String? title}) {
             fit: BoxFit.contain, scale: 50),
     centerTitle: true,
     backgroundColor: const Color(0xff193566),
-    flexibleSpace: Container(
-      alignment: Alignment.centerRight,
-      padding: const EdgeInsets.only(left: 0.0, right: 10.0),
-      child: const CircleAvatar(
-        backgroundImage: AssetImage('assets/images/tarek.jpg'),
-      ),
-    ),
+    actions: [
+      Container(
+        // alignment: Alignment.centerRight,
+        padding: const EdgeInsets.only(left: 0.0, right: 10.0),
+        child: const CircleAvatar(
+          backgroundImage: AssetImage('assets/images/tarek.jpg'),
+        ),
+      )
+    ],
+    // flexibleSpace: Container(
+    //   alignment: Alignment.centerRight,
+    //   padding: const EdgeInsets.only(left: 0.0, right: 10.0),
+    //   child: const CircleAvatar(
+    //     backgroundImage: AssetImage('assets/images/tarek.jpg'),
+    //   ),
+    // ),
   );
 }
 
