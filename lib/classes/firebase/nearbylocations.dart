@@ -20,8 +20,7 @@ class NearbyLocations {
         longitude: 29.918180,
         name: "1",
         // name: "mech 1",
-        type: LocationType.mechanic
-    );
+        type: LocationType.mechanic);
     CustomLocation loc_2 = CustomLocation(
         latitude: 31.207545,
         longitude: 29.919915,
@@ -133,22 +132,28 @@ stt38c5j0s
     final rsa = ref.watch(rsaProvider.notifier);
 
     ///TODO insert user location
+    print("Inside getNearbyMechanicsAndProviders::");
     Geofire.queryAtLocation(lat, long, radius)?.listen((map) {
+      print("Inside getNearbyMechanicsAndProviders::2");
       if (map != null) {
         var callBack = map['callBack'];
 
         //latitude will be retrieved from map['latitude']
         //longitude will be retrieved from map['longitude']
+        print("Inside getNearbyMechanicsAndProviders::333");
         switch (callBack) {
           case Geofire.onKeyEntered:
+            print("Inside getNearbyMechanicsAndProviders::33");
             getMechanicOrProviderData(map["key"]).then((value) {
               value.loc = CustomLocation(
                   latitude: map['latitude'], longitude: map['longitude']);
               if (value is Mechanic) {
+                print("Inside getNearbyMechanicsAndProviders::3");
+                rsa.onFindNewMechanic(value);
+
                 nearbyMechanics.add(value);
                 rsa.assignNearbyMechanics(nearbyMechanics);
 
-                rsa.onFindNewMechanic(value);
                 print("Added mechanic: " + value.name!);
               } else if (value is TowProvider) {
                 nearbyProviders.add(value);

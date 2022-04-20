@@ -3,6 +3,7 @@ import 'package:slahly/classes/models/location.dart';
 import 'dart:math' show cos, sqrt, asin;
 
 import '../http_request.dart';
+import 'geocoding.dart';
 
 Future _checkLocationPermission() async {
   bool serviceEnabled;
@@ -47,7 +48,8 @@ Future<CustomLocation> getUserLocation() async {
   });
   Position pos = await Geolocator.getCurrentPosition(
       desiredAccuracy: LocationAccuracy.high);
-  return CustomLocation(longitude: pos.longitude, latitude: pos.latitude);
+  String address = await searchCoordinateAddress_google(pos.latitude,pos.longitude);
+  return CustomLocation(longitude: pos.longitude, latitude: pos.latitude,address: address);
 }
 
 double calculateDistance(lat1, lon1, lat2, lon2) {
