@@ -32,15 +32,16 @@ class AddCarDialog extends StatelessWidget {
           return AlertDialog(
             insetPadding: EdgeInsets.all(8.0),
             shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
-            title: Text('Add_Car'.tr()),
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
+            title: Text('Add_Car'.tr(), style: TextStyle(
+              color: Color(0xFF193566),
+            )),
             content: Container(
                 width: MediaQuery.of(context).size.width,
                 child: SingleChildScrollView(
                   child: Column(
                     children: [
-                      Image.asset(
-                        'assets/images/car_management/addcar.png',
+                      Image.asset('assets/images/car_management/addcar.png',
                         fit: BoxFit.contain,
                         height: 150,
                       ),
@@ -103,20 +104,22 @@ class AddCarDialog extends StatelessWidget {
                   ),
                 )),
             actions: <Widget>[
-              new FlatButton(
-                textColor: Colors.white,
-                child: new Text('Send'.tr()),
-                color: Colors.black,
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              ),
+
               new FlatButton(
                 child: new Text('Cancel'.tr()),
                 onPressed: () {
                   Navigator.of(context).pop();
                 },
-              )
+              ),
+
+              new FlatButton(
+                textColor: Colors.white,
+                child: new Text('Send'.tr()),
+                color: Color(0xFF193566),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
             ],
           );
         });
