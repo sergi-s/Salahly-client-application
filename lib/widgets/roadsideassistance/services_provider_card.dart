@@ -39,17 +39,16 @@ class ServicesProviderCard extends StatelessWidget {
               title: Row(
                 children: [
                   Text(serviceProviderType!),
-                  Icon((serviceProviderIsCenter ?? false) ? Icons.badge : null)
+                  Icon((serviceProviderIsCenter ?? false) ? Icons.badge : null),
+                  SizedBox(width: MediaQuery.of(context).size.height * 0.1),
+                  IconButton(
+                      icon: const Icon(Icons.close),
+                      onPressed: () {
+                        Navigator.pop(context);
+                      })
                 ],
               ),
               content: getContent(),
-              actions: <Widget>[
-                IconButton(
-                    icon: const Icon(Icons.close),
-                    onPressed: () {
-                      Navigator.pop(context);
-                    })
-              ],
             ));
   }
 
@@ -212,6 +211,7 @@ class ServicesProviderCard extends StatelessWidget {
       child: Center(
         child: GestureDetector(
           onTap: () {
+
             customDialog(context);
           },
           child: Row(
