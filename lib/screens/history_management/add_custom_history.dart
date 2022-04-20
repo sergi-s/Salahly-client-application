@@ -86,8 +86,6 @@ class CustomHistory extends StatelessWidget {
                   keyboardType: TextInputType.multiline,
                 ),
                 TextField(
-                  enabled: false,
-                  readOnly: true,
                   decoration: InputDecoration(
                     labelText: 'Mechanic_Report',
                   ),
