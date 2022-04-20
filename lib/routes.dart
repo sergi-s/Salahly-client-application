@@ -35,7 +35,7 @@ import 'package:slahly/screens/userMangament/choose_car.dart';
 
 class Routing {
   get router => GoRouter(
-        initialLocation: LoginSignupScreen.routeName,
+        initialLocation: CheckLogin.routeName,
         routes: <GoRoute>[
           GoRoute(
             //TESTING

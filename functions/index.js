@@ -167,7 +167,7 @@ exports.onMechanicOrProviderResponse = functions.database.ref("/{requests}/{rece
      console.log("requestType: "+requestType);
      console.log("responses: "+responses); */
     // if request type is rsa we need to make only 1 mechanic accept, and update it in rsa
-    if (requestType === "rsa" && state === "accepted") {
+    if (requestType === "rsa" &&  (state === "accepted" || state === "denied")) {
       // check if anyone accepted before,
       let someoneAccepted = false;
 
@@ -191,12 +191,11 @@ exports.onMechanicOrProviderResponse = functions.database.ref("/{requests}/{rece
       }
       // if no one accepted, save the receiver acceptance
       else {
-        console.log("REACHED: " + 4);
         await idsSnapshot.child(receiverID).ref.set("accepted");
         // notify user that we found a mechanic or a provider
         let userID = (await idsSnapshot.ref.parent.parent.child("userID").get()).val();
         let userToken = await getFCMTokenOfSingleUser(userID);
-        console.log("REACHED: " + 5);
+        if(!userToken) return;
         return await sendNotificationSingleClient({
           token: userToken,
           title: "Road side assistance request",
@@ -209,15 +208,34 @@ exports.onMechanicOrProviderResponse = functions.database.ref("/{requests}/{rece
           },
         });
       }
-    } else if (requestType === "wsa" && (state === "accepted" || state === "canceled")) {
+    } else if (requestType === "wsa" && (state === "accepted" || state === "denied")) {
       // set the mechanic as accepted or canceled in wsa request
       await admin.database().ref("/wsa/" + requestID + "/" + responses + "/" + receiverID).ref.set(state);
       // notify user that we found a mechanic or a provider
       let userID = (await admin.database().ref("/wsa/" + requestID).child("userID").get()).val();
       let userToken = await getFCMTokenOfSingleUser(userID);
+      if(!userToken) return;
       return await sendNotificationSingleClient({
         token: userToken,
         title: "Work shop assistance request",
+        body: "Found a nearby available " + receiver,
+        data: {
+          requestType: requestType,
+          requestID: requestID,
+          accepterType: receiver,
+          accepterID: receiverID,
+        },
+      });
+    }
+    else if(requestType === "tta"  && (state === "accepted" || state === "denied")){
+      await admin.database().ref("/tta/" + requestID + "/" + responses + "/" + receiverID).ref.set(state);
+      // notify user that we found a mechanic or a provider
+      let userID = (await admin.database().ref("/tta/" + requestID).child("userID").get()).val();
+      let userToken = await getFCMTokenOfSingleUser(userID);
+      if(!userToken) return;
+      return await sendNotificationSingleClient({
+        token: userToken,
+        title: "Tow truck assistance request",
         body: "Found a nearby available " + receiver,
         data: {
           requestType: requestType,
