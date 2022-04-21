@@ -40,9 +40,8 @@ class RSANotifier extends StateNotifier<RSA> {
 
 //Sergi Samir Boules Rizkallah
   void onFindNewMechanic(Mechanic nearbyMechanic) async {
+    print("onFIndNew mechanic::");
     //I dont want to mess up the old code.
-
-    if (_requestType == _RequestType.TTA) return;
 
     //copy to new map (make sure their is no conflict between call by ref and call by value) and not null
     Map<String, Mechanic> tempMap = {...state.newNearbyMechanics ?? {}};
@@ -59,12 +58,13 @@ class RSANotifier extends StateNotifier<RSA> {
           _requestType == _RequestType.WSA ? wsaRef : rsaRef;
 
       print(_requestType == _RequestType.WSA ? "WSA" : "RSA");
-
-      localRef
-          .child(state.rsaID!)
-          .child("mechanicsResponses")
-          .child(nearbyMechanic.id!)
-          .set("pending");
+      if (_requestType != _RequestType.TTA) {
+        localRef
+            .child(state.rsaID!)
+            .child("mechanicsResponses")
+            .child(nearbyMechanic.id!)
+            .set("pending");
+      }
     }
     state = state.copyWith(newNearbyMechanics: tempMap);
     print("MAP2:${state.newNearbyMechanics!}");
@@ -73,8 +73,6 @@ class RSANotifier extends StateNotifier<RSA> {
 //Sergi Samir Boules Rizkallah
   void onFindNewProvider(TowProvider newNearbyProvider) async {
     //I dont want to mess up the old code.
-
-    if (_requestType == _RequestType.TTA) return;
 
     //copy to new map (make sure their is no conflict between call by ref and call by value) and not null
     Map<String, TowProvider> tempMap = {...state.newNearbyProviders ?? {}};
@@ -92,15 +90,14 @@ class RSANotifier extends StateNotifier<RSA> {
 
       print(_requestType == _RequestType.WSA ? "WSA" : "RSA");
 
-      localRef
-          .child(state.rsaID!)
-          .child("providersResponses")
-          .child(newNearbyProvider.id!)
-          .set("pending");
+      if (_requestType != _RequestType.TTA) {
+        localRef
+            .child(state.rsaID!)
+            .child("providersResponses")
+            .child(newNearbyProvider.id!)
+            .set("pending");
+      }
     }
-    // }
-    // }
-
     // print("MAP2:${state.newNearbyMechanics!.keys}");
     state = state.copyWith(newNearbyProviders: tempMap);
     print("PROV::MAP2:${state.newNearbyProviders}");
@@ -305,23 +302,25 @@ class RSANotifier extends StateNotifier<RSA> {
       "state": RSA.stateToString(RSAStates.waitingForProviderResponse)
     };
     print("b4 for");
-    for (var prov in state.nearbyProviders!) {
-      ttadata["providersResponses"][prov.id.toString()] = "pending";
-    }
-    print(ttadata["providersResponses"].toString());
 
+    print(ttadata["providersResponses"].toString());
     print("kimoooo");
     await newRSA.set(ttadata);
     print("lolaaddddd");
     state = state.copyWith(rsaID: newRSA.key);
     return newRSA.key;
   }
+
   assignRequestTypeToRSA() {
     _requestType = _RequestType.RSA;
   }
 
   assignRequestTypeToWSA() {
     _requestType = _RequestType.WSA;
+  }
+
+  assignRequestTypeToTTA() {
+    _requestType = _RequestType.TTA;
   }
 
   getRequestType() => _requestType;

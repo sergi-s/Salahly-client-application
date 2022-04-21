@@ -26,7 +26,7 @@ import 'package:slahly/screens/switchLanguage.dart';
 import 'package:slahly/screens/test_screens/test_user_SM.dart';
 import 'package:slahly/screens/userMangament/addSubowner.dart';
 import 'package:slahly/screens/userMangament/manageSubowner.dart';
-import 'package:slahly/screens/userMangament/select.dart';
+import 'screens/roadsideassistance/arrival.dart';
 import 'package:slahly/screens/userMangament/transferOwner.dart';
 import 'package:slahly/screens/test_screens/testscreen_foula.dart';
 import 'package:slahly/screens/Describeproblem.dart';
@@ -163,13 +163,13 @@ class Routing {
             builder: (context, state) => Choose_car(),
           ),
           GoRoute(
-            path: Select.routeName,
+            path: Arrival.routeName,
             // builder: (context, state) => Select(state.extra as bool),
-            builder: (context, state) => Select(type: state.extra as bool),
+            builder: (context, state) => Arrival(type: state.extra as bool),
           ),
           GoRoute(
             path: WSAScreen.routeName,
-            builder: (context,state) => WSAScreen(),
+            builder: (context, state) => WSAScreen(),
           ),
         ],
       );

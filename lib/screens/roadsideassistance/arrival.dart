@@ -1,58 +1,23 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:animate_icons/animate_icons.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:go_router/go_router.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:slahly/classes/firebase/roadsideassistance/roadsideassistance.dart';
-import 'package:slahly/screens/roadsideassistance/chooseprovider.dart';
 
 import '../../classes/provider/rsadata.dart';
-import '../../classes/provider/user_data.dart';
 
-// class Select extends StatelessWidget {
-//   // bool change;
-//
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     // if (change) {
-//     //   //TODOs
-//     //   context.go("choose PTOVE PAGE");
-//     // }
-//     final topPaddin
-//     return Container(
-//       decoration: BoxDecoration(
-//           gradient: LinearGradient(colors: [
-//         Color.fromRGBO(145, 131, 222, 1),
-//         Color.fromRGBO(160, 148, 227, 1),
-//       ], begin: Alignment.topCenter, end: Alignment.bottomCenter)),
-//       child: Scaffold(
-//         backgroundColor: Colors.transparent,
-//         body: Column(
-//           children: [
-//             SizedBox(height: ,)
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-// }
-// Select(this.change);
-
-class Select extends StatefulWidget {
+class Arrival extends StatefulWidget {
   static const routeName = "/Select";
   bool? type;
 
-  Select({this.type});
+  Arrival({this.type});
 
   @override
-  _SelectState createState() => _SelectState();
+  _ArrivalState createState() => _ArrivalState();
 }
 
-class _SelectState extends State<Select> with SingleTickerProviderStateMixin {
+class _ArrivalState extends State<Arrival> with SingleTickerProviderStateMixin {
   late final AnimationController _controller = AnimationController(
     vsync: this,
     duration: const Duration(seconds: 3),
@@ -74,12 +39,7 @@ class _SelectState extends State<Select> with SingleTickerProviderStateMixin {
     return Consumer(
       builder: (context, ref, child) {
         final RSA rsa = ref.watch(rsaProvider);
-        if (rsa.towProvider?.name == null) {
-          print("sleep");
-
-          context.go(ChooseProviderScreen.routeName);
-          print("mama 7elwa");
-        }
+        // if (rsa.towProvider?.name == null) {}
         return Scaffold(
             backgroundColor: const Color(0xFFd1d9e6),
             body: CustomPaint(
@@ -122,10 +82,6 @@ class _SelectState extends State<Select> with SingleTickerProviderStateMixin {
 
                                   return Text(rsa.towProvider?.name ??
                                       "searching for provider");
-
-                                  // rsa.towProvider?.name == null
-                                  //     ? context.go(ChooseProviderScreen.routeName)
-                                  //     : null;
                                 },
                               ),
                               Row(

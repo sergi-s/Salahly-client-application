@@ -10,7 +10,7 @@ import 'package:slahly/screens/test_screens/test_user_SM.dart';
 import 'package:slahly/screens/test_screens/testscreen_foula.dart';
 import 'package:slahly/screens/userMangament/choose_car.dart';
 import 'package:slahly/screens/userMangament/manageSubowner.dart';
-import 'package:slahly/screens/userMangament/select.dart';
+import 'roadsideassistance/arrival.dart';
 
 import 'dropOff_screens/dropOff_location_screen.dart';
 
@@ -38,10 +38,11 @@ class AllScreens extends StatelessWidget {
                   btn(MyLocationScreen.routeName, context),
                   btn(TestScreen_.routeName, context),
                   btn(ChooseMechanicScreen.routeName, context),
-                  btn(Select.routeName, context),
+                  btn(Arrival.routeName, context),
                   btn(TestUserSM.routeName, context),
                   btn(WSAScreen.routeName, context),
-                  btn(TestScreen_nearbymechanics_and_create_rsa.routeName, context),
+                  btn(TestScreen_nearbymechanics_and_create_rsa.routeName,
+                      context),
                   btn(SwitchLanguageScreen.routeName, context),
                   btn(SearchingMechanicProviderScreen.routeName, context),
                   btn(ManageSubowner.routeName, context),
