@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -17,6 +19,7 @@ import '../../main.dart';
 class ChooseProviderScreen extends ConsumerWidget {
   static const routeName = "/chooseproviderscreen";
   String providerH = "";
+  late StreamSubscription _myStream;
   List<TowProvider> providers = [
     TowProvider(
         nationalID: '123132',
@@ -83,7 +86,8 @@ class ChooseProviderScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, ref) {
-    _getStream(context, ref);
+    // _getStream(context, ref);
+    getAcceptedMechanic(ref);
     final rsaNotifier = ref.watch(rsaProvider.notifier);
     final RSA rsa = ref.watch(rsaProvider);
     return Scaffold(
@@ -124,7 +128,6 @@ class ChooseProviderScreen extends ConsumerWidget {
                         itemBuilder: (BuildContext, index) {
                           return GestureDetector(
                             onTap: () async {
-                              print(rsa.rsaID);
                               providerH =
                                   rsa.nearbyProviders![index].id.toString();
                               print("heshaamamam" + providerH);
@@ -132,24 +135,25 @@ class ChooseProviderScreen extends ConsumerWidget {
                                   rsa.nearbyProviders![index].id.toString(),
                                   ref);
 
-                              context.push(Arrival.routeName, extra: true);
+                              // context.push(Arrival.routeName, extra: true);
                             },
                             child: ChooseTile(
-                                email: rsa.nearbyProviders![index].email
+                                email: rsa.acceptedNearbyProviders![index].email
                                     .toString(),
-                                avatar: rsa.nearbyProviders![index].avatar
+                                avatar: rsa
+                                    .acceptedNearbyProviders![index].avatar
                                     .toString(),
-                                phone: rsa.nearbyProviders![index].phoneNumber
+                                phone: rsa
+                                    .acceptedNearbyProviders![index].phoneNumber
                                     .toString(),
-                                name:
-                                    rsa.nearbyProviders![index].name.toString(),
-                                address: "",
+                                name: rsa.acceptedNearbyProviders![index].name
+                                    .toString(),
                                 type: Type.provider,
                                 isCenter: false),
                           );
                         },
                         // itemCount: providers.length,
-                        itemCount: rsa.nearbyProviders!.length,
+                        itemCount: rsa.acceptedNearbyProviders!.length,
                         shrinkWrap: true,
                         padding: const EdgeInsets.all(5),
                         scrollDirection: Axis.vertical,
@@ -161,50 +165,109 @@ class ChooseProviderScreen extends ConsumerWidget {
         ));
   }
 
-  _getStream(BuildContext context, ref) async {
+  //
+  // _getStream(BuildContext context, ref) async {
+  //   DatabaseReference ttaRef = FirebaseDatabase.instance.ref().child("tta");
+  //   RSANotifier rsaNotifier = ref.watch(rsaProvider.notifier);
+  //   RSA rsa = ref.watch(rsaProvider);
+  //   ttaRef.child(rsa.rsaID!).onValue.listen((event) {
+  //     print(rsa.rsaID);
+  //     if (event.snapshot.value != null) {
+  //       print("data  null");
+  //       DataSnapshot dataSnapshot = event.snapshot;
+  //       if (dataSnapshot.child("state").value.toString() ==
+  //           RSA.stateToString(RSAStates.waitingForProviderResponse)) {
+  //         dataSnapshot.child("providersResponses").children.forEach((prov) {
+  //           if (prov.value == "accepted") {
+  //             print("provider accepted");
+  //             for (var provider
+  //                 in ref.watch(rsaProvider).newNearbyProviders!.keys) {
+  //               if (provider == prov.key) {
+  //                 print("provider assigned");
+  //                 print("provider accepted id::${provider}");
+  //                 rsaNotifier.assignProvider(
+  //                     ref.watch(rsaProvider).newNearbyProviders[provider],
+  //                     false);
+  //               }
+  //             }
+  //           } else if (prov.value == "rejected") {
+  //             print("rejectttttttt");
+  //             for (var provider
+  //                 in ref.watch(rsaProvider).newNearbyProviders!.keys) {
+  //               print("prev assigned tow provider${providerH}");
+  //               print("provider rejected${provider}");
+  //               bool isSame = provider == providerH;
+  //               print(isSame);
+  //               if (provider == prov.key && isSame) {
+  //                 rsaNotifier.assignProvider(
+  //                     TowProvider(name: null, email: null), false);
+  //                 providerH = "";
+  //                 // print("dialoggg");
+  //                 // customDialog(context);
+  //                 // print("b3d dia");
+  //                 context.pop();
+  //               }
+  //             }
+  //           }
+  //         });
+  //       }
+  //     }
+  //   });
+  // }
+  getAcceptedMechanic(ref) {
     DatabaseReference ttaRef = FirebaseDatabase.instance.ref().child("tta");
-    RSANotifier rsaNotifier = ref.watch(rsaProvider.notifier);
+
+    print("IN STREAM FUNCTION ::");
     RSA rsa = ref.watch(rsaProvider);
-    ttaRef.child(rsa.rsaID!).onValue.listen((event) {
-      print(rsa.rsaID);
+    if (rsa.rsaID == null) return [];
+
+    _myStream = ttaRef.child(rsa.rsaID!).onValue.listen((event) {
+      print("WSA LISTENER");
+      print("${event.snapshot.value}");
       if (event.snapshot.value != null) {
-        print("data  null");
+        //TODO: add the constraints of rsa state if needed
+
+        bool flagAllRejected = true;
+        bool flagFindYet = false;
+
         DataSnapshot dataSnapshot = event.snapshot;
-        if (dataSnapshot.child("state").value.toString() ==
-            RSA.stateToString(RSAStates.waitingForProviderResponse)) {
-          dataSnapshot.child("providersResponses").children.forEach((prov) {
-            if (prov.value == "accepted") {
-              print("provider accepted");
-              for (var provider
-                  in ref.watch(rsaProvider).newNearbyProviders!.keys) {
-                if (provider == prov.key) {
-                  print("provider assigned");
-                  print("provider accepted id::${provider}");
-                  rsaNotifier.assignProvider(
-                      ref.watch(rsaProvider).newNearbyProviders[provider],
-                      false);
-                }
-              }
-            } else if (prov.value == "rejected") {
-              print("rejectttttttt");
-              for (var provider
-                  in ref.watch(rsaProvider).newNearbyProviders!.keys) {
-                print("prev assigned tow provider${providerH}");
-                print("provider rejected${provider}");
-                bool isSame = provider == providerH;
-                print(isSame);
-                if (provider == prov.key && isSame) {
-                  rsaNotifier.assignProvider(
-                      TowProvider(name: null, email: null), false);
-                  providerH = "";
-                  // print("dialoggg");
-                  // customDialog(context);
-                  // print("b3d dia");
-                  context.pop();
-                }
+
+        dataSnapshot
+            .child("providersResponses")
+            .children
+            .forEach((dataSnapShotProvider) {
+          flagFindYet = true;
+          print("PROV::333333333333");
+          print("PROV::Stream::${dataSnapShotProvider.value}");
+          if (dataSnapShotProvider.value == "pending") {
+            flagAllRejected = false;
+          }
+          if (dataSnapShotProvider.value == "accepted") {
+            flagAllRejected = false;
+            print(
+                "PROV::inside if accepted and ${dataSnapShotProvider.key} accepted");
+
+            print(
+                "PROV::AAAAAAAAAAAAAAAAAAAAA${ref.watch(rsaProvider).newNearbyProviders}");
+            for (var towProvider
+                in ref.watch(rsaProvider).newNearbyProviders!.keys) {
+              print(
+                  "${towProvider} ====== ${dataSnapShotProvider.key}-> ${dataSnapShotProvider.key == towProvider}");
+              print("PROV::do I already have him?");
+              if (dataSnapShotProvider.key == towProvider) {
+                print(
+                    "PROV::YESSSSSSSSSSSSS->${ref.watch(rsaProvider).newNearbyProviders![towProvider]!.name}");
+                ref.watch(rsaProvider.notifier).addAcceptedNearbyProvider(
+                    ref.watch(rsaProvider).newNearbyProviders![towProvider]!);
+                // print(ref.watch(rsaProvider).);
               }
             }
-          });
+          }
+        });
+        if (flagAllRejected && flagFindYet) {
+          //TODO: Show a dialog box (ALL rejected Please request later)
+          // allRejected(context, "Providers");
+          print("All providers rejected");
         }
       }
     });
