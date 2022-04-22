@@ -172,6 +172,10 @@ class Routing {
             path: WSAScreen.routeName,
             builder: (context, state) => WSAScreen(),
           ),
+          GoRoute(
+            path: TestUserCAR.routeName,
+            builder: (context, state) => TestUserCAR(),
+          ),
         ],
       );
 }
