@@ -30,11 +30,13 @@ class PredictionTile extends ConsumerWidget {
         // Future.delayed(Duration.zero, ()  async {
         rsaNotifier.assignRequestTypeToTTA();
         await rsaNotifier.requestTta();
+        print("mum");
+
         print("dad");
 
         rsaNotifier.searchNearbyMechanicsAndProviders();
         // _getStream(context, ref);
-
+        print(rsa.rsaID);
         print("xxxxxxxx");
         context.push(ChooseProviderScreen.routeName);
         // });

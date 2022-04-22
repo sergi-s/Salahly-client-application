@@ -19,6 +19,7 @@ import '../../main.dart';
 class ChooseProviderScreen extends ConsumerWidget {
   static const routeName = "/chooseproviderscreen";
   String providerH = "";
+
   late StreamSubscription _myStream;
   List<TowProvider> providers = [
     TowProvider(
@@ -78,18 +79,21 @@ class ChooseProviderScreen extends ConsumerWidget {
   //     }
   //   });
   // }
-  void chosenProvider(String id, ref) {
-    final RSA rsa = ref.watch(rsaProvider);
-    DatabaseReference tta = dbRef.child("tta");
-    tta.child(rsa.rsaID!).child("providersResponses").child(id!).set("pending");
-  }
+  // void chosenProvider(String id, ref) {
+  //   final RSA rsa = ref.watch(rsaProvider);
+  //   DatabaseReference tta = dbRef.child("tta");
+  //   tta.child(rsa.rsaID!).child("providersResponses").child(id!).set("pending");
+  // }
 
   @override
   Widget build(BuildContext context, ref) {
     // _getStream(context, ref);
     getAcceptedMechanic(ref);
+    check(context, ref);
+
     final rsaNotifier = ref.watch(rsaProvider.notifier);
     final RSA rsa = ref.watch(rsaProvider);
+
     return Scaffold(
         backgroundColor: const Color(0xFFd1d9e6),
         appBar: AppBar(
@@ -128,12 +132,15 @@ class ChooseProviderScreen extends ConsumerWidget {
                         itemBuilder: (BuildContext, index) {
                           return GestureDetector(
                             onTap: () async {
-                              providerH =
-                                  rsa.nearbyProviders![index].id.toString();
+                              providerH = rsa.acceptedNearbyProviders![index].id
+                                  .toString();
                               print("heshaamamam" + providerH);
-                              chosenProvider(
-                                  rsa.nearbyProviders![index].id.toString(),
-                                  ref);
+                              // chosenProvider(
+                              //     rsa.acceptedNearbyProviders![index].id
+                              //         .toString(),
+                              //     ref);
+                              rsaNotifier.assignProvider(
+                                  rsa.acceptedNearbyProviders![index], false);
 
                               // context.push(Arrival.routeName, extra: true);
                             },
@@ -214,6 +221,22 @@ class ChooseProviderScreen extends ConsumerWidget {
   //     }
   //   });
   // }
+
+  void check(BuildContext context, ref) {
+    print(">>Checking");
+    TowProvider? tempTow = ref.watch(rsaProvider).towProvider;
+    Future.delayed(Duration.zero, () async {
+      if (tempTow != null) {
+        print(">>>>prov+mech page");
+        await _myStream.cancel();
+        context.go(Arrival.routeName, extra: true);
+        return;
+      }
+
+      return;
+    });
+  }
+
   getAcceptedMechanic(ref) {
     DatabaseReference ttaRef = FirebaseDatabase.instance.ref().child("tta");
 

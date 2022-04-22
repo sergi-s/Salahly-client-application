@@ -85,18 +85,19 @@ class RSANotifier extends StateNotifier<RSA> {
       print("PROV::Temp2:${tempMap}");
 
       print("PROV:::::add ${newNearbyProvider.name} to request table");
-      DatabaseReference localRef =
-          _requestType == _RequestType.WSA ? wsaRef : rsaRef;
+      DatabaseReference localRef = _requestType == _RequestType.WSA
+          ? wsaRef
+          : (_requestType == _RequestType.RSA)
+              ? rsaRef
+              : ttaRef;
 
       print(_requestType == _RequestType.WSA ? "WSA" : "RSA");
 
-      if (_requestType != _RequestType.TTA) {
-        localRef
-            .child(state.rsaID!)
-            .child("providersResponses")
-            .child(newNearbyProvider.id!)
-            .set("pending");
-      }
+      localRef
+          .child(state.rsaID!)
+          .child("providersResponses")
+          .child(newNearbyProvider.id!)
+          .set("pending");
     }
     // print("MAP2:${state.newNearbyMechanics!.keys}");
     state = state.copyWith(newNearbyProviders: tempMap);
@@ -305,9 +306,12 @@ class RSANotifier extends StateNotifier<RSA> {
 
     print(ttadata["providersResponses"].toString());
     print("kimoooo");
+    print(newRSA.key);
     await newRSA.set(ttadata);
     print("lolaaddddd");
     state = state.copyWith(rsaID: newRSA.key);
+    print(state.rsaID);
+    print("mona");
     return newRSA.key;
   }
 
