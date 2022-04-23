@@ -1,8 +1,11 @@
 import 'package:easy_localization/easy_localization.dart';
 import "package:flutter/material.dart";
 import 'package:go_router/go_router.dart';
+import 'package:slahly/screens/history_management/view_history.dart';
 
 import 'package:slahly/screens/switchLanguage.dart';
+
+import '../../screens/homepage.dart';
 
 Widget salahlyDrawer(BuildContext context) {
   return Drawer(
@@ -20,27 +23,29 @@ Widget salahlyDrawer(BuildContext context) {
         ),
         ListTile(
           title: const Text(
-            'Add User',
+            'home',
             style: TextStyle(fontWeight: FontWeight.bold),
           ).tr(),
           onTap: () {
             Navigator.pop(context);
+            context.push(HomePage.routeName);
           },
         ),
         ListTile(
-          title: const Text('Update Profile').tr(),
+          title: const Text('updateProfile').tr(),
           onTap: () {
             Navigator.pop(context);
           },
         ),
         ListTile(
-          title: const Text('History').tr(),
+          title: const Text('history').tr(),
           onTap: () {
             Navigator.pop(context);
+            context.push(ViewHistory.routeName);
           },
         ),
         ListTile(
-          title: const Text('Reminder').tr(),
+          title: const Text('reminder').tr(),
           onTap: () {
             Navigator.pop(context);
           },

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:firebase_database/firebase_database.dart';
 import 'package:slahly/classes/models/client.dart';
 import 'package:slahly/classes/models/location.dart';

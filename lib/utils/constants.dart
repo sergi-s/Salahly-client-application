@@ -25,3 +25,7 @@ const int fbdbport = 9000;
 const fbauthport = 9099;
 const _fbcfport = 5001;
 final fbcfurl = "http://"+localHostString+":$_fbcfport/salahny-6bfea/us-central1/";
+
+const bool kReleaseMode = bool.fromEnvironment('dart.vm.product');
+const bool kProfileMode = bool.fromEnvironment('dart.vm.profile');
+const bool kDebugMode = !kReleaseMode && !kProfileMode;

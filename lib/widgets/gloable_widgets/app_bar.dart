@@ -1,4 +1,7 @@
 import "package:flutter/material.dart";
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import 'package:slahly/classes/provider/user_data.dart';
 
 PreferredSizeWidget salahlyAppBar({String? title}) {
   return AppBar(
@@ -9,12 +12,17 @@ PreferredSizeWidget salahlyAppBar({String? title}) {
     centerTitle: true,
     backgroundColor: const Color(0xff193566),
     actions: [
-      Container(
-        // alignment: Alignment.centerRight,
-        padding: const EdgeInsets.only(left: 0.0, right: 10.0),
-        child: const CircleAvatar(
-          backgroundImage: AssetImage('assets/images/tarek.jpg'),
-        ),
+      Consumer(
+        builder: (context, ref, child) {
+          return Container(
+            // alignment: Alignment.centerRight,
+            padding: const EdgeInsets.only(left: 0.0, right: 10.0),
+            child: CircleAvatar(
+              backgroundImage:
+                  NetworkImage(ref.watch(userProvider).avatar ?? ""),
+            ),
+          );
+        },
       )
     ],
     // flexibleSpace: Container(

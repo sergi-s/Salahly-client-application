@@ -1,7 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'divider.dart';
-
+//TODO: delete this
 class DrawerWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {

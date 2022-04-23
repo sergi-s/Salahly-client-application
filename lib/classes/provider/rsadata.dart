@@ -10,8 +10,6 @@ import 'package:slahly/classes/models/towProvider.dart';
 import 'package:slahly/main.dart';
 import 'package:slahly/utils/constants.dart';
 
-// import 'package:slahly/classes/models/road_side_assistance.dart';
-
 // Global for anyone to use it
 final rsaProvider = StateNotifierProvider<RSANotifier, RSA>((ref) {
   return RSANotifier(ref);
@@ -24,6 +22,16 @@ class RSANotifier extends StateNotifier<RSA> {
                 CustomLocation(latitude: 31.206972, longitude: 29.919028)));
   final Ref ref;
   _RequestType? _requestType;
+
+  bool atLeastOneProvider = false;
+  bool atLeastOneMechanic = false;
+
+  Future<bool> atLeastOne(bool type) async {
+    //true mechanic
+    //false provider
+    await Future.delayed(const Duration(minutes: 1));
+    return type ? atLeastOneMechanic : atLeastOneProvider;
+  }
 
   // Setters
   void assignNearbyMechanics(List<Mechanic> nearbyMechanics) {
@@ -38,8 +46,8 @@ class RSANotifier extends StateNotifier<RSA> {
           List<TowProvider> acceptedNearbyProviders) =>
       state = state.copyWith(acceptedNearbyProviders: acceptedNearbyProviders);
 
-//Sergi Samir Boules Rizkallah
   void onFindNewMechanic(Mechanic nearbyMechanic) async {
+    atLeastOneMechanic = true;
     print("onFIndNew mechanic::");
     //I dont want to mess up the old code.
 
@@ -70,8 +78,8 @@ class RSANotifier extends StateNotifier<RSA> {
     print("MAP2:${state.newNearbyMechanics!}");
   }
 
-//Sergi Samir Boules Rizkallah
   void onFindNewProvider(TowProvider newNearbyProvider) async {
+    atLeastOneProvider = true;
     //I dont want to mess up the old code.
 
     //copy to new map (make sure their is no conflict between call by ref and call by value) and not null
