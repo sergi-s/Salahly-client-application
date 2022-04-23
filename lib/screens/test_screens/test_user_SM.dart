@@ -26,9 +26,19 @@ class TestUserSM extends StatefulWidget {
 
 class _State extends State<TestUserSM> {
   @override
+  String? _imageUrl;
+
   void initState() {
     super.initState();
-    fetch();
+    var ref = FirebaseStorage.instance
+        .ref()
+        .child("users")
+        .child("profile_picture")
+        .child(FirebaseAuth.instance.currentUser!.uid);
+    ref.getDownloadURL().then((loc) => setState(() => _imageUrl = loc));
+    setState(() {
+      fetch();
+    });
   }
 
   DatabaseReference user = dbRef.child("users");
@@ -42,6 +52,7 @@ class _State extends State<TestUserSM> {
   String? name;
   String? email;
   String? phone;
+  File? url;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -52,7 +63,7 @@ class _State extends State<TestUserSM> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           CircleAvatar(
-            backgroundImage: _image == null ? null : FileImage(_image!),
+            backgroundImage: (_image != null) ? FileImage(_image!) : null,
           ),
           InkWell(
             onTap: chooseimage,
@@ -61,12 +72,38 @@ class _State extends State<TestUserSM> {
               size: 48,
             ),
           ),
+          CircleAvatar(
+            backgroundImage: NetworkImage("getImage()"),
+          ),
+
+          SizedBox(height: 20),
+          // CircleAvatar(
+          //   backgroundImage: NetworkImage(getImage()),
+          // ),
+
+          // CircleAvatar(
+          //     child: _imageUrl == null
+          //         ? Image.asset(
+          //             'icons/default_profile_icon.png',
+          //             height: 110.0,
+          //           )
+          //         : getImage()),
           SizedBox(height: 20),
           ElevatedButton(
               onPressed: () {
                 updateProfile(context);
               },
               child: Text("update profile")),
+          ElevatedButton(
+              onPressed: () {
+                uploadimage();
+              },
+              child: Text("upload image")),
+          ElevatedButton(
+              onPressed: () {
+                getImage();
+              },
+              child: Text("press")),
           ElevatedButton(
               onPressed: () {
                 fetch();
@@ -119,9 +156,26 @@ class _State extends State<TestUserSM> {
     print(firebaseuser.displayName);
   }
 
+  getImage() async {
+    var ref = FirebaseStorage.instance
+        .ref()
+        .child("users")
+        .child("profile_picture")
+        .child(FirebaseAuth.instance.currentUser!.uid +
+            "_" +
+            basename(_image!.path));
+    var location = await ref.getDownloadURL();
+    var loc = location.toString();
+    print("boooooo");
+    print(location.toString());
+
+    return loc;
+  }
+
   updateProfile(BuildContext context) async {
     final firebaseuser = await FirebaseAuth.instance.currentUser;
     Map<String, dynamic> map = Map();
+
     map['name'] = nameController.text;
     map['address'] = addressController.text;
     map['phoneNumber'] = phoneController.text;
@@ -143,6 +197,7 @@ class _State extends State<TestUserSM> {
     setState(() {
       _image = File(image.path);
     });
+    print(_image);
   }
 
   Future<String> uploadimage() async {
@@ -155,7 +210,11 @@ class _State extends State<TestUserSM> {
             "_" +
             basename(_image!.path))
         .putFile(_image!);
-    return taskSnapshot.ref.getDownloadURL();
+    var url = await taskSnapshot.ref.getDownloadURL();
+    // print("ahoo");
+    // print(url.toString());
+
+    return url;
   }
 }
 
