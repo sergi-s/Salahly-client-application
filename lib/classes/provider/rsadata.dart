@@ -213,7 +213,8 @@ class RSANotifier extends StateNotifier<RSA> {
     assignState(RSAStates.requestingRSA);
     String? rsaID = await _requestWSA();
     if (rsaID != null) {
-      state = state.copyWith(state: RSAStates.created, rsaID: rsaID);
+      state = state.copyWith(
+          state: RSAStates.created, rsaID: rsaID, requestType: RequestType.WSA);
       print("WSA::${rsaID} ==== ${state.rsaID}");
       return true;
     } else {
@@ -243,7 +244,8 @@ class RSANotifier extends StateNotifier<RSA> {
     String? rsaID = await _requestRSA();
     if (rsaID != null) {
       print("aywaaaaaaaaaaa");
-      state = state.copyWith(state: RSAStates.created, rsaID: rsaID);
+      state = state.copyWith(
+          state: RSAStates.created, rsaID: rsaID, requestType: RequestType.RSA);
       print("AyoohID::${rsaID} ==== ${state.rsaID}");
       return true;
     } else {

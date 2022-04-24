@@ -120,5 +120,7 @@
   "didNotFindProvider": "لم نتمكن من ايجاد موفر شاحنات",
   "didNotFindMechanic": "لم نتمكن من ايجاد ميكانيكيه",
   "sorry": "ناسف",
-  "ok": "تمام"
+  "ok": "تمام",
+  "withTowTruck": "مع طلب شاحنه سحب",
+  "withNoTowTruck": "مبدون شاحنه سحب"
 }

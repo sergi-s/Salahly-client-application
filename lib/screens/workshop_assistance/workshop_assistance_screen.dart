@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
+import 'package:slahly/classes/provider/app_data.dart';
 import 'package:slahly/classes/provider/rsadata.dart';
 import 'package:slahly/classes/firebase/roadsideassistance/roadsideassistance.dart';
 import 'package:slahly/screens/userMangament/select.dart';
@@ -118,18 +119,23 @@ class _WSAScreenState extends ConsumerState<WSAScreen> {
                           : ElevatedButton(
                               child: const Text("confirm").tr(),
                               onPressed: () {
+                                if (ref.watch(salahlyClientProvider).requestType != RequestType.NONE) {
+                                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                                    content: Text("There is another onging request"),
+                                  ));
+                                  return ;
+                                }
                                 requestConfirmationDialogue(context,
-                                    titleChildren: [
-                                      const Text("confirm").tr()
-                                    ],
-                                    contentChildren: [
-                                      //TODO: translate el ta7t da
-                                      Text("wsaConfirmation".tr() +
-                                          "\n" +
-                                          (needProvider
-                                              ? "With Tow Provider"
-                                              : "With no Tow Provider"))
-                                    ],
+                                    titleChildren: [const Text("confirm").tr()],
+                                    content: Text("wsaConfirmation".tr() +
+                                        "\n" +
+                                        (needProvider
+                                            ? ("withTowTruck".tr() +
+                                                "at".tr() +
+                                                " " +
+                                                myMapWidgetState.currentState!
+                                                    .currentCustomLoc.address!)
+                                            : "withNoTowTruck".tr())),
                                     actionChildren: [
                                       ElevatedButton(
                                         onPressed: () => Navigator.pop(context),
@@ -146,7 +152,6 @@ class _WSAScreenState extends ConsumerState<WSAScreen> {
                                                 "2=>WE FOUND ${ref.watch(rsaProvider).newNearbyProviders!.keys.length} Provider");
                                             print(
                                                 "2=>WE FOUND ${ref.watch(rsaProvider).newNearbyMechanics!.keys.length} Mechanics");
-                                            _pcMechanic.open();
                                           },
                                           child: const Text("confirm").tr()),
                                     ]);
@@ -189,14 +194,14 @@ class _WSAScreenState extends ConsumerState<WSAScreen> {
 
   //wait 3 minute
   void activate3Min() async {
-    print("abl el 3 minutes");
+    print("WSA: abl el 3 minutes");
     bool tempProviders =
         await ref.watch(rsaProvider.notifier).atLeastOne(false);
     if (!tempProviders && !ref.watch(rsaProvider.notifier).atLeastOneProvider) {
       noneFound(context, who: false);
     }
 
-    print("after first 3 minutes");
+    print("WSA after first 3 minutes");
     bool tempMechanic = await ref.watch(rsaProvider.notifier).atLeastOne(true);
     if (!tempMechanic && !ref.watch(rsaProvider.notifier).atLeastOneMechanic) {
       noneFound(context, who: true);
@@ -219,6 +224,10 @@ class _WSAScreenState extends ConsumerState<WSAScreen> {
       gotMechanics = true;
       await rsaNotifier.searchNearbyMechanicsAndProviders();
     }
+    _pcMechanic.open();
+    //salahlyClientProvider
+    ref.watch(salahlyClientProvider.notifier).assignRequest(
+        ref.watch(rsaProvider).requestType!, ref.watch(rsaProvider).rsaID!);
     getAcceptedMechanic();
     activate3Min();
   }

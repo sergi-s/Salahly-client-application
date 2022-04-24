@@ -1,7 +1,7 @@
 import "package:flutter/material.dart";
 
 void requestConfirmationDialogue(context,
-    {required List<Widget> contentChildren,
+    {required content,
     required List<Widget> titleChildren,
     required List<Widget> actionChildren}) {
   showDialog(
@@ -10,11 +10,12 @@ void requestConfirmationDialogue(context,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(30),
           ),
-          title: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: titleChildren),
-          content: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: contentChildren),
+          title: Container(
+            alignment: Alignment.center,
+            child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: titleChildren),
+          ),
+          content: content,
           actions: actionChildren));
 }

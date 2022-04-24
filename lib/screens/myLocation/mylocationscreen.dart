@@ -1,5 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:slahly/widgets/location/mapWidget.dart';
@@ -7,14 +8,18 @@ import 'package:slahly/screens/roadsideassistance/searching_mechanic_provider_sc
 
 import 'package:slahly/widgets/dialogues/request_confirmation_dialogue.dart';
 
-class MyLocationScreen extends StatefulWidget {
+import 'package:slahly/classes/firebase/roadsideassistance/roadsideassistance.dart';
+
+import 'package:slahly/classes/provider/app_data.dart';
+
+class MyLocationScreen extends ConsumerStatefulWidget {
   static const String routeName = "/locationComponent";
 
   @override
   _MyLocationScreenState createState() => _MyLocationScreenState();
 }
 
-class _MyLocationScreenState extends State<MyLocationScreen> {
+class _MyLocationScreenState extends ConsumerState<MyLocationScreen> {
   GlobalKey<MapWidgetState> myMapWidgetState = GlobalKey();
 
   @override
@@ -31,6 +36,13 @@ class _MyLocationScreenState extends State<MyLocationScreen> {
             const SizedBox(width: 4),
             ElevatedButton(
                 onPressed: () {
+                  if (ref.watch(salahlyClientProvider).requestType !=
+                      RequestType.NONE) {
+                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                      content: Text("There is another onging request"),
+                    ));
+                    return;
+                  }
                   requestConfirmationDialogue(
                     context,
                     titleChildren: [
@@ -38,12 +50,10 @@ class _MyLocationScreenState extends State<MyLocationScreen> {
                       const ImageIcon(
                           AssetImage('assets/images/tow-truck 2.png')),
                     ],
-                    contentChildren: [
-                      Text("rsaConfirmation".tr() +
-                          "\n" +
-                          myMapWidgetState
-                              .currentState!.currentCustomLoc.address!)
-                    ],
+                    content: Text("rsaConfirmation".tr() +
+                        "\n" +
+                        myMapWidgetState
+                            .currentState!.currentCustomLoc.address!),
                     actionChildren: <Widget>[
                       ElevatedButton(
                         onPressed: () => Navigator.pop(context),

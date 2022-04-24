@@ -1,18 +1,19 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:go_router/go_router.dart';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'package:slahly/classes/firebase/roadsideassistance/roadsideassistance.dart';
-import 'package:slahly/classes/models/location.dart';
+import 'package:slahly/classes/provider/app_data.dart';
 import 'package:slahly/classes/provider/rsadata.dart';
+import 'package:slahly/classes/models/location.dart';
+import 'package:slahly/classes/firebase/roadsideassistance/roadsideassistance.dart';
 import 'package:slahly/screens/userMangament/select.dart';
 import 'package:slahly/widgets/roadsideassistance/HoldPlease.dart';
 import 'package:slahly/widgets/roadsideassistance/services_provider_card.dart';
 import 'package:slahly/widgets/dialogues/confirm_cancellation.dart';
 import 'package:slahly/widgets/dialogues/all_rejected.dart';
+import 'package:slahly/widgets/dialogues/none_found.dart';
 
 class SearchingMechanicProviderScreen extends ConsumerStatefulWidget {
   static const String routeName = "/searchingmechanicprovider";
@@ -216,6 +217,23 @@ class _SearchingMechanicProviderScreenState
     });
   }
 
+  void activate3Min() async {
+    print("RSA: abl el 3 minutes");
+    bool tempProviders =
+        await ref.watch(rsaProvider.notifier).atLeastOne(false);
+    if (!tempProviders && !ref.watch(rsaProvider.notifier).atLeastOneProvider) {
+      noneFound(context, who: false);
+    }
+
+    print("RSA: after first 3 minutes");
+    bool tempMechanic = await ref.watch(rsaProvider.notifier).atLeastOne(true);
+    if (!tempMechanic && !ref.watch(rsaProvider.notifier).atLeastOneMechanic) {
+      noneFound(context, who: true);
+    }
+
+    print("RSA: after second 3 minutes");
+  }
+
   requestRSA() async {
     print("Requesting RSA::");
     RSANotifier rsaNotifier = ref.watch(rsaProvider.notifier);
@@ -223,6 +241,9 @@ class _SearchingMechanicProviderScreenState
 
     await rsaNotifier.requestRSA();
     await rsaNotifier.searchNearbyMechanicsAndProviders();
+    ref.watch(salahlyClientProvider.notifier).assignRequest(
+        ref.watch(rsaProvider).requestType!, ref.watch(rsaProvider).rsaID!);
     _getRsaDataStream();
+    activate3Min();
   }
 }

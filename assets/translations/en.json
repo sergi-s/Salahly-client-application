@@ -120,5 +120,7 @@
   "didNotFindProvider": "Sorry! Did not find a Tow Provider",
   "didNotFindMechanic": "Sorry! Did not find a Nearby Mechanic",
   "sorry": "Sorry",
-  "ok": "Ok"
+  "ok": "Ok",
+  "withTowTruck": "with to truck",
+  "withNoTowTruck": "without a tow truck"
 }
