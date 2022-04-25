@@ -53,6 +53,7 @@ class _State extends State<TestUserSM> {
   String? email;
   String? phone;
   File? url;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -228,80 +229,222 @@ class TestUserCAR extends ConsumerWidget {
   final TextEditingController plateController = TextEditingController();
   final TextEditingController chasisController = TextEditingController();
   final TextEditingController numberController = TextEditingController();
+  final TextEditingController getuserController = TextEditingController();
+  final TextEditingController caridController = TextEditingController();
+
+  String? email = "7amda@gmail.com";
+  String? subid;
+  DatabaseReference user = dbRef.child("users");
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final Client car = ref.watch(userProvider);
     final userNotifier = ref.watch(userProvider.notifier);
+    String? email;
+    String? subid;
     return Scaffold(
       body: SafeArea(
-        child: Column(
-          children: [
-            const SizedBox(height: 50),
-            TextField(
-              controller: carModelController,
-              decoration: const InputDecoration(hintText: 'carModel'),
-            ),
-            TextField(
-              controller: yearController,
-              decoration: const InputDecoration(hintText: 'year Controller'),
-            ),
-            TextField(
-              controller: plateController,
-              decoration: const InputDecoration(hintText: 'plate'),
-            ),
-            TextField(
-              controller: chasisController,
-              decoration: const InputDecoration(hintText: 'chassis'),
-            ),
-            TextField(
-              controller: numberController,
-              decoration: const InputDecoration(hintText: 'number'),
-            ),
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              const SizedBox(height: 50),
+              TextField(
+                controller: carModelController,
+                decoration: const InputDecoration(hintText: 'carModel'),
+              ),
+              TextField(
+                controller: yearController,
+                decoration: const InputDecoration(hintText: 'year Controller'),
+              ),
+              TextField(
+                controller: plateController,
+                decoration: const InputDecoration(hintText: 'plate'),
+              ),
+              TextField(
+                controller: chasisController,
+                decoration: const InputDecoration(hintText: 'chassis'),
+              ),
+              TextField(
+                controller: numberController,
+                decoration: const InputDecoration(hintText: 'number'),
+              ),
 
-            ElevatedButton(
-                onPressed: () {
-                  userNotifier.assignCar(Car(
-                      noPlate: plateController.text,
-                      model: carModelController.text,
-                      noChassis: chasisController.text,
-                      id: numberController.text,
-                      carAccess: CarAccess.owner));
-                },
-                child: const Text("add car")),
-            ElevatedButton(
-                onPressed: () {
-                  userNotifier.removeCar(car.cars[0]);
-                },
-                child: const Text("removeeee")),
-            const SizedBox(height: 50),
-            Text(car.cars.toString()),
-            ///////////////////////////////////////////////////////////////////
-            // Text(user.name ?? "NON"), //ME
-            // Text(user.phoneNumber ?? "NON"), //HESHAM
-            //
-            // ElevatedButton(
-            //     onPressed: () => {userNotifier.setName("Sergi")},
-            //     child: const Text("Change name to sergi")),
+              ElevatedButton(
+                  onPressed: () {
+                    userNotifier.assignCar(Car(
+                        noPlate: plateController.text,
+                        model: carModelController.text,
+                        noChassis: chasisController.text,
+                        id: numberController.text,
+                        carAccess: CarAccess.owner));
+                    owner(ref);
+                  },
+                  child: const Text("add car")),
+              TextField(
+                controller: getuserController,
+                decoration: const InputDecoration(hintText: ' subowner email'),
+              ),
+              TextField(
+                controller: caridController,
+                decoration: const InputDecoration(hintText: 'Enter car id'),
+              ),
 
-            // ElevatedButton(
-            //     onPressed: () => {userNotifier.setPhoneNumber("Hesham")},
-            //     child: const Text("Change phoneNumber to Hesham")),
-          ],
+              ElevatedButton(
+                  onPressed: () {
+                    getuser();
+                  },
+                  child: const Text("add subowner")),
+              ElevatedButton(
+                  onPressed: () {
+                    getsubowner();
+                  },
+                  child: const Text("getsub")),
+
+              ElevatedButton(
+                  onPressed: () {
+                    // userNotifier.removeCar(car.cars[0]);
+                    delete();
+                  },
+                  child: const Text("removeeee")),
+              const SizedBox(height: 50),
+              // Text(car.cars.toString()),
+              ///////////////////////////////////////////////////////////////////
+              // Text(user.name ?? "NON"), //ME
+              // Text(user.phoneNumber ?? "NON"), //HESHAM
+              //
+              // ElevatedButton(
+              //     onPressed: () => {userNotifier.setName("Sergi")},
+              //     child: const Text("Change name to sergi")),
+
+              // ElevatedButton(
+              //     onPressed: () => {userNotifier.setPhoneNumber("Hesham")},
+              //     child: const Text("Change phoneNumber to Hesham")),
+            ],
+          ),
         ),
       ),
     );
   }
 
-  owner(ref) async {
-    Client user = ref.watch(userProvider);
+  // Future<Map?> getuser() async {
+  //   DatabaseReference users = await dbRef
+  //       .child("users")
+  //       .child("clients")
+  //       .equalTo(getuserController)
+  //       .once()
+  //       .then((event) {
+  //     final dataSnapshot = event.snapshot;
+  //     print("read" + dataSnapshot.value.toString());
+  //
+  //     var data = dataSnapshot.value as Map;
+  //     if (data != null) {}
+  //     return;
+  //   });
 
-    DatabaseReference reference = dbRef.child("users");
-    await reference
+  getsubowner() async {
+    DatabaseReference cars = await dbRef.child("cars");
+    cars.child(caridController.text).child("subowners").once().then((event) {
+      final dataSnapshot = event.snapshot;
+      print("read" + dataSnapshot.value.toString());
+    });
+  }
+
+  getuser() async {
+    //final firebaseuser = await FirebaseAuth.instance.currentUser;
+    // var method = await FirebaseAuth.instance
+    //     .fetchSignInMethodsForEmail(getuserController.text);
+    // var ids = await FirebaseAuth.instance.;
+    // if (method.isNotEmpty) {
+    //   print(ids.toString());
+    // }
+    // print("ahooo");
+    // print(method);
+    // method.contains(element)
+    user
         .child("clients")
-        .child(FirebaseAuth.instance.currentUser!.uid)
+        .orderByChild("email")
+        .equalTo(getuserController.text)
+        .once()
+        .then((event) {
+      final dataSnapshot = event.snapshot;
+      print("read" + dataSnapshot.value.toString());
+      var x = dataSnapshot.value.toString();
+      x.trim();
+      var y = x.split(":");
+      String z = y[0];
+      String f = z.replaceAll("{", "");
+      print(f);
+
+      var data = dataSnapshot.value as Map;
+
+      if (data != null) {
+        email = data[f]["email"];
+        subid = f;
+      }
+      print(subid);
+
+      print(email);
+    });
+    String carid = "-N0W8Ye-5UazFU3odpgr";
+    DatabaseReference cars = await dbRef
         .child("cars")
-        .set({"type": "user.cars."});
+        .child(caridController.text)
+        .child("subowners")
+        .push();
+
+    await cars.set({
+      "subowner": {"id": subid}
+    });
+  }
+
+  delete() async {
+    String carid = "-N0WRuJWVguAPHUklZuE";
+    DatabaseReference cars =
+        await dbRef.child("cars").child(caridController.text);
+    cars.remove();
+  }
+
+  owner(ref) async {
+    Client car = ref.watch(userProvider);
+    // final firebaseuser = await FirebaseAuth.instance.currentUser;
+    DatabaseReference cars = await dbRef.child("cars").push();
+    // String? key = dbRef.child("cars").push().key;
+    String? key = cars.key;
+    // String? key1 = cars.orderByChild("path").equalTo(value)
+    // Map<String, dynamic> map = Map();
+    // map['model'] = carModelController.text;
+    // map['plate'] = plateController.text;
+    // map['chasis'] = chasisController.text;
+    // map['year'] = yearController.text;
+    // Map<String, dynamic> map1 = Map();
+
+    await cars.set({
+      "model": carModelController.text,
+      "plate": plateController.text,
+      "year": yearController.text,
+      "owner": FirebaseAuth.instance.currentUser!.uid
+    });
+
+    // await cars.set({
+    //   "model": carModelController.text,
+    //   "plate": plateController.text,
+    //   "year": yearController.text,
+    //   "owner": {
+    //     "uid": FirebaseAuth.instance.currentUser!.uid,
+    //     "type": "owner",
+    //   }
+    // });
+    // cars.set(<String, Object>{
+    //   "id": FirebaseAuth.instance.currentUser!.uid,
+    //   "type": "owner",
+    // });
+    //   map1['type'] = "owner";
+    //   DatabaseReference cars_user = await dbRef
+    //       .child("cars_users")
+    //       .child(FirebaseAuth.instance.currentUser!.uid)
+    //       .child("$key");
+    //   await cars_user.set(map1);
+    // }
   }
 }
 ////user profile

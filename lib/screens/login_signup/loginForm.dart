@@ -87,7 +87,7 @@ class LoginForm extends StatelessWidget {
                 ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(content: Text('Login_successful'.tr())));
                 const SnackBar(content: Text('Login successful'));
-                context.go(TestUserSM.routeName);
+                context.go(TestUserCAR.routeName);
               } else {
                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                     content: Text('Account_invalid_please_try_again'.tr())));
