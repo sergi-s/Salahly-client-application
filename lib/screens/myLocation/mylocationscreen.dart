@@ -2,13 +2,12 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:slahly/classes/firebase/roadsideassistance/roadsideassistance.dart';
 
 import 'package:slahly/widgets/location/mapWidget.dart';
 import 'package:slahly/screens/roadsideassistance/searching_mechanic_provider_screen.dart';
 
 import 'package:slahly/widgets/dialogues/request_confirmation_dialogue.dart';
-
-import 'package:slahly/classes/firebase/roadsideassistance/roadsideassistance.dart';
 
 import 'package:slahly/classes/provider/app_data.dart';
 
@@ -37,9 +36,14 @@ class _MyLocationScreenState extends ConsumerState<MyLocationScreen> {
             ElevatedButton(
                 onPressed: () {
                   if (ref.watch(salahlyClientProvider).requestType != null) {
-                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                      content: Text("There is another ongoing request"),
-                    ));
+                    if (ref.watch(salahlyClientProvider).requestType ==
+                        RequestType.RSA) {
+                      context.push(SearchingMechanicProviderScreen.routeName);
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                        content: Text("There is another ongoing request"),
+                      ));
+                    }
                     return;
                   }
                   requestConfirmationDialogue(
@@ -54,10 +58,6 @@ class _MyLocationScreenState extends ConsumerState<MyLocationScreen> {
                         myMapWidgetState
                             .currentState!.currentCustomLoc.address!),
                     actionChildren: <Widget>[
-                      ElevatedButton(
-                        onPressed: () => Navigator.pop(context),
-                        child: Text("Cancel".tr()),
-                      ),
                       ElevatedButton(
                           onPressed: () {
                             print(myMapWidgetState

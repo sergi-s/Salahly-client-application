@@ -168,7 +168,7 @@ class _SearchingMechanicProviderScreenState
           if (flagAllRejected && flagFindYet) {
             //TODO: Show a dialog box (ALL rejected Please request later)
             print("ALL MECHANIC REJECTED MECHANIC ");
-            allRejected(context, "Mechanics");
+            allRejected(context, ref, "Mechanics");
           }
         }
 
@@ -209,7 +209,7 @@ class _SearchingMechanicProviderScreenState
 
           if (flagAllRejected && flagFindYet) {
             //TODO: Show a dialog box (ALL rejected Please request later)
-            allRejected(context, "Providers");
+            allRejected(context, ref, "Providers");
             print("All providers rejected");
           }
         }

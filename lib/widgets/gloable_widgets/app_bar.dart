@@ -18,9 +18,9 @@ PreferredSizeWidget salahlyAppBar({String? title}) {
             // alignment: Alignment.centerRight,
             padding: const EdgeInsets.only(left: 0.0, right: 10.0),
             child: CircleAvatar(
-              backgroundImage:
-                  NetworkImage(ref.watch(userProvider).avatar ?? ""),
-            ),
+                //   backgroundImage:
+                //       NetworkImage(ref.watch(userProvider).avatar ?? ""),
+                ),
           );
         },
       )

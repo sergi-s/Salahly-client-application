@@ -3,11 +3,7 @@
   "presshere": "اضغط هنا",
   "login": "تسجيل الدخخول",
   "welcome_back": "مرحبا بك",
-<<<<<<< HEAD
-  "Booking_successful":"تم الحجز بنجاح",
-=======
   "Booking_successful": "تم الحجز بنجاح",
->>>>>>> rsa/wsa
   "Confirm_Transfer": "تم التحويل",
   "Transfer_Ownership": "تحويل الملكيه",
   "back": "الرجوع",
@@ -34,10 +30,7 @@
   "my_car_is_broke_and_doesnt_work": "سيارتي معطلة ولا تعمل",
   "Send": "إرسال",
   "Add_History": "اضف في السجل",
-<<<<<<< HEAD
-=======
   "history": "ما سبق",
->>>>>>> rsa/wsa
   "Cancel": "إِلغاء",
   "Problem": "مشكلة",
   "confirm_location": "تاكيد المكان",
@@ -81,11 +74,7 @@
   "View_History": "عرض السجل",
   "View": "عرض",
   "Sucessfully": "بنجاح",
-<<<<<<< HEAD
-  "Checking_logged_in_user_error":"",
-=======
   "Checking_logged_in_user_error": "",
->>>>>>> rsa/wsa
   "Registration": "تسجيل",
   "Received": "تم الاستلام",
   "Your_Tow_Truck_is_being_prepared": "سياره سحب جاهزه",
@@ -95,19 +84,11 @@
   "Next": "التالي",
   "Setting_Drop_off_please_wait": "إعداد الإنزال يرجى الانتظار",
   "Profile_name": "اسم الشخصية",
-<<<<<<< HEAD
-  "Visit_profile":"قم بزيارة الملف الشخصي",
-  "Failed_to_Register": "فشل في التسجيل",
-  "Add_home": "أضف المنزل",
-  "Rating": "التقيم",
-  "Search_drop_off":"البحث عن مكان الانزال",
-=======
   "Visit_profile": "قم بزيارة الملف الشخصي",
   "Failed_to_Register": "فشل في التسجيل",
   "Add_home": "أضف المنزل",
   "Rating": "التقيم",
   "Search_drop_off": "البحث عن مكان الانزال",
->>>>>>> rsa/wsa
   "Your_living_home_address": "عنوان منزلك الذي تعيش فيه",
   "Add_work": "إضافة عمل",
   "Your_work_address": "عنوان عملك",
@@ -119,9 +100,6 @@
   "confirm_cancellation": "أكد الالغاء",
   "confirm": "تاكد",
   "settings": "اعدادات",
-<<<<<<< HEAD
-  "change_lang":"اختار لغه"
-=======
   "change_lang": "اختار لغه",
   "home": "الرئيسيه",
   "updateProfile": "اعدادت الحساب",
@@ -145,5 +123,4 @@
   "ok": "تمام",
   "withTowTruck": "مع طلب شاحنه سحب",
   "withNoTowTruck": "مبدون شاحنه سحب"
->>>>>>> rsa/wsa
 }

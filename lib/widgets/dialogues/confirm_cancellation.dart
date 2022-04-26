@@ -6,6 +6,8 @@ import 'package:slahly/classes/firebase/roadsideassistance/roadsideassistance.da
 import 'package:slahly/classes/provider/rsadata.dart';
 import 'package:slahly/utils/constants.dart';
 
+import '../../classes/provider/app_data.dart';
+
 //Dialogs
 void confirmCancellation(context, ref) {
   RSANotifier rsaNotifier = ref.watch(rsaProvider.notifier);
@@ -23,9 +25,10 @@ void confirmCancellation(context, ref) {
                   onPressed: () async {
                     //Cancel RSA request
                     //From State Management and Firebase
-                    rsaNotifier.assignState(RSAStates.canceled);
-                    await rsaRef.child(ref.watch(rsaProvider).rsaID!).update(
-                        {"state": RSA.stateToString(RSAStates.canceled)});
+                    print("CANCEL1");
+                    rsaNotifier.cancelRequest();
+                    ref.watch(salahlyClientProvider.notifier).deAssignRequest();
+                    print("CANCEL2");
                     context.pop();
                   },
                   child: Text("confirm".tr()))

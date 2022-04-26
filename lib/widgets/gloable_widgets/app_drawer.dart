@@ -6,6 +6,7 @@ import 'package:slahly/screens/history_management/view_history.dart';
 import 'package:slahly/screens/switchLanguage.dart';
 
 import '../../screens/homepage.dart';
+import '../../screens/test_screens/testscreen_foula.dart';
 
 Widget salahlyDrawer(BuildContext context) {
   return Drawer(
@@ -20,6 +21,16 @@ Widget salahlyDrawer(BuildContext context) {
                   fit: BoxFit.fill),
               color: Colors.transparent),
           child: Text(''),
+        ),
+        ListTile(
+          title: const Text(
+            "Test Screen",
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
+          onTap: () {
+            Navigator.pop(context);
+            context.push(TestScreen_nearbymechanics_and_create_rsa.routeName);
+          },
         ),
         ListTile(
           title: const Text(

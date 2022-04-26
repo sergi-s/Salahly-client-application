@@ -1,11 +1,13 @@
 import 'package:easy_localization/easy_localization.dart';
 import "package:flutter/material.dart";
 import 'package:go_router/go_router.dart';
+import 'package:slahly/classes/provider/app_data.dart';
+import 'package:slahly/classes/provider/rsadata.dart';
 
 import 'package:slahly/screens/homepage.dart';
 
 //TODO refactor it so it will be reused if needed
-void allRejected(context, String who) {
+void allRejected(context, ref, String who) {
   showDialog(
       context: context,
       barrierDismissible: false,
@@ -19,11 +21,15 @@ void allRejected(context, String who) {
                 Text("${who}Rejected").tr(),
               ],
             ),
-            content: Text("${who}ProvidersRejected"),
+            content: Text("${who}RejectedDescription"),
             actions: <Widget>[
               ElevatedButton(
                 onPressed: () {
                   Navigator.pop(context);
+
+                  ref.watch(rsaProvider.notifier).cancelRequest();
+                  ref.watch(salahlyClientProvider.notifier).deAssignRequest();
+
                   context.go(HomePage.routeName);
                 },
                 child: const Text("goToHomePage").tr(),

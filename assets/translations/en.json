@@ -100,10 +100,6 @@
   "confirm_cancellation": "Confirm cancellation",
   "confirm": "Confirm",
   "settings": "Settings",
-<<<<<<< HEAD
-  "change_lang": "Choose language"
-}
-=======
   "change_lang": "Choose language",
   "home": "Home",
   "updateProfile": "Update Profile",
@@ -128,4 +124,3 @@
   "withTowTruck": "with to truck",
   "withNoTowTruck": "without a tow truck"
 }
->>>>>>> rsa/wsa

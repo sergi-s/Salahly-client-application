@@ -1,98 +1,44 @@
 import 'dart:async';
-
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:slahly/classes/firebase/roadsideassistance/roadsideassistance.dart';
-import 'package:slahly/classes/models/location.dart';
-import 'package:slahly/classes/models/towProvider.dart';
-import 'package:slahly/abstract_classes/user.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'arrival.dart';
 
+import 'package:slahly/abstract_classes/user.dart';
+import 'package:slahly/classes/firebase/roadsideassistance/roadsideassistance.dart';
+import 'package:slahly/classes/models/towProvider.dart';
+import 'package:slahly/classes/provider/rsadata.dart';
+import 'package:slahly/screens/roadsideassistance/arrival.dart';
+import 'package:slahly/widgets/dialogues/all_rejected.dart';
 import 'package:slahly/widgets/ChooseTile.dart';
 
-import '../../classes/provider/rsadata.dart';
-import '../../main.dart';
+import 'package:slahly/widgets/dialogues/none_found.dart';
 
-class ChooseProviderScreen extends ConsumerWidget {
-  static const routeName = "/chooseproviderscreen";
+class ChooseProviderScreen extends ConsumerStatefulWidget {
+  static const String routeName = "/chooseproviderscreen";
+
+  ChooseProviderScreen({Key? key}) : super(key: key);
+
+  @override
+  _ChooseProviderScreenState createState() => _ChooseProviderScreenState();
+}
+
+class _ChooseProviderScreenState extends ConsumerState<ChooseProviderScreen> {
   String providerH = "";
 
   late StreamSubscription _myStream;
-  List<TowProvider> providers = [
-    TowProvider(
-        nationalID: '123132',
-        name: 'Ahmed tarek',
-        phoneNumber: '01115612314',
-        loc: CustomLocation(
-            address:
-                "Factorya, shar3 45 odam mtafy 12311321312312hasdhdashjss221",
-            longitude: 11,
-            latitude: 11),
-        avatar: 'https://www.woolha.com/media/2020/03/eevee.png',
-        email: 'email@yahoo.com',
-        type: Type.provider),
-  ];
-
-  // _getStream(BuildContext context, ref) async {
-  //   DatabaseReference ttaRef = FirebaseDatabase.instance.ref().child("tta");
-  //   RSANotifier rsaNotifier = ref.watch(rsaProvider.notifier);
-  //   RSA rsa = ref.watch(rsaProvider);
-  //   ttaRef.child(rsa.rsaID!).onValue.listen((event) {
-  //     print(rsa.rsaID);
-  //     if (event.snapshot.value != null) {
-  //       print("data  null");
-  //       DataSnapshot dataSnapshot = event.snapshot;
-  //       if (dataSnapshot.child("state").value.toString() ==
-  //           RSA.stateToString(RSAStates.waitingForProviderResponse)) {
-  //         dataSnapshot.child("providersResponses").children.forEach((prov) {
-  //           if (prov.value == "accepted") {
-  //             print("provider accepted");
-  //             for (var provider in rsa.nearbyProviders!) {
-  //               if (provider.id == prov.key) {
-  //                 print("provider assigned");
-  //                 print("provider accepted id::${provider.id}");
-  //                 rsaNotifier.assignProvider(provider, false);
-  //               }
-  //             }
-  //           } else if (prov.value == "rejected") {
-  //             for (var provider in rsa.nearbyProviders!) {
-  //               print(
-  //                   "prev assigned tow provider${ref.watch(rsaProvider).towProvider?.name}");
-  //               print("provider rejected${provider.id}");
-  //               bool isSame = provider.id ==
-  //                   (ref.watch(rsaProvider).towProvider != null
-  //                       ? ref.watch(rsaProvider).towProvider!.id
-  //                       : "sad");
-  //               print(isSame);
-  //               if (provider.id == prov.key && isSame) {
-  //                 rsaNotifier.assignProvider(
-  //                     TowProvider(name: null, email: null), false);
-  //                 context.pop();
-  //               }
-  //             }
-  //           }
-  //         });
-  //       }
-  //     }
-  //   });
-  // }
-  // void chosenProvider(String id, ref) {
-  //   final RSA rsa = ref.watch(rsaProvider);
-  //   DatabaseReference tta = dbRef.child("tta");
-  //   tta.child(rsa.rsaID!).child("providersResponses").child(id!).set("pending");
-  // }
 
   @override
-  Widget build(BuildContext context, ref) {
-    // _getStream(context, ref);
-    getAcceptedMechanic(ref);
-    check(context, ref);
+  void initState() {
+    activate3Min();
+    super.initState();
+  }
 
-    final rsaNotifier = ref.watch(rsaProvider.notifier);
-    final RSA rsa = ref.watch(rsaProvider);
+  @override
+  Widget build(BuildContext context) {
+    getAcceptedMechanic();
+    check();
 
     return Scaffold(
         backgroundColor: const Color(0xFFd1d9e6),
@@ -109,120 +55,77 @@ class ChooseProviderScreen extends ConsumerWidget {
         ),
         body: CustomPaint(
           child: Container(
-            child: Container(
-                width: MediaQuery.of(context).size.width,
-                height: MediaQuery.of(context).size.height,
-                decoration: BoxDecoration(
-                  color: const Color(0xFFd1d9e6),
-                ),
-                child: Center(
-                  // child: FloatingActionButton(
-                  //   child: Icon(Icons.add),
-                  //   onPressed: () {
-                  //     showModalBottomSheet<void>(
-                  //       context: context,
-                  //       isScrollControlled: true,
-                  //       enableDrag: true,
-                  //       isDismissible: true,
-                  //       builder: (BuildContext context) {
-                  child: Column(
-                    children: [
-                      SizedBox(height: 10),
-                      ListView.builder(
-                        itemBuilder: (BuildContext, index) {
-                          return GestureDetector(
-                            onTap: () async {
-                              providerH = rsa.acceptedNearbyProviders![index].id
-                                  .toString();
-                              print("heshaamamam" + providerH);
-                              // chosenProvider(
-                              //     rsa.acceptedNearbyProviders![index].id
-                              //         .toString(),
-                              //     ref);
-                              rsaNotifier.assignProvider(
-                                  rsa.acceptedNearbyProviders![index], false);
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height,
+              decoration: const BoxDecoration(
+                color: Color(0xFFd1d9e6),
+              ),
+              child: Center(
+                // child: FloatingActionButton(
+                //   child: Icon(Icons.add),
+                //   onPressed: () {
+                //     showModalBottomSheet<void>(
+                //       context: context,
+                //       isScrollControlled: true,
+                //       enableDrag: true,
+                //       isDismissible: true,
+                //       builder: (BuildContext context) {
+                child: Column(
+                  children: [
+                    const SizedBox(height: 10),
+                    ListView.builder(
+                      itemBuilder: (BuildContext context, index) {
+                        return GestureDetector(
+                          onTap: () async {
+                            ref.watch(rsaProvider.notifier).assignProvider(
+                                ref
+                                    .watch(rsaProvider)
+                                    .acceptedNearbyProviders![index],
+                                false);
 
-                              // context.push(Arrival.routeName, extra: true);
-                            },
-                            child: ChooseTile(
-                                email: rsa.acceptedNearbyProviders![index].email
-                                    .toString(),
-                                avatar: rsa
-                                    .acceptedNearbyProviders![index].avatar
-                                    .toString(),
-                                phone: rsa
-                                    .acceptedNearbyProviders![index].phoneNumber
-                                    .toString(),
-                                name: rsa.acceptedNearbyProviders![index].name
-                                    .toString(),
-                                type: Type.provider,
-                                isCenter: false),
-                          );
-                        },
-                        // itemCount: providers.length,
-                        itemCount: rsa.acceptedNearbyProviders!.length,
-                        shrinkWrap: true,
-                        padding: const EdgeInsets.all(5),
-                        scrollDirection: Axis.vertical,
-                      ),
-                    ],
-                  ),
-                )),
-          ),
+                            // context.push(Arrival.routeName, extra: true);
+                          },
+                          child: ChooseTile(
+                              email: ref
+                                  .watch(rsaProvider)
+                                  .acceptedNearbyProviders![index]
+                                  .email
+                                  .toString(),
+                              avatar: ref
+                                  .watch(rsaProvider)
+                                  .acceptedNearbyProviders![index]
+                                  .avatar
+                                  .toString(),
+                              phone: ref
+                                  .watch(rsaProvider)
+                                  .acceptedNearbyProviders![index]
+                                  .phoneNumber
+                                  .toString(),
+                              name: ref
+                                  .watch(rsaProvider)
+                                  .acceptedNearbyProviders![index]
+                                  .name
+                                  .toString(),
+                              type: Type.provider,
+                              isCenter: false),
+                        );
+                      },
+                      // itemCount: providers.length,
+                      itemCount: ref
+                          .watch(rsaProvider)
+                          .acceptedNearbyProviders!
+                          .length,
+                      shrinkWrap: true,
+                      padding: const EdgeInsets.all(5),
+                      scrollDirection: Axis.vertical,
+                    ),
+                  ],
+                ),
+              )),
         ));
   }
 
-  //
-  // _getStream(BuildContext context, ref) async {
-  //   DatabaseReference ttaRef = FirebaseDatabase.instance.ref().child("tta");
-  //   RSANotifier rsaNotifier = ref.watch(rsaProvider.notifier);
-  //   RSA rsa = ref.watch(rsaProvider);
-  //   ttaRef.child(rsa.rsaID!).onValue.listen((event) {
-  //     print(rsa.rsaID);
-  //     if (event.snapshot.value != null) {
-  //       print("data  null");
-  //       DataSnapshot dataSnapshot = event.snapshot;
-  //       if (dataSnapshot.child("state").value.toString() ==
-  //           RSA.stateToString(RSAStates.waitingForProviderResponse)) {
-  //         dataSnapshot.child("providersResponses").children.forEach((prov) {
-  //           if (prov.value == "accepted") {
-  //             print("provider accepted");
-  //             for (var provider
-  //                 in ref.watch(rsaProvider).newNearbyProviders!.keys) {
-  //               if (provider == prov.key) {
-  //                 print("provider assigned");
-  //                 print("provider accepted id::${provider}");
-  //                 rsaNotifier.assignProvider(
-  //                     ref.watch(rsaProvider).newNearbyProviders[provider],
-  //                     false);
-  //               }
-  //             }
-  //           } else if (prov.value == "rejected") {
-  //             print("rejectttttttt");
-  //             for (var provider
-  //                 in ref.watch(rsaProvider).newNearbyProviders!.keys) {
-  //               print("prev assigned tow provider${providerH}");
-  //               print("provider rejected${provider}");
-  //               bool isSame = provider == providerH;
-  //               print(isSame);
-  //               if (provider == prov.key && isSame) {
-  //                 rsaNotifier.assignProvider(
-  //                     TowProvider(name: null, email: null), false);
-  //                 providerH = "";
-  //                 // print("dialoggg");
-  //                 // customDialog(context);
-  //                 // print("b3d dia");
-  //                 context.pop();
-  //               }
-  //             }
-  //           }
-  //         });
-  //       }
-  //     }
-  //   });
-  // }
-
-  void check(BuildContext context, ref) {
+  void check() {
     print(">>Checking");
     TowProvider? tempTow = ref.watch(rsaProvider).towProvider;
     Future.delayed(Duration.zero, () async {
@@ -232,12 +135,11 @@ class ChooseProviderScreen extends ConsumerWidget {
         context.go(Arrival.routeName, extra: true);
         return;
       }
-
       return;
     });
   }
 
-  getAcceptedMechanic(ref) {
+  getAcceptedMechanic() {
     DatabaseReference ttaRef = FirebaseDatabase.instance.ref().child("tta");
 
     print("IN STREAM FUNCTION ::");
@@ -288,9 +190,7 @@ class ChooseProviderScreen extends ConsumerWidget {
           }
         });
         if (flagAllRejected && flagFindYet) {
-          //TODO: Show a dialog box (ALL rejected Please request later)
-          // allRejected(context, "Providers");
-          print("All providers rejected");
+          allRejected(context, ref, "Providers");
         }
       }
     });
@@ -306,7 +206,7 @@ class ChooseProviderScreen extends ConsumerWidget {
               ),
               title: Row(
                 children: [
-                  Text("Alert"),
+                  const Text("Alert"),
                   SizedBox(width: MediaQuery.of(context).size.height * 0.1),
                   IconButton(
                       icon: const Icon(Icons.close),
@@ -315,9 +215,17 @@ class ChooseProviderScreen extends ConsumerWidget {
                       })
                 ],
               ),
-              content: Text("Provider busy"),
+              content: const Text("Provider busy"),
             ));
-    print("nsssss");
+  }
+
+  void activate3Min() async {
+    print("RSA: abl el 3 minutes TTA");
+    bool tempProviders =
+        await ref.watch(rsaProvider.notifier).atLeastOne(false);
+    if (!tempProviders && !ref.watch(rsaProvider.notifier).atLeastOneProvider) {
+      noneFound(context, who: false);
+    }
   }
 }
 

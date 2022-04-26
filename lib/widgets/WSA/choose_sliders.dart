@@ -35,12 +35,10 @@ class ChooseMechanicSlider extends ConsumerWidget {
             ? HoldPlease()
             : const Text(""),
         mechanics.isEmpty
-            ? Flexible(
-                child: SearchingWidget(
-                  size: ref.watch(rsaProvider).newNearbyMechanics!.keys.length,
-                  who: "mechanicAndWaitingForResponse".tr(),
-                ),
-              )
+            ? SearchingWidget(
+              size: ref.watch(rsaProvider).newNearbyMechanics!.keys.length,
+              who: "mechanicAndWaitingForResponse".tr(),
+            )
             : Padding(
                 padding: const EdgeInsets.only(left: 160.0, top: 10),
                 child: SizedBox(
@@ -120,12 +118,10 @@ class ChooseTowProviderSlider extends ConsumerWidget {
             ? HoldPlease()
             : const Text(""),
         towProviders.isEmpty
-            ? Flexible(
-                child: SearchingWidget(
-                  size: ref.watch(rsaProvider).newNearbyProviders!.keys.length,
-                  who: "providerAndWaitingForResponse".tr(),
-                ),
-              )
+            ? SearchingWidget(
+              size: ref.watch(rsaProvider).newNearbyProviders!.keys.length,
+              who: "providerAndWaitingForResponse".tr(),
+            )
             : Padding(
                 padding: const EdgeInsets.only(left: 160.0, top: 10),
                 child: SizedBox(

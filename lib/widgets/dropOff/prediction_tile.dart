@@ -1,4 +1,3 @@
-import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -7,9 +6,11 @@ import 'package:slahly/classes/models/location.dart';
 import 'package:slahly/classes/provider/rsadata.dart';
 import 'package:slahly/utils/constants.dart';
 import 'package:slahly/utils/http_request.dart';
-import '../../classes/firebase/roadsideassistance/roadsideassistance.dart';
-import '../../classes/models/towProvider.dart';
-import '../../screens/roadsideassistance/chooseprovider.dart';
+import 'package:slahly/classes/firebase/roadsideassistance/roadsideassistance.dart';
+import 'package:slahly/classes/provider/app_data.dart';
+import 'package:slahly/screens/roadsideassistance/chooseprovider.dart';
+
+import 'package:slahly/widgets/dialogues/none_found.dart';
 
 class PredictionTile extends ConsumerWidget {
   const PredictionTile({Key? key, required this.placePredictions})
@@ -24,28 +25,21 @@ class PredictionTile extends ConsumerWidget {
         final RSA rsa = ref.watch(rsaProvider);
 
         getPlaceAddressDetails(placePredictions.place_id!, ref, context);
-        // print(rsa.nearbyProviders);
 
-        print("hiii");
-        // Future.delayed(Duration.zero, ()  async {
         rsaNotifier.assignRequestTypeToTTA();
         await rsaNotifier.requestTta();
-        print("mum");
-
-        print("dad");
-
         rsaNotifier.searchNearbyMechanicsAndProviders();
-        // _getStream(context, ref);
-        print(rsa.rsaID);
-        print("xxxxxxxx");
-        context.push(ChooseProviderScreen.routeName);
-        // });
 
-        // searchNearbyMechanicsAndProviders()
-        // context.go();
+        print("before app state");
+
+        ref.watch(salahlyClientProvider.notifier).assignRequest(
+            ref.watch(rsaProvider.notifier).getRequestType(),
+            ref.watch(rsaProvider).rsaID!);
+        print("after app state");
+
+        context.push(ChooseProviderScreen.routeName);
       },
-      child: Container(
-          child: Column(
+      child: Column(
         children: [
           const SizedBox(width: 10),
           Row(
@@ -74,7 +68,7 @@ class PredictionTile extends ConsumerWidget {
           ),
           const SizedBox(width: 10),
         ],
-      )),
+      ),
     );
   }
 

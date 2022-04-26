@@ -1,11 +1,14 @@
-import 'dart:async';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:slahly/screens/DropOff_screens/dropOff_search_screen.dart';
-import "package:slahly/widgets/dropOff/TextFieldOnMap.dart";
 
-import '../../widgets/location/mapWidget.dart';
+import "package:slahly/widgets/dropOff/TextFieldOnMap.dart";
+import 'package:slahly/widgets/location/mapWidget.dart';
+
+import 'package:slahly/screens/DropOff_screens/dropOff_search_screen.dart';
+import 'package:slahly/classes/firebase/roadsideassistance/roadsideassistance.dart';
+import 'package:slahly/classes/provider/app_data.dart';
 
 class DropOffLocationScreen extends StatefulWidget {
   static const String routeName = "/DropOffLocationScreen";
@@ -23,21 +26,6 @@ class _DropOffLocationScreenState extends State<DropOffLocationScreen> {
         body: Stack(
       children: [
         MapWidget(key: myMapWidgetState),
-        Positioned(
-          left: 300,
-          right: 0,
-          bottom: 275,
-          child: ElevatedButton(
-            onPressed: myMapWidgetState.currentState?.locatePosition,
-            child: const Icon(
-              Icons.location_on,
-            ),
-            style: ElevatedButton.styleFrom(
-              shape: CircleBorder(),
-              padding: EdgeInsets.all(10),
-            ),
-          ),
-        ),
         Positioned(
           left: 0,
           right: 0,
@@ -78,26 +66,63 @@ class _DropOffLocationScreenState extends State<DropOffLocationScreen> {
                       ),
                     ),
                     const SizedBox(height: 15),
-                    GestureDetector(
-                      onTap: () {
-                        print(
-                            "before next scree${myMapWidgetState.currentState!.currentCustomLoc.toString()}");
-                        context.push(DropOffSearchScreen.routeName,
-                            extra: myMapWidgetState
-                                .currentState!.currentCustomLoc);
+                    Consumer(
+                      builder: (context, ref, child) {
+                        return GestureDetector(
+                          onTap: () {
+                            print(
+                                "before next scree${myMapWidgetState.currentState!.currentCustomLoc.toString()}");
+
+                            if (ref.watch(salahlyClientProvider).requestType !=
+                                null) {
+                              if (ref
+                                      .watch(salahlyClientProvider)
+                                      .requestType ==
+                                  RequestType.TTA) {
+                                context.push(DropOffSearchScreen.routeName);
+                              } else {
+                                ScaffoldMessenger.of(context)
+                                    .showSnackBar(const SnackBar(
+                                  content:
+                                      Text("There is another ongoing request"),
+                                ));
+                              }
+
+                              return;
+                            }
+                            context.push(DropOffSearchScreen.routeName,
+                                extra: myMapWidgetState
+                                    .currentState!.currentCustomLoc);
+                          },
+                          child: TextFieldOnMap(
+                            isSelected: true,
+                            textToDisplay: ("where_to".tr()),
+                            iconToDisplay: const Icon(
+                              Icons.search,
+                              color: Colors.blue,
+                            ),
+                          ),
+                        );
                       },
-                      child: TextFieldOnMap(
-                        isSelected: true,
-                        textToDisplay: ("where_to".tr()),
-                        iconToDisplay: const Icon(
-                          Icons.search,
-                          color: Colors.blue,
-                        ),
-                      ),
                     ),
                   ],
                 ),
               )),
+        ),
+        Positioned(
+          left: MediaQuery.of(context).size.width * 0.80,
+          right: 0,
+          bottom: MediaQuery.of(context).size.height * 0.19,
+          child: ElevatedButton(
+            onPressed: () => myMapWidgetState.currentState?.locatePosition(),
+            child: const Icon(
+              Icons.location_on,
+            ),
+            style: ElevatedButton.styleFrom(
+              shape: const CircleBorder(),
+              padding: const EdgeInsets.all(10),
+            ),
+          ),
         ),
       ],
     ));
