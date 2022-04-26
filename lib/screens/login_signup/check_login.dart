@@ -5,6 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:overlay_support/overlay_support.dart';
 import 'package:slahly/screens/allScreens.dart';
+import 'package:slahly/screens/car_management/add_car_screen.dart';
+import 'package:slahly/screens/car_management/view_cars_screen.dart';
+import 'package:slahly/screens/history_management/view_history.dart';
 import 'package:slahly/screens/homepage.dart';
 import 'package:slahly/screens/login_signup/signupscreen.dart';
 import 'package:slahly/screens/test_screens/testscreen_foula.dart';
@@ -18,7 +21,7 @@ class CheckLogin extends StatelessWidget {
     if (FirebaseAuth.instance.currentUser == null) {
       context.go(LoginSignupScreen.routeName);
     } else {
-      context.go(AllScreens.routeName);
+      context.go(AddCars.routeName);
     }
     return Scaffold(body: Text("Checking_logged_in_user_error".tr()));
   }

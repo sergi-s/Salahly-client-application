@@ -30,6 +30,7 @@
   "my_car_is_broke_and_doesnt_work": "My car is broke and doesn't work",
   "Send": "Send",
   "Add_History": "Add History",
+  "history": "History",
   "Cancel": "Cancel",
   "Problem": "Problem",
   "confirm_location": "Confirm Location",
@@ -99,5 +100,32 @@
   "confirm_cancellation": "Confirm cancellation",
   "confirm": "Confirm",
   "settings": "Settings",
+<<<<<<< HEAD
   "change_lang": "Choose language"
 }
+=======
+  "change_lang": "Choose language",
+  "home": "Home",
+  "updateProfile": "Update Profile",
+  "reminder": "Reminder",
+  "goToHomePage": "Go to Home page",
+  "keepWaiting": "Keep waiting",
+  "MechanicsRejected": "Mechanics rejected request",
+  "ProvidersRejected": "Providers rejected request",
+  "MechanicsRejectedDescription": "All found Mechanics rejected your request, try again later or keep waiting",
+  "ProvidersRejectedDescription": "All found Providers rejected your request, try again later or keep waiting",
+  "rsaConfirmation": "Are you sure you want to request roadside assistance at ",
+  "wsaConfirmation": "Are you sure you want to request WorkShop assistance",
+  "at": "at",
+  "needTowTruck": "Do you need a Tow Truck?",
+  "weFound": "We found",
+  "mechanicAndWaitingForResponse": "Mechanics, and waiting for their response",
+  "providerAndWaitingForResponse": "Providers, and waiting for their response",
+  "didNotFindProvider": "Sorry! Did not find a Tow Provider",
+  "didNotFindMechanic": "Sorry! Did not find a Nearby Mechanic",
+  "sorry": "Sorry",
+  "ok": "Ok",
+  "withTowTruck": "with to truck",
+  "withNoTowTruck": "without a tow truck"
+}
+>>>>>>> rsa/wsa

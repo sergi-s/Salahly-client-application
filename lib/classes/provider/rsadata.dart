@@ -10,8 +10,6 @@ import 'package:slahly/classes/models/towProvider.dart';
 import 'package:slahly/main.dart';
 import 'package:slahly/utils/constants.dart';
 
-// import 'package:slahly/classes/models/road_side_assistance.dart';
-
 // Global for anyone to use it
 final rsaProvider = StateNotifierProvider<RSANotifier, RSA>((ref) {
   return RSANotifier(ref);
@@ -24,6 +22,16 @@ class RSANotifier extends StateNotifier<RSA> {
                 CustomLocation(latitude: 31.206972, longitude: 29.919028)));
   final Ref ref;
   _RequestType? _requestType;
+
+  bool atLeastOneProvider = false;
+  bool atLeastOneMechanic = false;
+
+  Future<bool> atLeastOne(bool type) async {
+    //true mechanic
+    //false provider
+    await Future.delayed(const Duration(minutes: 1));
+    return type ? atLeastOneMechanic : atLeastOneProvider;
+  }
 
   // Setters
   void assignNearbyMechanics(List<Mechanic> nearbyMechanics) {
@@ -38,8 +46,8 @@ class RSANotifier extends StateNotifier<RSA> {
           List<TowProvider> acceptedNearbyProviders) =>
       state = state.copyWith(acceptedNearbyProviders: acceptedNearbyProviders);
 
-//Sergi Samir Boules Rizkallah
   void onFindNewMechanic(Mechanic nearbyMechanic) async {
+    atLeastOneMechanic = true;
     print("onFIndNew mechanic::");
     //I dont want to mess up the old code.
 
@@ -70,8 +78,8 @@ class RSANotifier extends StateNotifier<RSA> {
     print("MAP2:${state.newNearbyMechanics!}");
   }
 
-//Sergi Samir Boules Rizkallah
   void onFindNewProvider(TowProvider newNearbyProvider) async {
+    atLeastOneProvider = true;
     //I dont want to mess up the old code.
 
     //copy to new map (make sure their is no conflict between call by ref and call by value) and not null
@@ -93,11 +101,13 @@ class RSANotifier extends StateNotifier<RSA> {
 
       print(_requestType == _RequestType.WSA ? "WSA" : "RSA");
 
-      localRef
-          .child(state.rsaID!)
-          .child("providersResponses")
-          .child(newNearbyProvider.id!)
-          .set("pending");
+      if (_requestType != _RequestType.TTA) {
+        localRef
+            .child(state.rsaID!)
+            .child("providersResponses")
+            .child(newNearbyProvider.id!)
+            .set("pending");
+      }
     }
     // print("MAP2:${state.newNearbyMechanics!.keys}");
     state = state.copyWith(newNearbyProviders: tempMap);
@@ -150,21 +160,52 @@ class RSANotifier extends StateNotifier<RSA> {
     print("THE ACCEPTED LIST IS tow provs ${state.acceptedNearbyProviders}");
   }
 
-  void assignMechanic(Mechanic mechanic, bool stopListener) {
+  void assignMechanic(Mechanic mechanic, bool stopListener) async {
     state = state.copyWith(mechanic: mechanic);
     if (stopListener) {
       NearbyLocations.stopListener();
     }
+    print(">>> assign 5ara mechanic");
+
+    print(_requestType.toString());
+    DatabaseReference localRef = _requestType == _RequestType.WSA
+        ? wsaRef
+        : _requestType == _RequestType.RSA
+            ? rsaRef
+            : ttaRef;
+
+    print((_requestType == _RequestType.WSA)
+        ? "wsaRef"
+        : _requestType == _RequestType.RSA
+            ? "rsaRef"
+            : "ttaRef");
+    await localRef
+        .child(ref.watch(rsaProvider).rsaID!)
+        .child("mechanicsResponses")
+        .update({mechanic.id!: "chosen"});
   }
 
   void assignNearbyProviders(List<TowProvider> nearbyProviders) =>
       state = state.copyWith(nearbyProviders: nearbyProviders);
 
-  void assignProvider(TowProvider provider, bool stopListener) {
+  void assignProvider(TowProvider provider, bool stopListener) async {
     state = state.copyWith(provider: provider);
     if (stopListener) {
       NearbyLocations.stopListener();
     }
+
+    print(">>> assign 5ara provider");
+
+    print(_requestType.toString());
+    DatabaseReference localRef = _requestType == _RequestType.WSA
+        ? wsaRef
+        : _requestType == _RequestType.RSA
+            ? rsaRef
+            : ttaRef;
+    await localRef
+        .child(ref.watch(rsaProvider).rsaID!)
+        .child("mechanicsResponses")
+        .update({provider.id!: "chosen"});
   }
 
   assignUserLocation(CustomLocation location) =>
@@ -186,42 +227,18 @@ class RSANotifier extends StateNotifier<RSA> {
   assignState(RSAStates newState) => state = state.copyWith(state: newState);
 
   Future _requestRSA() async {
-    //testing purpose
     String userID = FirebaseAuth.instance.currentUser!.uid;
-    // String userID = "met7at";
-    ///TODO MAKE THIS FROM USER DATA
 
     DatabaseReference newRSA = dbRef.child("rsa").push();
-    Map<String, dynamic> rsadata = {
+    Map<String, dynamic> rsaData = {
       "userID": userID,
       "latitude": state.location!.latitude,
       "longitude": state.location!.longitude,
       "mechanicsResponses": {},
       "providersResponses": {},
-      // "state": RSA.stateToString(RSAStates.waitingForMechanicResponse)
-
       "state": RSA.stateToString(RSAStates.waitingForMechanicResponse)
     };
-    print("Ayoohew");
-    // print(state.nearbyMechanics!.toString());
-    print("Ayooh");
-    for (var mech in state.nearbyMechanics!) {
-      // rsadata.update("mechanicsResponses", (value) => value[]);
-      if (mech.id == "1" || mech.id == "2" || mech.id == "3") continue;
-      rsadata["mechanicsResponses"][mech.id.toString()] = "pending";
-      // rsadata.update("mechanicsResponses", (value) => value.addAll({mech.id.toString():"pending"}));
-    }
-    print(rsadata["mechanicsResponses"].toString());
-    for (var prov in state.nearbyProviders!) {
-      rsadata["providersResponses"][prov.id.toString()] = "pending";
-      // rsadata.update("providersResponses", (value) => value.addAll({prov.id.toString():"pending"}));
-    }
-    print("Ayooh");
-    print(rsadata["providersResponses"].toString());
-    print("kimoooo");
-    await newRSA.set(rsadata);
-    print("lolaaddddd");
-    print("Ayooh");
+    await newRSA.set(rsaData);
     return newRSA.key;
   }
 
@@ -230,7 +247,8 @@ class RSANotifier extends StateNotifier<RSA> {
     assignState(RSAStates.requestingRSA);
     String? rsaID = await _requestWSA();
     if (rsaID != null) {
-      state = state.copyWith(state: RSAStates.created, rsaID: rsaID);
+      state = state.copyWith(
+          state: RSAStates.created, rsaID: rsaID, requestType: RequestType.WSA);
       print("WSA::${rsaID} ==== ${state.rsaID}");
       return true;
     } else {
@@ -260,7 +278,8 @@ class RSANotifier extends StateNotifier<RSA> {
     String? rsaID = await _requestRSA();
     if (rsaID != null) {
       print("aywaaaaaaaaaaa");
-      state = state.copyWith(state: RSAStates.created, rsaID: rsaID);
+      state = state.copyWith(
+          state: RSAStates.created, rsaID: rsaID, requestType: RequestType.RSA);
       print("AyoohID::${rsaID} ==== ${state.rsaID}");
       return true;
     } else {
@@ -270,8 +289,6 @@ class RSANotifier extends StateNotifier<RSA> {
     }
   }
 
-// customRefresh() => state = state.copyWith(); Testing
-
   searchNearbyMechanicsAndProviders() {
     // _assignState(RSAStates.searchingForNearbyMechanic);
     // double radius =
@@ -279,7 +296,6 @@ class RSANotifier extends StateNotifier<RSA> {
 
     double radius = 400;
 
-    // double radius =
     NearbyLocations.getNearbyMechanicsAndProviders(
         state.location!.latitude, state.location!.longitude, radius, ref);
   }

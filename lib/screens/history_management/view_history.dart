@@ -1,84 +1,195 @@
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:slahly/classes/firebase/roadsideassistance/roadsideassistance.dart';
+
+import 'package:slahly/classes/models/location.dart';
+import 'package:slahly/classes/models/towProvider.dart';
+import 'package:slahly/abstract_classes/user.dart';
+
+
+
+import 'package:slahly/classes/models/road_side_assistance.dart';
+
+import 'package:slahly/screens/history_management/accordion.dart';
+import 'package:slahly/screens/history_management/add_custom_history.dart';
+
+
+
 
 class ViewHistory extends StatelessWidget {
-  late List<RSA> rsaHistory;
-
   static final routeName = "/viewhistory";
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xFFd1d9e6),
-      appBar: AppBar(
-        backgroundColor: const Color(0xFF193566),
-        title: Text("View_History".tr()),
-      ), // appBar
-      body: SingleChildScrollView(
-        child: Container(
-          padding: EdgeInsets.all(10.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: <Widget>[
-              myCardLayout(theIcon: Icons.view_agenda, theText: "Report 1"),
-              myCardLayout(theIcon: Icons.view_agenda, theText: "Report 2"),
-              myCardLayout(theIcon: Icons.view_agenda, theText: "Report 3"),
-              myCardLayout(theIcon: Icons.view_agenda, theText: "Report 4"),
-              //this is not the list example, so when you add new cards, it won't be inside of the list.
-            ],
-          ), // column
-        ),
-      ), // Container
-    ); // scaffold
-  }
-}
+  ViewHistory({Key? key}) : super(key: key);
 
-class myCardLayout extends StatelessWidget {
-  // default constructor
-  myCardLayout({required this.theIcon, required this.theText});
 
-  // init variables
-  final IconData theIcon;
-  final String theText;
+
+  List<RSA> rsaHistory=[
+  ];
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Card(
-        elevation: 3,
-        margin: EdgeInsets.all(10),
-        color: Color(0xFFE8E8E8),
-        shape: BeveledRectangleBorder(
-          borderRadius: BorderRadius.circular(15.0),
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            ListTile(
-              leading: Icon(theIcon, size: 40.0, color: Colors.grey),
-              title: Text(
-                theText,
-                style: TextStyle(fontSize: 20.0),
-              ),
-              subtitle: const Text(
-                  'Date: 20/2/2022 \n Car: MG 6 \n Number Plate:س ق ه | 2544'),
-            ),
-            ButtonTheme(
-              // make buttons use the appropriate styles for cards
-              child: ButtonBar(
-                children: <Widget>[
-                  FlatButton(
-                    child: Text("View".tr()),
-                    onPressed: () {
-                      /* ... */
-                    },
-                  ),
+    return MaterialApp(
+        home: DefaultTabController(
+          length: 2,
+          child: Scaffold(
+            backgroundColor: const Color(0xFFd1d9e6),
+            appBar: AppBar(
+              backgroundColor: const Color(0xFF193566),
+              bottom: const TabBar(
+                tabs: [
+                  Tab(text: "History"),
+                  Tab(text: "Custom History"),
                 ],
               ),
             ),
-          ],
-        ),
-      ),
-    );
+            body: TabBarView(
+              children: [
+                Builder(
+                    builder: (context) {
+                      return Column(
+                        children: [
+                          SizedBox(height: 10),
+                          ListView.builder(
+                            itemBuilder: (BuildContext, index) {
+                              return Accordion(
+                                  providers[index].email.toString(),
+                                  providers[index].avatar.toString(),
+                                  providers[index].phoneNumber.toString(),
+                                  providers[index].name.toString(),
+                                  providers[index].loc!.address.toString(),
+                                  providers[index].type!,
+                                  false);
+                            },
+                            itemCount: providers.length,
+                            shrinkWrap: true,
+                            padding: EdgeInsets.all(5),
+                            scrollDirection: Axis.vertical,
+                          ),
+                        ],
+                      );
+                    }
+                ),
+
+
+                Builder(
+                    builder: (context) {
+                      return Column(
+                        children: [
+                          SizedBox(height: 10),
+                          ListView.builder(
+                            itemBuilder: (BuildContext, index) {
+                              return Accordion(
+                                  providers[index].email.toString(),
+                                  providers[index].avatar.toString(),
+                                  providers[index].phoneNumber.toString(),
+                                  providers[index].name.toString(),
+                                  providers[index].loc!.address.toString(),
+                                  providers[index].type!,
+                                  false);
+                            },
+                            itemCount: providers.length,
+                            shrinkWrap: true,
+                            padding: EdgeInsets.all(5),
+                            scrollDirection: Axis.vertical,
+                          ),
+                          FloatingActionButton(
+                            backgroundColor: const Color(0xFF193566),
+                            foregroundColor: Colors.white,
+                            onPressed: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (context) => AddCustomHistory()));
+                            },
+                            child: Icon(Icons.add),)
+
+                        ],
+                      );
+
+                    }
+
+                ),
+
+
+              ],
+            ),
+          ),
+        ));
   }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+List<TowProvider> providers = [
+  TowProvider(
+      nationalID: '123132',
+      name: 'Report 1',
+      phoneNumber: 'MG 6',
+      loc: CustomLocation(
+          address:
+          "Factorya, shar3 45 odam mtafy 12311321312312hasdhdashjss221",
+          longitude: 11,
+          latitude: 11),
+      avatar: 'https://www.woolha.com/media/2020/03/eevee.png',
+      email: 'email@yahoo.com',
+      type: Type.provider),
+  TowProvider(
+      nationalID: '123132',
+      name: 'Report 2',
+      phoneNumber: 'Bmw 320I',
+      loc: CustomLocation(
+          address:
+          "Factorya, shar3 45 odam mtafy 12311321312312hasdhdashjss221",
+          longitude: 11,
+          latitude: 11),
+      avatar: 'https://www.woolha.com/media/2020/03/eevee.png',
+      email: 'email@yahoo.com',
+      type: Type.provider),
+];
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

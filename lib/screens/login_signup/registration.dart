@@ -1,43 +1,39 @@
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:slahly/classes/firebase/firebase.dart';
 import 'package:slahly/classes/models/client.dart';
 import 'package:slahly/utils/validation.dart';
 import 'package:slahly/widgets/login_signup/Registration_TextField.dart';
-
-import '../../widgets/login_signup/Birthday_Input.dart';
-import '../../widgets/login_signup/Rounded_Bottom.dart';
-import '../../widgets/login_signup/roundedInput.dart';
+import 'package:slahly/widgets/login_signup/Rounded_Bottom.dart';
 
 class Registration extends StatelessWidget {
-  static final routeName = "/registrationscreen";
+  static const routeName = "/registrationscreen";
 
   Registration({
     Key? key,
-    required this.emailobj,
+    required this.emailObj,
   }) : super(key: key);
-  final String emailobj;
+  final String emailObj;
   Validator validation = Validator();
   FirebaseCustom fb = FirebaseCustom();
 
   //late TextEditingController emailController = TextEditingController();
   String username = "";
-  String phonenumber = "";
+  String phoneNumber = "";
   String address = "";
   String age = "";
+
   // String gender = "";
 
-  updateusername(String u) {
+  updateUserName(String u) {
     username = u;
   }
 
-  updatephonenumber(String pn) {
-    phonenumber = pn;
+  updatePhoneNumber(String pn) {
+    phoneNumber = pn;
   }
 
-  updateaddress(String adr) {
+  updateAddress(String adr) {
     address = adr;
   }
 
@@ -66,9 +62,9 @@ class Registration extends StatelessWidget {
     // }
     Client client = Client(
         name: username,
-        email: emailobj,
+        email: emailObj,
         address: address,
-        phoneNumber: phonenumber,
+        phoneNumber: phoneNumber,
         subscription: SubscriptionTypes.silver);
 
     bool check = await fb.registration(client);
@@ -110,7 +106,7 @@ class Registration extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Padding(
-              padding: EdgeInsets.all(20),
+              padding: const EdgeInsets.all(20),
               child: Text(
                 "Registration".tr(),
                 style: const TextStyle(
@@ -126,7 +122,7 @@ class Registration extends StatelessWidget {
         SingleChildScrollView(
           child: Center(
             child: Container(
-              margin: EdgeInsets.symmetric(vertical: 150),
+              margin: const EdgeInsets.symmetric(vertical: 150),
               height: MediaQuery.of(context).size.height * 0.55,
               width: MediaQuery.of(context).size.width,
               // decoration: BoxDecoration(
@@ -152,23 +148,21 @@ class Registration extends StatelessWidget {
                     Registration_Input(
                       hintText: 'Username'.tr(),
                       icon: Icons.face,
-                      fn: updateusername,
+                      fn: updateUserName,
                     ),
                     Registration_Input(
                         hintText: 'phone_number'.tr(),
                         icon: Icons.phone,
-                        fn: updatephonenumber),
+                        fn: updatePhoneNumber),
                     Registration_Input(
                       hintText: 'Address'.tr(),
                       icon: Icons.location_on,
-                      fn: updateaddress,
+                      fn: updateAddress,
                     ),
                     //Registration_Input(hintText: 'Age', icon: Icons.date_range,fn:updateage),
                     //DatePicker(hintText: "Birthdate", icon:Icons.date_range, fn: updateage),
                     // Registration_Input(hintText: 'Gender', icon: Icons.transgender,fn: updategender,),
-                    SizedBox(
-                      height: 10,
-                    ),
+                    const SizedBox(height: 10),
                     RoundedButton(
                       title: "Register".tr(),
                       onPressedFunction: () async {

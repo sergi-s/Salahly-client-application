@@ -1,11 +1,10 @@
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:slahly/classes/firebase/roadsideassistance/roadsideassistance.dart';
 
-import '../../classes/provider/rsadata.dart';
+import 'package:slahly/classes/provider/rsadata.dart';
 
 class Arrival extends StatefulWidget {
   static const routeName = "/Select";
