@@ -119,11 +119,16 @@ class _WSAScreenState extends ConsumerState<WSAScreen> {
                           : ElevatedButton(
                               child: const Text("confirm").tr(),
                               onPressed: () {
-                                if (ref.watch(salahlyClientProvider).requestType != RequestType.NONE) {
-                                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                                    content: Text("There is another onging request"),
+                                if (ref
+                                        .watch(salahlyClientProvider)
+                                        .requestType !=
+                                    null) {
+                                  ScaffoldMessenger.of(context)
+                                      .showSnackBar(const SnackBar(
+                                    content: Text(
+                                        "There is another ongoing request"),
                                   ));
-                                  return ;
+                                  return;
                                 }
                                 requestConfirmationDialogue(context,
                                     titleChildren: [const Text("confirm").tr()],

@@ -40,7 +40,6 @@ class _SearchingMechanicProviderScreenState
     });
   }
 
-//TODO static data to be removed
   @override
   Widget build(BuildContext context) {
     RSANotifier rsaNotifier = ref.watch(rsaProvider.notifier);

@@ -216,7 +216,7 @@ class RSA {
   nearby_locations+create_RSA
 
  */
-enum RequestType { RSA, WSA, TTA, NONE }
+enum RequestType { RSA, WSA, TTA}
 
 enum RSAStates {
   canceled,

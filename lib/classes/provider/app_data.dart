@@ -23,7 +23,7 @@ class SalahlyClient {
   SalahlyClient(
       {AppState? appState, RequestType? requestType, String? requestID}) {
     _appState = appState ?? AppState.initialState;
-    _requestType = requestType??RequestType.NONE;
+    _requestType = requestType;
     _requestID = requestID ?? "";
   }
 

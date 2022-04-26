@@ -157,21 +157,51 @@ class RSANotifier extends StateNotifier<RSA> {
     print("THE ACCEPTED LIST IS tow provs ${state.acceptedNearbyProviders}");
   }
 
-  void assignMechanic(Mechanic mechanic, bool stopListener) {
+  void assignMechanic(Mechanic mechanic, bool stopListener) async {
     state = state.copyWith(mechanic: mechanic);
     if (stopListener) {
       NearbyLocations.stopListener();
     }
+    print(">>> assign 5ara mechanic");
+
+    print(_requestType.toString());
+    DatabaseReference localRef = _requestType == _RequestType.WSA
+        ? wsaRef
+        : _requestType == _RequestType.RSA
+            ? rsaRef
+            : ttaRef;
+
+    print((_requestType == _RequestType.WSA)? "wsaRef"
+        : _requestType == _RequestType.RSA
+        ? "rsaRef"
+        : "ttaRef");
+    await localRef
+        .child(ref.watch(rsaProvider).rsaID!)
+        .child("mechanicsResponses")
+        .update({mechanic.id!: "chosen"});
   }
 
   void assignNearbyProviders(List<TowProvider> nearbyProviders) =>
       state = state.copyWith(nearbyProviders: nearbyProviders);
 
-  void assignProvider(TowProvider provider, bool stopListener) {
+  void assignProvider(TowProvider provider, bool stopListener) async {
     state = state.copyWith(provider: provider);
     if (stopListener) {
       NearbyLocations.stopListener();
     }
+
+    print(">>> assign 5ara provider");
+
+    print(_requestType.toString());
+    DatabaseReference localRef = _requestType == _RequestType.WSA
+        ? wsaRef
+        : _requestType == _RequestType.RSA
+            ? rsaRef
+            : ttaRef;
+    await localRef
+        .child(ref.watch(rsaProvider).rsaID!)
+        .child("mechanicsResponses")
+        .update({provider.id!: "chosen"});
   }
 
   assignUserLocation(CustomLocation location) =>

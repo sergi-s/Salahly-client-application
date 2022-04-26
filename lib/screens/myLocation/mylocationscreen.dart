@@ -36,10 +36,9 @@ class _MyLocationScreenState extends ConsumerState<MyLocationScreen> {
             const SizedBox(width: 4),
             ElevatedButton(
                 onPressed: () {
-                  if (ref.watch(salahlyClientProvider).requestType !=
-                      RequestType.NONE) {
+                  if (ref.watch(salahlyClientProvider).requestType != null) {
                     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                      content: Text("There is another onging request"),
+                      content: Text("There is another ongoing request"),
                     ));
                     return;
                   }
