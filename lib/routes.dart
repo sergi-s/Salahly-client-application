@@ -1,6 +1,8 @@
 import 'package:go_router/go_router.dart';
 import 'package:slahly/classes/models/location.dart';
 import 'package:slahly/screens/DropOff_screens/dropOff_search_screen.dart';
+import 'package:slahly/screens/userMangament/editProfile.dart';
+import 'package:slahly/screens/userMangament/pofile.dart';
 import 'package:slahly/screens/workshop_assistance/workshop_assistance_screen.dart';
 import 'package:slahly/screens/allScreens.dart';
 import 'package:slahly/screens/car_management/add_car_screen.dart';
@@ -32,6 +34,7 @@ import 'package:slahly/screens/test_screens/testscreen_foula.dart';
 import 'package:slahly/screens/Describeproblem.dart';
 import 'package:slahly/screens/waitforarrvial.dart';
 import 'package:slahly/screens/userMangament/choose_car.dart';
+import 'package:slahly/screens/userMangament/editProfile.dart';
 
 class Routing {
   get router => GoRouter(
@@ -175,6 +178,14 @@ class Routing {
           GoRoute(
             path: TestUserCAR.routeName,
             builder: (context, state) => TestUserCAR(),
+          ),
+          GoRoute(
+            path: EditProfile.routeName,
+            builder: (context, state) => EditProfile(),
+          ),
+          GoRoute(
+            path: Profile.routeName,
+            builder: (context, state) => Profile(),
           ),
         ],
       );
