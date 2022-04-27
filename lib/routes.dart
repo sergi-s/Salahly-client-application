@@ -1,6 +1,8 @@
 import 'package:go_router/go_router.dart';
 import 'package:slahly/classes/models/location.dart';
 import 'package:slahly/screens/DropOff_screens/dropOff_search_screen.dart';
+import 'package:slahly/screens/reminder/addReminderScreen.dart';
+import 'package:slahly/screens/reminder/reminderScreen.dart';
 import 'package:slahly/screens/workshop_assistance/workshop_assistance_screen.dart';
 import 'package:slahly/screens/allScreens.dart';
 import 'package:slahly/screens/car_management/add_car_screen.dart';
@@ -35,7 +37,7 @@ import 'package:slahly/screens/userMangament/choose_car.dart';
 
 class Routing {
   get router => GoRouter(
-        initialLocation: LoginSignupScreen.routeName,
+        initialLocation:AddReminder.routeName,
         routes: <GoRoute>[
           GoRoute(
             //TESTING
@@ -171,6 +173,14 @@ class Routing {
           GoRoute(
             path: WSAScreen.routeName,
             builder: (context, state) => WSAScreen(),
+          ),
+          GoRoute(
+            path: ReminderScreen.routeName,
+            builder: (context, state) => ReminderScreen(),
+          ),
+          GoRoute(
+            path: AddReminder.routeName,
+            builder: (context, state) => AddReminder(),
           ),
         ],
       );
