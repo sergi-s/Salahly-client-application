@@ -2,7 +2,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:slahly/classes/models/location.dart';
 import 'dart:math' show cos, sqrt, asin;
 
-import '../http_request.dart';
+import 'package:slahly/utils/http_request.dart';
 import 'geocoding.dart';
 
 Future _checkLocationPermission() async {
@@ -42,14 +42,17 @@ Future _checkLocationPermission() async {
 }
 
 Future<CustomLocation> getUserLocation() async {
-  _checkLocationPermission().onError((error, stackTrace) {
+  return _checkLocationPermission().onError((error, stackTrace) {
     print(error);
     return null;
+  }).then((value) async {
+    Position pos = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
+    String address =
+        await searchCoordinateAddress_google(pos.latitude, pos.longitude);
+    return CustomLocation(
+        longitude: pos.longitude, latitude: pos.latitude, address: address);
   });
-  Position pos = await Geolocator.getCurrentPosition(
-      desiredAccuracy: LocationAccuracy.high);
-  String address = await searchCoordinateAddress_google(pos.latitude,pos.longitude);
-  return CustomLocation(longitude: pos.longitude, latitude: pos.latitude,address: address);
 }
 
 double calculateDistance(lat1, lon1, lat2, lon2) {

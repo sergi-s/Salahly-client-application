@@ -1,13 +1,14 @@
-import 'package:flutter/cupertino.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:slahly/classes/models/towProvider.dart';
 import 'package:slahly/classes/provider/rsadata.dart';
+import 'package:slahly/widgets/roadsideassistance/HoldPlease.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 import 'package:slahly/classes/models/mechanic.dart';
 
-import '../ChooseTile.dart';
+import 'package:slahly/widgets/ChooseTile.dart';
 
 class ChooseMechanicSlider extends ConsumerWidget {
   ChooseMechanicSlider({Key? key, required this.pc, required this.mechanics})
@@ -28,9 +29,16 @@ class ChooseMechanicSlider extends ConsumerWidget {
       //   top: Radius.circular(50),
       // ),
       defaultPanelState: PanelState.CLOSED,
-      panelBuilder: (ScrollController sc) => Stack(children: [
+      panelBuilder: (ScrollController sc) =>
+          Stack(alignment: Alignment.center, children: [
+        (ref.watch(rsaProvider).acceptedNearbyMechanics!.isEmpty)
+            ? HoldPlease()
+            : const Text(""),
         mechanics.isEmpty
-            ? SearchingWidget()
+            ? SearchingWidget(
+              size: ref.watch(rsaProvider).newNearbyMechanics!.keys.length,
+              who: "mechanicAndWaitingForResponse".tr(),
+            )
             : Padding(
                 padding: const EdgeInsets.only(left: 160.0, top: 10),
                 child: SizedBox(
@@ -39,13 +47,18 @@ class ChooseMechanicSlider extends ConsumerWidget {
                   width: 60,
                   child: Padding(
                     padding: const EdgeInsets.only(bottom: 5, top: 5),
-                    child: RaisedButton(
-                        color: Colors.white,
-                        onPressed: () {
-                          print("hello");
-                        },
+                    child: ElevatedButton(
+                      onPressed: () {
+                        print("hello");
+                      },
+                      style: ElevatedButton.styleFrom(
+                        primary: Colors.white,
                         shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30.0))),
+                            borderRadius: BorderRadius.circular(30.0)),
+                        padding: const EdgeInsets.all(10),
+                      ),
+                      child: null,
+                    ),
                   ),
                 ),
               ),
@@ -60,6 +73,7 @@ class ChooseMechanicSlider extends ConsumerWidget {
                 ref
                     .watch(rsaProvider.notifier)
                     .assignMechanic(mechanics[index], false);
+                pc.close();
               },
               child: ChooseTile(
                 email: mechanics[index].email.toString(),
@@ -98,9 +112,16 @@ class ChooseTowProviderSlider extends ConsumerWidget {
       panelSnapping: true,
       minHeight: 0,
       defaultPanelState: PanelState.CLOSED,
-      panelBuilder: (ScrollController sc) => Stack(children: [
+      panelBuilder: (ScrollController sc) =>
+          Stack(alignment: Alignment.center, children: [
+        (ref.watch(rsaProvider).acceptedNearbyProviders!.isEmpty)
+            ? HoldPlease()
+            : const Text(""),
         towProviders.isEmpty
-            ? SearchingWidget()
+            ? SearchingWidget(
+              size: ref.watch(rsaProvider).newNearbyProviders!.keys.length,
+              who: "providerAndWaitingForResponse".tr(),
+            )
             : Padding(
                 padding: const EdgeInsets.only(left: 160.0, top: 10),
                 child: SizedBox(
@@ -130,6 +151,7 @@ class ChooseTowProviderSlider extends ConsumerWidget {
                 ref
                     .watch(rsaProvider.notifier)
                     .assignProvider(towProviders[index], false);
+                pc.close();
               },
               child: ChooseTile(
                 email: towProviders[index].email.toString(),
@@ -154,20 +176,20 @@ class ChooseTowProviderSlider extends ConsumerWidget {
 }
 
 class SearchingWidget extends StatelessWidget {
-  const SearchingWidget({
-    Key? key,
-  }) : super(key: key);
+  SearchingWidget({Key? key, this.who, this.size}) : super(key: key);
+
+  String? who;
+  int? size;
 
   @override
   Widget build(BuildContext context) {
     return Container(
+      padding: const EdgeInsets.all(5),
       alignment: Alignment.center,
-      color: Color(0xFFd1d9e6),
+      color: const Color(0xFFd1d9e6),
       child: Text(
-        "Searching...",
-        style: TextStyle(
-          fontSize: 20,
-        ),
+        "weFound".tr() + " $size, " + who!,
+        style: const TextStyle(fontSize: 20),
       ),
     );
   }

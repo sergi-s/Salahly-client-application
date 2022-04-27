@@ -2,7 +2,6 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 class AddCars extends StatelessWidget {
-  // This widget is the root of your application.
   static final routeName = "/addcarscreen";
   @override
   Widget build(BuildContext context) {
@@ -18,11 +17,11 @@ class AddCars extends StatelessWidget {
 }
 
 class AddCarDialog extends StatelessWidget {
-  String car = "Mg 6";
-  String model = "2022";
-  String noplate = "س ق ه | 2544";
-  String color = "YELLOW";
-  String Chassis = "SV30-01xxxx";
+  final TextEditingController carModelController = TextEditingController();
+  final TextEditingController yearController = TextEditingController();
+  final TextEditingController plateController = TextEditingController();
+  final TextEditingController chasisController = TextEditingController();
+  final TextEditingController numberController = TextEditingController();
 
   _displayDialog(BuildContext context) async {
     return showDialog(
@@ -32,26 +31,28 @@ class AddCarDialog extends StatelessWidget {
           return AlertDialog(
             insetPadding: EdgeInsets.all(8.0),
             shape:
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
-            title: Text('Add_Car'.tr(), style: TextStyle(
-              color: Color(0xFF193566),
-            )),
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
+            title: Text('Add_Car'.tr(),
+                style: TextStyle(
+                  color: Color(0xFF193566),
+                )),
             content: Container(
                 width: MediaQuery.of(context).size.width,
                 child: SingleChildScrollView(
                   child: Column(
                     children: [
-                      Image.asset('assets/images/car_management/addcar.png',
+                      Image.asset(
+                        'assets/images/car_management/addcar.png',
                         fit: BoxFit.contain,
                         height: 150,
                       ),
                       TextField(
                         enabled: false,
                         readOnly: true,
+                        controller: carModelController,
                         decoration: InputDecoration(
                           labelText: 'Car_Model'.tr(),
                         ),
-                        controller: TextEditingController(text: car),
                         textInputAction: TextInputAction.newline,
                         maxLines: null,
                         keyboardType: TextInputType.multiline,
@@ -62,7 +63,7 @@ class AddCarDialog extends StatelessWidget {
                         decoration: InputDecoration(
                           labelText: 'Model_Year'.tr(),
                         ),
-                        controller: TextEditingController(text: model),
+                        controller: carModelController,
                         textInputAction: TextInputAction.newline,
                         maxLines: null,
                         keyboardType: TextInputType.multiline,
@@ -73,18 +74,7 @@ class AddCarDialog extends StatelessWidget {
                         decoration: InputDecoration(
                           labelText: 'Number_Plate'.tr(),
                         ),
-                        controller: TextEditingController(text: noplate),
-                        textInputAction: TextInputAction.newline,
-                        maxLines: null,
-                        keyboardType: TextInputType.multiline,
-                      ),
-                      TextField(
-                        enabled: false,
-                        readOnly: true,
-                        decoration: InputDecoration(
-                          labelText: 'Color_Pick'.tr(),
-                        ),
-                        controller: TextEditingController(text: color),
+                        controller: numberController,
                         textInputAction: TextInputAction.newline,
                         maxLines: null,
                         keyboardType: TextInputType.multiline,
@@ -95,7 +85,7 @@ class AddCarDialog extends StatelessWidget {
                         decoration: InputDecoration(
                           labelText: 'Chassis_Number'.tr(),
                         ),
-                        controller: TextEditingController(text: Chassis),
+                        controller: chasisController,
                         textInputAction: TextInputAction.newline,
                         maxLines: null,
                         keyboardType: TextInputType.multiline,
@@ -104,14 +94,12 @@ class AddCarDialog extends StatelessWidget {
                   ),
                 )),
             actions: <Widget>[
-
               new FlatButton(
                 child: new Text('Cancel'.tr()),
                 onPressed: () {
                   Navigator.of(context).pop();
                 },
               ),
-
               new FlatButton(
                 textColor: Colors.white,
                 child: new Text('Send'.tr()),

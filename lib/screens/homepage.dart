@@ -1,6 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:slahly/screens/switchLanguage.dart';
 import 'package:slahly/screens/workshop_assistance/workshop_assistance_screen.dart';
 import 'package:slahly/screens/myLocation/mylocationscreen.dart';
 import 'package:slahly/widgets/gloable_widgets/app_bar.dart';
