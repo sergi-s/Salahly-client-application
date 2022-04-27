@@ -1,5 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:slahly/screens/reminder/reminderScreen.dart';
 
 import '../../widgets/reminder/MyInputField.dart';
 
@@ -20,33 +22,42 @@ class _AddReminderState extends State<AddReminder> {
   String _endTime = "9:30 PM";
   String _startTime = DateFormat("hh:mm a").format(DateTime.now());
   int _selectedRemind = 5;
-  List<int> remindList = [0,5, 10, 15, 20];
+  List<int> remindList = [0, 5, 10, 15, 20];
   String _selectedRepeat = "None";
   List<String> repeatList = ["None", "Daily", "Weekly", "Month"];
   int _selectedColor = 0;
-String title="";
-String note="";
-updateTitle(String tit){
-  title=tit;
-}
-  updateNote(String not){
-    note=not;
+  TimeOfDay selectedTime = TimeOfDay.now();
+  String title = "";
+  String note = "";
+
+  updateTitle(String tit) {
+    title = tit;
   }
-  updateDate(DateTime date){
-    _selectedDate=date;
+
+  updateNote(String not) {
+    note = not;
   }
-  updateStartTime(String st){
-    _startTime=st;
+
+  updateDate(DateTime date) {
+    _selectedDate = date;
   }
-  updateEndTime(String et){
-    _endTime=et;
+
+  updateStartTime(TimeOfDay st) {
+    selectedTime = st;
   }
-  updateReminder(int rem){
-    _selectedRemind=rem;
+
+  updateEndTime(String et) {
+    _endTime = et;
   }
-  updateSelectRepeat(String sp){
-   _selectedRepeat=sp;
+
+  updateReminder(int rem) {
+    _selectedRemind = rem;
   }
+
+  updateSelectRepeat(String sp) {
+    _selectedRepeat = sp;
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -60,7 +71,7 @@ updateTitle(String tit){
             Icons.arrow_back,
             color: Colors.white,
           ),
-          onPressed: () {},
+          onPressed: () {context.go(ReminderScreen.routeName);},
         ),
         title:
             Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
@@ -92,13 +103,12 @@ updateTitle(String tit){
               MyInputField(
                 title: "Title",
                 hint: "Enter your title",
-               fn:updateTitle ,
+                fn: updateTitle,
               ),
               MyInputField(
                 title: "Note",
                 hint: "Enter your note",
                 fn: updateNote,
-
               ),
               MyInputField(
                 fn: updateDate,
@@ -117,38 +127,39 @@ updateTitle(String tit){
               Row(
                 children: [
                   Expanded(
-                      child: MyInputField(
-                        fn: updateStartTime,
-                    title: 'Start Time',
-                    hint: _startTime,
-                    widget: IconButton(
-                      onPressed: () {
-                        _getTimeFromUser(isStartTime: true);
-                      },
-                      icon: const Icon(
-                        Icons.access_time_rounded,
-                        color: Colors.grey,
+                    child: MyInputField(
+                      fn: updateStartTime,
+                      title: 'Start Time',
+                      hint: "${selectedTime.hour}:${selectedTime.minute}",
+                      widget: IconButton(
+                        onPressed: () {
+                          _selectTime(context);
+                        },
+                        icon: const Icon(
+                          Icons.access_time_rounded,
+                          color: Colors.grey,
+                        ),
                       ),
                     ),
-                  )),
-                  const SizedBox(
-                    width: 15,
                   ),
-                  Expanded(
-                      child: MyInputField(
-                        fn:updateEndTime,
-                    title: 'End Time',
-                    hint: _endTime,
-                    widget: IconButton(
-                      onPressed: () {
-                        _getTimeFromUser(isStartTime: false);
-                      },
-                      icon: const Icon(
-                        Icons.access_time_rounded,
-                        color: Colors.grey,
-                      ),
-                    ),
-                  ))
+                  // const SizedBox(
+                  //   width: 15,
+                  // ),
+                  // Expanded(
+                  //     child: MyInputField(
+                  //       fn:updateEndTime,
+                  //   title: 'End Time',
+                  //   hint: _endTime,
+                  //   widget: IconButton(
+                  //     onPressed: () {
+                  //       _getTimeFromUser(isStartTime: false);
+                  //     },
+                  //     icon: const Icon(
+                  //       Icons.access_time_rounded,
+                  //       color: Colors.grey,
+                  //     ),
+                  //   ),
+                  // ))
                 ],
               ),
               // //Remind field
@@ -213,24 +224,24 @@ updateTitle(String tit){
               ),
               Row(
                 // crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  Container(
-                    height: 50,
-                    child: RaisedButton(
-                      splashColor: Colors.white.withAlpha(30),
-                      color: Color(0xFF193566),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12)),
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                      child: Text(
-                        "Cancel Task",
-                        style: TextStyle(color: Colors.white),
-                      ),
-                    ),
-                  ),
+                  // Container(
+                  //   height: 50,
+                  //   child: RaisedButton(
+                  //     splashColor: Colors.white.withAlpha(30),
+                  //     color: Color(0xFF193566),
+                  //     shape: RoundedRectangleBorder(
+                  //         borderRadius: BorderRadius.circular(12)),
+                  //     onPressed: () {
+                  //       Navigator.of(context).pop();
+                  //     },
+                  //     child: Text(
+                  //       "Cancel Task",
+                  //       style: TextStyle(color: Colors.white),
+                  //     ),
+                  //   ),
+                  // ),
                   Container(
                     // width: 95,
                     height: 50,
@@ -241,76 +252,7 @@ updateTitle(String tit){
                         borderRadius: BorderRadius.circular(12),
                       ),
                       onPressed: () {
-                       _validateData();
-
-                        // showDialog(
-                        //     context: context,
-                        //     builder: (context) {
-                        //       return Dialog(
-                        //         shape: RoundedRectangleBorder(
-                        //             borderRadius: BorderRadius.circular(40)),
-                        //         elevation: 16,
-                        //         child: Container(
-                        //           height:
-                        //               MediaQuery.of(context).size.height / 4,
-                        //           width: MediaQuery.of(context).size.width,
-                        //           child: ListView(
-                        //             children: <Widget>[
-                        //               SizedBox(height: 20),
-                        //               Text(
-                        //                   "Are You Sure You Want To Add Reminder",
-                        //                   style: TextStyle(
-                        //                       decoration:
-                        //                           TextDecoration.underline,
-                        //                       fontSize:18,
-                        //                       letterSpacing: 2,
-                        //                       color: Color(0xFF193566),
-                        //                       fontWeight: FontWeight.bold)),
-                        //               Padding(
-                        //                 padding: const EdgeInsets.only(
-                        //                     left: 70, top: 20),
-                        //                 child: Row(
-                        //                   children: [
-                        //                     RaisedButton(
-                        //                       color: Colors.blueGrey[300],
-                        //                       shape: RoundedRectangleBorder(
-                        //                           borderRadius:
-                        //                               BorderRadius.circular(
-                        //                                   12)),
-                        //                       onPressed: () {
-                        //                         Navigator.of(context).pop();
-                        //                       },
-                        //                       child: Text(
-                        //                         "Cancel",
-                        //                         style: TextStyle(
-                        //                             color: Colors.white),
-                        //                       ),
-                        //                     ),
-                        //                     SizedBox(
-                        //                       width: 10,
-                        //                     ),
-                        //                     RaisedButton(
-                        //                       color: Color(0xFF193566),
-                        //                       shape: RoundedRectangleBorder(
-                        //                           borderRadius:
-                        //                               BorderRadius.circular(
-                        //                                   12)),
-                        //                       onPressed: () {},
-                        //                       child: Text(
-                        //                         "Confirm",
-                        //                         style: TextStyle(
-                        //                             color: Colors.white),
-                        //                       ),
-                        //                     ),
-                        //                   ],
-                        //                 ),
-                        //               ),
-                        //             ],
-                        //           ),
-                        //         ),
-                        //       );
-                        //     });
-                        // },
+                        _validateData();
                       },
                       child: Text(
                         "Create Task",
@@ -338,6 +280,19 @@ updateTitle(String tit){
     if (_pickerDate != null) {
       setState(() {
         _selectedDate = _pickerDate;
+      });
+    }
+  }
+
+  Future<void> _selectTime(BuildContext context) async {
+    final TimeOfDay? timeOfDay = await showTimePicker(
+      context: context,
+      initialTime: selectedTime,
+      initialEntryMode: TimePickerEntryMode.dial,
+    );
+    if (timeOfDay != null && timeOfDay != selectedTime) {
+      setState(() {
+        selectedTime = timeOfDay;
       });
     }
   }
@@ -371,8 +326,8 @@ updateTitle(String tit){
   }
 
   _validateData() {
-    if (title==null ||title=="") {
-      print(title+note+_selectedRepeat+_endTime+_startTime);
+    if (title == null || title == "") {
+      print(title + note + _selectedRepeat + _endTime + _startTime);
 
       ScaffoldMessenger.of(context).showSnackBar(
           // SnackBar(content: Text('please_add_fields'.tr())));
@@ -380,13 +335,50 @@ updateTitle(String tit){
 
       print("wsl ll end");
     } else {
-      print("Controller Data");
-      print(title+"  "+note+"  "+_endTime+"  "+_startTime+"  "+_selectedRepeat);
+      print(title + " " + note + " " + _selectedRepeat + " ");
       print(_selectedDate);
       print(_selectedRemind);
+      print(selectedTime);
+      showDialog<String>(
+        context: context,
+        builder: (BuildContext context) => AlertDialog(
+          title: const Text(
+            'Confirmation',
+            style: TextStyle(
+              color: Color(0xFF193566),
+            ),
+          ),
+          content: const Text('Are you sure you Want To Save Data'),
+          actions: <Widget>[
+            RaisedButton(
+              color: Colors.blueGrey[300],
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12)),
+              onPressed: () => Navigator.pop(context, 'Cancel'),
+              child: const Text('Cancel', style: TextStyle(
+                color: Colors.white,
+              ),),
+            ),
+            RaisedButton(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12)),
+              color: Color(0xFF193566),
+              onPressed: () => Navigator.pop(context, 'OK'),
+              child: const Text(
+                'OK',
+                style: TextStyle(
+                  color: Colors.white,
+                ),
+              ),
+            ),
+          ],
+        ),
+      );
     }
+    ;
   }
 }
+
 // class TaskController extends GetxController {
 //   void onReady() {
 //     super.onReady();
