@@ -13,7 +13,13 @@ const {user} = require("firebase-functions/v1/auth");
 
 // // Create and Deploy Your First Cloud Functions
 // // https://firebase.google.com/docs/functions/write-firebase-functions
-//
+// deploy command:
+/*
+cd "C:\projects\flutter\slahly"
+firebase deploy --only functions
+firebase deploy --only functions:functionname
+
+ */
 
 admin.initializeApp();
 exports.helloWorld = functions.https.onRequest((request, response) => {
@@ -49,95 +55,91 @@ async function getFCMTokensOfMultiUsers(ids) {
 async function sendNotificationMultiClients(tokens) {
 
 }
+const RSAStates = {
+  canceled:"canceled",
 
-/*
+  requestingRSA:"requestingRSA",
+  failedToRequestRSA:"failedToRequestRSA",
+  created:"created", // created RSA on DB
 
-exports.onRSAUpdate = functions.database.ref("/rsa/{rsaID}").onUpdate(async (change, context) => {
-  var rsaID = context.params.rsaID;
-  console.log("RSA UPDATE");
+  waitingForMechanicResponse:"waitingForMechanicResponse", //
+  mechanicConfirmed:"mechanicConfirmed",
+  waitingForProviderResponse:"waitingForProviderResponse",
+  providerConfirmed:"providerConfirmed",
+  waitingForArrival:"waitingForArrival",
+  confirmedArrival:"confirmedArrival",
+  done:"done"
+};
+Object.freeze(RSAStates);
+
+// Listener when user chooses certain mechanic or provider in a wsa or tta request update the state of this request in the receiverRequests table
+exports.onChoosingCertainMechanicOrProviderForRequest = functions.database.ref("/{requestType}/{requestID}/{receiverResponse}/{receiverID}")
+  .onUpdate(async (change, context) => {
+    console.log("First line in function");
+    let receiverResponse = context.params.receiverResponse;
+    let receiverType = "";
+    let receiverID = context.params.receiverID;
+    let requestID = context.params.requestID;
+    let requestType = context.params.requestType;
+    let state = (await admin.database().ref(`/${requestType}/${requestID}/${receiverResponse}/${receiverID}`).get()).val();
+    console.log("before if");
+    // Handling the case when we receive wrong data
+    if (requestType !== "rsa" && requestType !== "tta" && requestType !== "wsa") {
+      console.log("wrong receiver type");
+      return;
+    }
+    if(state !== "chosen"){
+      console.log("wrong state");
+      return;
+    }
+    if (receiverResponse === "providersResponses") {
+      receiverType = "provider";
+    } else if (receiverResponse === "mechanicsResponses") {
+      receiverType = "mechanic";
+    } else {
+      return;
+    }
+    // Put this request in mechanic's requests
+    await updateStateReceiversRequests({
+      requestType: requestType,
+      requestID: requestID,
+      receiverID: receiverID,
+      receiverType: receiverType,
+      state: state,
+    });
 
 
-  // if one of the mechanics accepted
-  // we need to detect if his state changed from pending to accepted
-  if (change.before.child("state").val() === "waitingForMechanicResponse") {
+      // Send mechanic notification that he was chosen
+      let requestTypeFull = "Request type: " + requestType;
+      let receiverIDToken = await getFCMTokenOfSingleUser(receiverID);
+      let notificationPayload = {
+        token: receiverIDToken,
+        title: "You were chosen in a request",
+        body: requestTypeFull,
+        data: {"type": requestType},
+      };
+      console.log(await sendNotificationSingleClient(notificationPayload));
 
-    change.after.child("mechanicsResponses").forEach((mechanicSnap) => {
-      let mechanicState = mechanicSnap.val().toString();
-      console.log("Mechanic state: " + mechanicState);
-      if (mechanicState === "accepted") {
-
-        // Put this rsa in mechanic's list
-        let mechanicID = mechanicSnap.key.toString();
-        // admin.database().ref("mechanicsRequests/" + mechanicID).child(rsaID).set(
-        //   "ongoing",
-        // );
-        admin.database().ref("/mechanicsRequests").child(mechanicID).child(rsaID).set("ongoing");
-        // admin.database().ref("mechanRequests").child(mechanicID).child(rsaID).set("ongoing");
-        // admin.database().ref("/mechRequests/"+mechanicID+"/"+rsaID).set("ongoing");
-
-        // Send client notification
-        let userID = change.after.child("userID").val();
-        admin.database().ref("/FCMTokens/" + userID).get().then((dataDS) => {
-          console.log("userFCMToken: " + dataDS.val().toString());
-          const payload = {
-            notification: {
-              title: "Mechanic Accepted", body: mechanicID,
-            }, // data: {
-            //     body: "Helloooo",
-            // },
-            token: dataDS.val().toString(),
-          };
-          admin.messaging().send(payload).then((response) => {
-            console.log("Successfully sent message:", response);
-            return {success: true};
-          }).catch((error) => {
-            console.log("couldn't send:", error);
-            return {error: error.code};
-          });
-        });
+      // Send each mechanic that was not chosen that he was not chosen
+    await (await admin.database().ref(`/${requestType}/${requestID}/${receiverResponse}`)).once("value", async (snapshot) => {
+      let chosenMechanics = snapshot.val();
+      if (chosenMechanics !== null) {
+        for (let mechanicID in chosenMechanics) {
+          if (mechanicID !== receiverID) {
+            let mechanicIDToken = await getFCMTokenOfSingleUser(mechanicID);
+            let notificationPayload = {
+              token: mechanicIDToken,
+              title: "Request expired",
+              body: requestTypeFull,
+              data: {"type": requestType},
+            };
+            console.log(await sendNotificationSingleClient(notificationPayload));
+          }
+        }
       }
     });
-  } else if (change.before.child("state").val() === "waitingForProviderResponse") {
 
-    change.after.child("providersResponses").forEach((providerSnap) => {
-      let providerState = providerSnap.val().toString();
-      console.log("Provider state: " + providerState);
-      if (providerState === "accepted") {
-
-        // Put this rsa in mechanic's list
-        let providerID = providerSnap.key.toString();
-        // admin.database().ref("/providerHistory/" + providerID).child(rsaID).set(
-        //   "ongoing",
-        // );
-
-        admin.database().ref().child("/providersRequests").child(providerSnap.key.toString()).child(rsaID).set("ongoing");
-
-
-        // Send client notification
-        let userID = change.after.child("userID").val();
-        admin.database().ref("/FCMTokens/" + userID).get().then((dataDS) => {
-          console.log("userFCMToken: " + dataDS.val().toString());
-          const payload = {
-            notification: {
-              title: "Provider Accepted", body: providerID,
-            }, // data: {
-            //     body: "Helloooo",
-            // },
-            token: dataDS.val().toString(),
-          };
-          admin.messaging().send(payload).then((response) => {
-            console.log("Successfully sent message:", response);
-            return {success: true};
-          }).catch((error) => {
-            console.log("couldn't send:", error);
-            return {error: error.code};
-          });
-        });
-      }
-    });
-  }
-});
-*/
+  });
 
 // make a map with requestID and state which we will use at line 163 to check if an update is currently ongoing (stop till the variable is removed}
 let currentRSAPreviouslyAcceptedCheckingMap = {}; // not implemented yet
@@ -152,6 +154,7 @@ exports.onMechanicOrProviderResponse = functions.database.ref("/{requests}/{rece
     } else {
       return;
     }
+    var notificationMsg = "";
 
     let receiverID = context.params.receiverID;
     let requestID = context.params.requestID;
@@ -167,7 +170,7 @@ exports.onMechanicOrProviderResponse = functions.database.ref("/{requests}/{rece
      console.log("requestType: "+requestType);
      console.log("responses: "+responses); */
     // if request type is rsa we need to make only 1 mechanic accept, and update it in rsa
-    if (requestType === "rsa" &&  (state === "accepted" || state === "denied")) {
+    if (requestType === "rsa" &&  (state === "accepted" || state === "rejected")) {
       // check if anyone accepted before,
       let someoneAccepted = false;
 
@@ -192,6 +195,8 @@ exports.onMechanicOrProviderResponse = functions.database.ref("/{requests}/{rece
       // if no one accepted, save the receiver acceptance
       else {
         await idsSnapshot.child(receiverID).ref.set("accepted");
+        // Change state of RSA to RSAStates.waitingForProviderResponse
+        await admin.database().ref("/rsa/" + requestID + "/state").ref.set(RSAStates.waitingForProviderResponse);
         // notify user that we found a mechanic or a provider
         let userID = (await idsSnapshot.ref.parent.parent.child("userID").get()).val();
         let userToken = await getFCMTokenOfSingleUser(userID);
@@ -208,34 +213,18 @@ exports.onMechanicOrProviderResponse = functions.database.ref("/{requests}/{rece
           },
         });
       }
-    } else if (requestType === "wsa" && (state === "accepted" || state === "denied")) {
-      // set the mechanic as accepted or canceled in wsa request
-      await admin.database().ref("/wsa/" + requestID + "/" + responses + "/" + receiverID).ref.set(state);
+    } else if ((requestType === "wsa" || requestType === "tta" )&& (state === "accepted" || state === "rejected")) {
+      notificationMsg = requestType === "wsa"?"Work shop assistance request":"Tow truck assistance request";
+
+      // Sync mechanic/provider response in request table
+      await admin.database().ref("/"+requestType+"/" + requestID + "/" + responses + "/" + receiverID).ref.set(state);
       // notify user that we found a mechanic or a provider
-      let userID = (await admin.database().ref("/wsa/" + requestID).child("userID").get()).val();
+      let userID = (await admin.database().ref("/"+requestType+"/" + requestID).child("userID").get()).val();
       let userToken = await getFCMTokenOfSingleUser(userID);
       if(!userToken) return;
       return await sendNotificationSingleClient({
         token: userToken,
-        title: "Work shop assistance request",
-        body: "Found a nearby available " + receiver,
-        data: {
-          requestType: requestType,
-          requestID: requestID,
-          accepterType: receiver,
-          accepterID: receiverID,
-        },
-      });
-    }
-    else if(requestType === "tta"  && (state === "accepted" || state === "denied")){
-      await admin.database().ref("/tta/" + requestID + "/" + responses + "/" + receiverID).ref.set(state);
-      // notify user that we found a mechanic or a provider
-      let userID = (await admin.database().ref("/tta/" + requestID).child("userID").get()).val();
-      let userToken = await getFCMTokenOfSingleUser(userID);
-      if(!userToken) return;
-      return await sendNotificationSingleClient({
-        token: userToken,
-        title: "Tow truck assistance request",
+        title: notificationMsg,
         body: "Found a nearby available " + receiver,
         data: {
           requestType: requestType,
@@ -299,132 +288,3 @@ exports.onRSAFindNewMechanicOrProvider = functions.database.ref("/{requestType}/
 
   });
 
-
-/*
-
-exports.onRSACreation = functions.database.ref("/rsa/{rsaID}")
-  .onCreate(async (snap, context) => {
-    // var userID = snap.child("userID").val();
-    var rsaID = context.params.rsaID;
-
-
-    snap.child("mechanicsResponses").forEach((mechanic_ID) => {
-      mechanic_ID = mechanic_ID.key.toString();
-      console.log("after mechanic id");
-      console.log("mechanic id: " + mechanic_ID);
-
-      admin.database().ref("/mechanicsRequests").child(mechanic_ID).child(rsaID).set("pending");
-
-
-      admin.database().ref("/FCMTokens/" + mechanic_ID).get().then((dataDS) => {
-        console.log("userFCMToken: " + dataDS.val().toString());
-        const payload = {
-          notification: {
-            title: "cloud function demo",
-            body: rsaID,
-          },
-          // data: {
-          //     body: "Helloooo",
-          // },
-          token: dataDS.val().toString(),
-        };
-        admin.messaging().send(payload).then((response) => {
-          console.log("Successfully sent message:", response);
-          return {success: true};
-        }).catch((error) => {
-          console.log("couldn't send:", error);
-          return {error: error.code};
-        });
-      });
-
-
-      // getFCMTokenOfSingleUser(mechanic_ID).then((dataDS) => {
-      // var userToken = dataDS.val().toString();
-      //   console.log("after getting token");
-      //   console.log("user token: "+userToken);
-      // sendNotificationSingleClient(userToken,"Firebase notification test", rsaID);
-      // });
-    });
-
-
-  });
-*/
-
-/*
-WORKING ONRSACREATION
-// we must handle multiple tokens in a single notification message (avoid spamming sending) and try to read once from DB not spam reading too (mostly will stay the same)
-exports.onRSACreation = functions.database.ref("/rsa/{rsaID}")
-  .onCreate(async (snap, context) => {
-    // var userID = snap.child("userID").val();
-    var rsaID = context.params.rsaID;
-    snap.child("mechanicsResponses").forEach((mechanic_ID) => {
-      mechanic_ID = mechanic_ID.key.toString();
-      console.log("after mechanic id");
-      console.log("mechanic id: " + mechanic_ID);
-
-      admin.database().ref("/mechanicsRequests").child(mechanic_ID).child(rsaID).set("pending");
-
-
-      admin.database().ref("/FCMTokens/" + mechanic_ID).get().then((dataDS) => {
-        console.log("userFCMToken: " + dataDS.val().toString());
-        const payload = {
-          notification: {
-            title: "cloud function demo",
-            body: rsaID,
-          },
-          // data: {
-          //     body: "Helloooo",
-          // },
-          token: dataDS.val().toString(),
-        };
-        admin.messaging().send(payload).then((response) => {
-          console.log("Successfully sent message:", response);
-          return {success: true};
-        }).catch((error) => {
-          console.log("couldn't send:", error);
-          return {error: error.code};
-        });
-      });
-
-
-
-      // getFCMTokenOfSingleUser(mechanic_ID).then((dataDS) => {
-      // var userToken = dataDS.val().toString();
-      //   console.log("after getting token");
-      //   console.log("user token: "+userToken);
-      // sendNotificationSingleClient(userToken,"Firebase notification test", rsaID);
-      // });
-    });
-
-
-  });
-*/
-
-/*
-WORKING ♥♥♥
-exports.simpleDbFunction = functions.database.ref('/rsa/{rsaID}')
-    .onCreate(async (snap, context) => {
-        var userID = snap.child("userID").val();
-        var rsaID = context.params.rsaID;
-        console.log("userID: " + userID);
-      const userFCMToken = await admin.database().ref("/FCMTokens/"+userID).get().then( (dataDS) => {
-          console.log("userFCMToken: "+dataDS.val().toString());
-          const payload = {
-            notification: {
-              title: 'cloud function demo',
-              body: rsaID
-            },
-            // data: {
-            //     body: "Helloooo",
-            // },
-            token: dataDS.val().toString()
-          };
-          admin.messaging().send(payload).then((response) => {
-            console.log('Successfully sent message:', response);
-            return {success: true};
-          }).catch((error) => {
-            console.log('couldn\'t send:', error);
-            return {error: error.code};
-          });
-        });
-    }); */

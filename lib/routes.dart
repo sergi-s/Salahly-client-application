@@ -3,6 +3,8 @@ import 'package:slahly/classes/models/location.dart';
 import 'package:slahly/screens/DropOff_screens/dropOff_search_screen.dart';
 import 'package:slahly/screens/userMangament/editProfile.dart';
 import 'package:slahly/screens/userMangament/pofile.dart';
+import 'package:slahly/screens/reminder/addReminderScreen.dart';
+import 'package:slahly/screens/reminder/reminderScreen.dart';
 import 'package:slahly/screens/workshop_assistance/workshop_assistance_screen.dart';
 import 'package:slahly/screens/allScreens.dart';
 import 'package:slahly/screens/car_management/add_car_screen.dart';
@@ -28,7 +30,7 @@ import 'package:slahly/screens/switchLanguage.dart';
 import 'package:slahly/screens/test_screens/test_user_SM.dart';
 import 'package:slahly/screens/userMangament/addSubowner.dart';
 import 'package:slahly/screens/userMangament/manageSubowner.dart';
-import 'package:slahly/screens/userMangament/select.dart';
+import 'screens/roadsideassistance/arrival.dart';
 import 'package:slahly/screens/userMangament/transferOwner.dart';
 import 'package:slahly/screens/test_screens/testscreen_foula.dart';
 import 'package:slahly/screens/Describeproblem.dart';
@@ -38,7 +40,7 @@ import 'package:slahly/screens/userMangament/editProfile.dart';
 
 class Routing {
   get router => GoRouter(
-        initialLocation: LoginSignupScreen.routeName,
+        initialLocation:AddReminder.routeName,
         routes: <GoRoute>[
           GoRoute(
             //TESTING
@@ -167,9 +169,9 @@ class Routing {
             builder: (context, state) => Choose_car(),
           ),
           GoRoute(
-            path: Select.routeName,
+            path: Arrival.routeName,
             // builder: (context, state) => Select(state.extra as bool),
-            builder: (context, state) => Select(type: state.extra as bool),
+            builder: (context, state) => Arrival(type: state.extra as bool),
           ),
           GoRoute(
             path: WSAScreen.routeName,
@@ -186,6 +188,13 @@ class Routing {
           GoRoute(
             path: Profile.routeName,
             builder: (context, state) => Profile(),
+
+            path: ReminderScreen.routeName,
+            builder: (context, state) => ReminderScreen(),
+          ),
+          GoRoute(
+            path: AddReminder.routeName,
+            builder: (context, state) => AddReminder(),
           ),
         ],
       );

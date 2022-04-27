@@ -1,18 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-
 import "package:slahly/classes/models/place_predictions.dart";
-
 import 'package:slahly/classes/models/location.dart';
 import 'package:slahly/classes/provider/rsadata.dart';
 import 'package:slahly/utils/constants.dart';
 import 'package:slahly/utils/http_request.dart';
-import 'package:slahly/widgets/location/progressDialog.dart';
-import 'package:slahly/classes/provider/rsadata.dart';
+import 'package:slahly/classes/firebase/roadsideassistance/roadsideassistance.dart';
+import 'package:slahly/classes/provider/app_data.dart';
+import 'package:slahly/screens/roadsideassistance/chooseprovider.dart';
 
-import '../../classes/firebase/roadsideassistance/roadsideassistance.dart';
-import '../../screens/roadsideassistance/chooseprovider.dart';
+import 'package:slahly/widgets/dialogues/none_found.dart';
 
 class PredictionTile extends ConsumerWidget {
   const PredictionTile({Key? key, required this.placePredictions})
@@ -22,22 +20,26 @@ class PredictionTile extends ConsumerWidget {
   @override
   Widget build(BuildContext context, ref) {
     return TextButton(
-      onPressed: () {
+      onPressed: () async {
         final rsaNotifier = ref.watch(rsaProvider.notifier);
         final RSA rsa = ref.watch(rsaProvider);
 
         getPlaceAddressDetails(placePredictions.place_id!, ref, context);
-        rsaNotifier.searchNearbyMechanicsAndProviders();
-        print("xxxxxxxx");
-        // print(rsa.nearbyProviders);
-        print("hiii");
-        context.go(ChooseProviderScreen.routeName);
 
-        // searchNearbyMechanicsAndProviders()
-        // context.go();
+        rsaNotifier.assignRequestTypeToTTA();
+        await rsaNotifier.requestTta();
+        rsaNotifier.searchNearbyMechanicsAndProviders();
+
+        print("before app state");
+
+        ref.watch(salahlyClientProvider.notifier).assignRequest(
+            ref.watch(rsaProvider.notifier).getRequestType(),
+            ref.watch(rsaProvider).rsaID!);
+        print("after app state");
+
+        context.push(ChooseProviderScreen.routeName);
       },
-      child: Container(
-          child: Column(
+      child: Column(
         children: [
           const SizedBox(width: 10),
           Row(
@@ -66,15 +68,15 @@ class PredictionTile extends ConsumerWidget {
           ),
           const SizedBox(width: 10),
         ],
-      )),
+      ),
     );
   }
 
   void getPlaceAddressDetails(String placeId, ref, context) async {
-    showDialog(
-        context: context,
-        builder: (BuildContext context) =>
-            ProgressDialog(message: "Setting Drop off, please wait"));
+    // showDialog(
+    //     context: context,
+    //     builder: (BuildContext context) =>
+    //         ProgressDialog(message: "Setting Drop off, please wait"));
 
     String placeDetailsURL =
         "https://maps.googleapis.com/maps/api/place/details/json?place_id=$placeId&key=$googleMapsAPI";
@@ -89,7 +91,5 @@ class PredictionTile extends ConsumerWidget {
         longitude: res["result"]["geometry"]["location"]["lng"]);
 
     ref.watch(rsaProvider.notifier).assignDropOffLocation(customLocation);
-
-    Navigator.pop(context);
   }
 }
