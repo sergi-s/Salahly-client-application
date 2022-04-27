@@ -33,8 +33,7 @@ class WSAScreen extends ConsumerStatefulWidget {
 class _WSAScreenState extends ConsumerState<WSAScreen> {
   GlobalKey<MapWidgetState> myMapWidgetState = GlobalKey();
 
-  bool needProvider = false,
-      needMechanic = true;
+  bool needProvider = false, needMechanic = true;
   bool gotMechanics = false;
   bool didRequest = false;
 
@@ -47,20 +46,14 @@ class _WSAScreenState extends ConsumerState<WSAScreen> {
   @override
   void initState() {
     Future.delayed(Duration.zero, () {
-      if (ref
-          .watch(salahlyClientProvider)
-          .requestType == RequestType.WSA) {
+      if (ref.watch(salahlyClientProvider).requestType == RequestType.WSA) {
         print("HELLO::${ref.watch(rsaProvider).rsaID}");
         setState(() {
           didRequest = true;
-          if (ref
-              .watch(rsaProvider)
-              .mechanic != null) {
+          if (ref.watch(rsaProvider).mechanic != null) {
             gotMechanics = true;
           }
-          if (ref
-              .watch(rsaProvider)
-              .towProvider != null) {
+          if (ref.watch(rsaProvider).towProvider != null) {
             needProvider = true;
           }
         });
@@ -82,10 +75,7 @@ class _WSAScreenState extends ConsumerState<WSAScreen> {
             right: 0,
             bottom: 0,
             child: Container(
-              height: MediaQuery
-                  .of(context)
-                  .size
-                  .height * 0.43,
+              height: MediaQuery.of(context).size.height * 0.43,
               decoration: const BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.only(
@@ -101,7 +91,7 @@ class _WSAScreenState extends ConsumerState<WSAScreen> {
                   ]),
               child: Padding(
                 padding:
-                const EdgeInsets.symmetric(horizontal: 24, vertical: 18),
+                    const EdgeInsets.symmetric(horizontal: 24, vertical: 18),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -128,9 +118,7 @@ class _WSAScreenState extends ConsumerState<WSAScreen> {
                     GestureDetector(
                       child: getMechanicWidget(),
                       onTap: () async {
-                        if (ref
-                            .watch(rsaProvider)
-                            .mechanic == null &&
+                        if (ref.watch(rsaProvider).mechanic == null &&
                             didRequest) {
                           _pcMechanic.open();
                         }
@@ -142,9 +130,7 @@ class _WSAScreenState extends ConsumerState<WSAScreen> {
                         onTap: () {
                           print("The bool value::$needProvider");
                           if (!needProvider) return;
-                          if (ref
-                              .watch(rsaProvider)
-                              .towProvider == null) {
+                          if (ref.watch(rsaProvider).towProvider == null) {
                             _pcTowProvider.open();
                           }
                         }),
@@ -153,76 +139,68 @@ class _WSAScreenState extends ConsumerState<WSAScreen> {
                       children: [
                         didRequest
                             ? ElevatedButton(
-                          child: const Text("Cancel").tr(),
-                          onPressed: () {
-                            confirmCancellation(context, ref);
-                          },
-                        )
+                                child: const Text("Cancel").tr(),
+                                onPressed: () {
+                                  confirmCancellation(context, ref);
+                                },
+                              )
                             : ElevatedButton(
-                            child: const Text("confirm").tr(),
-                            onPressed: () {
-                              if (ref
-                                  .watch(salahlyClientProvider)
-                                  .requestType !=
-                                  null) {
-                                if (ref
-                                    .watch(salahlyClientProvider)
-                                    .requestType ==
-                                    RequestType.WSA) {
-                                  _pcMechanic.open();
-                                } else {
-                                  ScaffoldMessenger.of(context)
-                                      .showSnackBar(const SnackBar(
-                                    content: Text(
-                                        "There is another ongoing request"),
-                                  ));
-                                }
-                                return;
-                              }
-                              requestConfirmationDialogue(context,
-                                  titleChildren: [
-                                    const Text("confirm").tr()
-                                  ],
-                                  content: Text("wsaConfirmation".tr() +
-                                      "\n" +
-                                      (needProvider
-                                          ? ("withTowTruck".tr() +
-                                          "at".tr() +
-                                          " " +
-                                          myMapWidgetState
-                                              .currentState!
-                                              .currentCustomLoc
-                                              .address!)
-                                          : "withNoTowTruck".tr())),
-                                  actionChildren: [
-                                    ElevatedButton(
-                                      onPressed: () =>
-                                          Navigator.pop(context),
-                                      child: Text("Cancel".tr()),
-                                    ),
-                                    ElevatedButton(
-                                        onPressed: () async {
-                                          Navigator.pop(context);
-                                          setState(() {
-                                            didRequest = true;
-                                          });
-                                          await requestWSA();
-                                          print(
-                                              "2=>WE FOUND ${ref
-                                                  .watch(rsaProvider)
-                                                  .newNearbyProviders!
-                                                  .keys
-                                                  .length} Provider");
-                                          print(
-                                              "2=>WE FOUND ${ref
-                                                  .watch(rsaProvider)
-                                                  .newNearbyMechanics!
-                                                  .keys
-                                                  .length} Mechanics");
-                                        },
-                                        child: const Text("confirm").tr()),
-                                  ]);
-                            }),
+                                child: const Text("confirm").tr(),
+                                onPressed: () {
+                                  if (ref
+                                          .watch(salahlyClientProvider)
+                                          .requestType !=
+                                      null) {
+                                    if (ref
+                                            .watch(salahlyClientProvider)
+                                            .requestType ==
+                                        RequestType.WSA) {
+                                      _pcMechanic.open();
+                                    } else {
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(const SnackBar(
+                                        content: Text(
+                                            "There is another ongoing request"),
+                                      ));
+                                    }
+                                    return;
+                                  }
+                                  requestConfirmationDialogue(context,
+                                      titleChildren: [
+                                        const Text("confirm").tr()
+                                      ],
+                                      content: Text("wsaConfirmation".tr() +
+                                          "\n" +
+                                          (needProvider
+                                              ? ("withTowTruck".tr() +
+                                                  "at".tr() +
+                                                  " " +
+                                                  myMapWidgetState
+                                                      .currentState!
+                                                      .currentCustomLoc
+                                                      .address!)
+                                              : "withNoTowTruck".tr())),
+                                      actionChildren: [
+                                        ElevatedButton(
+                                          onPressed: () =>
+                                              Navigator.pop(context),
+                                          child: Text("Cancel".tr()),
+                                        ),
+                                        ElevatedButton(
+                                            onPressed: () async {
+                                              Navigator.pop(context);
+                                              setState(() {
+                                                didRequest = true;
+                                              });
+                                              await requestWSA();
+                                              print(
+                                                  "2=>WE FOUND ${ref.watch(rsaProvider).newNearbyProviders!.keys.length} Provider");
+                                              print(
+                                                  "2=>WE FOUND ${ref.watch(rsaProvider).newNearbyMechanics!.keys.length} Mechanics");
+                                            },
+                                            child: const Text("confirm").tr()),
+                                      ]);
+                                }),
                       ],
                     ),
                   ],
@@ -231,15 +209,9 @@ class _WSAScreenState extends ConsumerState<WSAScreen> {
             ),
           ),
           Positioned(
-            left: MediaQuery
-                .of(context)
-                .size
-                .width * 0.85,
+            left: MediaQuery.of(context).size.width * 0.85,
             right: 0,
-            bottom: MediaQuery
-                .of(context)
-                .size
-                .height * 0.35,
+            bottom: MediaQuery.of(context).size.height * 0.35,
             child: ElevatedButton(
               onPressed: () => myMapWidgetState.currentState?.locatePosition(),
               child: const Icon(
@@ -253,18 +225,14 @@ class _WSAScreenState extends ConsumerState<WSAScreen> {
           ),
           ChooseMechanicSlider(
               pc: _pcMechanic,
-              mechanics: ref
-                  .watch(rsaProvider)
-                  .acceptedNearbyMechanics ?? []
-            // pc: _pc, mechanics: mechanics,//static data for testing
-          ),
+              mechanics: ref.watch(rsaProvider).acceptedNearbyMechanics ?? []
+              // pc: _pc, mechanics: mechanics,//static data for testing
+              ),
           ChooseTowProviderSlider(
               pc: _pcTowProvider,
-              towProviders: ref
-                  .watch(rsaProvider)
-                  .acceptedNearbyProviders ?? []
-            // pc: _pc, mechanics: mechanics,//static data for testing
-          ),
+              towProviders: ref.watch(rsaProvider).acceptedNearbyProviders ?? []
+              // pc: _pc, mechanics: mechanics,//static data for testing
+              ),
         ],
       ),
     );
@@ -272,24 +240,19 @@ class _WSAScreenState extends ConsumerState<WSAScreen> {
 
   //wait 3 minute
   void activate3Min() async {
-    print("WSA: abl el 3 minutes");
-    bool tempProviders =
-    await ref.watch(rsaProvider.notifier).atLeastOne(false);
-    if (!tempProviders && !ref
+    print("RSA: abl el 3 minutes");
+    bool foundAny = await ref
         .watch(rsaProvider.notifier)
-        .atLeastOneProvider) {
-      noneFound(context, who: false);
-    }
+        .atLeastOne(needMechanic: true, needProvider: needProvider);
 
-    print("WSA after first 3 minutes");
-    bool tempMechanic = await ref.watch(rsaProvider.notifier).atLeastOne(true);
-    if (!tempMechanic && !ref
-        .watch(rsaProvider.notifier)
-        .atLeastOneMechanic) {
-      noneFound(context, who: true);
+    if (!foundAny) {
+      !ref.watch(rsaProvider.notifier).atLeastOneProvider
+          ? noneFound(context, who: false)
+          : null;
+      !ref.watch(rsaProvider.notifier).atLeastOneMechanic
+          ? noneFound(context, who: true)
+          : null;
     }
-
-    print("after second 3 minutes");
   }
 
   //request work shop assistance
@@ -308,11 +271,7 @@ class _WSAScreenState extends ConsumerState<WSAScreen> {
     _pcMechanic.open();
     //salahlyClientProvider
     ref.watch(salahlyClientProvider.notifier).assignRequest(
-        ref
-            .watch(rsaProvider)
-            .requestType!, ref
-        .watch(rsaProvider)
-        .rsaID!);
+        ref.watch(rsaProvider).requestType!, ref.watch(rsaProvider).rsaID!);
     getAcceptedMechanic();
     activate3Min();
   }
@@ -322,10 +281,7 @@ class _WSAScreenState extends ConsumerState<WSAScreen> {
     RSA rsa = ref.watch(rsaProvider);
     if (rsa.rsaID == null) return [];
 
-    _myStream = wsaRef
-        .child(rsa.rsaID!)
-        .onValue
-        .listen((event) {
+    _myStream = wsaRef.child(rsa.rsaID!).onValue.listen((event) {
       print("WSA LISTENER");
       print("${event.snapshot.value}");
       if (event.snapshot.value != null) {
@@ -350,39 +306,24 @@ class _WSAScreenState extends ConsumerState<WSAScreen> {
                 "inside if accepted and ${dataSnapShotMechanic.key} accepted");
 
             print(
-                "AAAAAAAAAAAAAAAAAAAAA${ref
-                    .watch(rsaProvider)
-                    .newNearbyMechanics}");
-            for (var mech in ref
-                .watch(rsaProvider)
-                .newNearbyMechanics!
-                .keys) {
+                "AAAAAAAAAAAAAAAAAAAAA${ref.watch(rsaProvider).newNearbyMechanics}");
+            for (var mech in ref.watch(rsaProvider).newNearbyMechanics!.keys) {
               print(
-                  "${mech} ====== ${dataSnapShotMechanic
-                      .key}-> ${dataSnapShotMechanic.key == mech}");
+                  "${mech} ====== ${dataSnapShotMechanic.key}-> ${dataSnapShotMechanic.key == mech}");
               print("do I already have him?");
               if (dataSnapShotMechanic.key == mech) {
                 print(
-                    "YESSSSSSSSSSSSS->${ref
-                        .watch(rsaProvider)
-                        .newNearbyMechanics![mech]!.name}");
+                    "YESSSSSSSSSSSSS->${ref.watch(rsaProvider).newNearbyMechanics![mech]!.name}");
                 ref.watch(rsaProvider.notifier).addAcceptedNearbyMechanic(
-                    ref
-                        .watch(rsaProvider)
-                        .newNearbyMechanics![mech]!);
+                    ref.watch(rsaProvider).newNearbyMechanics![mech]!);
                 // print(ref.watch(rsaProvider).);
               }
             }
           }
           if (dataSnapShotMechanic.value == "rejected") {
-            if (ref
-                .watch(rsaProvider)
-                .mechanic != null) {
+            if (ref.watch(rsaProvider).mechanic != null) {
               if (dataSnapShotMechanic.key ==
-                  ref
-                      .watch(rsaProvider)
-                      .mechanic!
-                      .id) {
+                  ref.watch(rsaProvider).mechanic!.id) {
                 print("No--------------------------------");
                 print("The assigned mechanic just rejected the request");
               }
@@ -412,31 +353,20 @@ class _WSAScreenState extends ConsumerState<WSAScreen> {
           if (dataSnapShotProvider.value == "accepted") {
             flagAllRejected = false;
             print(
-                "PROV::inside if accepted and ${dataSnapShotProvider
-                    .key} accepted");
+                "PROV::inside if accepted and ${dataSnapShotProvider.key} accepted");
 
             print(
-                "PROV::AAAAAAAAAAAAAAAAAAAAA${ref
-                    .watch(rsaProvider)
-                    .newNearbyProviders}");
+                "PROV::AAAAAAAAAAAAAAAAAAAAA${ref.watch(rsaProvider).newNearbyProviders}");
             for (var towProvider
-            in ref
-                .watch(rsaProvider)
-                .newNearbyProviders!
-                .keys) {
+                in ref.watch(rsaProvider).newNearbyProviders!.keys) {
               print(
-                  "${towProvider} ====== ${dataSnapShotProvider
-                      .key}-> ${dataSnapShotProvider.key == towProvider}");
+                  "${towProvider} ====== ${dataSnapShotProvider.key}-> ${dataSnapShotProvider.key == towProvider}");
               print("PROV::do I already have him?");
               if (dataSnapShotProvider.key == towProvider) {
                 print(
-                    "PROV::YESSSSSSSSSSSSS->${ref
-                        .watch(rsaProvider)
-                        .newNearbyProviders![towProvider]!.name}");
+                    "PROV::YESSSSSSSSSSSSS->${ref.watch(rsaProvider).newNearbyProviders![towProvider]!.name}");
                 ref.watch(rsaProvider.notifier).addAcceptedNearbyProvider(
-                    ref
-                        .watch(rsaProvider)
-                        .newNearbyProviders![towProvider]!);
+                    ref.watch(rsaProvider).newNearbyProviders![towProvider]!);
                 // print(ref.watch(rsaProvider).);
               }
             }
@@ -456,16 +386,10 @@ class _WSAScreenState extends ConsumerState<WSAScreen> {
   void check() async {
     print(">>Checking");
     // Future.delayed(Duration.zero, () async {
-    print(ref
-        .watch(rsaProvider)
-        .mechanic ?? "sad mafi4 assigned mechanic");
+    print(ref.watch(rsaProvider).mechanic ?? "sad mafi4 assigned mechanic");
     print(needProvider ? "need prov" : "no need prov");
-    if (!finished && ref
-        .watch(rsaProvider)
-        .mechanic != null) {
-      if (needProvider && ref
-          .watch(rsaProvider)
-          .towProvider != null) {
+    if (!finished && ref.watch(rsaProvider).mechanic != null) {
+      if (needProvider && ref.watch(rsaProvider).towProvider != null) {
         print(">>>>prov+mech page");
         await _myStream.cancel();
         context.push(Arrival.routeName, extra: true);
@@ -484,48 +408,40 @@ class _WSAScreenState extends ConsumerState<WSAScreen> {
 
 // Get assigned Provider
   Widget getProviderWidget() {
-    return (ref
-        .watch(rsaProvider)
-        .towProvider != null
-        ? mapTowProviderToWidget(ref
-        .watch(rsaProvider)
-        .towProvider!)
-    // ? Container(child: Text("Mech exits"))
+    return (ref.watch(rsaProvider).towProvider != null
+        ? mapTowProviderToWidget(ref.watch(rsaProvider).towProvider!)
+        // ? Container(child: Text("Mech exits"))
         : TextFieldOnMap(
-      textToDisplay:
-      didRequest ? "choose_provider".tr() : "needTowTruck".tr(),
-      imageIconToDisplay:
-      const ImageIcon(AssetImage('assets/images/tow-truck 2.png')),
-      isSelected: didRequest ? needProvider : false,
-      child: didRequest
-          ? null
-          : Switch(
-        value: needProvider,
-        onChanged: (value) {
-          setState(() => needProvider = !needProvider);
-        },
-        activeTrackColor: Colors.lightGreenAccent,
-        activeColor: Colors.green,
-      ),
-    ));
+            textToDisplay:
+                didRequest ? "choose_provider".tr() : "needTowTruck".tr(),
+            imageIconToDisplay:
+                const ImageIcon(AssetImage('assets/images/tow-truck 2.png')),
+            isSelected: didRequest ? needProvider : false,
+            child: didRequest
+                ? null
+                : Switch(
+                    value: needProvider,
+                    onChanged: (value) {
+                      setState(() => needProvider = !needProvider);
+                    },
+                    activeTrackColor: Colors.lightGreenAccent,
+                    activeColor: Colors.green,
+                  ),
+          ));
   }
 
 //Get assigned mechanic
   Widget getMechanicWidget() {
-    return (ref
-        .watch(rsaProvider)
-        .mechanic != null
-        ? mapMechanicToWidget(ref
-        .watch(rsaProvider)
-        .mechanic!)
-    // ? Container(child: Text("Mech exits"))
+    return (ref.watch(rsaProvider).mechanic != null
+        ? mapMechanicToWidget(ref.watch(rsaProvider).mechanic!)
+        // ? Container(child: Text("Mech exits"))
         : TextFieldOnMap(
-      isSelected: didRequest,
-      textToDisplay: ("choose_mech").tr(),
-      iconToDisplay: const Icon(
-        Icons.search,
-        color: Colors.blue,
-      ),
-    ));
+            isSelected: didRequest,
+            textToDisplay: ("choose_mech").tr(),
+            iconToDisplay: const Icon(
+              Icons.search,
+              color: Colors.blue,
+            ),
+          ));
   }
 }

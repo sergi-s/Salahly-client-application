@@ -220,12 +220,27 @@ class _ChooseProviderScreenState extends ConsumerState<ChooseProviderScreen> {
   }
 
   void activate3Min() async {
-    print("RSA: abl el 3 minutes TTA");
-    bool tempProviders =
-        await ref.watch(rsaProvider.notifier).atLeastOne(false);
-    if (!tempProviders && !ref.watch(rsaProvider.notifier).atLeastOneProvider) {
-      noneFound(context, who: false);
+    print("RSA: abl el 3 minutes");
+    bool foundAny = await ref
+        .watch(rsaProvider.notifier)
+        .atLeastOne(needMechanic: false, needProvider: true);
+
+    if (!foundAny) {
+      !ref.watch(rsaProvider.notifier).atLeastOneProvider
+          ? noneFound(context, who: false)
+          : null;
+      !ref.watch(rsaProvider.notifier).atLeastOneMechanic
+          ? noneFound(context, who: true)
+          : null;
     }
+
+    // print("RSA: after first 3 minutes");
+    // bool tempMechanic = await ref.watch(rsaProvider.notifier).atLeastOne(true);
+    // if (!tempMechanic && !ref.watch(rsaProvider.notifier).atLeastOneMechanic) {
+    //   noneFound(context, who: true);
+    // }
+
+    print("RSA: after second 3 minutes");
   }
 }
 

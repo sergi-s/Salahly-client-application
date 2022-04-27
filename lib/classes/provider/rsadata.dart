@@ -21,16 +21,19 @@ class RSANotifier extends StateNotifier<RSA> {
             location:
                 CustomLocation(latitude: 31.206972, longitude: 29.919028)));
   final Ref ref;
-  _RequestType? _requestType;
+  RequestType? _requestTypeLocal;
 
   bool atLeastOneProvider = false;
   bool atLeastOneMechanic = false;
 
-  Future<bool> atLeastOne(bool type) async {
+  Future<bool> atLeastOne(
+      {required bool needMechanic, required bool needProvider}) async {
     //true mechanic
     //false provider
-    await Future.delayed(const Duration(seconds: 50));
-    return type ? atLeastOneMechanic : atLeastOneProvider;
+
+    await Future.delayed(const Duration(seconds: 10));
+    return ((needMechanic ? atLeastOneMechanic : true) &&
+        (needProvider ? atLeastOneProvider : true));
   }
 
   // Setters
@@ -57,13 +60,13 @@ class RSANotifier extends StateNotifier<RSA> {
 
       // print("Temp2:${tempMap}");
       // print(":::add ${nearbyMechanic.name} to request table");
-      DatabaseReference localRef = _requestType == _RequestType.WSA
+      DatabaseReference localRef = _requestTypeLocal == RequestType.WSA
           ? wsaRef
-          : (_requestType == _RequestType.RSA)
+          : (_requestTypeLocal == RequestType.RSA)
               ? rsaRef
               : ttaRef;
 
-      if (_requestType != _RequestType.TTA) {
+      if (_requestTypeLocal != RequestType.TTA) {
         localRef
             .child(state.rsaID!)
             .child("mechanicsResponses")
@@ -87,9 +90,9 @@ class RSANotifier extends StateNotifier<RSA> {
       tempMap[newNearbyProvider.id!] = newNearbyProvider;
       // print("PROV::Temp2:${tempMap}");
       // print("PROV:::::add ${newNearbyProvider.name} to request table");
-      DatabaseReference localRef = _requestType == _RequestType.WSA
+      DatabaseReference localRef = _requestTypeLocal == RequestType.WSA
           ? wsaRef
-          : (_requestType == _RequestType.RSA)
+          : (_requestTypeLocal == RequestType.RSA)
               ? rsaRef
               : ttaRef;
 
@@ -159,10 +162,10 @@ class RSANotifier extends StateNotifier<RSA> {
     }
     // print(">>> assign 5ara mechanic");
     // print(_requestType.toString());
-    if (_requestType == _RequestType.TTA) return;
+    if (_requestTypeLocal == RequestType.TTA) return;
 
     DatabaseReference localRef =
-        _requestType == _RequestType.WSA ? wsaRef : rsaRef;
+        _requestTypeLocal == RequestType.WSA ? wsaRef : rsaRef;
 
     await localRef
         .child(ref.watch(rsaProvider).rsaID!)
@@ -172,9 +175,9 @@ class RSANotifier extends StateNotifier<RSA> {
 
   void cancelRequest() async {
     assignState(RSAStates.canceled);
-    DatabaseReference localRef = _requestType == _RequestType.WSA
+    DatabaseReference localRef = _requestTypeLocal == RequestType.WSA
         ? wsaRef
-        : _requestType == _RequestType.RSA
+        : _requestTypeLocal == RequestType.RSA
             ? rsaRef
             : ttaRef;
     await localRef
@@ -193,9 +196,9 @@ class RSANotifier extends StateNotifier<RSA> {
     }
     // print(">>> assign 5ara provider");
     // print(_requestType.toString());
-    DatabaseReference localRef = _requestType == _RequestType.WSA
+    DatabaseReference localRef = _requestTypeLocal == RequestType.WSA
         ? wsaRef
-        : _requestType == _RequestType.RSA
+        : _requestTypeLocal == RequestType.RSA
             ? rsaRef
             : ttaRef;
     // print((_requestType == _RequestType.WSA)
@@ -324,18 +327,16 @@ class RSANotifier extends StateNotifier<RSA> {
   }
 
   assignRequestTypeToRSA() {
-    _requestType = _RequestType.RSA;
+    _requestTypeLocal = RequestType.RSA;
   }
 
   assignRequestTypeToWSA() {
-    _requestType = _RequestType.WSA;
+    _requestTypeLocal = RequestType.WSA;
   }
 
   assignRequestTypeToTTA() {
-    _requestType = _RequestType.TTA;
+    _requestTypeLocal = RequestType.TTA;
   }
 
-  getRequestType() => _requestType;
+  getRequestType() => _requestTypeLocal;
 }
-
-enum _RequestType { RSA, WSA, TTA }

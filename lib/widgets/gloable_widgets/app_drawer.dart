@@ -4,9 +4,11 @@ import 'package:go_router/go_router.dart';
 import 'package:slahly/screens/history_management/view_history.dart';
 
 import 'package:slahly/screens/switchLanguage.dart';
+import 'package:slahly/screens/test_screens/test_user_SM.dart';
 
 import '../../screens/homepage.dart';
 import '../../screens/test_screens/testscreen_foula.dart';
+import '../../screens/userMangament/pofile.dart';
 
 Widget salahlyDrawer(BuildContext context) {
   return Drawer(
@@ -29,7 +31,7 @@ Widget salahlyDrawer(BuildContext context) {
           ),
           onTap: () {
             Navigator.pop(context);
-            context.push(TestScreen_nearbymechanics_and_create_rsa.routeName);
+            context.push(TestUserCAR.routeName);
           },
         ),
         ListTile(

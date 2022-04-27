@@ -147,7 +147,7 @@ class _State extends ConsumerState<TestUserSM> {
   }
 
   fetch() async {
-    final firebaseuser = await FirebaseAuth.instance.currentUser;
+    final firebaseUser = FirebaseAuth.instance.currentUser;
     user
         .child("clients")
         .child(FirebaseAuth.instance.currentUser!.uid)
@@ -173,8 +173,8 @@ class _State extends ConsumerState<TestUserSM> {
     });
     print("here");
     print(path);
-    print(firebaseuser!.email);
-    print(firebaseuser.displayName);
+    print(firebaseUser!.email);
+    print(firebaseUser.displayName);
   }
 
   getImage() async {
@@ -436,7 +436,6 @@ class TestUserCAR extends ConsumerWidget {
 
       print(email);
     });
-    String carid = "-N0W8Ye-5UazFU3odpgr";
     DatabaseReference cars = await dbRef
         .child("cars")
         .child(chasisController.text)
@@ -447,9 +446,9 @@ class TestUserCAR extends ConsumerWidget {
   }
 
   delete() async {
-    String carid = "-N0WRuJWVguAPHUklZuE";
-    DatabaseReference cars =
-        await dbRef.child("cars").child(chasisController.text);
+    //TODO check if this user is the owner of this car
+    //authorization
+    DatabaseReference cars = dbRef.child("cars").child(chasisController.text);
     cars.remove();
   }
 
@@ -460,7 +459,7 @@ class TestUserCAR extends ConsumerWidget {
     // String? key = dbRef.child("cars").push().key;
     String? key = cars.key;
 
-    carData = new Car(
+    carData = Car(
         noPlate: plateController.text,
         model: carModelController.text,
         noChassis: chasisController.text);

@@ -220,19 +220,18 @@ class _SearchingMechanicProviderScreenState
 
   void activate3Min() async {
     print("RSA: abl el 3 minutes");
-    bool tempProviders =
-        await ref.watch(rsaProvider.notifier).atLeastOne(false);
-    if (!tempProviders && !ref.watch(rsaProvider.notifier).atLeastOneProvider) {
-      noneFound(context, who: false);
-    }
+    bool foundAny = await ref
+        .watch(rsaProvider.notifier)
+        .atLeastOne(needMechanic: true, needProvider: true);
 
-    print("RSA: after first 3 minutes");
-    bool tempMechanic = await ref.watch(rsaProvider.notifier).atLeastOne(true);
-    if (!tempMechanic && !ref.watch(rsaProvider.notifier).atLeastOneMechanic) {
-      noneFound(context, who: true);
+    if (!foundAny) {
+      !ref.watch(rsaProvider.notifier).atLeastOneProvider
+          ? noneFound(context, who: false)
+          : null;
+      !ref.watch(rsaProvider.notifier).atLeastOneMechanic
+          ? noneFound(context, who: true)
+          : null;
     }
-
-    print("RSA: after second 3 minutes");
   }
 
   requestRSA() async {

@@ -40,7 +40,7 @@ import 'package:slahly/screens/userMangament/editProfile.dart';
 
 class Routing {
   get router => GoRouter(
-        initialLocation:AddReminder.routeName,
+        initialLocation: LoginSignupScreen.routeName,
         routes: <GoRoute>[
           GoRoute(
             //TESTING
@@ -188,7 +188,8 @@ class Routing {
           GoRoute(
             path: Profile.routeName,
             builder: (context, state) => Profile(),
-
+          ),
+          GoRoute(
             path: ReminderScreen.routeName,
             builder: (context, state) => ReminderScreen(),
           ),

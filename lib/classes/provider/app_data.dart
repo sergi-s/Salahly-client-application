@@ -1,5 +1,4 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:http/http.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:slahly/classes/firebase/roadsideassistance/roadsideassistance.dart';
 
@@ -12,7 +11,7 @@ enum AppState {
 
 class SalahlyClient {
   AppState? _appState = AppState.initialState;
-  late RequestType? _requestType;
+  late  RequestType? _requestType;
   late String? _requestID;
 
   AppState? get appState => _appState;
