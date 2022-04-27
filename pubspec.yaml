@@ -66,6 +66,7 @@ dependencies:
   flutter_staggered_animations: ^1.0.0
   animate_icons: ^2.0.0
   flutter_spinkit: ^5.1.0
+  shared_preferences: ^2.0.13
 
 
 dev_dependencies:

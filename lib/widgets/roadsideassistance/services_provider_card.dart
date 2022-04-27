@@ -3,6 +3,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import '../../classes/models/mechanic.dart';
+import '../../classes/models/towProvider.dart';
+
 class ServicesProviderCard extends StatelessWidget {
   late String foundType;
 
@@ -238,4 +241,28 @@ class ServicesProviderCard extends StatelessWidget {
       ),
     );
   }
+}
+
+
+Widget mapMechanicToWidget(Mechanic mec) {
+  return ServicesProviderCard(
+    serviceProviderEmail: mec.email,
+    serviceProviderName: mec.name,
+    serviceProviderIsCenter: mec.isCenter,
+    serviceProviderType: mec.getUserType(),
+    serviceProviderPhoneNumber: mec.phoneNumber,
+    serviceProviderRating: mec.rating,
+    serviceProviderAddress: mec.address,
+  );
+}
+Widget mapTowProviderToWidget(TowProvider prov) {
+  return ServicesProviderCard(
+    serviceProviderEmail: prov.email,
+    serviceProviderName: prov.name,
+    serviceProviderIsCenter: prov.isCenter,
+    serviceProviderType: prov.getUserType(),
+    serviceProviderPhoneNumber: prov.phoneNumber,
+    serviceProviderRating: prov.rating,
+    serviceProviderAddress: prov.address,
+  );
 }

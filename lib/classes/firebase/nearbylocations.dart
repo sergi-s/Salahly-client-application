@@ -140,15 +140,12 @@ stt38c5j0s
 
         //latitude will be retrieved from map['latitude']
         //longitude will be retrieved from map['longitude']
-        print("Inside getNearbyMechanicsAndProviders::333");
         switch (callBack) {
           case Geofire.onKeyEntered:
-            print("Inside getNearbyMechanicsAndProviders::33");
             getMechanicOrProviderData(map["key"]).then((value) {
               value.loc = CustomLocation(
                   latitude: map['latitude'], longitude: map['longitude']);
               if (value is Mechanic) {
-                print("Inside getNearbyMechanicsAndProviders::3");
                 rsa.onFindNewMechanic(value);
 
                 nearbyMechanics.add(value);
@@ -156,9 +153,11 @@ stt38c5j0s
 
                 print("Added mechanic: " + value.name!);
               } else if (value is TowProvider) {
-                nearbyProviders.add(value);
                 rsa.onFindNewProvider(value);
+
+                nearbyProviders.add(value);
                 rsa.assignNearbyProviders(nearbyProviders);
+
                 print("Added provider: " + value.name!);
               } else {
                 print("Not mechanic and not provider");
