@@ -26,7 +26,7 @@ Widget salahlyDrawer(BuildContext context) {
         ),
         ListTile(
           title: const Text(
-            "Test Screen",
+            "Test Car Screen",
             style: TextStyle(fontWeight: FontWeight.bold),
           ),
           onTap: () {
@@ -41,7 +41,7 @@ Widget salahlyDrawer(BuildContext context) {
           ).tr(),
           onTap: () {
             Navigator.pop(context);
-            context.push(HomePage.routeName);
+            context.push(Profile.routeName);
           },
         ),
         ListTile(

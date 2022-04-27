@@ -160,17 +160,20 @@ class RSANotifier extends StateNotifier<RSA> {
     if (stopListener) {
       NearbyLocations.stopListener();
     }
-    // print(">>> assign 5ara mechanic");
-    // print(_requestType.toString());
-    if (_requestTypeLocal == RequestType.TTA) return;
+    print(">>> assign 5ara mechanic");
+    print(_requestTypeLocal.toString());
+    if (_requestTypeLocal == RequestType.TTA ||
+        _requestTypeLocal == RequestType.RSA) return;
 
-    DatabaseReference localRef =
-        _requestTypeLocal == RequestType.WSA ? wsaRef : rsaRef;
+    DatabaseReference localRef = wsaRef;
+    print("Assigned Mechanic${mechanic.id!}");
 
     await localRef
-        .child(ref.watch(rsaProvider).rsaID!)
+        .child(state.rsaID!)
         .child("mechanicsResponses")
         .update({mechanic.id!: "chosen"});
+
+    print("After await");
   }
 
   void cancelRequest() async {
@@ -196,6 +199,7 @@ class RSANotifier extends StateNotifier<RSA> {
     }
     // print(">>> assign 5ara provider");
     // print(_requestType.toString());
+    if (_requestTypeLocal == RequestType.RSA) return;
     DatabaseReference localRef = _requestTypeLocal == RequestType.WSA
         ? wsaRef
         : _requestTypeLocal == RequestType.RSA
@@ -206,6 +210,7 @@ class RSANotifier extends StateNotifier<RSA> {
     //     : _requestType == _RequestType.RSA
     //         ? "rsaRef"
     //         : "ttaRef");
+
     await localRef
         .child(state.rsaID!)
         .child("providersResponses")
