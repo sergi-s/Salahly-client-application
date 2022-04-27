@@ -146,7 +146,7 @@ stt38c5j0s
               value.loc = CustomLocation(
                   latitude: map['latitude'], longitude: map['longitude']);
               if (value is Mechanic) {
-                // rsa.onFindNewMechanic(value);
+                rsa.onFindNewMechanic(value);
 
                 nearbyMechanics.add(value);
                 rsa.assignNearbyMechanics(nearbyMechanics);
