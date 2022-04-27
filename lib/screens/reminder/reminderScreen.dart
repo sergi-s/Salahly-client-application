@@ -25,12 +25,13 @@ class ReminderScreen extends StatelessWidget {
     )
   ];
 
-  Widget personDetailCard(Reminder) {
+  Widget personDetailCard(Reminder,BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     final String title = Reminder.title;
     final String date = Reminder.date;
 
     return Container(
-      height: 120,
+      height: size.height/8,
       alignment: Alignment.center,
 
       child: Center(
@@ -45,8 +46,44 @@ class ReminderScreen extends StatelessWidget {
           child: InkWell(
             splashColor: Colors.blue.withAlpha(30),
             onTap: () {
-              debugPrint('Card tapped.');
-            },
+              showDialog<String>(
+                  context: context,
+                  builder: (BuildContext context) => AlertDialog(
+                title: const Text(
+                  'Confirmation',
+                  style: TextStyle(
+                    color: Color(0xFF193566),
+                  ),
+                ),
+                content: const Text(''),
+                actions: <Widget>[
+                  TextButton.icon(
+                    style: TextButton.styleFrom(
+                      textStyle: TextStyle(color: Colors.white),
+                      backgroundColor: Colors.blueGrey[300],
+                      shape:RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                    onPressed: () => {Navigator.pop(context, 'Delete')},
+                    icon: Icon(Icons.delete_outline_outlined,color: Colors.white,),
+                    label: Text('Delete',style:TextStyle(color: Colors.white,)),
+                  ),
+                  TextButton.icon(
+                    style: TextButton.styleFrom(
+                      textStyle: TextStyle(color: Colors.white),
+                      backgroundColor: Color(0xFF193566),
+                      shape:RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                    onPressed: () => {Navigator.pop(context, 'Okay')},
+                    icon: Icon(Icons.done,color: Colors.white,),
+                    label: Text('Okay',style:TextStyle(color: Colors.white,)),
+                  ),
+                ],
+              ),
+              );},
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -108,11 +145,13 @@ class ReminderScreen extends StatelessWidget {
           ),
         ]),
       ),
-      body: Center(
-        child: Column(
-            children: Clients.map((p) {
-          return personDetailCard(p);
-        }).toList()),
+      body: SingleChildScrollView(
+        child: Center(
+          child: Column(
+              children: Clients.map((p) {
+            return personDetailCard(p,context);
+          }).toList()),
+        ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
       floatingActionButton: FloatingActionButton(

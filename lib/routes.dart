@@ -37,7 +37,7 @@ import 'package:slahly/screens/userMangament/choose_car.dart';
 
 class Routing {
   get router => GoRouter(
-        initialLocation:AddReminder.routeName,
+        initialLocation:ReminderScreen.routeName,
         routes: <GoRoute>[
           GoRoute(
             //TESTING
