@@ -2,9 +2,11 @@ import 'package:easy_localization/easy_localization.dart';
 import "package:flutter/material.dart";
 import 'package:go_router/go_router.dart';
 import 'package:slahly/screens/history_management/view_history.dart';
+import 'package:slahly/screens/reminder/reminderScreen.dart';
 
 import 'package:slahly/screens/switchLanguage.dart';
 import 'package:slahly/screens/test_screens/test_user_SM.dart';
+import 'package:slahly/screens/userMangament/editProfile.dart';
 
 import '../../screens/homepage.dart';
 import '../../screens/test_screens/testscreen_foula.dart';
@@ -26,16 +28,6 @@ Widget salahlyDrawer(BuildContext context) {
         ),
         ListTile(
           title: const Text(
-            "Test Car Screen",
-            style: TextStyle(fontWeight: FontWeight.bold),
-          ),
-          onTap: () {
-            Navigator.pop(context);
-            context.push(TestUserCAR.routeName);
-          },
-        ),
-        ListTile(
-          title: const Text(
             'home',
             style: TextStyle(fontWeight: FontWeight.bold),
           ).tr(),
@@ -45,9 +37,27 @@ Widget salahlyDrawer(BuildContext context) {
           },
         ),
         ListTile(
+          title: const Text(
+            "Test Car Screen",
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
+          onTap: () {
+            Navigator.pop(context);
+            context.push(TestUserCAR.routeName);
+          },
+        ),
+        ListTile(
           title: const Text('updateProfile').tr(),
           onTap: () {
             Navigator.pop(context);
+            context.push(EditProfile.routeName);
+          },
+        ),
+        ListTile(
+          title: const Text("Mange Reminders").tr(),
+          onTap: () {
+            Navigator.pop(context);
+            context.push(ReminderScreen.routeName);
           },
         ),
         ListTile(
@@ -61,6 +71,13 @@ Widget salahlyDrawer(BuildContext context) {
           title: const Text('reminder').tr(),
           onTap: () {
             Navigator.pop(context);
+          },
+        ),
+        ListTile(
+          title: Text("Test APP state"),
+          onTap: () {
+            Navigator.pop(context);
+            context.push(TestScreen_nearbymechanics_and_create_rsa.routeName);
           },
         ),
         ListTile(

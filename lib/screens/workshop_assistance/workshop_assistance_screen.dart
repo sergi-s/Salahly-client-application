@@ -4,6 +4,9 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:slahly/utils/firebase/get_mechanic_data.dart';
+import 'package:slahly/utils/firebase/get_provider_data.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 import 'package:slahly/classes/provider/app_data.dart';
@@ -45,18 +48,41 @@ class _WSAScreenState extends ConsumerState<WSAScreen> {
 
   @override
   void initState() {
-    Future.delayed(Duration.zero, () {
+    Future.delayed(Duration.zero, () async {
+      ref.watch(salahlyClientProvider.notifier).getSavedData();
+      final prefs = await SharedPreferences.getInstance();
+      print("YARAB ${prefs.getBool("needProvider")}");
+      if (prefs.getBool("needProvider") ?? false) {
+        setState(() {
+          needProvider = true;
+        });
+      }
+
       if (ref.watch(salahlyClientProvider).requestType == RequestType.WSA) {
+        // ref.watch(rsaProvider.notifier).searchNearbyMechanicsAndProviders();
+        ref.watch(rsaProvider.notifier).assignRequestID(
+            ref.watch(salahlyClientProvider).requestID.toString());
+        print("there is a onging request");
         print("HELLO::${ref.watch(rsaProvider).rsaID}");
         setState(() {
-          didRequest = true;
+          setState(() {
+            didRequest = true;
+          });
+
           if (ref.watch(rsaProvider).mechanic != null) {
-            gotMechanics = true;
-          }
-          if (ref.watch(rsaProvider).towProvider != null) {
-            needProvider = true;
+            setState(() {
+              gotMechanics = true;
+            });
           }
         });
+        if (prefs.getString("mechanic") != null) {
+          ref.watch(rsaProvider.notifier).assignMechanic(
+              await getMechanicData(prefs.getString("mechanic")!), false);
+        }
+        if (prefs.getString("towProvider") != null) {
+          ref.watch(rsaProvider.notifier).assignProvider(
+              await getProviderData(prefs.getString("towProvider")!), false);
+        }
         getAcceptedMechanic();
       }
     });
@@ -245,7 +271,7 @@ class _WSAScreenState extends ConsumerState<WSAScreen> {
         .watch(rsaProvider.notifier)
         .atLeastOne(needMechanic: true, needProvider: needProvider);
 
-    if (!foundAny) {
+    if (!foundAny && ref.watch(rsaProvider).state != RSAStates.canceled) {
       !ref.watch(rsaProvider.notifier).atLeastOneProvider
           ? noneFound(context, who: false)
           : null;
@@ -278,10 +304,10 @@ class _WSAScreenState extends ConsumerState<WSAScreen> {
 
   getAcceptedMechanic() {
     print("IN STREAM FUNCTION ::");
-    RSA rsa = ref.watch(rsaProvider);
-    if (rsa.rsaID == null) return [];
-
-    _myStream = wsaRef.child(rsa.rsaID!).onValue.listen((event) {
+    if (ref.watch(rsaProvider).rsaID == null) return [];
+    print("WSA ID is ${ref.watch(rsaProvider).rsaID}");
+    _myStream =
+        wsaRef.child(ref.watch(rsaProvider).rsaID!).onValue.listen((event) {
       print("WSA LISTENER");
       print("${event.snapshot.value}");
       if (event.snapshot.value != null) {
@@ -295,6 +321,7 @@ class _WSAScreenState extends ConsumerState<WSAScreen> {
             .child("mechanicsResponses")
             .children
             .forEach((dataSnapShotMechanic) {
+          ref.watch(rsaProvider.notifier).atLeastOneMechanic = true;
           flagFindYet = true;
           if (dataSnapShotMechanic.value == "pending") {
             flagAllRejected = false;
@@ -307,18 +334,20 @@ class _WSAScreenState extends ConsumerState<WSAScreen> {
 
             print(
                 "AAAAAAAAAAAAAAAAAAAAA${ref.watch(rsaProvider).newNearbyMechanics}");
-            for (var mech in ref.watch(rsaProvider).newNearbyMechanics!.keys) {
-              print(
-                  "${mech} ====== ${dataSnapShotMechanic.key}-> ${dataSnapShotMechanic.key == mech}");
-              print("do I already have him?");
-              if (dataSnapShotMechanic.key == mech) {
-                print(
-                    "YESSSSSSSSSSSSS->${ref.watch(rsaProvider).newNearbyMechanics![mech]!.name}");
-                ref.watch(rsaProvider.notifier).addAcceptedNearbyMechanic(
-                    ref.watch(rsaProvider).newNearbyMechanics![mech]!);
-                // print(ref.watch(rsaProvider).);
-              }
-            }
+            // for (var mech in ref.watch(rsaProvider).newNearbyMechanics!.keys) {
+            //   print(
+            //       "${mech} ====== ${dataSnapShotMechanic.key}-> ${dataSnapShotMechanic.key == mech}");
+            //   print("do I already have him?");
+            //   if (dataSnapShotMechanic.key == mech) {
+            //     print(
+            //         "YESSSSSSSSSSSSS->${ref.watch(rsaProvider).newNearbyMechanics![mech]!.name}");
+            //     ref.watch(rsaProvider.notifier).addAcceptedNearbyMechanic(mech);
+            //     // print(ref.watch(rsaProvider).);
+            //   }
+            // }
+            ref
+                .watch(rsaProvider.notifier)
+                .addAcceptedNearbyMechanic(dataSnapShotMechanic.key.toString());
           }
           if (dataSnapShotMechanic.value == "rejected") {
             if (ref.watch(rsaProvider).mechanic != null) {
@@ -329,11 +358,14 @@ class _WSAScreenState extends ConsumerState<WSAScreen> {
               }
             }
           }
+          if (dataSnapShotMechanic.value == "chosen") {
+            if (!needProvider) {
+              _myStream.cancel();
+            }
+          }
         });
 
         if (flagAllRejected && flagFindYet) {
-          //TODO: Show a dialog box (ALL rejected Please request later)
-          print("ALL MECHANIC REJECTED MECHANIC ");
           allRejected(context, ref, "Mechanics");
         }
 
@@ -344,6 +376,7 @@ class _WSAScreenState extends ConsumerState<WSAScreen> {
             .child("providersResponses")
             .children
             .forEach((dataSnapShotProvider) {
+          ref.watch(rsaProvider.notifier).atLeastOneProvider = true;
           flagFindYet = true;
           print("PROV::333333333333");
           print("PROV::Stream::${dataSnapShotProvider.value}");
@@ -357,19 +390,24 @@ class _WSAScreenState extends ConsumerState<WSAScreen> {
 
             print(
                 "PROV::AAAAAAAAAAAAAAAAAAAAA${ref.watch(rsaProvider).newNearbyProviders}");
-            for (var towProvider
-                in ref.watch(rsaProvider).newNearbyProviders!.keys) {
-              print(
-                  "${towProvider} ====== ${dataSnapShotProvider.key}-> ${dataSnapShotProvider.key == towProvider}");
-              print("PROV::do I already have him?");
-              if (dataSnapShotProvider.key == towProvider) {
-                print(
-                    "PROV::YESSSSSSSSSSSSS->${ref.watch(rsaProvider).newNearbyProviders![towProvider]!.name}");
-                ref.watch(rsaProvider.notifier).addAcceptedNearbyProvider(
-                    ref.watch(rsaProvider).newNearbyProviders![towProvider]!);
-                // print(ref.watch(rsaProvider).);
-              }
-            }
+            // for (var towProvider
+            //     in ref.watch(rsaProvider).newNearbyProviders!.keys) {
+            //   print(
+            //       "${towProvider} ====== ${dataSnapShotProvider.key}-> ${dataSnapShotProvider.key == towProvider}");
+            //   print("PROV::do I already have him?");
+            //   if (dataSnapShotProvider.key == towProvider) {
+            //     print(
+            //         "PROV::YESSSSSSSSSSSSS->${ref.watch(rsaProvider).newNearbyProviders![towProvider]!.name}");
+            //     ref
+            //         .watch(rsaProvider.notifier)
+            //         .addAcceptedNearbyProvider(towProvider);
+            //     // print(ref.watch(rsaProvider).);
+            //   }
+            // }
+
+            ref
+                .watch(rsaProvider.notifier)
+                .addAcceptedNearbyProvider(dataSnapShotProvider.key.toString());
           }
         });
         if (flagAllRejected && flagFindYet) {
@@ -421,8 +459,13 @@ class _WSAScreenState extends ConsumerState<WSAScreen> {
                 ? null
                 : Switch(
                     value: needProvider,
-                    onChanged: (value) {
-                      setState(() => needProvider = !needProvider);
+                    onChanged: (value) async {
+                      setState(() {
+                        needProvider = !needProvider;
+                      });
+
+                      final prefs = await SharedPreferences.getInstance();
+                      prefs.setBool("needProvider", needProvider);
                     },
                     activeTrackColor: Colors.lightGreenAccent,
                     activeColor: Colors.green,

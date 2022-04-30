@@ -31,15 +31,16 @@ class _ChooseProviderScreenState extends ConsumerState<ChooseProviderScreen> {
 
   @override
   void initState() {
-    activate3Min();
+    Future.delayed(Duration.zero, () async {
+      check();
+      getAcceptedTowProviders();
+      activate3Min();
+    });
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    getAcceptedMechanic();
-    check();
-
     return Scaffold(
         backgroundColor: const Color(0xFFd1d9e6),
         appBar: AppBar(
@@ -77,13 +78,16 @@ class _ChooseProviderScreenState extends ConsumerState<ChooseProviderScreen> {
                       itemBuilder: (BuildContext context, index) {
                         return GestureDetector(
                           onTap: () async {
+                            print("ACCEPTED PROVIDER");
+                            if (ref.watch(rsaProvider).towProvider != null)
+                              return;
                             ref.watch(rsaProvider.notifier).assignProvider(
                                 ref
                                     .watch(rsaProvider)
                                     .acceptedNearbyProviders![index],
                                 false);
 
-                            // context.push(Arrival.routeName, extra: true);
+                            context.push(Arrival.routeName, extra: true);
                           },
                           child: ChooseTile(
                               email: ref
@@ -125,21 +129,23 @@ class _ChooseProviderScreenState extends ConsumerState<ChooseProviderScreen> {
         ));
   }
 
+  bool checkOnce = false;
+
   void check() {
+    if (checkOnce) return;
+    checkOnce = true;
     print(">>Checking");
-    TowProvider? tempTow = ref.watch(rsaProvider).towProvider;
-    Future.delayed(Duration.zero, () async {
-      if (tempTow != null) {
-        print(">>>>prov+mech page");
-        await _myStream.cancel();
-        context.go(Arrival.routeName, extra: true);
-        return;
-      }
-      return;
-    });
+    // Future.delayed(Duration.zero, () async {
+    if (ref.watch(rsaProvider).towProvider != null) {
+      print(">>>>prov");
+      context.push(Arrival.routeName, extra: true);
+      print("after push");
+      // await _myStream.cancel();
+    }
+    // });
   }
 
-  getAcceptedMechanic() {
+  getAcceptedTowProviders() {
     DatabaseReference ttaRef = FirebaseDatabase.instance.ref().child("tta");
 
     print("IN STREAM FUNCTION ::");
@@ -147,7 +153,7 @@ class _ChooseProviderScreenState extends ConsumerState<ChooseProviderScreen> {
     if (rsa.rsaID == null) return [];
 
     _myStream = ttaRef.child(rsa.rsaID!).onValue.listen((event) {
-      print("WSA LISTENER");
+      print("TTA LISTENER");
       print("${event.snapshot.value}");
       if (event.snapshot.value != null) {
         //TODO: add the constraints of rsa state if needed
@@ -161,6 +167,7 @@ class _ChooseProviderScreenState extends ConsumerState<ChooseProviderScreen> {
             .child("providersResponses")
             .children
             .forEach((dataSnapShotProvider) {
+          ref.watch(rsaProvider.notifier).atLeastOneProvider = true;
           flagFindYet = true;
           print("PROV::333333333333");
           print("PROV::Stream::${dataSnapShotProvider.value}");
@@ -174,20 +181,25 @@ class _ChooseProviderScreenState extends ConsumerState<ChooseProviderScreen> {
 
             print(
                 "PROV::AAAAAAAAAAAAAAAAAAAAA${ref.watch(rsaProvider).newNearbyProviders}");
-            for (var towProvider
-                in ref.watch(rsaProvider).newNearbyProviders!.keys) {
-              print(
-                  "${towProvider} ====== ${dataSnapShotProvider.key}-> ${dataSnapShotProvider.key == towProvider}");
-              print("PROV::do I already have him?");
-              if (dataSnapShotProvider.key == towProvider) {
-                print(
-                    "PROV::YESSSSSSSSSSSSS->${ref.watch(rsaProvider).newNearbyProviders![towProvider]!.name}");
-                ref.watch(rsaProvider.notifier).addAcceptedNearbyProvider(
-                    ref.watch(rsaProvider).newNearbyProviders![towProvider]!);
-                // print(ref.watch(rsaProvider).);
-              }
-            }
+            // for (var towProvider
+            //     in ref.watch(rsaProvider).newNearbyProviders!.keys) {
+            //   print(
+            //       "${towProvider} ====== ${dataSnapShotProvider.key}-> ${dataSnapShotProvider.key == towProvider}");
+            //   print("PROV::do I already have him?");
+            //   if (dataSnapShotProvider.key == towProvider) {
+            //     print(
+            //         "PROV::YESSSSSSSSSSSSS->${ref.watch(rsaProvider).newNearbyProviders![towProvider]!.name}");
+            //     ref
+            //         .watch(rsaProvider.notifier)
+            //         .addAcceptedNearbyProvider(towProvider);
+            //     // print(ref.watch(rsaProvider).);
+            //   }
+            // }
+            ref
+                .watch(rsaProvider.notifier)
+                .addAcceptedNearbyProvider(dataSnapShotProvider.key.toString());
           }
+          if (dataSnapShotProvider.value == "chosen") {}
         });
         if (flagAllRejected && flagFindYet) {
           allRejected(context, ref, "Providers");
@@ -229,16 +241,7 @@ class _ChooseProviderScreenState extends ConsumerState<ChooseProviderScreen> {
       !ref.watch(rsaProvider.notifier).atLeastOneProvider
           ? noneFound(context, who: false)
           : null;
-      !ref.watch(rsaProvider.notifier).atLeastOneMechanic
-          ? noneFound(context, who: true)
-          : null;
     }
-
-    // print("RSA: after first 3 minutes");
-    // bool tempMechanic = await ref.watch(rsaProvider.notifier).atLeastOne(true);
-    // if (!tempMechanic && !ref.watch(rsaProvider.notifier).atLeastOneMechanic) {
-    //   noneFound(context, who: true);
-    // }
 
     print("RSA: after second 3 minutes");
   }

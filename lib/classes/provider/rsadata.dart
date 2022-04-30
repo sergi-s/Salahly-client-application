@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:slahly/classes/firebase/nearbylocations.dart';
 import 'package:slahly/classes/firebase/roadsideassistance/roadsideassistance.dart';
 import 'package:slahly/classes/models/client.dart';
@@ -9,6 +10,9 @@ import 'package:slahly/classes/models/mechanic.dart';
 import 'package:slahly/classes/models/towProvider.dart';
 import 'package:slahly/main.dart';
 import 'package:slahly/utils/constants.dart';
+
+import 'package:slahly/utils/firebase/get_mechanic_data.dart';
+import 'package:slahly/utils/firebase/get_provider_data.dart';
 
 // Global for anyone to use it
 final rsaProvider = StateNotifierProvider<RSANotifier, RSA>((ref) {
@@ -21,7 +25,8 @@ class RSANotifier extends StateNotifier<RSA> {
             location:
                 CustomLocation(latitude: 31.206972, longitude: 29.919028)));
   final Ref ref;
-  RequestType? _requestTypeLocal;
+
+  // RequestType? state.requestType;
 
   bool atLeastOneProvider = false;
   bool atLeastOneMechanic = false;
@@ -60,13 +65,13 @@ class RSANotifier extends StateNotifier<RSA> {
 
       // print("Temp2:${tempMap}");
       // print(":::add ${nearbyMechanic.name} to request table");
-      DatabaseReference localRef = _requestTypeLocal == RequestType.WSA
+      DatabaseReference localRef = state.requestType == RequestType.WSA
           ? wsaRef
-          : (_requestTypeLocal == RequestType.RSA)
+          : (state.requestType == RequestType.RSA)
               ? rsaRef
               : ttaRef;
 
-      if (_requestTypeLocal != RequestType.TTA) {
+      if (state.requestType != RequestType.TTA) {
         localRef
             .child(state.rsaID!)
             .child("mechanicsResponses")
@@ -90,9 +95,9 @@ class RSANotifier extends StateNotifier<RSA> {
       tempMap[newNearbyProvider.id!] = newNearbyProvider;
       // print("PROV::Temp2:${tempMap}");
       // print("PROV:::::add ${newNearbyProvider.name} to request table");
-      DatabaseReference localRef = _requestTypeLocal == RequestType.WSA
+      DatabaseReference localRef = state.requestType == RequestType.WSA
           ? wsaRef
-          : (_requestTypeLocal == RequestType.RSA)
+          : (state.requestType == RequestType.RSA)
               ? rsaRef
               : ttaRef;
 
@@ -109,18 +114,28 @@ class RSANotifier extends StateNotifier<RSA> {
     // print("PROV::MAP2:${state.newNearbyProviders}");
   }
 
-  void addAcceptedNearbyMechanic(Mechanic newMechanic) {
+  void addAcceptedNearbyMechanic(String newMechanicID) async {
     // print("Will try to add ${newMechanic.name}");
-    bool flage = true;
+    Mechanic newMechanic;
+
+    if (!state.newNearbyMechanics!.containsKey(newMechanicID)) {
+      newMechanic = await getMechanicData(newMechanicID) as Mechanic;
+      state.newNearbyMechanics![newMechanicID] = newMechanic;
+      state = state.copyWith(newNearbyMechanics: state.newNearbyMechanics);
+    } else {
+      newMechanic = state.newNearbyMechanics![newMechanicID]!;
+    }
+
+    bool flag = true;
     if (state.acceptedNearbyMechanics!.isNotEmpty) {
       for (var mechanic in state.acceptedNearbyMechanics!) {
         if (mechanic.id == newMechanic.id) {
           // print("${mechanic.name} already exists");
-          flage = false;
+          flag = false;
         }
       }
     }
-    if (flage) {
+    if (flag) {
       // print("Will add ${newMechanic.name}");
       state = state.copyWith(acceptedNearbyMechanics: [
         ...?state.acceptedNearbyMechanics,
@@ -132,7 +147,17 @@ class RSANotifier extends StateNotifier<RSA> {
     // print("THE ACCEPTED LIST IS mechs${state.acceptedNearbyMechanics}");
   }
 
-  void addAcceptedNearbyProvider(TowProvider newTowProvider) {
+  void addAcceptedNearbyProvider(String newTowProviderID) async {
+    TowProvider newTowProvider;
+
+    if (!state.newNearbyProviders!.containsKey(newTowProviderID)) {
+      newTowProvider = await getProviderData(newTowProviderID) as TowProvider;
+      state.newNearbyProviders![newTowProviderID] = newTowProvider;
+      state = state.copyWith(newNearbyProviders: state.newNearbyProviders);
+    } else {
+      newTowProvider = state.newNearbyProviders![newTowProviderID]!;
+    }
+
     // print("Will try to add ${newTowProvider.name}");
     bool flag = true;
     if (state.acceptedNearbyProviders!.isNotEmpty) {
@@ -161,9 +186,13 @@ class RSANotifier extends StateNotifier<RSA> {
       NearbyLocations.stopListener();
     }
     print(">>> assign 5ara mechanic");
-    print(_requestTypeLocal.toString());
-    if (_requestTypeLocal == RequestType.TTA ||
-        _requestTypeLocal == RequestType.RSA) return;
+
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setString("mechanic", mechanic.id!);
+
+    print(state.requestType.toString());
+    if (state.requestType == RequestType.TTA ||
+        state.requestType == RequestType.RSA) return;
 
     DatabaseReference localRef = wsaRef;
     print("Assigned Mechanic${mechanic.id!}");
@@ -172,15 +201,14 @@ class RSANotifier extends StateNotifier<RSA> {
         .child(state.rsaID!)
         .child("mechanicsResponses")
         .update({mechanic.id!: "chosen"});
-
     print("After await");
   }
 
   void cancelRequest() async {
     assignState(RSAStates.canceled);
-    DatabaseReference localRef = _requestTypeLocal == RequestType.WSA
+    DatabaseReference localRef = state.requestType == RequestType.WSA
         ? wsaRef
-        : _requestTypeLocal == RequestType.RSA
+        : state.requestType == RequestType.RSA
             ? rsaRef
             : ttaRef;
     await localRef
@@ -197,14 +225,13 @@ class RSANotifier extends StateNotifier<RSA> {
     if (stopListener) {
       NearbyLocations.stopListener();
     }
-    // print(">>> assign 5ara provider");
+    print(">>> assign 5ara provider");
     // print(_requestType.toString());
-    if (_requestTypeLocal == RequestType.RSA) return;
-    DatabaseReference localRef = _requestTypeLocal == RequestType.WSA
-        ? wsaRef
-        : _requestTypeLocal == RequestType.RSA
-            ? rsaRef
-            : ttaRef;
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setString("towProvider", provider.id!);
+    if (state.requestType == RequestType.RSA) return;
+    DatabaseReference localRef =
+        state.requestType == RequestType.WSA ? wsaRef : ttaRef;
     // print((_requestType == _RequestType.WSA)
     //     ? "wsaRef"
     //     : _requestType == _RequestType.RSA
@@ -216,6 +243,11 @@ class RSANotifier extends StateNotifier<RSA> {
         .child("providersResponses")
         .update({provider.id!: "chosen"});
   }
+
+  assignRequestType(RequestType requestType) =>
+      state = state.copyWith(requestType: requestType);
+
+  assignRequestID(String requestID) => state = state.copyWith(rsaID: requestID);
 
   assignUserLocation(CustomLocation location) =>
       state = state.copyWith(location: location);
@@ -331,17 +363,9 @@ class RSANotifier extends StateNotifier<RSA> {
     return newRSA.key;
   }
 
-  assignRequestTypeToRSA() {
-    _requestTypeLocal = RequestType.RSA;
-  }
+  assignRequestTypeToRSA() => assignRequestType(RequestType.RSA);
 
-  assignRequestTypeToWSA() {
-    _requestTypeLocal = RequestType.WSA;
-  }
+  assignRequestTypeToWSA() => assignRequestType(RequestType.WSA);
 
-  assignRequestTypeToTTA() {
-    _requestTypeLocal = RequestType.TTA;
-  }
-
-  getRequestType() => _requestTypeLocal;
+  assignRequestTypeToTTA() => assignRequestType(RequestType.TTA);
 }

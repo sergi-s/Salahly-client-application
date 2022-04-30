@@ -21,7 +21,7 @@ void allRejected(context, ref, String who) {
                 Text("${who}Rejected").tr(),
               ],
             ),
-            content: Text("${who}RejectedDescription"),
+            content: Text("${who}RejectedDescription").tr(),
             actions: <Widget>[
               ElevatedButton(
                 onPressed: () {

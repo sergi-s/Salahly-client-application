@@ -31,14 +31,8 @@ class ChooseMechanicSlider extends ConsumerWidget {
       defaultPanelState: PanelState.CLOSED,
       panelBuilder: (ScrollController sc) =>
           Stack(alignment: Alignment.center, children: [
-        (ref.watch(rsaProvider).acceptedNearbyMechanics!.isEmpty)
-            ? HoldPlease()
-            : const Text(""),
         mechanics.isEmpty
-            ? SearchingWidget(
-              size: ref.watch(rsaProvider).newNearbyMechanics!.keys.length,
-              who: "mechanicAndWaitingForResponse".tr(),
-            )
+            ? HoldPlease()
             : Padding(
                 padding: const EdgeInsets.only(left: 160.0, top: 10),
                 child: SizedBox(
@@ -114,14 +108,8 @@ class ChooseTowProviderSlider extends ConsumerWidget {
       defaultPanelState: PanelState.CLOSED,
       panelBuilder: (ScrollController sc) =>
           Stack(alignment: Alignment.center, children: [
-        (ref.watch(rsaProvider).acceptedNearbyProviders!.isEmpty)
-            ? HoldPlease()
-            : const Text(""),
         towProviders.isEmpty
-            ? SearchingWidget(
-              size: ref.watch(rsaProvider).newNearbyProviders!.keys.length,
-              who: "providerAndWaitingForResponse".tr(),
-            )
+            ? HoldPlease()
             : Padding(
                 padding: const EdgeInsets.only(left: 160.0, top: 10),
                 child: SizedBox(
