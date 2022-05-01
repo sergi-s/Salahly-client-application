@@ -35,6 +35,7 @@ class AddCarDialog extends ConsumerWidget {
   final TextEditingController plateController = TextEditingController();
   final TextEditingController chasisController = TextEditingController();
   final TextEditingController numberController = TextEditingController();
+  final TextEditingController year = TextEditingController();
 
   Car? carData;
 
