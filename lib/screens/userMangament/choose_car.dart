@@ -234,6 +234,7 @@ class _State extends ConsumerState<Choose_car> {
             model: carsSnapShot.child("model").value.toString(),
             noChassis: carsSnapShot.key.toString());
         ref.watch(userProvider.notifier).assignCar(car);
+        print(ref.watch(userProvider).cars);
       });
     });
     print("hiii");
