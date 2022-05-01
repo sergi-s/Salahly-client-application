@@ -47,7 +47,7 @@ class _State extends ConsumerState<ViewCards> {
                 leading: Text(
                     ref.watch(userProvider).cars[index].noChassis.toString()),
                 trailing: Text(
-                  ref.watch(userProvider).cars[index].model.toString(),
+                  model[index].toString(),
                   style: TextStyle(color: Colors.green, fontSize: 15),
                 ),
                 title: Text("List item $index"));

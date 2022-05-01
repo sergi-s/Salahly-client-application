@@ -7,7 +7,9 @@ import 'package:go_router/go_router.dart';
 import 'package:slahly/classes/models/car.dart';
 import 'package:slahly/classes/models/client.dart';
 import 'package:slahly/screens/car_management/view_cars_screen.dart';
+import 'package:slahly/screens/userMangament/addSubowner.dart';
 import 'package:slahly/screens/userMangament/choose_car.dart';
+import 'package:slahly/screens/userMangament/transferOwner.dart';
 import '../../classes/provider/user_data.dart';
 import '../../main.dart';
 
@@ -134,12 +136,20 @@ class AddCarDialog extends ConsumerWidget {
         ),
         FloatingActionButton(
           onPressed: () => context.push(Choose_car.routeName),
-          child: Text("goooo"),
+          child: Text("choosecar"),
         ),
         FloatingActionButton(
           onPressed: () => context.push(ViewCars.routeName),
-          child: Text("goooo"),
-        )
+          child: Text("viewcar"),
+        ),
+        FloatingActionButton(
+          onPressed: () => context.push(TransferOwner.routeName),
+          child: Text("transfer"),
+        ),
+        FloatingActionButton(
+          onPressed: () => context.push(AddSubowner.routeName),
+          child: Text("add subowner"),
+        ),
       ]),
     );
   }

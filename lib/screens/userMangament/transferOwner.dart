@@ -19,12 +19,23 @@ class TransferOwner extends ConsumerStatefulWidget {
 }
 
 class _State extends ConsumerState<TransferOwner> {
+  @override
+  void initState() {
+    cardata();
+    super.initState();
+  }
+
   final TextEditingController getUserController = TextEditingController();
 
   String? email = "";
   String? subId;
   String? avatar;
   List models = [];
+  List chasis = [];
+  String? sub;
+  String? selected;
+  Map<String, String> map = new Map();
+
   DatabaseReference user = dbRef.child("users");
   String dropdownvalue = 'Choose car';
   var items = ['lada', 'bmw', 'ferari', 'btngan'];
@@ -39,7 +50,7 @@ class _State extends ConsumerState<TransferOwner> {
         actions: [
           ElevatedButton(
               onPressed: () {
-                getuser();
+                // getuser();
                 Navigator.pop(context, true);
 
                 // ShowSnackbar(context, info, index);
@@ -124,6 +135,7 @@ class _State extends ConsumerState<TransferOwner> {
                     onChanged: (dynamic? value) {
                       setState(() {
                         this.dropdownvalue = value!;
+                        selected = map[this.dropdownvalue];
                       });
                     },
                   ),
@@ -186,14 +198,20 @@ class _State extends ConsumerState<TransferOwner> {
                   )),
               ElevatedButton(
                   onPressed: () {
-                    cardata(ref);
+                    // cardata();
+                    getuser();
                   },
                   child: Text("dataa")),
               ElevatedButton(
                   onPressed: () {
                     context.push(AddCars.routeName);
                   },
-                  child: Text("goooo"))
+                  child: Text("goooo")),
+              ElevatedButton(
+                  onPressed: () {
+                    transferOwner(selected);
+                  },
+                  child: Text("transfer"))
             ]),
           ),
         ),
@@ -202,9 +220,26 @@ class _State extends ConsumerState<TransferOwner> {
     );
   }
 
-  cardata(ref) async {
+  cardata() async {
+    // DatabaseReference cars = dbRef.child("cars");
+    // final userNotifier = ref.watch(userProvider.notifier);
+    //
+    // cars
+    //     .orderByChild("owner")
+    //     .equalTo(FirebaseAuth.instance.currentUser!.uid)
+    //     .once()
+    //     .then((event) {
+    //   final dataSnapshot = event.snapshot;
+    //
+    //   dataSnapshot.children.forEach((carsSnapShot) {
+    //     print("this user's cars=>${carsSnapShot.child("model").value}");
+    //
+    //     models.add(carsSnapShot.child("model").value.toString());
+    //     print(models);
+    //   });
+    // });
     DatabaseReference cars = dbRef.child("cars");
-    final userNotifier = ref.watch(userProvider.notifier);
+    // final userNotifier = ref.watch(userProvider.notifier);
 
     cars
         .orderByChild("owner")
@@ -215,11 +250,33 @@ class _State extends ConsumerState<TransferOwner> {
 
       dataSnapshot.children.forEach((carsSnapShot) {
         print("this user's cars=>${carsSnapShot.child("model").value}");
+        print("this user's cars=>${carsSnapShot.key}");
 
-        models.add(carsSnapShot.child("model").value.toString());
+        setState(() {
+          models.add(carsSnapShot.child("model").value.toString());
+          chasis.add(carsSnapShot.key);
+          for (var i = 0; i < models.length; i++) {
+            map[models[i]] = chasis[i];
+          }
+
+          dropdownvalue = models[0].toString();
+        });
         print(models);
+        print(map);
       });
     });
+  }
+
+  transferOwner(selected) {
+    DatabaseReference cars = dbRef.child("cars");
+    DatabaseReference carsUsers = dbRef.child("cars_users");
+    DatabaseReference Userscar = dbRef.child("users_cars");
+
+    cars.child(selected).update({"owner": subId});
+    carsUsers.child(selected).remove();
+    Userscar.child(FirebaseAuth.instance.currentUser!.uid)
+        .update({selected: "false"});
+    Userscar.child(subId!).child(selected).set(true);
   }
 
   getuser() async {
