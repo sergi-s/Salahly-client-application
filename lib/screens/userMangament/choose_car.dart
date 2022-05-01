@@ -1,18 +1,14 @@
 import 'package:easy_localization/easy_localization.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:slahly/classes/models/car.dart';
-import 'package:slahly/screens/car_management/add_car_screen.dart';
-import 'package:vertical_card_pager/vertical_card_pager.dart';
 import 'package:slahly/classes/models/client.dart';
 
-import '../../classes/provider/user_data.dart';
-import '../../main.dart';
+import 'package:slahly/classes/provider/user_data.dart';
+import 'package:slahly/utils/firebase/get_all_cars.dart';
 import 'manageSubowner.dart';
 
 class Choose_car extends ConsumerStatefulWidget {
@@ -25,7 +21,7 @@ class Choose_car extends ConsumerStatefulWidget {
 class _State extends ConsumerState<Choose_car> {
   @override
   void initState() {
-    cardata();
+    allCars(ref);
     super.initState();
   }
 
@@ -123,121 +119,107 @@ class _State extends ConsumerState<Choose_car> {
                 child: AnimationLimiter(
               child: ListView.builder(
                 itemCount: carstate.cars.length,
-                itemBuilder: (context, index) => Card(
-                  elevation: 6,
-                  margin: EdgeInsets.all(10),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      boxShadow: [
-                        new BoxShadow(
-                          blurRadius: 10.0,
+                itemBuilder: (context, index) {
+                  if (carstate.cars[index].carAccess != CarAccess.sub) {
+                    return Card(
+                      elevation: 6,
+                      margin: EdgeInsets.all(10),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          boxShadow: [
+                            new BoxShadow(
+                              blurRadius: 10.0,
+                            ),
+                          ],
+                          borderRadius: BorderRadius.circular(8.0),
+                          color: const Color(0xFFd1d9e6),
                         ),
-                      ],
-                      borderRadius: BorderRadius.circular(8.0),
-                      color: const Color(0xFFd1d9e6),
-                    ),
-                    child: SingleChildScrollView(
-                      child: GestureDetector(
-                        onTap: () {
-                          context.push(ManageSubowner.routeName,
-                              extra: carstate.cars[index].noChassis.toString());
+                        child: SingleChildScrollView(
+                          child: GestureDetector(
+                            onTap: () {
+                              context.push(ManageSubowner.routeName,
+                                  extra: carstate.cars[index].noChassis
+                                      .toString());
 
-                          print('welcome'.tr());
-                        },
-                        child: ListTile(
-                          leading: CircleAvatar(
-                            radius: 30,
-                            backgroundColor: btncolor[car[index].color],
-                            child: Icon(Icons.directions_car_filled, size: 40),
-                          ),
-                          title: Text(carstate.cars[index].model.toString(),
-                              style: TextStyle(
-                                  fontSize: 25, fontWeight: FontWeight.bold)),
-                          subtitle: Padding(
-                            padding: const EdgeInsets.all(0),
-                            child: Column(children: [
-                              Row(
-                                children: [
-                                  Text(
-                                    "Plate_Number".tr(),
-                                    style: TextStyle(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.black),
-                                  ),
-                                  Text(
-                                    carstate.cars[index].noPlate.toString(),
-                                    style: TextStyle(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                ],
+                              print('welcome'.tr());
+                            },
+                            child: ListTile(
+                              leading: CircleAvatar(
+                                radius: 30,
+                                backgroundColor: btncolor[car[index].color],
+                                child:
+                                    Icon(Icons.directions_car_filled, size: 40),
                               ),
-                              Row(
-                                children: [
-                                  Text(
-                                    "Chassis_Number".tr(),
-                                    style: TextStyle(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.black),
+                              title: Text(carstate.cars[index].model.toString(),
+                                  style: TextStyle(
+                                      fontSize: 25,
+                                      fontWeight: FontWeight.bold)),
+                              subtitle: Padding(
+                                padding: const EdgeInsets.all(0),
+                                child: Column(children: [
+                                  Row(
+                                    children: [
+                                      Text(
+                                        "Plate_Number".tr(),
+                                        style: TextStyle(
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.black),
+                                      ),
+                                      Text(
+                                        carstate.cars[index].noPlate.toString(),
+                                        style: TextStyle(
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    ],
                                   ),
-                                  Text(
-                                      carstate.cars[index].noChassis.toString(),
-                                      style: TextStyle(
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.bold)),
-                                ],
+                                  Row(
+                                    children: [
+                                      Text(
+                                        "Chassis_Number".tr(),
+                                        style: TextStyle(
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.black),
+                                      ),
+                                      Text(
+                                          carstate.cars[index].noChassis
+                                              .toString(),
+                                          style: TextStyle(
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.bold)),
+                                    ],
+                                  ),
+                                  Row(
+                                    children: [
+                                      Text("Color".tr(),
+                                          style: TextStyle(
+                                              color: Colors.black,
+                                              fontSize: 19,
+                                              fontWeight: FontWeight.bold)),
+                                      Text(car[index].color.toString(),
+                                          style: TextStyle(
+                                              fontSize: 19,
+                                              color: btncolor[car[index].color],
+                                              fontWeight: FontWeight.bold)),
+                                    ],
+                                  ),
+                                ]),
                               ),
-                              Row(
-                                children: [
-                                  Text("Color".tr(),
-                                      style: TextStyle(
-                                          color: Colors.black,
-                                          fontSize: 19,
-                                          fontWeight: FontWeight.bold)),
-                                  Text(car[index].color.toString(),
-                                      style: TextStyle(
-                                          fontSize: 19,
-                                          color: btncolor[car[index].color],
-                                          fontWeight: FontWeight.bold)),
-                                ],
-                              ),
-                            ]),
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  ),
-                ),
+                    );
+                  }
+                  return Container();
+                },
               ),
             )),
           ),
           painter: HeaderCurvedContainer(),
         ));
-  }
-
-  cardata() async {
-    print("saaaaaddddd");
-    DatabaseReference cars = dbRef.child("cars");
-
-    cars
-        .orderByChild("owner")
-        .equalTo(FirebaseAuth.instance.currentUser!.uid)
-        .once()
-        .then((event) {
-      final dataSnapshot = event.snapshot;
-      dataSnapshot.children.forEach((carsSnapShot) {
-        print("this user's cars=>${carsSnapShot.child("model").value}");
-        Car car = new Car(
-            noPlate: carsSnapShot.child("plate").value.toString(),
-            model: carsSnapShot.child("model").value.toString(),
-            noChassis: carsSnapShot.key.toString());
-        ref.watch(userProvider.notifier).assignCar(car);
-        print(ref.watch(userProvider).cars);
-      });
-    });
-    print("hiii");
   }
 }
 

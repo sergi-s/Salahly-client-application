@@ -30,7 +30,7 @@ class ClientNotifier extends StateNotifier<Client> {
   assignCar(Car car) {
     bool flag = true;
     for (int i = 0; i < state.cars.length; i++) {
-      if (state.cars[i].noChassis == car.noChassis) {
+      if (state.cars[i].noPlate == car.noPlate) {
         flag = false;
       }
     }
