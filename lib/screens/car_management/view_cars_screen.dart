@@ -1,8 +1,17 @@
+import '../../classes/provider/user_data.dart';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../classes/models/car.dart';
+import '../../classes/provider/user_data.dart';
+import '../../main.dart';
 
 class ViewCars extends StatelessWidget {
   static const routeName = "/viewcars";
+
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -12,55 +21,75 @@ class ViewCars extends StatelessWidget {
   }
 }
 
-class ViewCards extends StatefulWidget {
+class ViewCards extends ConsumerStatefulWidget {
   @override
-  State<ViewCards> createState() => CarCard();
+  _State createState() => _State();
 }
 
-class CarCard extends State<ViewCards> {
+class _State extends ConsumerState<ViewCards> {
+  @override
+  void initState() {
+    allCars();
+    super.initState();
+  }
+
+  List plate = [];
+  List year = [];
+  List model = [];
+
   @override
   Widget build(BuildContext context) {
-    List<Car> cars = [
-      Car(name: "Mg 6", rollno: 1, year: "2022"),
-      Car(name: "Bmw", rollno: 2, year: "2006"),
-      Car(name: "BYD", rollno: 3, year: "2007"),
-    ];
-
-    var seen = Set<String>();
-    List<Car> uniquelist =
-        cars.where((student) => seen.add(student.name)).toList();
-    //output list: John Cena, Jack Sparrow, Harry Potter
-
     return Scaffold(
-        backgroundColor: const Color(0xFFd1d9e6),
-        appBar: AppBar(
-          backgroundColor: const Color(0xFF193566),
-          title:  Text("View_Cars".tr()),
-        ), // appBar
-        body: Container(
-          alignment: Alignment.center,
-          padding: EdgeInsets.all(20),
-          child: Column(
-            children: uniquelist.map((carname) {
-              return Container(
-                  child: Card(
-                      child: ListTile(
+      body: ListView.builder(
+          itemCount: model.length,
+          itemBuilder: (BuildContext context, int index) {
+            return ListTile(
                 leading: Text(
-                  carname.rollno.toString(),
-                  style: TextStyle(fontSize: 25),
+                    ref.watch(userProvider).cars[index].noChassis.toString()),
+                trailing: Text(
+                  ref.watch(userProvider).cars[index].model.toString(),
+                  style: TextStyle(color: Colors.green, fontSize: 15),
                 ),
-                title: Text(carname.name),
-                subtitle: Text(carname.year),
-              )));
-            }).toList(),
-          ),
-        ));
+                title: Text("List item $index"));
+          }),
+    );
   }
-}
 
-class Car {
-  String name, year;
-  int rollno;
+  allCars() async {
+    DatabaseReference carsUsers = dbRef.child("users_cars");
+    DatabaseReference cars = dbRef.child("cars");
+    carsUsers
+        .child(FirebaseAuth.instance.currentUser!.uid)
+        .orderByValue()
+        .equalTo("true")
+        .once()
+        .then((event) {
+      final dataSnapshot = event.snapshot;
+      print("carssss${dataSnapshot.value.toString()}");
 
-  Car({required this.name, required this.rollno, required this.year});
+      dataSnapshot.children.forEach((element) {
+        print(element.key.toString());
+        cars.child(element.key.toString()).once().then((value) {
+          final carsSnapshot = value.snapshot;
+          print(carsSnapshot.value.toString());
+          print(carsSnapshot.child("year").value.toString());
+
+          // Car car = new Car(
+          //     noPlate: carsSnapshot.child("plate").value.toString(),
+          //     model: carsSnapshot.child("model").value.toString(),
+          //     noChassis: carsSnapshot.key.toString());
+          // ref.watch(userProvider.notifier).assignCar(car);
+          setState(() {
+            plate.add(carsSnapshot.child("plate").value.toString());
+            model.add(carsSnapshot.child("model").value.toString());
+            year.add(carsSnapshot.child("year").value.toString());
+
+            print(plate);
+            print(model);
+            print(year);
+          });
+        });
+      });
+    });
+  }
 }

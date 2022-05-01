@@ -82,7 +82,7 @@ class _ProfileState extends ConsumerState<Profile> {
               Center(
                 child: Text(
                   ref.watch(userProvider).name ?? "wait",
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 34),
                 ),
               ),
               SizedBox(
@@ -94,62 +94,165 @@ class _ProfileState extends ConsumerState<Profile> {
               SizedBox(
                 height: 30,
               ),
-              Text(
-                "User Information",
-                style: TextStyle(fontSize: 25, fontWeight: FontWeight.w500),
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              Center(
-                child: Row(children: [
-                  Text("Phone : ",
-                      style:
-                          TextStyle(fontSize: 20, fontWeight: FontWeight.w500)),
-                  Text(ref.watch(userProvider).phoneNumber ?? "wait",
-                      style:
-                          TextStyle(fontSize: 20, fontWeight: FontWeight.w500)),
-                ]),
-              ),
-              Row(children: [
-                Text("email : ",
-                    style:
-                        TextStyle(fontSize: 20, fontWeight: FontWeight.w500)),
-                Text(ref.watch(userProvider).email ?? "wait",
-                    style:
-                        TextStyle(fontSize: 20, fontWeight: FontWeight.w500)),
-              ]),
-              Row(children: [
-                Text("address : ",
-                    style:
-                        TextStyle(fontSize: 20, fontWeight: FontWeight.w500)),
-                Text(ref.watch(userProvider).address ?? "wait",
-                    style:
-                        TextStyle(fontSize: 20, fontWeight: FontWeight.w500)),
-              ]),
-              Align(
-                alignment: Alignment.bottomCenter,
+              // Text(
+              //   "User Information",
+              //   style: TextStyle(fontSize: 25, fontWeight: FontWeight.w500),
+              // ),
+              // SizedBox(
+              //   height: 20,
+              // ),
+              // Center(
+              //   child: Row(children: [
+              //     Text("Phone : ",
+              //         style:
+              //             TextStyle(fontSize: 20, fontWeight: FontWeight.w500)),
+              //     Text(ref.watch(userProvider).phoneNumber ?? "wait",
+              //         style:
+              //             TextStyle(fontSize: 20, fontWeight: FontWeight.w500)),
+              //   ]),
+              // ),
+              // Row(children: [
+              //   Text("email : ",
+              //       style:
+              //           TextStyle(fontSize: 20, fontWeight: FontWeight.w500)),
+              //   Text(ref.watch(userProvider).email ?? "wait",
+              //       style:
+              //           TextStyle(fontSize: 20, fontWeight: FontWeight.w500)),
+              // ]),
+              // Row(children: [
+              //   Text("address : ",
+              //       style:
+              //           TextStyle(fontSize: 20, fontWeight: FontWeight.w500)),
+              //   Text(ref.watch(userProvider).address ?? "wait",
+              //       style:
+              //           TextStyle(fontSize: 20, fontWeight: FontWeight.w500)),
+              // ]),
+              // Align(
+              //   alignment: Alignment.bottomCenter,
+              //   child: Column(
+              //     crossAxisAlignment: CrossAxisAlignment.end,
+              //     children: [
+              //       RaisedButton(
+              //         onPressed: () {
+              //           context.push(EditProfile.routeName);
+              //         },
+              //         color: Colors.green,
+              //         padding: EdgeInsets.symmetric(horizontal: 50),
+              //         shape: RoundedRectangleBorder(
+              //             borderRadius: BorderRadius.circular(20)),
+              //         child: Text(
+              //           "update profile",
+              //           style: TextStyle(
+              //               fontSize: 14,
+              //               letterSpacing: 2.2,
+              //               color: Colors.white),
+              //         ),
+              //       ),
+
+              //     ],
+              //   ),
+              // )
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 16),
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    RaisedButton(
-                      onPressed: () {
-                        context.push(EditProfile.routeName);
-                      },
-                      color: Colors.green,
-                      padding: EdgeInsets.symmetric(horizontal: 50),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20)),
-                      child: Text(
-                        "update profile",
-                        style: TextStyle(
-                            fontSize: 14,
-                            letterSpacing: 2.2,
-                            color: Colors.white),
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          Text(
+                            "email",
+                            style: TextStyle(
+                                fontSize: 16, color: Color(0xFF193566)),
+                          ),
+                          SizedBox(
+                            width: 7,
+                          ),
+                          Icon(
+                            Icons.email,
+                            color: Color(0xFF193566),
+                          )
+                        ],
                       ),
-                    ),
-                  ],
-                ),
+                      SizedBox(
+                        height: 4,
+                      ),
+                      Text(ref.watch(userProvider).email ?? "wait",
+                          style: TextStyle(
+                              fontSize: 25, fontWeight: FontWeight.w500)),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      Row(
+                        children: [
+                          Text(
+                            "Phone",
+                            style: TextStyle(
+                                fontSize: 18, color: Color(0xFF193566)),
+                          ),
+                          SizedBox(
+                            width: 5,
+                          ),
+                          Icon(
+                            Icons.phone,
+                            color: Color(0xFF193566),
+                          )
+                        ],
+                      ),
+                      SizedBox(
+                        height: 4,
+                      ),
+                      Text(ref.watch(userProvider).phoneNumber ?? "wait",
+                          style: TextStyle(
+                              fontSize: 25, fontWeight: FontWeight.w500)),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      Row(
+                        children: [
+                          Text(
+                            "Address",
+                            style: TextStyle(
+                                fontSize: 20, color: Color(0xFF193566)),
+                          ),
+                          Icon(
+                            Icons.map,
+                            color: Color(0xFF193566),
+                          )
+                        ],
+                      ),
+                      SizedBox(
+                        height: 4,
+                      ),
+                      Text(ref.watch(userProvider).address ?? "wait",
+                          style: TextStyle(
+                              fontSize: 25, fontWeight: FontWeight.w500)),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(
+                          vertical: MediaQuery.of(context).size.height * 0.2,
+                        ),
+                        child: Align(
+                          alignment: FractionalOffset.bottomRight,
+                          child: RaisedButton(
+                            onPressed: () {
+                              context.push(EditProfile.routeName);
+                            },
+                            color: Color(0xFF193566),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20)),
+                            child: Text(
+                              "update profile",
+                              style: TextStyle(
+                                  fontSize: 14,
+                                  letterSpacing: 2.2,
+                                  color: Colors.white),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ]),
               )
             ],
           ),

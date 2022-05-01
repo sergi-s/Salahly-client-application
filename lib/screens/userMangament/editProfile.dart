@@ -22,6 +22,7 @@ class EditProfile extends ConsumerStatefulWidget {
 class _State extends ConsumerState<EditProfile> {
   final TextEditingController nameController = TextEditingController();
   final TextEditingController addressController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
   final TextEditingController emailyController = TextEditingController();
   final TextEditingController phoneController = TextEditingController();
   DatabaseReference user = dbRef.child("users");
@@ -29,10 +30,13 @@ class _State extends ConsumerState<EditProfile> {
   String? phone, address, email, name, data;
   File? url;
   dynamic? path;
+  String? emaily;
+  String? passwordy;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color(0xFFd1d9e6),
       body: Container(
         padding: EdgeInsets.only(left: 16, top: 25, right: 16),
         child: GestureDetector(
@@ -89,7 +93,27 @@ class _State extends ConsumerState<EditProfile> {
                               color: Colors.green),
                           child: GestureDetector(
                             onTap: () {
-                              uploadImage();
+                              final snackBar =
+                                  SnackBar(content: Text('Image uploaded'));
+
+                              try {
+                                uploadImage(context);
+                                ScaffoldMessenger.of(context)
+                                    .showMaterialBanner(MaterialBanner(
+                                  content:
+                                      const Text('Image updated Successfully'),
+                                  actions: [
+                                    TextButton(
+                                        onPressed: () {
+                                          ScaffoldMessenger.of(context)
+                                              .hideCurrentMaterialBanner();
+                                        },
+                                        child: const Text('Dismiss')),
+                                  ],
+                                ));
+                                // ScaffoldMessenger.of(context)
+                                //     .showSnackBar(snackBar);
+                              } catch (e) {}
                             },
                             child: Icon(
                               Icons.edit,
@@ -107,24 +131,39 @@ class _State extends ConsumerState<EditProfile> {
                 controller: nameController,
                 decoration: InputDecoration(
                     labelText: "Name",
+                    hintText: ref.watch(userProvider).name ?? "wait",
+                    hintStyle: TextStyle(color: Colors.black, fontSize: 14),
                     floatingLabelBehavior: FloatingLabelBehavior.always),
               ),
               TextField(
                 controller: emailyController,
                 decoration: InputDecoration(
                     labelText: "Email",
+                    hintStyle: TextStyle(color: Colors.black, fontSize: 14),
+                    hintText: ref.watch(userProvider).email ?? "wait",
+                    floatingLabelBehavior: FloatingLabelBehavior.always),
+              ),
+              TextField(
+                controller: passwordController,
+                decoration: InputDecoration(
+                    labelText: "Password",
+                    hintStyle: TextStyle(color: Colors.black, fontSize: 14),
                     floatingLabelBehavior: FloatingLabelBehavior.always),
               ),
               TextField(
                 controller: phoneController,
                 decoration: InputDecoration(
+                    hintText: ref.watch(userProvider).phoneNumber ?? "wait",
                     labelText: "Phone",
+                    hintStyle: TextStyle(color: Colors.black, fontSize: 14),
                     floatingLabelBehavior: FloatingLabelBehavior.always),
               ),
               TextField(
                 controller: addressController,
                 decoration: InputDecoration(
+                    hintText: ref.watch(userProvider).address ?? "wait",
                     labelText: "Address",
+                    hintStyle: TextStyle(color: Colors.black, fontSize: 14),
                     floatingLabelBehavior: FloatingLabelBehavior.always),
               ),
               Row(
@@ -185,6 +224,9 @@ class _State extends ConsumerState<EditProfile> {
 
   updateAuth() async {
     final firebaseUser = FirebaseAuth.instance.currentUser;
+    emaily = firebaseUser?.email;
+    // EmailAuthProvider.credential(email: emaily!, password: '');
+
     // emailyController.text.isNotEmpty
     //     ? firebaseUser?.updateEmail(emailyController.text)
     //     : null;
@@ -193,8 +235,13 @@ class _State extends ConsumerState<EditProfile> {
     //     ? firebaseUser?.updateDisplayName(nameController.text)
     //     : null;
     print("b4");
-    firebaseUser?.updateEmail(emailyController.text);
-    firebaseUser?.updateDisplayName(nameController.text);
+    if (await firebaseUser != null) {
+      firebaseUser?.updateEmail(emailyController.text);
+      firebaseUser?.updateDisplayName(nameController.text);
+      firebaseUser?.updatePassword(passwordController.text);
+      // signed in
+    } else {}
+
     print("updated");
   }
 
@@ -225,20 +272,39 @@ class _State extends ConsumerState<EditProfile> {
     fetch();
   }
 
-  Future<String> uploadImage() async {
+  Future<String> uploadImage(BuildContext context) async {
+    final snackBar = SnackBar(content: Text('Are you talkin\' to me?'));
+
     // String filepath = basename(file.path);
     //add image into fireStorage
+    // final storage = await FirebaseStorage.instance.ref()
+    //   ..child("users").child("profile_picture").child(
+    //       FirebaseAuth.instance.currentUser!.uid +
+    //           "_" +
+    //           basename(_image!.path));
+    // print("storage");
+    // dynamic store = await storage.root;
+    // print(store.toString());
     TaskSnapshot taskSnapshot = await FirebaseStorage.instance
         .ref()
         .child("users")
         .child("profile_picture")
-        .child(FirebaseAuth.instance.currentUser!.uid +
-            "_" +
-            basename(_image!.path))
+        .child(FirebaseAuth.instance.currentUser!.uid)
         .putFile(_image!);
+    // TaskSnapshot snapshot = await FirebaseStorage.instance
+    //     .ref()
+    //     .child("users")
+    //     .child("profile_picture")
+    //     .child(FirebaseAuth.instance.currentUser!.uid +
+    //         "_" +
+    //         basename(_image!.path))
+    //     .writeToFile(_image!);
+
     //get image for current user from fireStorage
     dynamic url = await taskSnapshot.ref.getDownloadURL();
+
     ref.watch(userProvider.notifier).assignAvatar(url);
+
     //RTDB
     user
         .child("clients")

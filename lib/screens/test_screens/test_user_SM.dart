@@ -277,6 +277,8 @@ class TestUserCAR extends ConsumerWidget {
   final TextEditingController getUserController = TextEditingController();
   final TextEditingController carIdController = TextEditingController();
   Car? carData;
+  String? x;
+  List idss = [];
 
   String? email = "7amda@gmail.com";
   String? subId;
@@ -284,8 +286,9 @@ class TestUserCAR extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final Client car = ref.watch(userProvider);
+    final Client carstate = ref.watch(userProvider);
     final userNotifier = ref.watch(userProvider.notifier);
+
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
@@ -347,18 +350,35 @@ class TestUserCAR extends ConsumerWidget {
               ElevatedButton(
                   onPressed: () {
                     // userNotifier.removeCar(car.cars[0]);
-                    delete();
+                    delete(ref);
                   },
                   child: const Text("removeeee")),
               ElevatedButton(
                   onPressed: () {
                     // userNotifier.removeCar(car.cars[0]);
-                    cardata();
+                    cardata(ref);
                   },
                   child: const Text("cardata")),
+              ElevatedButton(
+                  onPressed: () {
+                    // userNotifier.removeCar(car.cars[0]);
+                    allSubowner();
+                  },
+                  child: const Text("subowners")),
               const SizedBox(height: 50),
 
-              // Text(car.cars.toString()),
+              // Text(carstate.cars.toString()),
+              // ListView.builder(
+              //     itemCount: carstate.cars.length,
+              //     itemBuilder: (BuildContext context, int index) {
+              //       return ListTile(
+              //           leading: Text(carstate.cars[index].model.toString()),
+              //           trailing: Text(
+              //             "GFG",
+              //             style: TextStyle(color: Colors.green, fontSize: 15),
+              //           ),
+              //           title: Text("List item $index"));
+              //     }),
               ///////////////////////////////////////////////////////////////////
               // Text(user.name ?? "NON"), //ME
               // Text(user.phoneNumber ?? "NON"), //HESHAM
@@ -400,6 +420,14 @@ class TestUserCAR extends ConsumerWidget {
     });
   }
 
+  // getownercar() async {
+  //   DatabaseReference cars = await dbRef.child("cars");
+  //   cars.orderByChild("owner").equalTo().once().then((event) {
+  //     final dataSnapshot = event.snapshot;
+  //     print("read" + dataSnapshot.value.toString());
+  //   });
+  // }
+
   getuser() async {
     //final firebaseuser = await FirebaseAuth.instance.currentUser;
     // var method = await FirebaseAuth.instance
@@ -436,26 +464,85 @@ class TestUserCAR extends ConsumerWidget {
 
       print(email);
     });
-    DatabaseReference cars = await dbRef
-        .child("cars")
-        .child(chasisController.text)
-        .child("subowners")
-        .child(subId!);
+    // DatabaseReference cars = await dbRef
+    //     .child("cars_users")
+    //     .child(chasisController.text)
+    //     .child("subowners")
+    //     .child(subId!);
+    //
+    // await cars.set("true");
 
-    await cars.set("true");
+    DatabaseReference carsUsers =
+        dbRef.child("cars_users").child(chasisController.text);
+    DatabaseReference cars = dbRef.child("cars");
+
+    cars
+        .orderByChild("owner")
+        .equalTo(FirebaseAuth.instance.currentUser!.uid)
+        .once()
+        .then((event) async {
+      final dataSnapshot = event.snapshot;
+
+      dataSnapshot.children.forEach((carsSnapShot) async {
+        print("this user's cars=>${carsSnapShot.key}");
+        x = carsSnapShot.key;
+        print("thiss xxxx ${x}");
+        if (x.toString() == carsUsers.key.toString()) {
+          print("car added");
+          await carsUsers
+              .child(FirebaseAuth.instance.currentUser!.uid)
+              .child(subId!)
+              .set(true);
+        } else {
+          print("add car");
+        }
+      });
+    });
+    print("herreee");
+    print(carsUsers.key.toString());
   }
 
-  delete() async {
+  delete(ref) async {
+    final userNotifier = ref.watch(userProvider.notifier);
+    final Client carstate = ref.watch(userProvider);
+
     //TODO check if this user is the owner of this car
     //authorization
     DatabaseReference cars = dbRef.child("cars").child(chasisController.text);
+    userNotifier.removeCar(carstate.cars);
     cars.remove();
+  }
+
+  allSubowner() async {
+    DatabaseReference carsUsers =
+        dbRef.child("cars_users").child(chasisController.text);
+    DatabaseReference users = dbRef.child("users").child("clients");
+
+    carsUsers
+        .child(FirebaseAuth.instance.currentUser!.uid)
+        .orderByValue()
+        .equalTo(true)
+        .once()
+        .then((event) {
+      final dataSnapshot = event.snapshot;
+
+      dataSnapshot.children.forEach((subownerSnapShot) async {
+        print("subownerssss =>>>${subownerSnapShot.key}");
+        users.child(subownerSnapShot.key.toString()).once().then((event) {
+          final dataSnapshot = event.snapshot;
+          print("read" + dataSnapshot.value.toString());
+        });
+        // idss.add(subownerSnapShot.key.toString());
+      });
+      // print(idss);
+    });
   }
 
   owner(ref) async {
     Client car = ref.watch(userProvider);
     // final firebaseuser = await FirebaseAuth.instance.currentUser;
     DatabaseReference cars = dbRef.child("cars").child(chasisController.text);
+
     // String? key = dbRef.child("cars").push().key;
     String? key = cars.key;
 
@@ -469,7 +556,7 @@ class TestUserCAR extends ConsumerWidget {
     // map['plate'] = plateController.text;
     // map['chasis'] = chasisController.text;
     // map['year'] = yearController.text;
-    // Map<String, dynamic> map1 = Map();
+    // Map<String, dynamic> map1 = Map();carsUsers.set(value)
 
     await cars.set({
       "model": carModelController.text,
@@ -500,8 +587,9 @@ class TestUserCAR extends ConsumerWidget {
     // }
   }
 
-  cardata() async {
-    DatabaseReference cars = await dbRef.child("cars");
+  cardata(ref) async {
+    DatabaseReference cars = dbRef.child("cars");
+    final userNotifier = ref.watch(userProvider.notifier);
 
     cars
         .orderByChild("owner")
@@ -509,15 +597,14 @@ class TestUserCAR extends ConsumerWidget {
         .once()
         .then((event) {
       final dataSnapshot = event.snapshot;
-
       dataSnapshot.children.forEach((carsSnapShot) {
-        print("this user's cars=>${carsSnapShot.value}");
-
-        carsSnapShot.child("subowners").children.forEach((subOwnerSnapShot) {
-          print(subOwnerSnapShot.key);
-        });
+        print("this user's cars=>${carsSnapShot.child("model").value}");
+        Car car = new Car(
+            noPlate: carsSnapShot.child("plate").value.toString(),
+            model: carsSnapShot.child("model").value.toString(),
+            noChassis: carsSnapShot.key.toString());
+        userNotifier.assignCar(car);
       });
-      print("cars data" + dataSnapshot.value.toString());
     });
   }
 }

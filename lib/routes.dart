@@ -58,7 +58,8 @@ class Routing {
           ),
           GoRoute(
             path: ManageSubowner.routeName,
-            builder: (context, state) => ManageSubowner(),
+            builder: (context, state) =>
+                ManageSubowner(chasis: state.extra! as String),
           ),
           GoRoute(
             path: TransferOwner.routeName,

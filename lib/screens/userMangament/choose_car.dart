@@ -1,12 +1,33 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
+import 'package:go_router/go_router.dart';
 import 'package:slahly/classes/models/car.dart';
+import 'package:slahly/screens/car_management/add_car_screen.dart';
 import 'package:vertical_card_pager/vertical_card_pager.dart';
+import 'package:slahly/classes/models/client.dart';
 
-class Choose_car extends StatelessWidget {
+import '../../classes/provider/user_data.dart';
+import '../../main.dart';
+import 'manageSubowner.dart';
+
+class Choose_car extends ConsumerStatefulWidget {
   static final routeName = "/Choose_car";
+
+  @override
+  _State createState() => _State();
+}
+
+class _State extends ConsumerState<Choose_car> {
+  @override
+  void initState() {
+    cardata();
+    super.initState();
+  }
 
   final List<String> titles = [
     "RED",
@@ -75,6 +96,8 @@ class Choose_car extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final Client carstate = ref.watch(userProvider);
+    final userNotifier = ref.watch(userProvider.notifier);
     Size size = MediaQuery.of(context).size;
     return Scaffold(
         backgroundColor: const Color(0xFFd1d9e6),
@@ -99,7 +122,7 @@ class Choose_car extends StatelessWidget {
             child: SafeArea(
                 child: AnimationLimiter(
               child: ListView.builder(
-                itemCount: car.length,
+                itemCount: carstate.cars.length,
                 itemBuilder: (context, index) => Card(
                   elevation: 6,
                   margin: EdgeInsets.all(10),
@@ -116,6 +139,9 @@ class Choose_car extends StatelessWidget {
                     child: SingleChildScrollView(
                       child: GestureDetector(
                         onTap: () {
+                          context.push(ManageSubowner.routeName,
+                              extra: carstate.cars[index].noChassis.toString());
+
                           print('welcome'.tr());
                         },
                         child: ListTile(
@@ -124,7 +150,7 @@ class Choose_car extends StatelessWidget {
                             backgroundColor: btncolor[car[index].color],
                             child: Icon(Icons.directions_car_filled, size: 40),
                           ),
-                          title: Text(car[index].model.toString(),
+                          title: Text(carstate.cars[index].model.toString(),
                               style: TextStyle(
                                   fontSize: 25, fontWeight: FontWeight.bold)),
                           subtitle: Padding(
@@ -140,7 +166,7 @@ class Choose_car extends StatelessWidget {
                                         color: Colors.black),
                                   ),
                                   Text(
-                                    car[index].noPlate.toString(),
+                                    carstate.cars[index].noPlate.toString(),
                                     style: TextStyle(
                                         fontSize: 18,
                                         fontWeight: FontWeight.bold),
@@ -156,7 +182,8 @@ class Choose_car extends StatelessWidget {
                                         fontWeight: FontWeight.bold,
                                         color: Colors.black),
                                   ),
-                                  Text(car[index].noChassis.toString(),
+                                  Text(
+                                      carstate.cars[index].noChassis.toString(),
                                       style: TextStyle(
                                           fontSize: 18,
                                           fontWeight: FontWeight.bold)),
@@ -188,6 +215,28 @@ class Choose_car extends StatelessWidget {
           ),
           painter: HeaderCurvedContainer(),
         ));
+  }
+
+  cardata() async {
+    print("saaaaaddddd");
+    DatabaseReference cars = dbRef.child("cars");
+
+    cars
+        .orderByChild("owner")
+        .equalTo(FirebaseAuth.instance.currentUser!.uid)
+        .once()
+        .then((event) {
+      final dataSnapshot = event.snapshot;
+      dataSnapshot.children.forEach((carsSnapShot) {
+        print("this user's cars=>${carsSnapShot.child("model").value}");
+        Car car = new Car(
+            noPlate: carsSnapShot.child("plate").value.toString(),
+            model: carsSnapShot.child("model").value.toString(),
+            noChassis: carsSnapShot.key.toString());
+        ref.watch(userProvider.notifier).assignCar(car);
+      });
+    });
+    print("hiii");
   }
 }
 

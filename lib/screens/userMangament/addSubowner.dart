@@ -4,28 +4,43 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:slahly/main.dart';
 import 'package:firebase_core/firebase_core.dart';
 
-class AddSubowner extends StatefulWidget {
+import '../../classes/provider/user_data.dart';
+
+class AddSubowner extends ConsumerStatefulWidget {
   static final routeName = "/addSubowner";
 
   @override
-  State<AddSubowner> createState() => _AddSubownerState();
+  _State createState() => _State();
 }
 
-class _AddSubownerState extends State<AddSubowner> {
+class _State extends ConsumerState<AddSubowner> {
+  @override
+  void initState() {
+    cardata();
+    super.initState();
+  }
+
   DatabaseReference subowners =
       FirebaseDatabase.instance.ref().child("subowners");
+  final TextEditingController getUserController = TextEditingController();
 
-  Future<void> addUser() async {
-    await subowners.set({
-      "user_id": "user id ", //user id
-      "Car_id": "car id" //car id
-    });
-  }
+  String? email = "";
+  String? subId;
+  String? avatar;
+  List models = [];
+  List chasis = [];
+  String? sub;
+  String? selected;
+  Map<String, String> map = new Map();
+
+  DatabaseReference user = dbRef.child("users");
+  late String dropdownvalue;
 
   Future showAlertbox(context) {
     return showDialog(
@@ -37,6 +52,8 @@ class _AddSubownerState extends State<AddSubowner> {
         actions: [
           ElevatedButton(
               onPressed: () {
+                addSubowner(selected);
+                getuser();
                 Navigator.pop(context, true);
 
                 // ShowSnackbar(context, info, index);
@@ -56,7 +73,6 @@ class _AddSubownerState extends State<AddSubowner> {
 
   var name = ['sergi ', 'hesham'];
 
-  String dropdownvalue = 'BMW';
   String qrCode = 'Unknown';
 
   @override
@@ -110,6 +126,7 @@ class _AddSubownerState extends State<AddSubowner> {
                     Container(
                       width: 250,
                       child: TextFormField(
+                        controller: getUserController,
                         decoration: InputDecoration(
                           labelText: "Enter_Subowner_Email".tr(),
                           filled: true,
@@ -129,21 +146,20 @@ class _AddSubownerState extends State<AddSubowner> {
                       Text('Choose_Car'.tr(),
                           style: TextStyle(fontSize: 25, color: Colors.black)),
                       SizedBox(width: 20),
-                      DropdownButton(
+                      DropdownButton<dynamic>(
                         value: dropdownvalue,
                         icon: Icon(Icons.keyboard_arrow_down),
-                        items: items.map((String items) {
+                        items: models.map((dynamic items) {
                           return DropdownMenuItem(
                               value: items,
-                              child: Text(
-                                items,
-                                style: TextStyle(
-                                    fontSize: 20, color: Colors.black),
-                              ));
+                              child: Text(items,
+                                  style: TextStyle(
+                                      fontSize: 15, color: Colors.black)));
                         }).toList(),
-                        onChanged: (String? value) {
+                        onChanged: (dynamic? value) {
                           setState(() {
                             this.dropdownvalue = value!;
+                            selected = map[this.dropdownvalue];
                           });
                         },
                       ),
@@ -155,11 +171,11 @@ class _AddSubownerState extends State<AddSubowner> {
                     children: [
                       CircleAvatar(
                         radius: 30.0,
-                        backgroundImage: NetworkImage(""),
+                        backgroundImage: NetworkImage(avatar ?? "sad"),
                         backgroundColor: Colors.blue,
                       ),
                       SizedBox(width: 50),
-                      Text("Aya Adel", style: TextStyle(fontSize: 25))
+                      Text(email!, style: TextStyle(fontSize: 25))
                     ],
                   )
                 ],
@@ -186,6 +202,99 @@ class _AddSubownerState extends State<AddSubowner> {
     } on PlatformException {
       qrCode = 'failed to get version';
     }
+  }
+
+  cardata() async {
+    DatabaseReference cars = dbRef.child("cars");
+    // final userNotifier = ref.watch(userProvider.notifier);
+
+    cars
+        .orderByChild("owner")
+        .equalTo(FirebaseAuth.instance.currentUser!.uid)
+        .once()
+        .then((event) {
+      final dataSnapshot = event.snapshot;
+
+      dataSnapshot.children.forEach((carsSnapShot) {
+        print("this user's cars=>${carsSnapShot.child("model").value}");
+        print("this user's cars=>${carsSnapShot.key}");
+
+        setState(() {
+          models.add(carsSnapShot.child("model").value.toString());
+          chasis.add(carsSnapShot.key);
+          for (var i = 0; i < models.length; i++) {
+            map[models[i]] = chasis[i];
+          }
+
+          dropdownvalue = models[0].toString();
+        });
+        print(models);
+        print(map);
+      });
+    });
+  }
+
+  addSubowner(selected) async {
+    DatabaseReference carsUsers = dbRef.child("cars_users").child(selected);
+    DatabaseReference cars = dbRef.child("cars");
+    DatabaseReference usersCars = dbRef.child("users_cars").child(subId!);
+    cars
+        .orderByChild("owner")
+        .equalTo(FirebaseAuth.instance.currentUser!.uid)
+        .once()
+        .then((event) async {
+      final dataSnapshot = event.snapshot;
+
+      dataSnapshot.children.forEach((carsSnapShot) async {
+        print("this user's cars=>${carsSnapShot.key}");
+        sub = carsSnapShot.key;
+        print("thiss xxxx ${sub}");
+        if (sub.toString() == carsUsers.key.toString()) {
+          print("car added");
+          await carsUsers
+              .child(FirebaseAuth.instance.currentUser!.uid)
+              .child(subId!)
+              .set(true);
+          usersCars.child(selected).set("true");
+        } else {
+          print("add car");
+        }
+      });
+    });
+    print("herreee");
+    print(carsUsers.key.toString());
+  }
+
+  getuser() async {
+    user
+        .child("clients")
+        .orderByChild("email")
+        .equalTo(getUserController.text)
+        .once()
+        .then((event) {
+      final dataSnapshot = event.snapshot;
+      print("read" + dataSnapshot.value.toString());
+      var x = dataSnapshot.value.toString();
+      x.trim();
+      var y = x.split(":");
+      String z = y[0];
+      String f = z.replaceAll("{", "");
+      print(f);
+
+      var data = dataSnapshot.value as Map;
+
+      if (data != null) {
+        email = data[f]["email"];
+        avatar = data[f]["image"];
+        subId = f;
+      }
+      print(subId);
+      print(avatar);
+      print(email);
+
+      // user.child("cars").orderByChild("model").equalTo(dropdownvalue).;
+    });
+    print(items);
   }
 }
 
