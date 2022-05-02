@@ -10,6 +10,264 @@ import 'package:slahly/classes/models/mechanic.dart';
 
 import 'package:slahly/widgets/ChooseTile.dart';
 
+import '../dialogues/confirm_cancellation.dart';
+import '../roadsideassistance/services_provider_card.dart';
+
+class WSASlider extends ConsumerStatefulWidget {
+  bool needTowProvider, needMechanic;
+  PanelController pc;
+
+  WSASlider(
+      {Key? key,
+      required this.pc,
+      required this.needTowProvider,
+      required this.needMechanic})
+      : super(key: key);
+
+  @override
+  ConsumerState<WSASlider> createState() => _WSASliderState();
+}
+
+class _WSASliderState extends ConsumerState<WSASlider> {
+  List<Widget> tabs = [];
+  bool requestDone = false;
+
+  // List<Widget>
+  tabsHeading() {
+    tabs = [];
+    if (widget.needMechanic) {
+      tabs.add(const Tab(text: "Mechanic"));
+    }
+    if (widget.needTowProvider) {
+      tabs.add(const Tab(text: "Tow Provider"));
+    }
+    print("TABSSS ${tabs.length}");
+  }
+
+  List<Widget> tabsContent(ScrollController sc) {
+    List<Widget> tempList = [];
+    if (widget.needMechanic) {
+      tempList.add(
+        Builder(builder: (context) {
+          return Stack(alignment: Alignment.center, children: [
+            ref.watch(rsaProvider).mechanic == null
+                ? ref.watch(rsaProvider).acceptedNearbyMechanics!.isEmpty
+                    ? HoldPlease(who: "mechanic")
+                    : ListView.separated(
+                        itemCount: ref
+                            .watch(rsaProvider)
+                            .acceptedNearbyMechanics!
+                            .length,
+                        controller: sc,
+                        itemBuilder: (BuildContext context, int index) {
+                          return mechanicChooseTile(index);
+                        },
+                        separatorBuilder: (BuildContext context, int index) {
+                          return const Divider(height: 5);
+                        },
+                      )
+                : mapMechanicToFullWidget(ref.watch(rsaProvider).mechanic!),
+          ]);
+        }),
+      );
+    }
+    if (widget.needTowProvider) {
+      tempList.add(Builder(builder: (context) {
+        return Stack(alignment: Alignment.center, children: [
+          ref.watch(rsaProvider).towProvider == null
+              ? ref.watch(rsaProvider).acceptedNearbyProviders!.isEmpty
+                  ? HoldPlease(
+                      who: "provider",
+                    )
+                  : ListView.separated(
+                      itemCount: ref
+                          .watch(rsaProvider)
+                          .acceptedNearbyProviders!
+                          .length,
+                      controller: sc,
+                      itemBuilder: (BuildContext context, int index) {
+                        return towProviderChooseTile(index);
+                      },
+                      separatorBuilder: (BuildContext context, int index) {
+                        return const Divider(height: 5);
+                      },
+                    )
+              : mapTowProviderToFullWidget(ref.watch(rsaProvider).towProvider!)
+        ]);
+      }));
+    }
+    tabsHeading();
+    return tempList;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    tabsHeading();
+    check();
+    return SlidingUpPanel(
+      controller: widget.pc,
+      panelSnapping: false,
+      isDraggable: false,
+      minHeight: 0,
+      defaultPanelState: PanelState.CLOSED,
+      panelBuilder: (sc) {
+        return DefaultTabController(
+          length: (widget.needTowProvider && widget.needMechanic) ? 2 : 1,
+          child: Scaffold(
+            backgroundColor: const Color(0xFFd1d9e6),
+            appBar: AppBar(
+              title: TabBar(
+                tabs: tabs,
+              ),
+              // toolbarHeight: 21,
+              // automaticallyImplyLeading: false,
+              backgroundColor: const Color(0xFF193566),
+            ),
+            body: TabBarView(
+              children: tabsContent(sc),
+            ),
+            floatingActionButton: requestDone ? nextPageButton() : Container(),
+          ),
+        );
+      },
+    );
+  }
+
+  Widget nextPageButton() {
+    return ElevatedButton(
+      style: ElevatedButton.styleFrom(
+        shape: const CircleBorder(),
+        primary: const Color(0xFF193566),
+        padding: const EdgeInsets.all(10),
+      ),
+      onPressed: () {
+        print("NEXT PAGE>>>>>>>>>");
+      },
+      child: const Icon(
+        Icons.navigate_next_outlined,
+      ),
+    );
+  }
+
+  Widget cancelButton() {
+    return ElevatedButton(
+      onPressed: () => confirmCancellation(context, ref),
+      child: const Icon(
+        Icons.location_on,
+      ),
+      style: ElevatedButton.styleFrom(
+        shape: const CircleBorder(),
+        primary: const Color(0xFF193566),
+        padding: const EdgeInsets.all(10),
+      ),
+    );
+  }
+
+  void check() async {
+    print(">>Checking");
+    // Future.delayed(Duration.zero, () async {
+    print(ref.watch(rsaProvider).mechanic ?? "sad mafi4 assigned mechanic");
+    print(widget.needTowProvider ? "need prov" : "no need prov");
+    if (ref.watch(rsaProvider).mechanic != null) {
+      if (widget.needTowProvider &&
+          ref.watch(rsaProvider).towProvider != null) {
+        print(">>>>prov+mech page");
+        requestDone = true;
+        // context.push(Arrival.routeName, extra: true);
+      } else if (!widget.needTowProvider) {
+        requestDone = true;
+        print(">>>>mech page");
+      }
+    }
+  }
+
+  GestureDetector towProviderChooseTile(int index) {
+    return GestureDetector(
+      onTap: () {
+        print(
+            "${ref.watch(rsaProvider).acceptedNearbyProviders![index].name.toString()} is selected");
+        //TODO assign mechanic
+        ref.watch(rsaProvider.notifier).assignProvider(
+            ref.watch(rsaProvider).acceptedNearbyProviders![index], false);
+      },
+      child: ChooseTile(
+        email: ref
+            .watch(rsaProvider)
+            .acceptedNearbyProviders![index]
+            .email
+            .toString(),
+        avatar: ref
+            .watch(rsaProvider)
+            .acceptedNearbyProviders![index]
+            .avatar
+            .toString(),
+        phone: ref
+            .watch(rsaProvider)
+            .acceptedNearbyProviders![index]
+            .phoneNumber
+            .toString(),
+        name: ref
+            .watch(rsaProvider)
+            .acceptedNearbyProviders![index]
+            .name
+            .toString(),
+        address: ref
+            .watch(rsaProvider)
+            .acceptedNearbyProviders![index]
+            .address
+            .toString(),
+        type: ref.watch(rsaProvider).acceptedNearbyProviders![index].type!,
+        isCenter:
+            ref.watch(rsaProvider).acceptedNearbyProviders![index].isCenter,
+        rating: ref.watch(rsaProvider).acceptedNearbyProviders![index].rating,
+      ),
+    );
+  }
+
+  GestureDetector mechanicChooseTile(int index) {
+    return GestureDetector(
+      onTap: () {
+        print(
+            "${ref.watch(rsaProvider).acceptedNearbyMechanics![index].name.toString()} is selected");
+        //TODO assign mechanic
+        ref.watch(rsaProvider.notifier).assignMechanic(
+            ref.watch(rsaProvider).acceptedNearbyMechanics![index], false);
+      },
+      child: ChooseTile(
+        email: ref
+            .watch(rsaProvider)
+            .acceptedNearbyMechanics![index]
+            .email
+            .toString(),
+        avatar: ref
+            .watch(rsaProvider)
+            .acceptedNearbyMechanics![index]
+            .avatar
+            .toString(),
+        phone: ref
+            .watch(rsaProvider)
+            .acceptedNearbyMechanics![index]
+            .phoneNumber
+            .toString(),
+        name: ref
+            .watch(rsaProvider)
+            .acceptedNearbyMechanics![index]
+            .name
+            .toString(),
+        type: ref.watch(rsaProvider).acceptedNearbyMechanics![index].type!,
+        isCenter:
+            ref.watch(rsaProvider).acceptedNearbyMechanics![index].isCenter,
+        address: ref
+            .watch(rsaProvider)
+            .acceptedNearbyMechanics![index]
+            .address
+            .toString(),
+        rating: ref.watch(rsaProvider).acceptedNearbyMechanics![index].rating,
+      ),
+    );
+  }
+}
+
 class ChooseMechanicSlider extends ConsumerWidget {
   ChooseMechanicSlider({Key? key, required this.pc, required this.mechanics})
       : super(key: key);

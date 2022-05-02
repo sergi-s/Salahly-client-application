@@ -30,6 +30,7 @@ import 'package:slahly/screens/switchLanguage.dart';
 import 'package:slahly/screens/test_screens/test_user_SM.dart';
 import 'package:slahly/screens/userMangament/addSubowner.dart';
 import 'package:slahly/screens/userMangament/manageSubowner.dart';
+import 'package:slahly/widgets/location/directionMap.dart';
 import 'screens/roadsideassistance/arrival.dart';
 import 'package:slahly/screens/userMangament/transferOwner.dart';
 import 'package:slahly/screens/test_screens/testscreen_foula.dart';
@@ -196,6 +197,12 @@ class Routing {
           GoRoute(
             path: AddReminder.routeName,
             builder: (context, state) => AddReminder(),
+          ),
+          GoRoute(
+            path: DirectionMap.routeName,
+            builder: (context, state) => DirectionMap(
+                currentLocation: state.extra as CustomLocation,
+                destinationLocation: state.extra as CustomLocation),
           ),
         ],
       );

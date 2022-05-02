@@ -46,12 +46,15 @@ class _WSAScreenState extends ConsumerState<WSAScreen> {
 
   final PanelController _pcTowProvider = PanelController();
 
+  final PanelController _pcSlider = PanelController();
+
   @override
   void initState() {
     Future.delayed(Duration.zero, () async {
       ref.watch(salahlyClientProvider.notifier).getSavedData();
       final prefs = await SharedPreferences.getInstance();
       print("YARAB ${prefs.getBool("needProvider")}");
+      print("didRequest${didRequest}");
       if (prefs.getBool("needProvider") ?? false) {
         setState(() {
           needProvider = true;
@@ -65,14 +68,10 @@ class _WSAScreenState extends ConsumerState<WSAScreen> {
         print("there is a onging request");
         print("HELLO::${ref.watch(rsaProvider).rsaID}");
         setState(() {
-          setState(() {
-            didRequest = true;
-          });
+          didRequest = true;
 
           if (ref.watch(rsaProvider).mechanic != null) {
-            setState(() {
-              gotMechanics = true;
-            });
+            gotMechanics = true;
           }
         });
         if (prefs.getString("mechanic") != null) {
@@ -83,6 +82,8 @@ class _WSAScreenState extends ConsumerState<WSAScreen> {
           ref.watch(rsaProvider.notifier).assignProvider(
               await getProviderData(prefs.getString("towProvider")!), false);
         }
+
+        if (didRequest) _pcSlider.open();
         getAcceptedMechanic();
       }
     });
@@ -91,7 +92,7 @@ class _WSAScreenState extends ConsumerState<WSAScreen> {
 
   @override
   Widget build(BuildContext context) {
-    check();
+    // check();
     return Scaffold(
       body: Stack(
         children: [
@@ -129,11 +130,13 @@ class _WSAScreenState extends ConsumerState<WSAScreen> {
                     const SizedBox(height: 20),
                     GestureDetector(
                       child: TextFieldOnMap(
-                        isSelected: !didRequest,
-                        textToDisplay: ("your_current_location".tr()),
-                        iconToDisplay: const Icon(
-                          Icons.my_location,
-                          color: Colors.blue,
+                        isSelected: (!didRequest && needProvider),
+                        textToDisplay: (needProvider
+                            ? "your_current_location".tr()
+                            : "goOnYourOwn".tr()),
+                        iconToDisplay: Icon(
+                          needProvider ? Icons.my_location : Icons.car_repair,
+                          color: const Color(0xFF193566),
                         ),
                       ),
                       onTap: () {
@@ -165,12 +168,18 @@ class _WSAScreenState extends ConsumerState<WSAScreen> {
                       children: [
                         didRequest
                             ? ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  primary: const Color(0xFF193566),
+                                ),
                                 child: const Text("Cancel").tr(),
                                 onPressed: () {
                                   confirmCancellation(context, ref);
                                 },
                               )
                             : ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  primary: const Color(0xFF193566),
+                                ),
                                 child: const Text("confirm").tr(),
                                 onPressed: () {
                                   if (ref
@@ -181,7 +190,8 @@ class _WSAScreenState extends ConsumerState<WSAScreen> {
                                             .watch(salahlyClientProvider)
                                             .requestType ==
                                         RequestType.WSA) {
-                                      _pcMechanic.open();
+                                      // _pcMechanic.open();
+                                      _pcSlider.open();
                                     } else {
                                       ScaffoldMessenger.of(context)
                                           .showSnackBar(const SnackBar(
@@ -210,9 +220,15 @@ class _WSAScreenState extends ConsumerState<WSAScreen> {
                                         ElevatedButton(
                                           onPressed: () =>
                                               Navigator.pop(context),
+                                          style: ElevatedButton.styleFrom(
+                                            primary: const Color(0xFF193566),
+                                          ),
                                           child: Text("Cancel".tr()),
                                         ),
                                         ElevatedButton(
+                                            style: ElevatedButton.styleFrom(
+                                              primary: const Color(0xFF193566),
+                                            ),
                                             onPressed: () async {
                                               Navigator.pop(context);
                                               setState(() {
@@ -245,6 +261,7 @@ class _WSAScreenState extends ConsumerState<WSAScreen> {
               ),
               style: ElevatedButton.styleFrom(
                 shape: const CircleBorder(),
+                primary: const Color(0xFF193566),
                 padding: const EdgeInsets.all(10),
               ),
             ),
@@ -259,6 +276,11 @@ class _WSAScreenState extends ConsumerState<WSAScreen> {
               towProviders: ref.watch(rsaProvider).acceptedNearbyProviders ?? []
               // pc: _pc, mechanics: mechanics,//static data for testing
               ),
+          WSASlider(
+            needTowProvider: needProvider,
+            needMechanic: needMechanic,
+            pc: _pcSlider,
+          )
         ],
       ),
     );
@@ -294,7 +316,8 @@ class _WSAScreenState extends ConsumerState<WSAScreen> {
       gotMechanics = true;
       await rsaNotifier.searchNearbyMechanicsAndProviders();
     }
-    _pcMechanic.open();
+    // _pcMechanic.open();
+    _pcSlider.open();
     //salahlyClientProvider
     ref.watch(salahlyClientProvider.notifier).assignRequest(
         ref.watch(rsaProvider).requestType!, ref.watch(rsaProvider).rsaID!);
@@ -323,6 +346,9 @@ class _WSAScreenState extends ConsumerState<WSAScreen> {
             .forEach((dataSnapShotMechanic) {
           ref.watch(rsaProvider.notifier).atLeastOneMechanic = true;
           flagFindYet = true;
+          if (dataSnapShotMechanic.value == "chosen") {
+            flagAllRejected = false;
+          }
           if (dataSnapShotMechanic.value == "pending") {
             flagAllRejected = false;
           }
@@ -383,6 +409,9 @@ class _WSAScreenState extends ConsumerState<WSAScreen> {
           if (dataSnapShotProvider.value == "pending") {
             flagAllRejected = false;
           }
+          if (dataSnapShotProvider.value == "chosen") {
+            flagAllRejected = false;
+          }
           if (dataSnapShotProvider.value == "accepted") {
             flagAllRejected = false;
             print(
@@ -419,31 +448,6 @@ class _WSAScreenState extends ConsumerState<WSAScreen> {
     });
   }
 
-  bool finished = false;
-
-  void check() async {
-    print(">>Checking");
-    // Future.delayed(Duration.zero, () async {
-    print(ref.watch(rsaProvider).mechanic ?? "sad mafi4 assigned mechanic");
-    print(needProvider ? "need prov" : "no need prov");
-    if (!finished && ref.watch(rsaProvider).mechanic != null) {
-      if (needProvider && ref.watch(rsaProvider).towProvider != null) {
-        print(">>>>prov+mech page");
-        await _myStream.cancel();
-        context.push(Arrival.routeName, extra: true);
-        finished = true;
-      } else if (!needProvider) {
-        print(">>>>mech page");
-        // Future.delayed(Duration.zero, () async {
-        await _myStream.cancel();
-        context.push(Arrival.routeName, extra: false);
-        finished = true;
-        // });
-      }
-    }
-    // });
-  }
-
 // Get assigned Provider
   Widget getProviderWidget() {
     return (ref.watch(rsaProvider).towProvider != null
@@ -452,8 +456,9 @@ class _WSAScreenState extends ConsumerState<WSAScreen> {
         : TextFieldOnMap(
             textToDisplay:
                 didRequest ? "choose_provider".tr() : "needTowTruck".tr(),
-            imageIconToDisplay:
-                const ImageIcon(AssetImage('assets/images/tow-truck 2.png')),
+            imageIconToDisplay: const ImageIcon(
+                AssetImage('assets/images/tow-truck 2.png'),
+                color: Color(0xFF193566)),
             isSelected: didRequest ? needProvider : false,
             child: didRequest
                 ? null
@@ -483,7 +488,7 @@ class _WSAScreenState extends ConsumerState<WSAScreen> {
             textToDisplay: ("choose_mech").tr(),
             iconToDisplay: const Icon(
               Icons.search,
-              color: Colors.blue,
+              color: Color(0xFF193566),
             ),
           ));
   }

@@ -19,9 +19,15 @@ void confirmCancellation(context, ref) {
             content: Text("confirm_cancellation".tr()),
             actions: <Widget>[
               ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    primary: const Color(0xFF193566),
+                  ),
                   onPressed: () => Navigator.pop(context),
                   child: Text("Cancel".tr())),
               ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    primary: const Color(0xFF193566),
+                  ),
                   onPressed: () async {
                     //Cancel RSA request
                     //From State Management and Firebase
