@@ -53,7 +53,6 @@ class _State extends ConsumerState<AddSubowner> {
           ElevatedButton(
               onPressed: () {
                 addSubowner(selected);
-                getuser();
                 Navigator.pop(context, true);
 
                 // ShowSnackbar(context, info, index);
@@ -135,9 +134,11 @@ class _State extends ConsumerState<AddSubowner> {
                       ),
                     ),
                     FloatingActionButton(
-                      onPressed: () => scanQRcode(),
-                      child: const Icon(Icons.qr_code),
-                      backgroundColor: const Color(0xFF193566),
+                      onPressed: () {
+                        getuser();
+                      },
+                      tooltip: 'search',
+                      child: Icon(Icons.search),
                     ),
                   ]),
                   const SizedBox(height: 30),
@@ -184,12 +185,26 @@ class _State extends ConsumerState<AddSubowner> {
           ),
           painter: HeaderCurvedContainer(),
         ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            showAlertbox(context);
-          },
-          child: const Icon(Icons.add),
-          backgroundColor: Color(0xFF193566),
+        floatingActionButton: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(32.0),
+              child: FloatingActionButton(
+                onPressed: () => scanQRcode(),
+                child: const Icon(Icons.qr_code),
+                backgroundColor: const Color(0xFF193566),
+              ),
+            ),
+            // SizedBox(width: MediaQuery.of(context).size.width * 0.7),
+            FloatingActionButton(
+              onPressed: () {
+                showAlertbox(context);
+              },
+              child: const Icon(Icons.add),
+              backgroundColor: Color(0xFF193566),
+            ),
+          ],
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.endFloat);
   }

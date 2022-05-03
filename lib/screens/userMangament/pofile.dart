@@ -37,6 +37,7 @@ class _ProfileState extends ConsumerState<Profile> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+    final screenSize = MediaQuery.of(context).size;
 
     return Scaffold(
       // body: Stack(
@@ -502,7 +503,7 @@ class _ProfileState extends ConsumerState<Profile> {
                 child: Column(
                   children: [
                     Padding(
-                      padding: const EdgeInsets.only(right: 300),
+                      padding: EdgeInsets.only(right: screenSize.width * 0.8),
                       child: Text("name"),
                     ),
                     TextFormField(
@@ -535,7 +536,7 @@ class _ProfileState extends ConsumerState<Profile> {
                 child: Column(
                   children: [
                     Padding(
-                      padding: const EdgeInsets.only(right: 300),
+                      padding: EdgeInsets.only(right: screenSize.width * 0.8),
                       child: Text("Email"),
                     ),
                     TextFormField(
@@ -568,7 +569,7 @@ class _ProfileState extends ConsumerState<Profile> {
                 child: Column(
                   children: [
                     Padding(
-                      padding: const EdgeInsets.only(right: 300),
+                      padding: EdgeInsets.only(right: screenSize.width * 0.8),
                       child: Text("Address"),
                     ),
                     TextFormField(
@@ -601,7 +602,7 @@ class _ProfileState extends ConsumerState<Profile> {
                 child: Column(
                   children: [
                     Padding(
-                      padding: const EdgeInsets.only(right: 300),
+                      padding: EdgeInsets.only(right: screenSize.width * 0.8),
                       child: Text("Phone"),
                     ),
                     TextFormField(

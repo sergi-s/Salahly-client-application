@@ -292,15 +292,15 @@ class _State extends ConsumerState<TransferOwner> {
       x.trim();
       var y = x.split(":");
       String z = y[0];
-      String f = z.replaceAll("{", "");
-      print(f);
+      String userId = z.replaceAll("{", "");
+      print(userId);
 
       var data = dataSnapshot.value as Map;
 
       if (data != null) {
-        email = data[f]["email"];
-        avatar = data[f]["image"];
-        subId = f;
+        email = data[userId]["email"];
+        avatar = data[userId]["image"];
+        subId = userId;
       }
       print(subId);
       print(avatar);
