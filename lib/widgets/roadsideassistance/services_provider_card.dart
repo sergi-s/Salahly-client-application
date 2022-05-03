@@ -59,7 +59,7 @@ class ServicesProviderWiget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DefaultTextStyle(
-      style: const TextStyle(fontSize: 20, color: Colors.black),
+      style: const TextStyle(fontSize: 20, color: Color(0xFF193566)),
       child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -75,6 +75,7 @@ class ServicesProviderWiget extends StatelessWidget {
               padding: const EdgeInsets.only(
                   left: 60.0, right: 60, bottom: 50, top: 50),
               child: Table(
+                columnWidths: const {0: FractionColumnWidth(0.3)},
                 defaultVerticalAlignment: TableCellVerticalAlignment.middle,
                 children: [
                   TableRow(children: [
@@ -105,16 +106,17 @@ class ServicesProviderWiget extends StatelessWidget {
                         serviceProviderPhoneNumber ?? "01..",
                         overflow: TextOverflow.ellipsis,
                         style: const TextStyle(
-                            color: Colors.black, fontWeight: FontWeight.bold),
+                            color: Color(0xFF193566),
+                            fontWeight: FontWeight.bold),
                       ),
                       style: ElevatedButton.styleFrom(
-                        primary: const Color(0xFFff193566).withOpacity(0),
+                        primary: const Color(0xffff193566).withOpacity(0),
                         elevation: 0,
                         animationDuration: Duration.zero,
                       ),
                       icon: const Icon(
                         Icons.copy,
-                        color: Colors.black,
+                        color: Color(0xFF193566),
                       ),
                     ))
                   ]),

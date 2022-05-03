@@ -1,12 +1,9 @@
 import 'package:easy_localization/easy_localization.dart';
 import "package:flutter/material.dart";
 import 'package:go_router/go_router.dart';
-
-import 'package:slahly/classes/firebase/roadsideassistance/roadsideassistance.dart';
 import 'package:slahly/classes/provider/rsadata.dart';
 import 'package:slahly/utils/constants.dart';
-
-import '../../classes/provider/app_data.dart';
+import 'package:slahly/classes/provider/app_data.dart';
 
 //Dialogs
 void confirmCancellation(context, ref) {
@@ -15,6 +12,9 @@ void confirmCancellation(context, ref) {
   showDialog(
       context: context,
       builder: (BuildContext context) => AlertDialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(dialogRadius),
+            ),
             title: Text("are_you_sure".tr()),
             content: Text("confirm_cancellation".tr()),
             actions: <Widget>[

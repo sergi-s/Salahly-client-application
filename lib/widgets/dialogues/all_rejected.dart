@@ -6,6 +6,9 @@ import 'package:slahly/classes/provider/rsadata.dart';
 
 import 'package:slahly/screens/homepage.dart';
 
+import 'package:slahly/utils/constants.dart';
+
+
 //TODO refactor it so it will be reused if needed
 void allRejected(context, ref, String who) {
   showDialog(
@@ -13,7 +16,7 @@ void allRejected(context, ref, String who) {
       barrierDismissible: false,
       builder: (BuildContext context) => AlertDialog(
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(30),
+              borderRadius: BorderRadius.circular(dialogRadius),
             ),
             title: Row(
               mainAxisAlignment: MainAxisAlignment.center,

@@ -1,16 +1,14 @@
 import 'package:easy_localization/easy_localization.dart';
 import "package:flutter/material.dart";
 import 'package:go_router/go_router.dart';
+
 import 'package:slahly/screens/history_management/view_history.dart';
 import 'package:slahly/screens/reminder/reminderScreen.dart';
-
 import 'package:slahly/screens/switchLanguage.dart';
 import 'package:slahly/screens/test_screens/test_user_SM.dart';
 import 'package:slahly/screens/userMangament/editProfile.dart';
-
-import '../../screens/homepage.dart';
-import '../../screens/test_screens/testscreen_foula.dart';
-import '../../screens/userMangament/pofile.dart';
+import 'package:slahly/screens/test_screens/testscreen_foula.dart';
+import 'package:slahly/screens/userMangament/pofile.dart';
 
 Widget salahlyDrawer(BuildContext context) {
   return Drawer(

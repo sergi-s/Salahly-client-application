@@ -1,17 +1,20 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:slahly/classes/models/towProvider.dart';
-import 'package:slahly/classes/provider/rsadata.dart';
-import 'package:slahly/widgets/roadsideassistance/HoldPlease.dart';
+import 'package:go_router/go_router.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
+import 'package:slahly/classes/models/towProvider.dart';
+import 'package:slahly/classes/provider/rsadata.dart';
 import 'package:slahly/classes/models/mechanic.dart';
 
+import 'package:slahly/widgets/roadsideassistance/HoldPlease.dart';
+import 'package:slahly/widgets/roadsideassistance/services_provider_card.dart';
 import 'package:slahly/widgets/ChooseTile.dart';
+import 'package:slahly/widgets/dialogues/confirm_cancellation.dart';
+import 'package:slahly/widgets/location/finalScreen.dart';
 
-import '../dialogues/confirm_cancellation.dart';
-import '../roadsideassistance/services_provider_card.dart';
+import '../../screens/userMangament/pofile.dart';
 
 class WSASlider extends ConsumerStatefulWidget {
   bool needTowProvider, needMechanic;
@@ -126,7 +129,8 @@ class _WSASliderState extends ConsumerState<WSASlider> {
             body: TabBarView(
               children: tabsContent(sc),
             ),
-            floatingActionButton: requestDone ? nextPageButton() : Container(),
+            floatingActionButton:
+                requestDone ? nextPageButton() : cancelButton(),
           ),
         );
       },
@@ -141,7 +145,9 @@ class _WSASliderState extends ConsumerState<WSASlider> {
         padding: const EdgeInsets.all(10),
       ),
       onPressed: () {
-        print("NEXT PAGE>>>>>>>>>");
+        print("SADSAADASD");
+        context.push(RequestFinalScreen.routeName);
+        // context.push(Profile.routeName);
       },
       child: const Icon(
         Icons.navigate_next_outlined,
@@ -153,7 +159,7 @@ class _WSASliderState extends ConsumerState<WSASlider> {
     return ElevatedButton(
       onPressed: () => confirmCancellation(context, ref),
       child: const Icon(
-        Icons.location_on,
+        Icons.cancel_outlined,
       ),
       style: ElevatedButton.styleFrom(
         shape: const CircleBorder(),

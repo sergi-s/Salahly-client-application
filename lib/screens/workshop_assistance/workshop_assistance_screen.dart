@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:slahly/classes/provider/user_data.dart';
+import 'package:slahly/screens/userMangament/choose_car.dart';
 import 'package:slahly/utils/firebase/get_mechanic_data.dart';
 import 'package:slahly/utils/firebase/get_provider_data.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
@@ -13,16 +15,16 @@ import 'package:slahly/classes/provider/app_data.dart';
 import 'package:slahly/classes/provider/rsadata.dart';
 import 'package:slahly/classes/firebase/roadsideassistance/roadsideassistance.dart';
 
-import 'package:slahly/screens/roadsideassistance/arrival.dart';
 import "package:slahly/widgets/dropOff/TextFieldOnMap.dart";
 import 'package:slahly/widgets/WSA/choose_sliders.dart';
-import 'package:slahly/widgets/roadsideassistance/services_provider_card.dart';
 import 'package:slahly/widgets/location/mapWidget.dart';
 import 'package:slahly/widgets/dialogues/request_confirmation_dialogue.dart';
 import 'package:slahly/widgets/dialogues/all_rejected.dart';
 import 'package:slahly/widgets/dialogues/none_found.dart';
 import 'package:slahly/widgets/dialogues/confirm_cancellation.dart';
 import 'package:slahly/utils/constants.dart';
+
+import 'package:slahly/classes/models/car.dart';
 
 class WSAScreen extends ConsumerStatefulWidget {
   static const String routeName = "/WSAScreen";
@@ -74,6 +76,7 @@ class _WSAScreenState extends ConsumerState<WSAScreen> {
             gotMechanics = true;
           }
         });
+        if (didRequest) _pcSlider.open();
         if (prefs.getString("mechanic") != null) {
           ref.watch(rsaProvider.notifier).assignMechanic(
               await getMechanicData(prefs.getString("mechanic")!), false);
@@ -82,8 +85,6 @@ class _WSAScreenState extends ConsumerState<WSAScreen> {
           ref.watch(rsaProvider.notifier).assignProvider(
               await getProviderData(prefs.getString("towProvider")!), false);
         }
-
-        if (didRequest) _pcSlider.open();
         getAcceptedMechanic();
       }
     });
@@ -92,7 +93,6 @@ class _WSAScreenState extends ConsumerState<WSAScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // check();
     return Scaffold(
       body: Stack(
         children: [
@@ -102,7 +102,8 @@ class _WSAScreenState extends ConsumerState<WSAScreen> {
             right: 0,
             bottom: 0,
             child: Container(
-              height: MediaQuery.of(context).size.height * 0.43,
+              height: MediaQuery.of(context).size.height *
+                  ((didRequest) ? 0.0 : 0.43),
               decoration: const BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.only(
@@ -243,6 +244,11 @@ class _WSAScreenState extends ConsumerState<WSAScreen> {
                                             child: const Text("confirm").tr()),
                                       ]);
                                 }),
+                        ElevatedButton(
+                            onPressed: () {
+                              context.push(Choose_car.routeName);
+                            },
+                            child: Text("Choose Car"))
                       ],
                     ),
                   ],
@@ -253,7 +259,8 @@ class _WSAScreenState extends ConsumerState<WSAScreen> {
           Positioned(
             left: MediaQuery.of(context).size.width * 0.85,
             right: 0,
-            bottom: MediaQuery.of(context).size.height * 0.35,
+            bottom:
+                MediaQuery.of(context).size.height * (didRequest ? 0 : 0.35),
             child: ElevatedButton(
               onPressed: () => myMapWidgetState.currentState?.locatePosition(),
               child: const Icon(
@@ -450,46 +457,79 @@ class _WSAScreenState extends ConsumerState<WSAScreen> {
 
 // Get assigned Provider
   Widget getProviderWidget() {
-    return (ref.watch(rsaProvider).towProvider != null
-        ? mapTowProviderToWidget(ref.watch(rsaProvider).towProvider!)
-        // ? Container(child: Text("Mech exits"))
-        : TextFieldOnMap(
-            textToDisplay:
-                didRequest ? "choose_provider".tr() : "needTowTruck".tr(),
-            imageIconToDisplay: const ImageIcon(
-                AssetImage('assets/images/tow-truck 2.png'),
-                color: Color(0xFF193566)),
-            isSelected: didRequest ? needProvider : false,
-            child: didRequest
-                ? null
-                : Switch(
-                    value: needProvider,
-                    onChanged: (value) async {
-                      setState(() {
-                        needProvider = !needProvider;
-                      });
+    return (
+        // ref.watch(rsaProvider).towProvider != null
+        // ? mapTowProviderToWidget(ref.watch(rsaProvider).towProvider!)
+        // :
+        TextFieldOnMap(
+      textToDisplay: didRequest ? "choose_provider".tr() : "needTowTruck".tr(),
+      imageIconToDisplay: const ImageIcon(
+          AssetImage('assets/images/tow-truck 2.png'),
+          color: Color(0xFF193566)),
+      isSelected: didRequest ? needProvider : false,
+      child: didRequest
+          ? null
+          : Switch(
+              value: needProvider,
+              onChanged: (value) async {
+                setState(() {
+                  needProvider = !needProvider;
+                });
 
-                      final prefs = await SharedPreferences.getInstance();
-                      prefs.setBool("needProvider", needProvider);
-                    },
-                    activeTrackColor: Colors.lightGreenAccent,
-                    activeColor: Colors.green,
-                  ),
-          ));
+                final prefs = await SharedPreferences.getInstance();
+                prefs.setBool("needProvider", needProvider);
+              },
+              activeTrackColor: Colors.lightGreenAccent,
+              activeColor: Colors.green,
+            ),
+    ));
   }
 
 //Get assigned mechanic
   Widget getMechanicWidget() {
-    return (ref.watch(rsaProvider).mechanic != null
-        ? mapMechanicToWidget(ref.watch(rsaProvider).mechanic!)
-        // ? Container(child: Text("Mech exits"))
-        : TextFieldOnMap(
-            isSelected: didRequest,
-            textToDisplay: ("choose_mech").tr(),
-            iconToDisplay: const Icon(
-              Icons.search,
-              color: Color(0xFF193566),
-            ),
-          ));
+    return (
+        // ref.watch(rsaProvider).mechanic != null
+        // ? mapMechanicToWidget(ref.watch(rsaProvider).mechanic!)
+        // :
+        TextFieldOnMap(
+      isSelected: didRequest,
+      textToDisplay: ("choose_mech").tr(),
+      iconToDisplay: const Icon(
+        Icons.search,
+        color: Color(0xFF193566),
+      ),
+    ));
+  }
+
+  void addCars() {
+    List tempCars = [
+      Car(
+          color: "blue",
+          noPlate: '1945stak',
+          model: "Ferari",
+          id: "145",
+          noChassis: "1294sfas"),
+      Car(
+          color: "green",
+          noPlate: '1945stak',
+          model: "BMW",
+          id: "145",
+          noChassis: "1294sfas"),
+      Car(
+          color: "black",
+          noPlate: '1945stak',
+          model: "porche",
+          id: "145",
+          noChassis: "1294sfas"),
+      Car(
+          color: "red",
+          noPlate: '1945stak',
+          model: "lada",
+          id: "145",
+          noChassis: "1294sfas")
+    ];
+    for (var car in tempCars) {
+      ref.watch(userProvider.notifier).assignCar(car);
+    }
   }
 }

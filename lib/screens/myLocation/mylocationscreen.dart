@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:slahly/classes/firebase/roadsideassistance/roadsideassistance.dart';
-import 'package:slahly/classes/models/location.dart';
 
 import 'package:slahly/widgets/location/mapWidget.dart';
 import 'package:slahly/widgets/dialogues/request_confirmation_dialogue.dart';

@@ -14,6 +14,8 @@ import 'package:slahly/utils/constants.dart';
 import 'package:slahly/utils/firebase/get_mechanic_data.dart';
 import 'package:slahly/utils/firebase/get_provider_data.dart';
 
+import 'package:slahly/classes/models/car.dart';
+
 // Global for anyone to use it
 final rsaProvider = StateNotifierProvider<RSANotifier, RSA>((ref) {
   return RSANotifier(ref);
@@ -264,6 +266,8 @@ class RSANotifier extends StateNotifier<RSA> {
       state = state.copyWith(estimatedTime: estimatedTime);
 
   assignState(RSAStates newState) => state = state.copyWith(state: newState);
+
+  assignCar(Car car) => state = state.copyWith(car: car);
 
   Future _requestRSA() async {
     String userID = FirebaseAuth.instance.currentUser!.uid;

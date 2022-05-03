@@ -5,8 +5,8 @@ import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
-import '../../classes/models/location.dart';
-import '../../utils/constants.dart';
+import 'package:slahly/classes/models/location.dart';
+import 'package:slahly/utils/constants.dart';
 
 class DirectionMap extends StatefulWidget {
   static const routeName = "/staticDirectionOnMap";
