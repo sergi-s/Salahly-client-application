@@ -47,171 +47,180 @@ class _State extends ConsumerState<Addcar> {
     return Scaffold(
         backgroundColor: const Color(0xFFd1d9e6),
         body: CustomPaint(
-          child: Container(
-            width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.height,
-            child: Padding(
-              padding: EdgeInsets.only(
-                  top: screenSize.height * 0.15,
-                  right: screenSize.width * 0.05,
-                  left: screenSize.width * 0.05),
-              child: Column(
-                children: [
-                  Text(
-                    "Addcar",
-                    style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
-                  ),
-                  SizedBox(
-                    height: 40,
-                  ),
-                  TextFormField(
-                    controller: carModelController,
-                    decoration: InputDecoration(
-                      prefixIcon: Icon(
-                        Icons.drive_eta_rounded,
-                        color: Colors.grey[500],
-                      ),
-                      border: OutlineInputBorder(
-                        // width: 0.0 produces a thin "hairline" border
-                        borderRadius: BorderRadius.all(Radius.circular(90.0)),
-                        borderSide: BorderSide.none,
-                      ),
-                      hintStyle: TextStyle(
-                          color: Colors.black, fontFamily: "WorkSansLight"),
-                      filled: true,
-                      label: Text("Car Model",
-                          style: TextStyle(fontSize: 20, color: Colors.black)),
-                      fillColor: Colors.white70,
-                      hintText: "Enter Car Model",
+          child: GestureDetector(
+            onTap: () {
+              FocusScope.of(context).unfocus();
+            },
+            child: Container(
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height,
+              child: Padding(
+                padding: EdgeInsets.only(
+                    top: screenSize.height * 0.15,
+                    right: screenSize.width * 0.05,
+                    left: screenSize.width * 0.05),
+                child: Column(
+                  children: [
+                    Text(
+                      "Addcar",
+                      style:
+                          TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
                     ),
-                  ),
-                  SizedBox(
-                    height: 30,
-                  ),
-                  TextFormField(
-                    controller: chasisController,
-                    decoration: InputDecoration(
-                      prefixIcon: Icon(
-                        Icons.add_circle_outlined,
-                        color: Colors.grey[500],
-                      ),
-                      border: OutlineInputBorder(
-                        // width: 0.0 produces a thin "hairline" border
-                        borderRadius: BorderRadius.all(Radius.circular(90.0)),
-                        borderSide: BorderSide.none,
-                      ),
-                      hintStyle: TextStyle(
-                          color: Colors.black, fontFamily: "WorkSansLight"),
-                      filled: true,
-                      label: Text("Chasis Number",
-                          style: TextStyle(fontSize: 20, color: Colors.black)),
-                      fillColor: Colors.white70,
-                      hintText: "Enter chasis Number",
+                    SizedBox(
+                      height: 40,
                     ),
-                  ),
-                  SizedBox(
-                    height: 30,
-                  ),
-                  TextFormField(
-                    controller: plateController,
-                    decoration: InputDecoration(
-                      prefixIcon: Icon(
-                        Icons.add_circle_outlined,
-                        color: Colors.grey[500],
-                      ),
-                      border: OutlineInputBorder(
-                        // width: 0.0 produces a thin "hairline" border
-                        borderRadius: BorderRadius.all(Radius.circular(90.0)),
-                        borderSide: BorderSide.none,
-                      ),
-                      hintStyle: TextStyle(
-                          color: Colors.black, fontFamily: "WorkSansLight"),
-                      filled: true,
-                      label: Text("Plate Number",
-                          style: TextStyle(fontSize: 20, color: Colors.black)),
-                      fillColor: Colors.white70,
-                      hintText: "Enter car plate",
-                    ),
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Row(
-                    children: [
-                      Text("Pick Color",
-                          style: TextStyle(
-                              fontSize: 22, fontWeight: FontWeight.bold)),
-                      SizedBox(
-                        width: 45,
-                      ),
-                      GestureDetector(
-                        onTap: () {
-                          pickColor(context);
-                        },
-                        child: Container(
-                          decoration: BoxDecoration(
-                              shape: BoxShape.circle, color: pickerColor),
-                          width: 50,
-                          height: 50,
+                    TextFormField(
+                      controller: carModelController,
+                      decoration: InputDecoration(
+                        prefixIcon: Icon(
+                          Icons.drive_eta_rounded,
+                          color: Colors.grey[500],
                         ),
+                        border: OutlineInputBorder(
+                          // width: 0.0 produces a thin "hairline" border
+                          borderRadius: BorderRadius.all(Radius.circular(90.0)),
+                          borderSide: BorderSide.none,
+                        ),
+                        hintStyle: TextStyle(
+                            color: Colors.black, fontFamily: "WorkSansLight"),
+                        filled: true,
+                        label: Text("Car Model",
+                            style:
+                                TextStyle(fontSize: 20, color: Colors.black)),
+                        fillColor: Colors.white70,
+                        hintText: "Enter Car Model",
                       ),
-                    ],
-                  ),
-                  FlatButton(
-                    textColor: Colors.white,
-                    child: new Text('Add Car'.tr()),
-                    color: Color(0xFF193566),
-                    onPressed: () {
-                      final snackBar = SnackBar(content: Text('Car Added'));
-                      showDialog(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return AlertDialog(
-                              content: Text("are you sure u want to add car"),
-                              title: Text("Warning"),
-                              actions: [
-                                TextButton(
-                                    onPressed: () {
-                                      userNotifier.assignCar(Car(
-                                          noPlate: plateController.text,
-                                          model: carModelController.text,
-                                          noChassis: chasisController.text,
-                                          color: this.pickerColor.toString(),
-                                          id: numberController.text,
-                                          carAccess: CarAccess.owner));
-                                      addCar(ref);
-                                      Navigator.of(context).pop();
-                                      ScaffoldMessenger.of(context)
-                                          .showSnackBar(snackBar);
-                                    },
-                                    child: Text("Confirm")),
-                                TextButton(
-                                    onPressed: () {
-                                      Navigator.of(context).pop();
-                                    },
-                                    child: Text("Cancel"))
-                              ],
-                            );
-                          });
-                    },
-                  ),
-                  FloatingActionButton(
-                    onPressed: () => context.push(Choose_car.routeName),
-                    child: Text("choosecar"),
-                  ),
-                  FloatingActionButton(
-                    onPressed: () => context.push(ViewCars.routeName),
-                    child: Text("viewcar"),
-                  ),
-                  FloatingActionButton(
-                    onPressed: () => context.push(TransferOwner.routeName),
-                    child: Text("transfer"),
-                  ),
-                  FloatingActionButton(
-                    onPressed: () => context.push(AddSubowner.routeName),
-                    child: Text("add subowner"),
-                  ),
-                ],
+                    ),
+                    SizedBox(
+                      height: 30,
+                    ),
+                    TextFormField(
+                      controller: chasisController,
+                      decoration: InputDecoration(
+                        prefixIcon: Icon(
+                          Icons.add_circle_outlined,
+                          color: Colors.grey[500],
+                        ),
+                        border: OutlineInputBorder(
+                          // width: 0.0 produces a thin "hairline" border
+                          borderRadius: BorderRadius.all(Radius.circular(90.0)),
+                          borderSide: BorderSide.none,
+                        ),
+                        hintStyle: TextStyle(
+                            color: Colors.black, fontFamily: "WorkSansLight"),
+                        filled: true,
+                        label: Text("Chasis Number",
+                            style:
+                                TextStyle(fontSize: 20, color: Colors.black)),
+                        fillColor: Colors.white70,
+                        hintText: "Enter chasis Number",
+                      ),
+                    ),
+                    SizedBox(
+                      height: 30,
+                    ),
+                    TextFormField(
+                      controller: plateController,
+                      decoration: InputDecoration(
+                        prefixIcon: Icon(
+                          Icons.add_circle_outlined,
+                          color: Colors.grey[500],
+                        ),
+                        border: OutlineInputBorder(
+                          // width: 0.0 produces a thin "hairline" border
+                          borderRadius: BorderRadius.all(Radius.circular(90.0)),
+                          borderSide: BorderSide.none,
+                        ),
+                        hintStyle: TextStyle(
+                            color: Colors.black, fontFamily: "WorkSansLight"),
+                        filled: true,
+                        label: Text("Plate Number",
+                            style:
+                                TextStyle(fontSize: 20, color: Colors.black)),
+                        fillColor: Colors.white70,
+                        hintText: "Enter car plate",
+                      ),
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Row(
+                      children: [
+                        Text("Pick Color",
+                            style: TextStyle(
+                                fontSize: 22, fontWeight: FontWeight.bold)),
+                        SizedBox(
+                          width: 45,
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            pickColor(context);
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                                shape: BoxShape.circle, color: pickerColor),
+                            width: 50,
+                            height: 50,
+                          ),
+                        ),
+                      ],
+                    ),
+                    FlatButton(
+                      textColor: Colors.white,
+                      child: new Text('Add Car'.tr()),
+                      color: Color(0xFF193566),
+                      onPressed: () {
+                        final snackBar = SnackBar(content: Text('Car Added'));
+                        showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                content: Text("are you sure u want to add car"),
+                                title: Text("Warning"),
+                                actions: [
+                                  TextButton(
+                                      onPressed: () {
+                                        userNotifier.assignCar(Car(
+                                            noPlate: plateController.text,
+                                            model: carModelController.text,
+                                            noChassis: chasisController.text,
+                                            color: this.pickerColor,
+                                            id: numberController.text,
+                                            carAccess: CarAccess.owner));
+                                        addCar(ref);
+                                        Navigator.of(context).pop();
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(snackBar);
+                                      },
+                                      child: Text("Confirm")),
+                                  TextButton(
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                      child: Text("Cancel"))
+                                ],
+                              );
+                            });
+                      },
+                    ),
+                    FloatingActionButton(
+                      onPressed: () => context.push(Choose_car.routeName),
+                      child: Text("choosecar"),
+                    ),
+                    FloatingActionButton(
+                      onPressed: () => context.push(ViewCars.routeName),
+                      child: Text("viewcar"),
+                    ),
+                    FloatingActionButton(
+                      onPressed: () => context.push(TransferOwner.routeName),
+                      child: Text("transfer"),
+                    ),
+                    FloatingActionButton(
+                      onPressed: () => context.push(AddSubowner.routeName),
+                      child: Text("add subowner"),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
@@ -268,7 +277,7 @@ class _State extends ConsumerState<Addcar> {
         noPlate: plateController.text,
         model: carModelController.text,
         noChassis: chasisController.text,
-        color: this.pickerColor.toString());
+        color: this.pickerColor);
     ref.watch(userProvider.notifier).assignCar(carData);
     print(color);
   }

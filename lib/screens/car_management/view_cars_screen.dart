@@ -215,9 +215,6 @@ class _State extends ConsumerState<ViewCards> {
     final userNotifier = ref.watch(userProvider.notifier);
     final Client carstate = ref.watch(userProvider);
 
-    //TODO check if this user is the owner of this car
-    //authorization
-    // DatabaseReference cars = dbRef.child("cars").child(chasis!);
     DatabaseReference userCars = dbRef
         .child("users_cars")
         .child(FirebaseAuth.instance.currentUser!.uid)
@@ -226,7 +223,5 @@ class _State extends ConsumerState<ViewCards> {
     ref
         .watch(userProvider.notifier)
         .removeCar(ref.watch(userProvider).cars[index]);
-    // userNotifier.removeCar(carstate.cars);
-    // cars.remove();
   }
 }

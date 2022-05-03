@@ -1,7 +1,9 @@
+import 'dart:ui';
+
 class Car {
   String? id;
   String? model;
-  String? color;
+  Color? color;
   String noPlate;
   String? noChassis;
   CarAccess? carAccess;

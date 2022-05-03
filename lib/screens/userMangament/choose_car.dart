@@ -148,7 +148,7 @@ class _State extends ConsumerState<Choose_car> {
                               child: ListTile(
                                 leading: CircleAvatar(
                                   radius: 30,
-                                  backgroundColor: Colors.red,
+                                  backgroundColor: carstate.cars[index].color,
                                   // ref
                                   //     .watch(userProvider)
                                   //     .cars[index]
