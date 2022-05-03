@@ -10,6 +10,8 @@ import 'package:slahly/screens/userMangament/editProfile.dart';
 import 'package:slahly/screens/test_screens/testscreen_foula.dart';
 import 'package:slahly/screens/userMangament/pofile.dart';
 
+import '../../screens/car_management/view_cars_screen.dart';
+
 Widget salahlyDrawer(BuildContext context) {
   return Drawer(
     child: ListView(
@@ -83,6 +85,13 @@ Widget salahlyDrawer(BuildContext context) {
           onTap: () {
             Navigator.pop(context);
             context.push(SwitchLanguageScreen.routeName);
+          },
+        ),
+        ListTile(
+          title: Text('View CArs'),
+          onTap: () {
+            Navigator.pop(context);
+            context.push(ViewCars.routeName);
           },
         ),
       ],
