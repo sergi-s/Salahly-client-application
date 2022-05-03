@@ -29,9 +29,15 @@ class _ProfileState extends ConsumerState<Profile> {
   String? phone, address, email, name, data;
   File? url;
   dynamic? path;
+  String? title;
+  updateTitle(title) {
+    this.title;
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+    final screenSize = MediaQuery.of(context).size;
 
     return Scaffold(
       // body: Stack(
@@ -284,9 +290,9 @@ class _ProfileState extends ConsumerState<Profile> {
               // Center(child: Text(ref.watch(userProvider).email ?? "wait")),
               // Center(
               //     child: Text(ref.watch(userProvider).phoneNumber ?? "wait")),
-              SizedBox(
-                height: 30,
-              ),
+              // SizedBox(
+              //   height: 30,
+              // ),
               // Text(
               //   "User Information",
               //   style: TextStyle(fontSize: 25, fontWeight: FontWeight.w500),
@@ -345,108 +351,303 @@ class _ProfileState extends ConsumerState<Profile> {
               //     ],
               //   ),
               // )
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 16),
+              // Container(
+              //   padding: EdgeInsets.symmetric(horizontal: 16),
+              //   child: Column(
+              //       crossAxisAlignment: CrossAxisAlignment.start,
+              //       children: [
+              //         Row(
+              //           children: [
+              //             Text(
+              //               "email",
+              //               style: TextStyle(
+              //                   fontSize: 16, color: Color(0xFF193566)),
+              //             ),
+              //             SizedBox(
+              //               width: 7,
+              //             ),
+              //             Icon(
+              //               Icons.email,
+              //               color: Color(0xFF193566),
+              //             )
+              //           ],
+              //         ),
+              //         SizedBox(
+              //           height: 4,
+              //         ),
+              //         Text(ref.watch(userProvider).email ?? "wait",
+              //             style: TextStyle(
+              //                 fontSize: 25, fontWeight: FontWeight.w500)),
+              //         SizedBox(
+              //           height: 20,
+              //         ),
+              //         Row(
+              //           children: [
+              //             Text(
+              //               "Phone",
+              //               style: TextStyle(
+              //                   fontSize: 18, color: Color(0xFF193566)),
+              //             ),
+              //             SizedBox(
+              //               width: 5,
+              //             ),
+              //             Icon(
+              //               Icons.phone,
+              //               color: Color(0xFF193566),
+              //             )
+              //           ],
+              //         ),
+              //         SizedBox(
+              //           height: 4,
+              //         ),
+              //         Text(ref.watch(userProvider).phoneNumber ?? "wait",
+              //             style: TextStyle(
+              //                 fontSize: 25, fontWeight: FontWeight.w500)),
+              //         SizedBox(
+              //           height: 20,
+              //         ),
+              //         Row(
+              //           children: [
+              //             Text(
+              //               "Address",
+              //               style: TextStyle(
+              //                   fontSize: 20, color: Color(0xFF193566)),
+              //             ),
+              //             Icon(
+              //               Icons.map,
+              //               color: Color(0xFF193566),
+              //             )
+              //           ],
+              //         ),
+              //         SizedBox(
+              //           height: 4,
+              //         ),
+              //         Text(ref.watch(userProvider).address ?? "wait",
+              //             style: TextStyle(
+              //                 fontSize: 25, fontWeight: FontWeight.w500)),
+              //         SizedBox(
+              //           height: 10,
+              //         ),
+              //         Padding(
+              //           padding: EdgeInsets.symmetric(
+              //             vertical: MediaQuery.of(context).size.height * 0.2,
+              //           ),
+              //           child: Align(
+              //             alignment: FractionalOffset.bottomRight,
+              //             child: RaisedButton(
+              //               onPressed: () {
+              //                 context.push(EditProfile.routeName);
+              //               },
+              //               color: Color(0xFF193566),
+              //               shape: RoundedRectangleBorder(
+              //                   borderRadius: BorderRadius.circular(20)),
+              //               child: Text(
+              //                 "update profile",
+              //                 style: TextStyle(
+              //                     fontSize: 14,
+              //                     letterSpacing: 2.2,
+              //                     color: Colors.white),
+              //               ),
+              //             ),
+              //           ),
+              //         ),
+              //       ]),
+              // )
+              // Padding(
+              //   padding: EdgeInsets.all(25),
+              //   child: Container(
+              //       height: 52,
+              //       padding: const EdgeInsets.only(left: 14),
+              //       margin: const EdgeInsets.only(top: 8),
+              //       decoration: BoxDecoration(
+              //           borderRadius: BorderRadius.circular(20),
+              //           color: Colors.grey[100],
+              //           boxShadow: [
+              //             BoxShadow(
+              //               color: Colors.blueGrey,
+              //               blurRadius: 2.0,
+              //               spreadRadius: 0.0,
+              //               offset: Offset(3, 0),
+              //             ),
+              //           ]),
+              //       child: TextField(
+              //         autofocus: false,
+              //         cursorColor: Colors.blue,
+              //         // controller: controller,
+              //         style: TextStyle(
+              //           fontSize: 15,
+              //           fontWeight: FontWeight.w400,
+              //           color: Colors.grey[900],
+              //         ),
+              //
+              //         decoration: InputDecoration(
+              //             border: InputBorder.none,
+              //             focusedBorder: InputBorder.none,
+              //             enabledBorder: InputBorder.none,
+              //             // errorBorder: InputBorder.none,
+              //             disabledBorder: InputBorder.none,
+              //             // contentPadding: EdgeInsets.symmetric(vertical: 15),
+              //             filled: true,
+              //             enabled: false,
+              //             hintStyle: TextStyle(
+              //               fontSize: 14,
+              //               fontWeight: FontWeight.w400,
+              //               color: Colors.grey[600],
+              //             ),
+              //             hintText: "Type in your text",
+              //             fillColor: Colors.white70),
+              //       )),
+              // ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
                 child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        children: [
-                          Text(
-                            "email",
-                            style: TextStyle(
-                                fontSize: 16, color: Color(0xFF193566)),
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.only(right: screenSize.width * 0.8),
+                      child: Text("name"),
+                    ),
+                    TextFormField(
+                      decoration: InputDecoration(
+                          prefixIcon: Icon(
+                            Icons.person,
+                            color: Colors.grey[500],
                           ),
-                          SizedBox(
-                            width: 7,
+                          border: OutlineInputBorder(
+                            // width: 0.0 produces a thin "hairline" border
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(90.0)),
+                            borderSide: BorderSide.none,
                           ),
-                          Icon(
+                          hintStyle: TextStyle(
+                              color: Colors.black, fontFamily: "WorkSansLight"),
+                          filled: true,
+                          enabled: false,
+                          label: Text(ref.watch(userProvider).name ?? "wait",
+                              style:
+                                  TextStyle(fontSize: 20, color: Colors.black)),
+                          fillColor: Colors.white70,
+                          hintText: ref.watch(userProvider).name ?? "wait"),
+                    ),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.only(right: screenSize.width * 0.8),
+                      child: Text("Email"),
+                    ),
+                    TextFormField(
+                      decoration: InputDecoration(
+                          prefixIcon: Icon(
                             Icons.email,
-                            color: Color(0xFF193566),
-                          )
-                        ],
-                      ),
-                      SizedBox(
-                        height: 4,
-                      ),
-                      Text(ref.watch(userProvider).email ?? "wait",
-                          style: TextStyle(
-                              fontSize: 25, fontWeight: FontWeight.w500)),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      Row(
-                        children: [
-                          Text(
-                            "Phone",
-                            style: TextStyle(
-                                fontSize: 18, color: Color(0xFF193566)),
+                            color: Colors.grey[500],
                           ),
-                          SizedBox(
-                            width: 5,
+                          border: OutlineInputBorder(
+                            // width: 0.0 produces a thin "hairline" border
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(90.0)),
+                            borderSide: BorderSide.none,
                           ),
-                          Icon(
+                          hintStyle: TextStyle(
+                              color: Colors.black, fontFamily: "WorkSansLight"),
+                          filled: true,
+                          enabled: false,
+                          label: Text(ref.watch(userProvider).email ?? "wait",
+                              style:
+                                  TextStyle(fontSize: 20, color: Colors.black)),
+                          fillColor: Colors.white70,
+                          hintText: ref.watch(userProvider).email ?? "wait"),
+                    ),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.only(right: screenSize.width * 0.8),
+                      child: Text("Address"),
+                    ),
+                    TextFormField(
+                      decoration: InputDecoration(
+                          prefixIcon: Icon(
+                            Icons.place,
+                            color: Colors.grey[500],
+                          ),
+                          border: OutlineInputBorder(
+                            // width: 0.0 produces a thin "hairline" border
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(90.0)),
+                            borderSide: BorderSide.none,
+                          ),
+                          hintStyle: TextStyle(
+                              color: Colors.black, fontFamily: "WorkSansLight"),
+                          filled: true,
+                          enabled: false,
+                          label: Text(ref.watch(userProvider).address ?? "wait",
+                              style:
+                                  TextStyle(fontSize: 20, color: Colors.black)),
+                          fillColor: Colors.white70,
+                          hintText: ref.watch(userProvider).name ?? "wait"),
+                    ),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.only(right: screenSize.width * 0.8),
+                      child: Text("Phone"),
+                    ),
+                    TextFormField(
+                      decoration: InputDecoration(
+                          prefixIcon: Icon(
                             Icons.phone,
-                            color: Color(0xFF193566),
-                          )
-                        ],
-                      ),
-                      SizedBox(
-                        height: 4,
-                      ),
-                      Text(ref.watch(userProvider).phoneNumber ?? "wait",
-                          style: TextStyle(
-                              fontSize: 25, fontWeight: FontWeight.w500)),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      Row(
-                        children: [
-                          Text(
-                            "Address",
-                            style: TextStyle(
-                                fontSize: 20, color: Color(0xFF193566)),
+                            color: Colors.grey[500],
                           ),
-                          Icon(
-                            Icons.map,
-                            color: Color(0xFF193566),
-                          )
-                        ],
-                      ),
-                      SizedBox(
-                        height: 4,
-                      ),
-                      Text(ref.watch(userProvider).address ?? "wait",
-                          style: TextStyle(
-                              fontSize: 25, fontWeight: FontWeight.w500)),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Padding(
-                        padding: EdgeInsets.symmetric(
-                          vertical: MediaQuery.of(context).size.height * 0.2,
-                        ),
-                        child: Align(
-                          alignment: FractionalOffset.bottomRight,
-                          child: RaisedButton(
-                            onPressed: () {
-                              context.push(EditProfile.routeName);
-                            },
-                            color: Color(0xFF193566),
+                          border: OutlineInputBorder(
+                            // width: 0.0 produces a thin "hairline" border
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(90.0)),
+                            borderSide: BorderSide.none,
+                          ),
+                          hintStyle: TextStyle(
+                              color: Colors.black, fontFamily: "WorkSansLight"),
+                          filled: true,
+                          enabled: false,
+                          label: Text(
+                              ref.watch(userProvider).phoneNumber ?? "wait",
+                              style:
+                                  TextStyle(fontSize: 20, color: Colors.black)),
+                          fillColor: Colors.white70,
+                          hintText: ref.watch(userProvider).name ?? "wait"),
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    SizedBox(
+                      width: 200,
+                      child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            primary: Color(0xFF193566),
                             shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(20)),
-                            child: Text(
-                              "update profile",
-                              style: TextStyle(
-                                  fontSize: 14,
-                                  letterSpacing: 2.2,
-                                  color: Colors.white),
+                              borderRadius: BorderRadius.circular(20),
                             ),
                           ),
-                        ),
-                      ),
-                    ]),
-              )
+                          onPressed: () {
+                            context.push(EditProfile.routeName);
+                          },
+                          child: Text("Edit profile")),
+                    )
+                  ],
+                ),
+              ),
             ],
           ),
         ),
