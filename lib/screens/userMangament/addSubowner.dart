@@ -253,6 +253,7 @@ class _State extends ConsumerState<AddSubowner> {
     DatabaseReference carsUsers = dbRef.child("cars_users").child(selected);
     DatabaseReference cars = dbRef.child("cars");
     DatabaseReference usersCars = dbRef.child("users_cars").child(subId!);
+
     cars
         .orderByChild("owner")
         .equalTo(FirebaseAuth.instance.currentUser!.uid)
@@ -264,7 +265,8 @@ class _State extends ConsumerState<AddSubowner> {
         print("this user's cars=>${carsSnapShot.key}");
         sub = carsSnapShot.key;
         print("thiss xxxx ${sub}");
-        if (sub.toString() == carsUsers.key.toString()) {
+        if (sub.toString() == carsUsers.key.toString() &&
+            subId != FirebaseAuth.instance.currentUser!.uid) {
           print("car added");
           await carsUsers
               .child(FirebaseAuth.instance.currentUser!.uid)
