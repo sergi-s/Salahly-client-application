@@ -4,22 +4,27 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:slahly/classes/provider/user_data.dart';
+import 'package:slahly/screens/userMangament/choose_car.dart';
+import 'package:slahly/utils/firebase/get_mechanic_data.dart';
+import 'package:slahly/utils/firebase/get_provider_data.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 import 'package:slahly/classes/provider/app_data.dart';
 import 'package:slahly/classes/provider/rsadata.dart';
 import 'package:slahly/classes/firebase/roadsideassistance/roadsideassistance.dart';
 
-import 'package:slahly/screens/roadsideassistance/arrival.dart';
 import "package:slahly/widgets/dropOff/TextFieldOnMap.dart";
 import 'package:slahly/widgets/WSA/choose_sliders.dart';
-import 'package:slahly/widgets/roadsideassistance/services_provider_card.dart';
 import 'package:slahly/widgets/location/mapWidget.dart';
 import 'package:slahly/widgets/dialogues/request_confirmation_dialogue.dart';
 import 'package:slahly/widgets/dialogues/all_rejected.dart';
 import 'package:slahly/widgets/dialogues/none_found.dart';
 import 'package:slahly/widgets/dialogues/confirm_cancellation.dart';
 import 'package:slahly/utils/constants.dart';
+
+import 'package:slahly/classes/models/car.dart';
 
 class WSAScreen extends ConsumerStatefulWidget {
   static const String routeName = "/WSAScreen";
@@ -43,20 +48,43 @@ class _WSAScreenState extends ConsumerState<WSAScreen> {
 
   final PanelController _pcTowProvider = PanelController();
 
+  final PanelController _pcSlider = PanelController();
+
   @override
   void initState() {
-    Future.delayed(Duration.zero, () {
+    Future.delayed(Duration.zero, () async {
+      ref.watch(salahlyClientProvider.notifier).getSavedData();
+      final prefs = await SharedPreferences.getInstance();
+      print("YARAB ${prefs.getBool("needProvider")}");
+      print("didRequest${didRequest}");
+      if (prefs.getBool("needProvider") ?? false) {
+        setState(() {
+          needProvider = true;
+        });
+      }
+
       if (ref.watch(salahlyClientProvider).requestType == RequestType.WSA) {
+        // ref.watch(rsaProvider.notifier).searchNearbyMechanicsAndProviders();
+        ref.watch(rsaProvider.notifier).assignRequestID(
+            ref.watch(salahlyClientProvider).requestID.toString());
+        print("there is a onging request");
         print("HELLO::${ref.watch(rsaProvider).rsaID}");
         setState(() {
           didRequest = true;
+
           if (ref.watch(rsaProvider).mechanic != null) {
             gotMechanics = true;
           }
-          if (ref.watch(rsaProvider).towProvider != null) {
-            needProvider = true;
-          }
         });
+        if (didRequest) _pcSlider.open();
+        if (prefs.getString("mechanic") != null) {
+          ref.watch(rsaProvider.notifier).assignMechanic(
+              await getMechanicData(prefs.getString("mechanic")!), false);
+        }
+        if (prefs.getString("towProvider") != null) {
+          ref.watch(rsaProvider.notifier).assignProvider(
+              await getProviderData(prefs.getString("towProvider")!), false);
+        }
         getAcceptedMechanic();
       }
     });
@@ -65,7 +93,6 @@ class _WSAScreenState extends ConsumerState<WSAScreen> {
 
   @override
   Widget build(BuildContext context) {
-    check();
     return Scaffold(
       body: Stack(
         children: [
@@ -75,7 +102,8 @@ class _WSAScreenState extends ConsumerState<WSAScreen> {
             right: 0,
             bottom: 0,
             child: Container(
-              height: MediaQuery.of(context).size.height * 0.43,
+              height: MediaQuery.of(context).size.height *
+                  ((didRequest) ? 0.0 : 0.43),
               decoration: const BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.only(
@@ -103,11 +131,13 @@ class _WSAScreenState extends ConsumerState<WSAScreen> {
                     const SizedBox(height: 20),
                     GestureDetector(
                       child: TextFieldOnMap(
-                        isSelected: !didRequest,
-                        textToDisplay: ("your_current_location".tr()),
-                        iconToDisplay: const Icon(
-                          Icons.my_location,
-                          color: Colors.blue,
+                        isSelected: (!didRequest && needProvider),
+                        textToDisplay: (needProvider
+                            ? "your_current_location".tr()
+                            : "goOnYourOwn".tr()),
+                        iconToDisplay: Icon(
+                          needProvider ? Icons.my_location : Icons.car_repair,
+                          color: const Color(0xFF193566),
                         ),
                       ),
                       onTap: () {
@@ -139,12 +169,18 @@ class _WSAScreenState extends ConsumerState<WSAScreen> {
                       children: [
                         didRequest
                             ? ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  primary: const Color(0xFF193566),
+                                ),
                                 child: const Text("Cancel").tr(),
                                 onPressed: () {
                                   confirmCancellation(context, ref);
                                 },
                               )
                             : ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  primary: const Color(0xFF193566),
+                                ),
                                 child: const Text("confirm").tr(),
                                 onPressed: () {
                                   if (ref
@@ -155,7 +191,8 @@ class _WSAScreenState extends ConsumerState<WSAScreen> {
                                             .watch(salahlyClientProvider)
                                             .requestType ==
                                         RequestType.WSA) {
-                                      _pcMechanic.open();
+                                      // _pcMechanic.open();
+                                      _pcSlider.open();
                                     } else {
                                       ScaffoldMessenger.of(context)
                                           .showSnackBar(const SnackBar(
@@ -184,9 +221,15 @@ class _WSAScreenState extends ConsumerState<WSAScreen> {
                                         ElevatedButton(
                                           onPressed: () =>
                                               Navigator.pop(context),
+                                          style: ElevatedButton.styleFrom(
+                                            primary: const Color(0xFF193566),
+                                          ),
                                           child: Text("Cancel".tr()),
                                         ),
                                         ElevatedButton(
+                                            style: ElevatedButton.styleFrom(
+                                              primary: const Color(0xFF193566),
+                                            ),
                                             onPressed: () async {
                                               Navigator.pop(context);
                                               setState(() {
@@ -201,6 +244,11 @@ class _WSAScreenState extends ConsumerState<WSAScreen> {
                                             child: const Text("confirm").tr()),
                                       ]);
                                 }),
+                        ElevatedButton(
+                            onPressed: () {
+                              context.push(Choose_car.routeName);
+                            },
+                            child: Text("Choose Car"))
                       ],
                     ),
                   ],
@@ -211,7 +259,8 @@ class _WSAScreenState extends ConsumerState<WSAScreen> {
           Positioned(
             left: MediaQuery.of(context).size.width * 0.85,
             right: 0,
-            bottom: MediaQuery.of(context).size.height * 0.35,
+            bottom:
+                MediaQuery.of(context).size.height * (didRequest ? 0 : 0.35),
             child: ElevatedButton(
               onPressed: () => myMapWidgetState.currentState?.locatePosition(),
               child: const Icon(
@@ -219,6 +268,7 @@ class _WSAScreenState extends ConsumerState<WSAScreen> {
               ),
               style: ElevatedButton.styleFrom(
                 shape: const CircleBorder(),
+                primary: const Color(0xFF193566),
                 padding: const EdgeInsets.all(10),
               ),
             ),
@@ -233,6 +283,11 @@ class _WSAScreenState extends ConsumerState<WSAScreen> {
               towProviders: ref.watch(rsaProvider).acceptedNearbyProviders ?? []
               // pc: _pc, mechanics: mechanics,//static data for testing
               ),
+          WSASlider(
+            needTowProvider: needProvider,
+            needMechanic: needMechanic,
+            pc: _pcSlider,
+          )
         ],
       ),
     );
@@ -245,7 +300,7 @@ class _WSAScreenState extends ConsumerState<WSAScreen> {
         .watch(rsaProvider.notifier)
         .atLeastOne(needMechanic: true, needProvider: needProvider);
 
-    if (!foundAny) {
+    if (!foundAny && ref.watch(rsaProvider).state != RSAStates.canceled) {
       !ref.watch(rsaProvider.notifier).atLeastOneProvider
           ? noneFound(context, who: false)
           : null;
@@ -268,7 +323,8 @@ class _WSAScreenState extends ConsumerState<WSAScreen> {
       gotMechanics = true;
       await rsaNotifier.searchNearbyMechanicsAndProviders();
     }
-    _pcMechanic.open();
+    // _pcMechanic.open();
+    _pcSlider.open();
     //salahlyClientProvider
     ref.watch(salahlyClientProvider.notifier).assignRequest(
         ref.watch(rsaProvider).requestType!, ref.watch(rsaProvider).rsaID!);
@@ -278,10 +334,10 @@ class _WSAScreenState extends ConsumerState<WSAScreen> {
 
   getAcceptedMechanic() {
     print("IN STREAM FUNCTION ::");
-    RSA rsa = ref.watch(rsaProvider);
-    if (rsa.rsaID == null) return [];
-
-    _myStream = wsaRef.child(rsa.rsaID!).onValue.listen((event) {
+    if (ref.watch(rsaProvider).rsaID == null) return [];
+    print("WSA ID is ${ref.watch(rsaProvider).rsaID}");
+    _myStream =
+        wsaRef.child(ref.watch(rsaProvider).rsaID!).onValue.listen((event) {
       print("WSA LISTENER");
       print("${event.snapshot.value}");
       if (event.snapshot.value != null) {
@@ -295,7 +351,11 @@ class _WSAScreenState extends ConsumerState<WSAScreen> {
             .child("mechanicsResponses")
             .children
             .forEach((dataSnapShotMechanic) {
+          ref.watch(rsaProvider.notifier).atLeastOneMechanic = true;
           flagFindYet = true;
+          if (dataSnapShotMechanic.value == "chosen") {
+            flagAllRejected = false;
+          }
           if (dataSnapShotMechanic.value == "pending") {
             flagAllRejected = false;
           }
@@ -307,18 +367,20 @@ class _WSAScreenState extends ConsumerState<WSAScreen> {
 
             print(
                 "AAAAAAAAAAAAAAAAAAAAA${ref.watch(rsaProvider).newNearbyMechanics}");
-            for (var mech in ref.watch(rsaProvider).newNearbyMechanics!.keys) {
-              print(
-                  "${mech} ====== ${dataSnapShotMechanic.key}-> ${dataSnapShotMechanic.key == mech}");
-              print("do I already have him?");
-              if (dataSnapShotMechanic.key == mech) {
-                print(
-                    "YESSSSSSSSSSSSS->${ref.watch(rsaProvider).newNearbyMechanics![mech]!.name}");
-                ref.watch(rsaProvider.notifier).addAcceptedNearbyMechanic(
-                    ref.watch(rsaProvider).newNearbyMechanics![mech]!);
-                // print(ref.watch(rsaProvider).);
-              }
-            }
+            // for (var mech in ref.watch(rsaProvider).newNearbyMechanics!.keys) {
+            //   print(
+            //       "${mech} ====== ${dataSnapShotMechanic.key}-> ${dataSnapShotMechanic.key == mech}");
+            //   print("do I already have him?");
+            //   if (dataSnapShotMechanic.key == mech) {
+            //     print(
+            //         "YESSSSSSSSSSSSS->${ref.watch(rsaProvider).newNearbyMechanics![mech]!.name}");
+            //     ref.watch(rsaProvider.notifier).addAcceptedNearbyMechanic(mech);
+            //     // print(ref.watch(rsaProvider).);
+            //   }
+            // }
+            ref
+                .watch(rsaProvider.notifier)
+                .addAcceptedNearbyMechanic(dataSnapShotMechanic.key.toString());
           }
           if (dataSnapShotMechanic.value == "rejected") {
             if (ref.watch(rsaProvider).mechanic != null) {
@@ -329,11 +391,14 @@ class _WSAScreenState extends ConsumerState<WSAScreen> {
               }
             }
           }
+          if (dataSnapShotMechanic.value == "chosen") {
+            if (!needProvider) {
+              _myStream.cancel();
+            }
+          }
         });
 
         if (flagAllRejected && flagFindYet) {
-          //TODO: Show a dialog box (ALL rejected Please request later)
-          print("ALL MECHANIC REJECTED MECHANIC ");
           allRejected(context, ref, "Mechanics");
         }
 
@@ -344,10 +409,14 @@ class _WSAScreenState extends ConsumerState<WSAScreen> {
             .child("providersResponses")
             .children
             .forEach((dataSnapShotProvider) {
+          ref.watch(rsaProvider.notifier).atLeastOneProvider = true;
           flagFindYet = true;
           print("PROV::333333333333");
           print("PROV::Stream::${dataSnapShotProvider.value}");
           if (dataSnapShotProvider.value == "pending") {
+            flagAllRejected = false;
+          }
+          if (dataSnapShotProvider.value == "chosen") {
             flagAllRejected = false;
           }
           if (dataSnapShotProvider.value == "accepted") {
@@ -357,19 +426,24 @@ class _WSAScreenState extends ConsumerState<WSAScreen> {
 
             print(
                 "PROV::AAAAAAAAAAAAAAAAAAAAA${ref.watch(rsaProvider).newNearbyProviders}");
-            for (var towProvider
-                in ref.watch(rsaProvider).newNearbyProviders!.keys) {
-              print(
-                  "${towProvider} ====== ${dataSnapShotProvider.key}-> ${dataSnapShotProvider.key == towProvider}");
-              print("PROV::do I already have him?");
-              if (dataSnapShotProvider.key == towProvider) {
-                print(
-                    "PROV::YESSSSSSSSSSSSS->${ref.watch(rsaProvider).newNearbyProviders![towProvider]!.name}");
-                ref.watch(rsaProvider.notifier).addAcceptedNearbyProvider(
-                    ref.watch(rsaProvider).newNearbyProviders![towProvider]!);
-                // print(ref.watch(rsaProvider).);
-              }
-            }
+            // for (var towProvider
+            //     in ref.watch(rsaProvider).newNearbyProviders!.keys) {
+            //   print(
+            //       "${towProvider} ====== ${dataSnapShotProvider.key}-> ${dataSnapShotProvider.key == towProvider}");
+            //   print("PROV::do I already have him?");
+            //   if (dataSnapShotProvider.key == towProvider) {
+            //     print(
+            //         "PROV::YESSSSSSSSSSSSS->${ref.watch(rsaProvider).newNearbyProviders![towProvider]!.name}");
+            //     ref
+            //         .watch(rsaProvider.notifier)
+            //         .addAcceptedNearbyProvider(towProvider);
+            //     // print(ref.watch(rsaProvider).);
+            //   }
+            // }
+
+            ref
+                .watch(rsaProvider.notifier)
+                .addAcceptedNearbyProvider(dataSnapShotProvider.key.toString());
           }
         });
         if (flagAllRejected && flagFindYet) {
@@ -381,67 +455,81 @@ class _WSAScreenState extends ConsumerState<WSAScreen> {
     });
   }
 
-  bool finished = false;
-
-  void check() async {
-    print(">>Checking");
-    // Future.delayed(Duration.zero, () async {
-    print(ref.watch(rsaProvider).mechanic ?? "sad mafi4 assigned mechanic");
-    print(needProvider ? "need prov" : "no need prov");
-    if (!finished && ref.watch(rsaProvider).mechanic != null) {
-      if (needProvider && ref.watch(rsaProvider).towProvider != null) {
-        print(">>>>prov+mech page");
-        await _myStream.cancel();
-        context.push(Arrival.routeName, extra: true);
-        finished = true;
-      } else if (!needProvider) {
-        print(">>>>mech page");
-        // Future.delayed(Duration.zero, () async {
-        await _myStream.cancel();
-        context.push(Arrival.routeName, extra: false);
-        finished = true;
-        // });
-      }
-    }
-    // });
-  }
-
 // Get assigned Provider
   Widget getProviderWidget() {
-    return (ref.watch(rsaProvider).towProvider != null
-        ? mapTowProviderToWidget(ref.watch(rsaProvider).towProvider!)
-        // ? Container(child: Text("Mech exits"))
-        : TextFieldOnMap(
-            textToDisplay:
-                didRequest ? "choose_provider".tr() : "needTowTruck".tr(),
-            imageIconToDisplay:
-                const ImageIcon(AssetImage('assets/images/tow-truck 2.png')),
-            isSelected: didRequest ? needProvider : false,
-            child: didRequest
-                ? null
-                : Switch(
-                    value: needProvider,
-                    onChanged: (value) {
-                      setState(() => needProvider = !needProvider);
-                    },
-                    activeTrackColor: Colors.lightGreenAccent,
-                    activeColor: Colors.green,
-                  ),
-          ));
+    return (
+        // ref.watch(rsaProvider).towProvider != null
+        // ? mapTowProviderToWidget(ref.watch(rsaProvider).towProvider!)
+        // :
+        TextFieldOnMap(
+      textToDisplay: didRequest ? "choose_provider".tr() : "needTowTruck".tr(),
+      imageIconToDisplay: const ImageIcon(
+          AssetImage('assets/images/tow-truck 2.png'),
+          color: Color(0xFF193566)),
+      isSelected: didRequest ? needProvider : false,
+      child: didRequest
+          ? null
+          : Switch(
+              value: needProvider,
+              onChanged: (value) async {
+                setState(() {
+                  needProvider = !needProvider;
+                });
+
+                final prefs = await SharedPreferences.getInstance();
+                prefs.setBool("needProvider", needProvider);
+              },
+              activeTrackColor: Colors.lightGreenAccent,
+              activeColor: Colors.green,
+            ),
+    ));
   }
 
 //Get assigned mechanic
   Widget getMechanicWidget() {
-    return (ref.watch(rsaProvider).mechanic != null
-        ? mapMechanicToWidget(ref.watch(rsaProvider).mechanic!)
-        // ? Container(child: Text("Mech exits"))
-        : TextFieldOnMap(
-            isSelected: didRequest,
-            textToDisplay: ("choose_mech").tr(),
-            iconToDisplay: const Icon(
-              Icons.search,
-              color: Colors.blue,
-            ),
-          ));
+    return (
+        // ref.watch(rsaProvider).mechanic != null
+        // ? mapMechanicToWidget(ref.watch(rsaProvider).mechanic!)
+        // :
+        TextFieldOnMap(
+      isSelected: didRequest,
+      textToDisplay: ("choose_mech").tr(),
+      iconToDisplay: const Icon(
+        Icons.search,
+        color: Color(0xFF193566),
+      ),
+    ));
+  }
+
+  void addCars() {
+    List tempCars = [
+      Car(
+          color: "blue",
+          noPlate: '1945stak',
+          model: "Ferari",
+          id: "145",
+          noChassis: "1294sfas"),
+      Car(
+          color: "green",
+          noPlate: '1945stak',
+          model: "BMW",
+          id: "145",
+          noChassis: "1294sfas"),
+      Car(
+          color: "black",
+          noPlate: '1945stak',
+          model: "porche",
+          id: "145",
+          noChassis: "1294sfas"),
+      Car(
+          color: "red",
+          noPlate: '1945stak',
+          model: "lada",
+          id: "145",
+          noChassis: "1294sfas")
+    ];
+    for (var car in tempCars) {
+      ref.watch(userProvider.notifier).assignCar(car);
+    }
   }
 }

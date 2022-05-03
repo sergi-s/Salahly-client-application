@@ -55,7 +55,7 @@ class MapWidgetState extends State<MapWidget> {
             myLocationButtonEnabled: true,
             // myLocationEnabled: true,
             zoomGesturesEnabled: true,
-            zoomControlsEnabled: true,
+            zoomControlsEnabled: false,
             initialCameraPosition: _kGooglePlex,
             onMapCreated: (GoogleMapController controller) {
               _controllerGoogleMap.complete(controller);

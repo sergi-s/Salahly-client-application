@@ -11,7 +11,7 @@ enum AppState {
 
 class SalahlyClient {
   AppState? _appState = AppState.initialState;
-  late  RequestType? _requestType;
+  late RequestType? _requestType;
   late String? _requestID;
 
   AppState? get appState => _appState;
@@ -53,6 +53,19 @@ class SalahlyClient {
     }
     return null;
   }
+
+  @override
+  String toString() {
+    // TODO: implement toString
+    String strAppState =
+        (_appState != null) ? appStateToString(_appState!) : "no app state";
+    String strRequestType = (_requestType != null)
+        ? RSA.requestTypeToString(_requestType!)
+        : "no request";
+    String strRequestID =
+        (_requestID != null) ? (_requestID).toString() : "no request ID";
+    return "App State:$strAppState\nRequest Type:$strRequestType\nRequest ID:$strRequestID";
+  }
 }
 
 final salahlyClientProvider =
@@ -76,11 +89,21 @@ class SalahlyClientNotifier extends StateNotifier<SalahlyClient> {
         SalahlyClient.appStateToString(AppState.requestingAssistance));
   }
 
-  deAssignRequest() {
+  deAssignRequest() async {
     state = SalahlyClient(appState: AppState.normal);
+    final prefs = await SharedPreferences.getInstance();
+
+    prefs.remove("requestID");
+    prefs.remove("requestType");
+    prefs.setString(
+        "appState", SalahlyClient.appStateToString(AppState.normal));
+    prefs.remove("mechanic");
+    prefs.remove("towProvider");
+    print("SHARED PREF SHOUD BE DELETED");
   }
 
   getSavedData() async {
+    print("GET SAVED DATA FROM SHARED PREF");
     final prefs = await SharedPreferences.getInstance();
 
     state = state.copyWith(
@@ -88,5 +111,9 @@ class SalahlyClientNotifier extends StateNotifier<SalahlyClient> {
         requestType:
             RSA.stringToRequestType(prefs.getString('requestType') ?? "null"),
         requestID: prefs.getString('requestID'));
+    state.toString();
+    print(state.appState);
+    print(state.requestType);
+    print(state.requestID);
   }
 }

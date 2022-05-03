@@ -6,11 +6,8 @@ import 'package:slahly/classes/models/location.dart';
 import 'package:slahly/classes/provider/rsadata.dart';
 import 'package:slahly/utils/constants.dart';
 import 'package:slahly/utils/http_request.dart';
-import 'package:slahly/classes/firebase/roadsideassistance/roadsideassistance.dart';
 import 'package:slahly/classes/provider/app_data.dart';
 import 'package:slahly/screens/roadsideassistance/chooseprovider.dart';
-
-import 'package:slahly/widgets/dialogues/none_found.dart';
 
 class PredictionTile extends ConsumerWidget {
   const PredictionTile({Key? key, required this.placePredictions})
@@ -21,20 +18,16 @@ class PredictionTile extends ConsumerWidget {
   Widget build(BuildContext context, ref) {
     return TextButton(
       onPressed: () async {
-        final rsaNotifier = ref.watch(rsaProvider.notifier);
-        final RSA rsa = ref.watch(rsaProvider);
-
         getPlaceAddressDetails(placePredictions.place_id!, ref, context);
 
-        rsaNotifier.assignRequestTypeToTTA();
-        await rsaNotifier.requestTta();
-        rsaNotifier.searchNearbyMechanicsAndProviders();
+        ref.watch(rsaProvider.notifier).assignRequestTypeToTTA();
+        await ref.watch(rsaProvider.notifier).requestTta();
+        ref.watch(rsaProvider.notifier).searchNearbyMechanicsAndProviders();
 
         print("before app state");
 
         ref.watch(salahlyClientProvider.notifier).assignRequest(
-            ref.watch(rsaProvider.notifier).getRequestType(),
-            ref.watch(rsaProvider).rsaID!);
+            ref.watch(rsaProvider).requestType!, ref.watch(rsaProvider).rsaID!);
         print("after app state");
 
         context.push(ChooseProviderScreen.routeName);

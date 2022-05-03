@@ -2,6 +2,8 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:slahly/screens/roadsideassistance/chooseprovider.dart';
 
 import "package:slahly/widgets/dropOff/TextFieldOnMap.dart";
 import 'package:slahly/widgets/location/mapWidget.dart';
@@ -10,15 +12,43 @@ import 'package:slahly/screens/DropOff_screens/dropOff_search_screen.dart';
 import 'package:slahly/classes/firebase/roadsideassistance/roadsideassistance.dart';
 import 'package:slahly/classes/provider/app_data.dart';
 
-class DropOffLocationScreen extends StatefulWidget {
+import 'package:slahly/classes/provider/rsadata.dart';
+import 'package:slahly/widgets/roadsideassistance/services_provider_card.dart';
+
+import 'package:slahly/utils/firebase/get_provider_data.dart';
+
+class DropOffLocationScreen extends ConsumerStatefulWidget {
   static const String routeName = "/DropOffLocationScreen";
+
+  const DropOffLocationScreen({Key? key}) : super(key: key);
 
   @override
   _DropOffLocationScreenState createState() => _DropOffLocationScreenState();
 }
 
-class _DropOffLocationScreenState extends State<DropOffLocationScreen> {
+class _DropOffLocationScreenState extends ConsumerState<DropOffLocationScreen> {
   GlobalKey<MapWidgetState> myMapWidgetState = GlobalKey();
+  bool didRequest = false;
+
+  @override
+  void initState() {
+    Future.delayed(Duration.zero, () async {
+      ref.watch(salahlyClientProvider.notifier).getSavedData();
+      final prefs = await SharedPreferences.getInstance();
+
+      if (prefs.getString("towProvider") != null) {
+        ref.watch(rsaProvider.notifier).assignProvider(
+            await getProviderData(prefs.getString("towProvider")!), false);
+      }
+
+      if (ref.watch(salahlyClientProvider).requestType == RequestType.TTA) {
+        ref.watch(rsaProvider.notifier).assignRequestID(
+            ref.watch(salahlyClientProvider).requestID.toString());
+        context.push(ChooseProviderScreen.routeName);
+      }
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -79,7 +109,9 @@ class _DropOffLocationScreenState extends State<DropOffLocationScreen> {
                                       .watch(salahlyClientProvider)
                                       .requestType ==
                                   RequestType.TTA) {
-                                context.push(DropOffSearchScreen.routeName);
+                                context.push(DropOffSearchScreen.routeName,
+                                    extra: myMapWidgetState
+                                        .currentState!.currentCustomLoc);
                               } else {
                                 ScaffoldMessenger.of(context)
                                     .showSnackBar(const SnackBar(
@@ -94,14 +126,7 @@ class _DropOffLocationScreenState extends State<DropOffLocationScreen> {
                                 extra: myMapWidgetState
                                     .currentState!.currentCustomLoc);
                           },
-                          child: TextFieldOnMap(
-                            isSelected: true,
-                            textToDisplay: ("where_to".tr()),
-                            iconToDisplay: const Icon(
-                              Icons.search,
-                              color: Colors.blue,
-                            ),
-                          ),
+                          child: getProviderWidget(),
                         );
                       },
                     ),
@@ -126,5 +151,19 @@ class _DropOffLocationScreenState extends State<DropOffLocationScreen> {
         ),
       ],
     ));
+  }
+
+// Get assigned Provider
+  Widget getProviderWidget() {
+    return (ref.watch(rsaProvider).towProvider != null
+        ? mapTowProviderToWidget(ref.watch(rsaProvider).towProvider!)
+        // ? Container(child: Text("Mech exits"))
+        : TextFieldOnMap(
+            textToDisplay:
+                didRequest ? "choose_provider".tr() : "where_to".tr(),
+            imageIconToDisplay:
+                const ImageIcon(AssetImage('assets/images/tow-truck 2.png')),
+            isSelected: !didRequest,
+          ));
   }
 }

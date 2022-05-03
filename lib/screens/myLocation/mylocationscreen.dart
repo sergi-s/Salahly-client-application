@@ -5,9 +5,9 @@ import 'package:go_router/go_router.dart';
 import 'package:slahly/classes/firebase/roadsideassistance/roadsideassistance.dart';
 
 import 'package:slahly/widgets/location/mapWidget.dart';
-import 'package:slahly/screens/roadsideassistance/searching_mechanic_provider_screen.dart';
-
 import 'package:slahly/widgets/dialogues/request_confirmation_dialogue.dart';
+
+import 'package:slahly/screens/roadsideassistance/searching_mechanic_provider_screen.dart';
 
 import 'package:slahly/classes/provider/app_data.dart';
 
@@ -20,6 +20,14 @@ class MyLocationScreen extends ConsumerStatefulWidget {
 
 class _MyLocationScreenState extends ConsumerState<MyLocationScreen> {
   GlobalKey<MapWidgetState> myMapWidgetState = GlobalKey();
+
+  @override
+  void initState() {
+    Future.delayed(Duration.zero, () async {
+      ref.watch(salahlyClientProvider.notifier).getSavedData();
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +46,10 @@ class _MyLocationScreenState extends ConsumerState<MyLocationScreen> {
                   if (ref.watch(salahlyClientProvider).requestType != null) {
                     if (ref.watch(salahlyClientProvider).requestType ==
                         RequestType.RSA) {
-                      context.push(SearchingMechanicProviderScreen.routeName);
+                      context.push(
+                          SearchingMechanicProviderScreen.routeName,
+                          extra: myMapWidgetState
+                              .currentState!.currentCustomLoc);
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                         content: Text("There is another ongoing request"),
