@@ -69,6 +69,8 @@ dependencies:
   flutter_local_notifications: ^9.4.1
   flutter_custom_cards: ^0.2.1
   get: ^4.6.1
+  awesome_notifications: ^0.6.21
+  intl: ^0.17.0
 
 dev_dependencies:
   flutter_test:
