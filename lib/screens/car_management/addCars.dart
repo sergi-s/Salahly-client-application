@@ -210,22 +210,22 @@ class _State extends ConsumerState<Addcar> {
                               });
                         },
                       ),
-                      FloatingActionButton(
-                        onPressed: () => context.push(Choose_car.routeName),
-                        child: Text("choosecar"),
-                      ),
-                      FloatingActionButton(
-                        onPressed: () => context.push(ViewCars.routeName),
-                        child: Text("viewcar"),
-                      ),
-                      FloatingActionButton(
-                        onPressed: () => context.push(TransferOwner.routeName),
-                        child: Text("transfer"),
-                      ),
-                      FloatingActionButton(
-                        onPressed: () => context.push(AddSubowner.routeName),
-                        child: Text("add subowner"),
-                      ),
+                      // FloatingActionButton(
+                      //   onPressed: () => context.push(Choose_car.routeName),
+                      //   child: Text("choosecar"),
+                      // ),
+                      // FloatingActionButton(
+                      //   onPressed: () => context.push(ViewCars.routeName),
+                      //   child: Text("viewcar"),
+                      // ),
+                      // FloatingActionButton(
+                      //   onPressed: () => context.push(TransferOwner.routeName),
+                      //   child: Text("transfer"),
+                      // ),
+                      // FloatingActionButton(
+                      //   onPressed: () => context.push(AddSubowner.routeName),
+                      //   child: Text("add subowner"),
+                      // ),
                     ],
                   ),
                 ),

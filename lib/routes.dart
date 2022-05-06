@@ -45,7 +45,7 @@ import 'package:slahly/screens/userMangament/editProfile.dart';
 
 class Routing {
   get router => GoRouter(
-        initialLocation: LoginSignupScreen.routeName,
+        initialLocation: CheckLogin.routeName,
         // initialLocation: RequestFinalScreen.routeName,
         routes: <GoRoute>[
           GoRoute(

@@ -323,6 +323,7 @@ class _AddReminderState extends State<AddReminder> {
     if (_pickerDate != null) {
       setState(() {
         _selectedDate = _pickerDate;
+        print("Selected Date:HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH ${_selectedDate.toString()}");
       });
     }
   }

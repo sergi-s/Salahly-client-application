@@ -175,8 +175,9 @@ class _DropOffLocationScreenState extends ConsumerState<DropOffLocationScreen> {
         TextFieldOnMap(
       textToDisplay: didRequest ? "choose_provider".tr() : "where_to".tr(),
       imageIconToDisplay: ImageIcon(
+          AssetImage('assets/images/tow-truck 2.png'),
           color: Color(0xFF193566),
-          AssetImage('assets/images/tow-truck 2.png')),
+      ),
       isSelected: !didRequest,
     ));
   }

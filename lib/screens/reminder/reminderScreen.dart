@@ -16,26 +16,27 @@ class ReminderScreen extends StatefulWidget {
   State<ReminderScreen> createState() => _ReminderScreenState();
 }
 
-
 class _ReminderScreenState extends State<ReminderScreen> {
   @override
-  void initState(){
+  void initState() {
     super.initState();
-start();
-if(!isListening){
-  isListening=true;
-    AwesomeNotifications().createdStream.listen((notification) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Notification Created '),
-        ),
+    start();
+    if (!isListening) {
+      isListening = true;
+      AwesomeNotifications().createdStream.listen((notification) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Notification Created '),
+          ),
+        );
+        start();
+      });
+    }
+  }
 
-      );
-start();
-    });
-  }}
-bool isListening =false;
-  Map<String,bool> map={};
+  static bool isListening = false;
+  Map<String, bool> map = {};
+
   // @override
   // void dispose() {
   //   AwesomeNotifications().actionSink.close();
@@ -43,108 +44,121 @@ bool isListening =false;
   //   super.dispose();
   // }
 
-
-
-  start ()async{
-    List<NotificationModel>reminders=await AwesomeNotifications().listScheduledNotifications();
+  start() async {
+    List<NotificationModel> reminders =
+        await AwesomeNotifications().listScheduledNotifications();
     reminders.forEach((element) {
-      if(element.content!= null && element.content!.body   !=  null && !(map.containsKey(element.content!.body))){
-        map[element.content!.body!]=true;
-        reminder.add(Reminder(title: element.content!.body! , date: element.content!.displayedDate??DateTime.now().toString()));
-      }else{
+      if (element.content != null &&
+          element.content!.body != null &&
+          !(map.containsKey(element.content!.body))) {
+        map[element.content!.body!] = true;
+        reminder.add(Reminder(
+            title: element.content!.body!,
+            // date: "Hello"));
+        date: element.content!.createdDate ?? DateTime.now().add(Duration(days: 1)).toString()));
+              //  DateTime.now().toString()));
+      } else {
         print("element not valid ");
       }
     });
-    setState(() { });
+    setState(() {});
   }
 
+  List<Reminder> reminder = [];
 
-  List<Reminder> reminder = [
-
-  ];
-
-  Widget personDetailCard(Reminder reminder,BuildContext context) {
+  Widget personDetailCard(Reminder reminder, BuildContext context) {
     Size size = MediaQuery.of(context).size;
     final String title = reminder.title;
     final String date = reminder.date;
 
     return Container(
-      height: size.height/8,
+      height: size.height / 8,
       alignment: Alignment.center,
-
       child: Center(
         child: Card(
-          elevation:8,
+          elevation: 8,
           color: Colors.grey[200],
-          shadowColor:Colors.blueGrey[600],
+          shadowColor: Colors.blueGrey[600],
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),
           ),
           margin: const EdgeInsets.symmetric(vertical: 6, horizontal: 25),
           child: InkWell(
-          splashColor: Colors.blue.withAlpha(30),
-          highlightColor: Colors.grey[200],
-          onTap: () {
-            showDialog<String>(
-              context: context,
-              builder: (BuildContext context) => AlertDialog(
-                title: const Text(
-                  'Confirmation',
-                  style: TextStyle(
-                    color: Color(0xFF193566),
+            splashColor: Colors.blue.withAlpha(30),
+            highlightColor: Colors.grey[200],
+            onTap: () {
+              showDialog<String>(
+                context: context,
+                builder: (BuildContext context) => AlertDialog(
+                  title: const Text(
+                    'Confirmation',
+                    style: TextStyle(
+                      color: Color(0xFF193566),
+                    ),
                   ),
+                  content: const Text(''),
+                  actions: <Widget>[
+                    TextButton.icon(
+                      style: TextButton.styleFrom(
+                        textStyle: TextStyle(color: Colors.white),
+                        backgroundColor: Colors.blueGrey[300],
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                      onPressed: () => {Navigator.pop(context, 'Delete')},
+                      icon: Icon(
+                        Icons.delete_outline_outlined,
+                        color: Colors.white,
+                      ),
+                      label: Text('Delete',
+                          style: TextStyle(
+                            color: Colors.white,
+                          )),
+                    ),
+                    TextButton.icon(
+                      style: TextButton.styleFrom(
+                        textStyle: TextStyle(color: Colors.white),
+                        backgroundColor: Color(0xFF193566),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                      onPressed: () => {Navigator.pop(context, 'Okay')},
+                      icon: Icon(
+                        Icons.done,
+                        color: Colors.white,
+                      ),
+                      label: Text('Okay',
+                          style: TextStyle(
+                            color: Colors.white,
+                          )),
+                    ),
+                  ],
                 ),
-                content: const Text(''),
-                actions: <Widget>[
-                  TextButton.icon(
-                    style: TextButton.styleFrom(
-                      textStyle: TextStyle(color: Colors.white),
-                      backgroundColor: Colors.blueGrey[300],
-                      shape:RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                    ),
-                    onPressed: () => {Navigator.pop(context, 'Delete')},
-                    icon: Icon(Icons.delete_outline_outlined,color: Colors.white,),
-                    label: Text('Delete',style:TextStyle(color: Colors.white,)),
-                  ),
-                  TextButton.icon(
-                    style: TextButton.styleFrom(
-                      textStyle: TextStyle(color: Colors.white),
-                      backgroundColor: Color(0xFF193566),
-                      shape:RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                    ),
-                    onPressed: () => {Navigator.pop(context, 'Okay')},
-                    icon: Icon(Icons.done,color: Colors.white,),
-                    label: Text('Okay',style:TextStyle(color: Colors.white,)),
-                  ),
-                ],
-              ),
-            );},
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              ListTile(
-                leading: Icon(CupertinoIcons.alarm,
-                    color: Color(0xFF193566), size: 40),
-                title: Text(title,
-                        textScaleFactor: 1.4,
-                        style: TextStyle(
-                            color: Color(0xff193566),
-                            fontWeight: FontWeight.bold))
-                    .tr(),
-                subtitle: Text(date,
-                        textScaleFactor: 1.1,
-                        style: TextStyle(color: Colors.black54))
-                    .tr(),
-
-              )
-            ],
-          ),
+              );
+            },
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                ListTile(
+                  leading: Icon(CupertinoIcons.alarm,
+                      color: Color(0xFF193566), size: 40),
+                  title: Text(title,
+                          textScaleFactor: 1.4,
+                          style: TextStyle(
+                              color: Color(0xff193566),
+                              fontWeight: FontWeight.bold))
+                      .tr(),
+                  subtitle: Text(date,
+                          textScaleFactor: 1.1,
+                          style: TextStyle(color: Colors.black54))
+                      .tr(),
+                )
+              ],
             ),
+          ),
         ),
       ),
     );
@@ -188,7 +202,7 @@ bool isListening =false;
         child: Center(
           child: Column(
               children: reminder.map((p) {
-            return personDetailCard(p,context);
+            return personDetailCard(p, context);
           }).toList()),
         ),
       ),
@@ -197,9 +211,11 @@ bool isListening =false;
         isExtended: true,
         child: Icon(Icons.add),
         backgroundColor: Color(0xFF193566),
-        onPressed: () { context.push(AddReminder.routeName);
+        onPressed: () {
+          context.push(AddReminder.routeName);
           print("after add");
-          start();},
+          start();
+        },
       ),
     );
     ;

@@ -15,14 +15,17 @@ import 'package:slahly/screens/test_screens/testscreen_foula.dart';
 class CheckLogin extends StatelessWidget {
   const CheckLogin({Key? key}) : super(key: key);
   static const routeName = "/checklogin";
-  @override
-  Widget build(BuildContext context) {
-    // FirebaseAuth.instance.signOut();
-    if (FirebaseAuth.instance.currentUser == null) {
+  _checkLogin(BuildContext context) async {
+    User? user = await FirebaseAuth.instance.currentUser;
+    if (user == null) {
       context.go(LoginSignupScreen.routeName);
     } else {
-      context.go(AddCars.routeName);
+      context.go(HomePage.routeName);
     }
+  }
+  @override
+  Widget build(BuildContext context) {
+    _checkLogin(context);
     return Scaffold(body: Text("Checking_logged_in_user_error".tr()));
   }
 }
