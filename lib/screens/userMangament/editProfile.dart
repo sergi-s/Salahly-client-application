@@ -22,6 +22,7 @@ class EditProfile extends ConsumerStatefulWidget {
 class _State extends ConsumerState<EditProfile> {
   final TextEditingController nameController = TextEditingController();
   final TextEditingController addressController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
   final TextEditingController emailyController = TextEditingController();
   final TextEditingController phoneController = TextEditingController();
   DatabaseReference user = dbRef.child("users");
@@ -29,146 +30,295 @@ class _State extends ConsumerState<EditProfile> {
   String? phone, address, email, name, data;
   File? url;
   dynamic? path;
+  String? emaily;
+  String? passwordy;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        padding: EdgeInsets.only(left: 16, top: 25, right: 16),
-        child: GestureDetector(
-          onTap: () {
-            FocusScope.of(context).unfocus();
-          },
-          child: ListView(
-            children: [
-              Text(
-                "Edit Profile",
-                style: TextStyle(fontSize: 25, fontWeight: FontWeight.w500),
-              ),
-              SizedBox(
-                height: 15,
-              ),
-              Center(
-                child: Stack(
-                  children: [
-                    GestureDetector(
-                      child: Container(
-                        width: 130,
-                        height: 130,
-                        decoration: BoxDecoration(
-                          border: Border.all(width: 4),
-                          boxShadow: [
-                            BoxShadow(
-                                spreadRadius: 2,
-                                blurRadius: 10,
-                                color: Colors.black.withOpacity(0.1),
-                                offset: Offset(0, 10))
-                          ],
-                          shape: BoxShape.circle,
-                          // image: DecorationImage(
-                          //     fit: BoxFit.cover, image: FileImage(_image!))),
-                        ),
-                        child: CircleAvatar(
-                          backgroundImage:
-                              (_image != null) ? FileImage(_image!) : null,
-                        ),
-                      ),
-                      onTap: () {
-                        chooseImage();
-                      },
-                    ),
-                    Positioned(
-                        bottom: 0,
-                        right: 0,
-                        child: Container(
-                          height: 40,
-                          width: 40,
-                          decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              border: Border.all(width: 4),
-                              color: Colors.green),
-                          child: GestureDetector(
-                            onTap: () {
-                              uploadImage();
-                            },
-                            child: Icon(
-                              Icons.edit,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ))
-                  ],
-                ),
-              ),
-              SizedBox(
-                height: 25,
-              ),
-              TextField(
-                controller: nameController,
-                decoration: InputDecoration(
-                    labelText: "Name",
-                    floatingLabelBehavior: FloatingLabelBehavior.always),
-              ),
-              TextField(
-                controller: emailyController,
-                decoration: InputDecoration(
-                    labelText: "Email",
-                    floatingLabelBehavior: FloatingLabelBehavior.always),
-              ),
-              TextField(
-                controller: phoneController,
-                decoration: InputDecoration(
-                    labelText: "Phone",
-                    floatingLabelBehavior: FloatingLabelBehavior.always),
-              ),
-              TextField(
-                controller: addressController,
-                decoration: InputDecoration(
-                    labelText: "Address",
-                    floatingLabelBehavior: FloatingLabelBehavior.always),
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  OutlineButton(
-                    onPressed: () {
-                      context.pop();
-                    },
-                    padding: EdgeInsets.symmetric(horizontal: 50),
-                    highlightElevation: 2,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: Text(
-                      "Cancel",
-                      style: TextStyle(
-                          fontSize: 14,
-                          letterSpacing: 2.2,
-                          color: Colors.black),
-                    ),
+      backgroundColor: const Color(0xFFd1d9e6),
+      body: CustomPaint(
+        child: Container(
+          padding: EdgeInsets.only(left: 16, top: 25, right: 16),
+          child: GestureDetector(
+            onTap: () {
+              FocusScope.of(context).unfocus();
+            },
+            child: ListView(
+              children: [
+                Padding(
+                  padding: EdgeInsets.only(
+                      top: MediaQuery.of(context).size.height * 0.05,
+                      left: MediaQuery.of(context).size.width * 0.3),
+                  child: Text(
+                    "Edit Profile",
+                    style: TextStyle(fontSize: 25, fontWeight: FontWeight.w500),
                   ),
-                  RaisedButton(
-                    onPressed: () {
-                      updateProfile(context);
-                      updateAuth();
-                    },
-                    color: Colors.green,
-                    padding: EdgeInsets.symmetric(horizontal: 50),
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20)),
-                    child: Text(
-                      "Save",
-                      style: TextStyle(
-                          fontSize: 14,
-                          letterSpacing: 2.2,
-                          color: Colors.white),
+                ),
+                SizedBox(
+                  height: 15,
+                ),
+                Center(
+                  child: Stack(
+                    children: [
+                      GestureDetector(
+                        child: Container(
+                          width: 130,
+                          height: 130,
+                          decoration: BoxDecoration(
+                            border: Border.all(width: 4),
+                            boxShadow: [
+                              BoxShadow(
+                                  spreadRadius: 2,
+                                  blurRadius: 10,
+                                  color: Colors.black.withOpacity(0.1),
+                                  offset: Offset(0, 10))
+                            ],
+                            shape: BoxShape.circle,
+                            // image: DecorationImage(
+                            //     fit: BoxFit.cover, image: FileImage(_image!))),
+                          ),
+                          child: CircleAvatar(
+                            backgroundImage:
+                                (_image != null) ? FileImage(_image!) : null,
+                          ),
+                        ),
+                        onTap: () {
+                          chooseImage();
+                        },
+                      ),
+                      Positioned(
+                          bottom: 0,
+                          right: 0,
+                          child: Container(
+                            height: 40,
+                            width: 40,
+                            decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                border: Border.all(width: 4),
+                                color: Colors.green),
+                            child: GestureDetector(
+                              onTap: () {
+                                final snackBar =
+                                    SnackBar(content: Text('Image uploaded'));
+
+                                try {
+                                  uploadImage(context);
+                                  ScaffoldMessenger.of(context)
+                                      .showMaterialBanner(MaterialBanner(
+                                    content: const Text(
+                                        'Image updated Successfully'),
+                                    actions: [
+                                      TextButton(
+                                          onPressed: () {
+                                            ScaffoldMessenger.of(context)
+                                                .hideCurrentMaterialBanner();
+                                          },
+                                          child: const Text('Dismiss')),
+                                    ],
+                                  ));
+                                  // ScaffoldMessenger.of(context)
+                                  //     .showSnackBar(snackBar);
+                                } catch (e) {}
+                              },
+                              child: Icon(
+                                Icons.edit,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ))
+                    ],
+                  ),
+                ),
+                SizedBox(
+                  height: 25,
+                ),
+                TextField(
+                  controller: nameController,
+                  decoration: InputDecoration(
+                      prefixIcon: Icon(
+                        Icons.person,
+                        color: Colors.grey[500],
+                      ),
+                      border: OutlineInputBorder(
+                        // width: 0.0 produces a thin "hairline" border
+                        borderRadius: BorderRadius.all(Radius.circular(90.0)),
+                        borderSide: BorderSide.none,
+                      ),
+                      hintStyle: TextStyle(
+                          color: Colors.black, fontFamily: "WorkSansLight"),
+                      filled: true,
+                      enabled: true,
+                      labelText: "Name",
+                      fillColor: Colors.white70,
+                      hintText: ref.watch(userProvider).name ?? "wait",
+                      floatingLabelBehavior: FloatingLabelBehavior.always),
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                TextField(
+                  controller: emailyController,
+                  decoration: InputDecoration(
+                      prefixIcon: Icon(
+                        Icons.email,
+                        color: Colors.grey[500],
+                      ),
+                      border: OutlineInputBorder(
+                        // width: 0.0 produces a thin "hairline" border
+                        borderRadius: BorderRadius.all(Radius.circular(90.0)),
+                        borderSide: BorderSide.none,
+                      ),
+                      hintStyle: TextStyle(
+                          color: Colors.black, fontFamily: "WorkSansLight"),
+                      filled: true,
+                      enabled: true,
+                      labelText: "Email",
+                      fillColor: Colors.white70,
+                      hintText: ref.watch(userProvider).email ?? "wait",
+                      floatingLabelBehavior: FloatingLabelBehavior.always),
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                TextField(
+                  controller: passwordController,
+                  decoration: InputDecoration(
+                      prefixIcon: Icon(
+                        Icons.password,
+                        color: Colors.grey[500],
+                      ),
+                      border: OutlineInputBorder(
+                        // width: 0.0 produces a thin "hairline" border
+                        borderRadius: BorderRadius.all(Radius.circular(90.0)),
+                        borderSide: BorderSide.none,
+                      ),
+                      hintStyle: TextStyle(
+                          color: Colors.black, fontFamily: "WorkSansLight"),
+                      filled: true,
+                      enabled: true,
+                      labelText: "password",
+                      fillColor: Colors.white70,
+                      floatingLabelBehavior: FloatingLabelBehavior.always),
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                TextField(
+                  controller: phoneController,
+                  decoration: InputDecoration(
+                      prefixIcon: Icon(
+                        Icons.phone,
+                        color: Colors.grey[500],
+                      ),
+                      border: OutlineInputBorder(
+                        // width: 0.0 produces a thin "hairline" border
+                        borderRadius: BorderRadius.all(Radius.circular(90.0)),
+                        borderSide: BorderSide.none,
+                      ),
+                      hintStyle: TextStyle(
+                          color: Colors.black, fontFamily: "WorkSansLight"),
+                      filled: true,
+                      enabled: true,
+                      labelText: "Phone",
+                      fillColor: Colors.white70,
+                      hintText: ref.watch(userProvider).phoneNumber ?? "wait",
+                      floatingLabelBehavior: FloatingLabelBehavior.always),
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                TextField(
+                  controller: addressController,
+                  decoration: InputDecoration(
+                      prefixIcon: Icon(
+                        Icons.location_on,
+                        color: Colors.grey[500],
+                      ),
+                      border: OutlineInputBorder(
+                        // width: 0.0 produces a thin "hairline" border
+                        borderRadius: BorderRadius.all(Radius.circular(90.0)),
+                        borderSide: BorderSide.none,
+                      ),
+                      hintStyle: TextStyle(
+                          color: Colors.black, fontFamily: "WorkSansLight"),
+                      filled: true,
+                      fillColor: Colors.white70,
+                      enabled: true,
+                      labelText: "Address",
+                      hintText: ref.watch(userProvider).address ?? "wait",
+                      floatingLabelBehavior: FloatingLabelBehavior.always),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    RaisedButton(
+                      color: Colors.white70,
+                      onPressed: () {
+                        context.pop();
+                      },
+                      padding: EdgeInsets.symmetric(horizontal: 50),
+                      highlightElevation: 2,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: Text(
+                        "Cancel",
+                        style: TextStyle(
+                            fontSize: 14,
+                            letterSpacing: 2.2,
+                            color: Colors.black),
+                      ),
                     ),
-                  )
-                ],
-              )
-            ],
+                    RaisedButton(
+                      onPressed: () {
+                        showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                content: Text(
+                                    "are you sure u want to update profile?"),
+                                title: Text("Warning"),
+                                actions: [
+                                  TextButton(
+                                      onPressed: () {
+                                        final snackBar = SnackBar(
+                                            content: Text('profile updated'));
+                                        updateProfile(context);
+                                        updateAuth();
+                                        Navigator.of(context).pop();
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(snackBar);
+                                      },
+                                      child: Text("Confirm")),
+                                  TextButton(
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                      child: Text("Cancel"))
+                                ],
+                              );
+                            });
+                      },
+                      color: Color(0xFF193566),
+                      padding: EdgeInsets.symmetric(horizontal: 50),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20)),
+                      child: Text(
+                        "Save",
+                        style: TextStyle(
+                            fontSize: 14,
+                            letterSpacing: 2.2,
+                            color: Colors.white),
+                      ),
+                    )
+                  ],
+                )
+              ],
+            ),
           ),
         ),
+        painter: HeaderCurvedContainer(),
       ),
     );
   }
@@ -185,6 +335,9 @@ class _State extends ConsumerState<EditProfile> {
 
   updateAuth() async {
     final firebaseUser = FirebaseAuth.instance.currentUser;
+    emaily = firebaseUser?.email;
+    // EmailAuthProvider.credential(email: emaily!, password: '');
+
     // emailyController.text.isNotEmpty
     //     ? firebaseUser?.updateEmail(emailyController.text)
     //     : null;
@@ -193,8 +346,13 @@ class _State extends ConsumerState<EditProfile> {
     //     ? firebaseUser?.updateDisplayName(nameController.text)
     //     : null;
     print("b4");
-    firebaseUser?.updateEmail(emailyController.text);
-    firebaseUser?.updateDisplayName(nameController.text);
+    if (await firebaseUser != null) {
+      firebaseUser?.updateEmail(emailyController.text);
+      firebaseUser?.updateDisplayName(nameController.text);
+      firebaseUser?.updatePassword(passwordController.text);
+      // signed in
+    } else {}
+
     print("updated");
   }
 
@@ -225,20 +383,39 @@ class _State extends ConsumerState<EditProfile> {
     fetch();
   }
 
-  Future<String> uploadImage() async {
+  Future<String> uploadImage(BuildContext context) async {
+    final snackBar = SnackBar(content: Text('Are you talkin\' to me?'));
+
     // String filepath = basename(file.path);
     //add image into fireStorage
+    // final storage = await FirebaseStorage.instance.ref()
+    //   ..child("users").child("profile_picture").child(
+    //       FirebaseAuth.instance.currentUser!.uid +
+    //           "_" +
+    //           basename(_image!.path));
+    // print("storage");
+    // dynamic store = await storage.root;
+    // print(store.toString());
     TaskSnapshot taskSnapshot = await FirebaseStorage.instance
         .ref()
         .child("users")
         .child("profile_picture")
-        .child(FirebaseAuth.instance.currentUser!.uid +
-            "_" +
-            basename(_image!.path))
+        .child(FirebaseAuth.instance.currentUser!.uid)
         .putFile(_image!);
+    // TaskSnapshot snapshot = await FirebaseStorage.instance
+    //     .ref()
+    //     .child("users")
+    //     .child("profile_picture")
+    //     .child(FirebaseAuth.instance.currentUser!.uid +
+    //         "_" +
+    //         basename(_image!.path))
+    //     .writeToFile(_image!);
+
     //get image for current user from fireStorage
     dynamic url = await taskSnapshot.ref.getDownloadURL();
+
     ref.watch(userProvider.notifier).assignAvatar(url);
+
     //RTDB
     user
         .child("clients")
@@ -282,4 +459,20 @@ class _State extends ConsumerState<EditProfile> {
     print(firebaseuser!.email);
     print(firebaseuser.displayName);
   }
+}
+
+class HeaderCurvedContainer extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    Paint paint = Paint()..color = const Color(0xFF193566);
+    Path path = Path()
+      ..relativeLineTo(0, 90)
+      ..quadraticBezierTo(size.width / 2, 150, size.width, 90)
+      ..relativeLineTo(0, -90)
+      ..close();
+    canvas.drawPath(path, paint);
+  }
+
+  @override
+  bool shouldRepaint(CustomPainter oldDelegate) => false;
 }

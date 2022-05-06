@@ -1,5 +1,7 @@
 import "package:flutter/material.dart";
 
+import 'package:slahly/utils/constants.dart';
+
 void requestConfirmationDialogue(context,
     {required content,
     required List<Widget> titleChildren,
@@ -8,7 +10,7 @@ void requestConfirmationDialogue(context,
       context: context,
       builder: (BuildContext context) => AlertDialog(
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(30),
+            borderRadius: BorderRadius.circular(dialogRadius),
           ),
           title: Container(
             alignment: Alignment.center,

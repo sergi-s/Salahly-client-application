@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:slahly/widgets/login_signup/Input_container.dart';
 
-class RounedInput extends StatelessWidget {
+class RounedInput extends StatefulWidget {
   RounedInput({
     Key? key,
     required this.icon,
@@ -11,26 +11,30 @@ class RounedInput extends StatelessWidget {
 
   final IconData icon;
   final String hint;
-  final TextEditingController _textEditingController = TextEditingController();
   final Function fn;
+
+  @override
+  State<RounedInput> createState() => _RounedInputState();
+}
+
+class _RounedInputState extends State<RounedInput> {
+  final TextEditingController _textEditingController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return InputContainer(
       child: TextField(
         onChanged: (value) {
-          fn(value);
-
+          widget.fn(value);
         },
-
         controller: _textEditingController,
         cursorColor: Colors.blue,
         decoration: InputDecoration(
           icon: Icon(
-            icon,
+            widget.icon,
             color: Colors.blue,
           ),
-          hintText: hint,
+          hintText: widget.hint,
           border: InputBorder.none,
         ),
       ),

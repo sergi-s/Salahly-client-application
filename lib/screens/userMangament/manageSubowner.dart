@@ -1,59 +1,39 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:slahly/classes/models/client.dart';
 import 'package:slahly/screens/userMangament/addSubowner.dart';
 
-class ManageSubowner extends StatelessWidget {
+import '../../main.dart';
+
+class ManageSubowner extends ConsumerStatefulWidget {
   static final routeName = "/manageSubowner";
+  String? chasis;
+  ManageSubowner({this.chasis});
+
+  @override
+  _State createState() => _State();
+}
+
+class _State extends ConsumerState<ManageSubowner> {
+  @override
+  void initState() {
+    allSubowner(widget.chasis);
+    super.initState();
+  }
 
   List<String> info = ['mizo', '7amo', '7amama'];
-  List<Client> client = [
-    Client(
-        id: "1",
-        name: "Sergi Samir",
-        email: "Sergi@yahoo.com",
-        subscription: SubscriptionTypes.gold,
-        phoneNumber: "015234451112",
-        address: "Smouha",
-        avatar:
-            "https://scontent-hbe1-1.xx.fbcdn.net/v/t1.6435-1/79130787_2501294306773024_4727773538419736576_n.jpg?stp=dst-jpg_s320x320&_nc_cat=101&ccb=1-5&_nc_sid=7206a8&_nc_ohc=TStj9OkVc68AX9r5iXm&_nc_ht=scontent-hbe1-1.xx&oh=00_AT85JFYVsgGCK_t9dtbdu0vMH6zliaL5tgiTaIQCtgjJGg&oe=626BF022"),
-
-    Client(
-        id: "2",
-        name: "Mahmoud Magdy",
-        email: "Magdy@gmail.com",
-        subscription: SubscriptionTypes.gold,
-        phoneNumber: "010292929223",
-        address: "MONTAZAA m3omraaaa",
-        avatar:
-            "https://see.news/wp-content/uploads/2019/09/8872540_1531078574.jpg"),
-    // avatar:
-    //     "https://scontent.fcai19-5.fna.fbcdn.net/v/t39.30808-6/241676442_4279329582181382_2167552377324842210_n.jpg?_nc_cat=105&ccb=1-5&_nc_sid=09cbfe&_nc_eui2=AeGKq4FMZp3eGePXQ9yrDTBYkTuL3-uGRVeRO4vf64ZFVyifGvoEaCgfgms4jZSbNSNezryRH0GahKxAbVi2v_V5&_nc_ohc=2j1ZPLP0Oe0AX-V7zp-&_nc_ht=scontent.fcai19-5.fna&oh=00_AT8N6VsLIbTZGsJkVnDDHsebygQtlt5Ks1qS1ZTXL_oq0A&oe=6243CF2E"),
-    Client(
-        id: "55",
-        name: "Aya Adel",
-        email: "AyaADEL@gmail.com",
-        subscription: SubscriptionTypes.gold,
-        phoneNumber: "01550123452",
-        address: "Miami 45 sedigabrrrr ",
-        // avatar: "https://pbs.twimg.com/profile_images/1440433307859111939/mG5NGNHn_400x400.jpg")
-        avatar:
-// <<<<<<< HEAD
-//             "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.egypttoday.com%2FArticle%2F4%2F78359%2FTamer-Hosny-to-break-a-Guinness-World-Record-for-the&psig=AOvVaw1KakqcJ-fDoulAiCEEB-ZN&ust=1648993859676000&source=images&cd=vfe&ved=0CAsQjRxqFwoTCIjo5fzC9fYCFQAAAAAdAAAAABAD")
-// =======
-            "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.egypttoday.com%2FArticle%2F4%2F78359%2FTamer-Hosny-to-break-a-Guinness-World-Record-for-the&psig=AOvVaw1KakqcJ-fDoulAiCEEB-ZN&ust=1648993859676000&source=images&cd=vfe&ved=0CAsQjRxqFwoTCIjo5fzC9fYCFQAAAAAdAAAAABAD")
-// >>>>>>> 931e111d966e6532a25d6451b6fa85ee81a45bd7
-  ];
+  // String? name, email, avatar, phone;
+  List emails = [];
+  List name = [];
+  List avatar = [];
+  List phone = [];
 
   // Addinfo() {
-  //   info.add('mizo');
-  //   info.add('7amo');
-  //   info.add('tito');
-  // }
-
   Widget showList() {
     return SingleChildScrollView(
         child: Column(children: [
@@ -70,7 +50,7 @@ class ManageSubowner extends StatelessWidget {
       ListView.builder(
           padding: EdgeInsets.all(17),
           shrinkWrap: true,
-          itemCount: client.length,
+          itemCount: name.length,
           itemBuilder: (BuildContext context, index) {
             return Column(children: [
               Container(
@@ -86,13 +66,13 @@ class ManageSubowner extends StatelessWidget {
     // Key k = Key(randomNumber.toString());
     return Dismissible(
         confirmDismiss: (DismissDirection) async {
-          return await showAlertbox(context, client[index], index);
+          return await showAlertbox(context, name[index], index);
         },
-        key: ValueKey(client[index]),
+        key: ValueKey(name),
         // key: Key(randomNumber.toString()),
         onDismissed: (direction) {
           // _deleteRecord(k)
-          var info = this.client[index];
+          var info = this.name[index];
         },
         background: deleteBgItem(),
         child: Container(
@@ -102,11 +82,11 @@ class ManageSubowner extends StatelessWidget {
               leading: CircleAvatar(
                 radius: 30,
                 backgroundImage: NetworkImage(
-                  client[index].avatar.toString(),
+                  avatar[index].toString(),
                 ),
                 backgroundColor: Colors.blue,
               ),
-              title: Text(client[index].name.toString(),
+              title: Text(name[index],
                   style: TextStyle(
                       fontSize: 20,
                       color: Colors.black,
@@ -115,13 +95,13 @@ class ManageSubowner extends StatelessWidget {
                 children: [
                   Row(
                     children: [
-                      Text(client[index].email.toString(),
+                      Text(emails[index],
                           style: TextStyle(fontSize: 17, color: Colors.black))
                     ],
                   ),
                   Row(
                     children: [
-                      Text(client[index].phoneNumber.toString(),
+                      Text("",
                           style: TextStyle(fontSize: 17, color: Colors.black)),
                     ],
                   )
@@ -133,22 +113,6 @@ class ManageSubowner extends StatelessWidget {
   }
 
   //
-  // Widget rowItem(context, info, index) {
-  //   // var info = this.info[index];
-  //   return Expanded(
-  //     child: Row(
-  //       children: [
-  //         Card(
-  //           child: ListTile(
-  //             title: Text(info),
-  //           ),
-  //         ),
-  //         deleteBgItem()
-  //       ],
-  //     ),
-  //   );
-  // }
-
   Future showAlertbox(context, info, index) {
     return showDialog(
       context: context,
@@ -187,7 +151,6 @@ class ManageSubowner extends StatelessWidget {
   }
 
   // UndoDelete(index, info) {}
-
   Widget deleteBgItem() {
     return Container(
       alignment: Alignment.centerRight,
@@ -234,6 +197,45 @@ class ManageSubowner extends StatelessWidget {
         backgroundColor: Color(0xFF193566),
       ),
     );
+  }
+
+  allSubowner(chasis) async {
+    DatabaseReference carsUsers = dbRef.child("cars_users").child(chasis);
+    DatabaseReference users = dbRef.child("users").child("clients");
+
+    carsUsers
+        .child(FirebaseAuth.instance.currentUser!.uid)
+        .orderByValue()
+        .equalTo(true)
+        .once()
+        .then((event) {
+      final dataSnapshot = event.snapshot;
+
+      dataSnapshot.children.forEach((subownerSnapShot) async {
+        print("subownerssss =>>>${subownerSnapShot.key}");
+        users.child(subownerSnapShot.key.toString()).once().then((event) {
+          final dataSnapshot = event.snapshot;
+          print("read" + dataSnapshot.value.toString());
+          print(dataSnapshot.child("name").value.toString());
+          print(name);
+          print(emails);
+          print(avatar);
+
+          setState(() {
+            name.add(dataSnapshot.child("name").value);
+            emails.add(dataSnapshot.child("email").value);
+            avatar.add(dataSnapshot.child("image").value);
+          });
+          // print(dataSnapshot.child("email").value.toString());
+
+          // print(dataSnapshot.child("email").value.toString());
+        });
+
+        // idss.add(subownerSnapShot.key.toString());
+      });
+
+      // print(idss);
+    });
   }
 }
 //

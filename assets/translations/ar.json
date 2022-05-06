@@ -122,5 +122,19 @@
   "sorry": "ناسف",
   "ok": "تمام",
   "withTowTruck": "مع طلب شاحنه سحب",
-  "withNoTowTruck": "مبدون شاحنه سحب"
+  "withNoTowTruck": "مبدون شاحنه سحب",
+  "goOnYourOwn": "اذهب بمفردي",
+  "request": "اطلب",
+  "plzSpecCar": "اختار سياره من فضلك",
+  "onGoingRequest": "ناسف, هناك طلب لم ينتهي بعد",
+  "subType": "نوع اشتراكك",
+  "km": "كم",
+  "silver": "فضي",
+  "gold": "ذهبي",
+  "platinum": "بلاتين",
+  "expectedTime": "الوقت المحتمل",
+  "rsa": "مساعده الطريق",
+  "wsa": "حجز وؤشه",
+  "tta": "حدمة سياره سحب",
+  "workingOn": "يعمل على"
 }

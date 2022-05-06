@@ -8,6 +8,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:overlay_support/overlay_support.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:slahly/classes/firebase/nearbylocations.dart';
 import 'package:slahly/classes/firebase/roadsideassistance/roadsideassistance.dart';
 import 'package:slahly/classes/models/location.dart';
@@ -55,14 +56,26 @@ class TestScreen_nearbymechanics_and_create_rsa extends ConsumerWidget {
           child: Column(
         children: [
           ElevatedButton(
-              onPressed: () {
+              onPressed: () async{
+                ref.watch(salahlyClientProvider.notifier).getSavedData();
+                final prefs = await SharedPreferences.getInstance();
+
                 print("${ref.watch(salahlyClientProvider).requestType}\n"
                     "${ref.watch(salahlyClientProvider).requestID}\n"
-                    "${ref.watch(salahlyClientProvider).appState}");
+                    "${ref.watch(salahlyClientProvider).appState}\n"
+                    "provider: ${prefs.getString("towProvider")}\n"
+                    "mechanic: ${prefs.getString("mechanic")}");
+
                 print("sad");
               },
               child: const Text("See App state")),
-
+          ElevatedButton(
+            onPressed: () {
+              ref.watch(rsaProvider.notifier).cancelRequest();
+              ref.watch(salahlyClientProvider.notifier).deAssignRequest();
+            },
+            child: Text("cancel request"),
+          ),
           ElevatedButton(
               onPressed: () {
                 ref.watch(rsaProvider.notifier).cancelRequest();

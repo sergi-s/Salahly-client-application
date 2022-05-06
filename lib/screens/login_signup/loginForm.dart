@@ -1,10 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:slahly/screens/car_management/add_car_screen.dart';
 import 'package:slahly/screens/homepage.dart';
-import 'package:slahly/screens/test_screens/test_user_SM.dart';
-import 'package:slahly/screens/test_screens/testscreen_foula.dart';
-import 'package:slahly/screens/userMangament/editProfile.dart';
-import 'package:slahly/screens/userMangament/pofile.dart';
 import 'package:slahly/widgets/login_signup/Rounded_Bottom.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:go_router/go_router.dart';
@@ -13,7 +8,7 @@ import 'package:slahly/widgets/login_signup/Rounded_password.dart';
 import 'package:slahly/widgets/login_signup/roundedInput.dart';
 import 'package:slahly/classes/firebase/firebase.dart';
 
-class LoginForm extends StatelessWidget {
+class LoginForm extends StatefulWidget {
   LoginForm({
     Key? key,
     required this.size,
@@ -22,8 +17,16 @@ class LoginForm extends StatelessWidget {
 
   final Size size;
   final double defaultLogin;
+
+  @override
+  State<LoginForm> createState() => _LoginFormState();
+}
+
+class _LoginFormState extends State<LoginForm> {
   String email = "";
+
   String password = "";
+
   FirebaseCustom fb = FirebaseCustom();
 
   updateEmail(String e) {
@@ -37,8 +40,8 @@ class LoginForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: size.width,
-      height: defaultLogin,
+      width: widget.size.width,
+      height: widget.defaultLogin,
       //color: Color(0xFFd1d9e6),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -83,8 +86,9 @@ class LoginForm extends StatelessWidget {
               //       const SnackBar(
               //           content: Text('Invalid Password!! Please try again')));
               // }
-              // bool check = await fb.login(email, password);
-              bool check = await fb.login("sergi@sergi.sergi", "123456");
+              bool check = await fb.login(email, password);
+              // bool check = await fb.login("mohamed@h.moh", "123456");
+              // bool check = await fb.login("sergi@client.sergi", "123456");
               if (check) {
                 ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(content: Text('Login_successful'.tr())));

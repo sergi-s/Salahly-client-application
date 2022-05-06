@@ -1,16 +1,43 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+import 'package:slahly/classes/models/client.dart';
+import 'package:slahly/screens/car_management/add_car_screen.dart';
+import '../../classes/models/car.dart';
+import '../../classes/provider/user_data.dart';
+import '../../main.dart';
 
-class TransferOwner extends StatefulWidget {
+class TransferOwner extends ConsumerStatefulWidget {
   static final routeName = "/transferOwner";
 
   @override
-  State<TransferOwner> createState() => _TransferOwnerState();
+  _State createState() => _State();
 }
 
-class _TransferOwnerState extends State<TransferOwner> {
-  String dropdownvalue = 'bmw';
+class _State extends ConsumerState<TransferOwner> {
+  @override
+  void initState() {
+    cardata();
+    super.initState();
+  }
+
+  final TextEditingController getUserController = TextEditingController();
+
+  String? email = "";
+  String? subId;
+  String? avatar;
+  List models = [];
+  List chasis = [];
+  String? sub;
+  String? selected;
+  Map<String, String> map = new Map();
+
+  DatabaseReference user = dbRef.child("users");
+  String dropdownvalue = 'Choose car';
   var items = ['lada', 'bmw', 'ferari', 'btngan'];
 
   Future showAlertbox(context) {
@@ -23,6 +50,7 @@ class _TransferOwnerState extends State<TransferOwner> {
         actions: [
           ElevatedButton(
               onPressed: () {
+                // getuser();
                 Navigator.pop(context, true);
 
                 // ShowSnackbar(context, info, index);
@@ -39,7 +67,12 @@ class _TransferOwnerState extends State<TransferOwner> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(
+    BuildContext context,
+  ) {
+    final Client carstate = ref.watch(userProvider);
+
+    final userNotifier = ref.watch(userProvider.notifier);
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: const Color(0xFFd1d9e6),
@@ -76,8 +109,10 @@ class _TransferOwnerState extends State<TransferOwner> {
                 height: 120,
               ),
               TextFormField(
-                decoration:
-                    InputDecoration(labelText: "Enter New Ownership email"),
+                controller: getUserController,
+                decoration: InputDecoration(
+                  labelText: "Enter New Ownership email",
+                ),
               ),
               SizedBox(
                 height: 50,
@@ -87,22 +122,39 @@ class _TransferOwnerState extends State<TransferOwner> {
                   Text('Choose_Car'.tr(),
                       style: TextStyle(fontSize: 25, color: Colors.black)),
                   SizedBox(width: 20),
-                  DropdownButton(
+                  DropdownButton<dynamic>(
                     value: dropdownvalue,
                     icon: Icon(Icons.keyboard_arrow_down),
-                    items: items.map((String items) {
+                    items: models.map((dynamic items) {
                       return DropdownMenuItem(
                           value: items,
                           child: Text(items,
                               style: TextStyle(
-                                  fontSize: 20, color: Colors.black)));
+                                  fontSize: 15, color: Colors.black)));
                     }).toList(),
-                    onChanged: (String? value) {
+                    onChanged: (dynamic? value) {
                       setState(() {
                         this.dropdownvalue = value!;
+                        selected = map[this.dropdownvalue];
                       });
                     },
                   ),
+                  // DropdownButton(
+                  //   value: dropdownvalue,
+                  //   icon: Icon(Icons.keyboard_arrow_down),
+                  //   items: items.map((String items) {
+                  //     return DropdownMenuItem(
+                  //         value: items,
+                  //         child: Text(items,
+                  //             style: TextStyle(
+                  //                 fontSize: 15, color: Colors.black)));
+                  //   }).toList(),
+                  //   onChanged: (dynamic? value) {
+                  //     setState(() {
+                  //       this.dropdownvalue = value!;
+                  //     });
+                  //   },
+                  // ),
                 ],
               ),
               SizedBox(
@@ -112,11 +164,11 @@ class _TransferOwnerState extends State<TransferOwner> {
                 children: [
                   CircleAvatar(
                     radius: 30.0,
-                    backgroundImage: NetworkImage(""),
+                    backgroundImage: NetworkImage(avatar ?? "sad"),
                     backgroundColor: Colors.blue,
                   ),
                   SizedBox(width: 50),
-                  Text("Aya Adel", style: TextStyle(fontSize: 25))
+                  Text(email!, style: TextStyle(fontSize: 25))
                 ],
               ),
               SizedBox(
@@ -144,12 +196,119 @@ class _TransferOwnerState extends State<TransferOwner> {
                                     side: BorderSide(color: Colors.blue)))),
                         onPressed: () => showAlertbox(context)),
                   )),
+              ElevatedButton(
+                  onPressed: () {
+                    // cardata();
+                    getuser();
+                  },
+                  child: Text("dataa")),
+              ElevatedButton(
+                  onPressed: () {
+                    context.push(AddCars.routeName);
+                  },
+                  child: Text("goooo")),
+              ElevatedButton(
+                  onPressed: () {
+                    transferOwner(selected);
+                  },
+                  child: Text("transfer"))
             ]),
           ),
         ),
         painter: HeaderCurvedContainer(),
       ),
     );
+  }
+
+  cardata() async {
+    // DatabaseReference cars = dbRef.child("cars");
+    // final userNotifier = ref.watch(userProvider.notifier);
+    //
+    // cars
+    //     .orderByChild("owner")
+    //     .equalTo(FirebaseAuth.instance.currentUser!.uid)
+    //     .once()
+    //     .then((event) {
+    //   final dataSnapshot = event.snapshot;
+    //
+    //   dataSnapshot.children.forEach((carsSnapShot) {
+    //     print("this user's cars=>${carsSnapShot.child("model").value}");
+    //
+    //     models.add(carsSnapShot.child("model").value.toString());
+    //     print(models);
+    //   });
+    // });
+    DatabaseReference cars = dbRef.child("cars");
+    // final userNotifier = ref.watch(userProvider.notifier);
+
+    cars
+        .orderByChild("owner")
+        .equalTo(FirebaseAuth.instance.currentUser!.uid)
+        .once()
+        .then((event) {
+      final dataSnapshot = event.snapshot;
+
+      dataSnapshot.children.forEach((carsSnapShot) {
+        print("this user's cars=>${carsSnapShot.child("model").value}");
+        print("this user's cars=>${carsSnapShot.key}");
+
+        setState(() {
+          models.add(carsSnapShot.child("model").value.toString());
+          chasis.add(carsSnapShot.key);
+          for (var i = 0; i < models.length; i++) {
+            map[models[i]] = chasis[i];
+          }
+
+          dropdownvalue = models[0].toString();
+        });
+        print(models);
+        print(map);
+      });
+    });
+  }
+
+  transferOwner(selected) {
+    DatabaseReference cars = dbRef.child("cars");
+    DatabaseReference carsUsers = dbRef.child("cars_users");
+    DatabaseReference Userscar = dbRef.child("users_cars");
+
+    cars.child(selected).update({"owner": subId});
+    carsUsers.child(selected).remove();
+    Userscar.child(FirebaseAuth.instance.currentUser!.uid)
+        .update({selected: "false"});
+    Userscar.child(subId!).child(selected).set(true);
+  }
+
+  getuser() async {
+    user
+        .child("clients")
+        .orderByChild("email")
+        .equalTo(getUserController.text)
+        .once()
+        .then((event) {
+      final dataSnapshot = event.snapshot;
+      print("read" + dataSnapshot.value.toString());
+      var x = dataSnapshot.value.toString();
+      x.trim();
+      var y = x.split(":");
+      String z = y[0];
+      String userId = z.replaceAll("{", "");
+      print(userId);
+
+      var data = dataSnapshot.value as Map;
+
+      if (data != null) {
+        email = data[userId]["email"];
+        avatar = data[userId]["image"];
+        subId = userId;
+      }
+      print(subId);
+      print(avatar);
+      print(email);
+
+      // user.child("cars").orderByChild("model").equalTo(dropdownvalue).;
+    });
+    print(items);
   }
 }
 

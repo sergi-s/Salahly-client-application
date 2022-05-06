@@ -1,6 +1,9 @@
 import 'package:go_router/go_router.dart';
+import 'package:path/path.dart';
 import 'package:slahly/classes/models/location.dart';
 import 'package:slahly/screens/DropOff_screens/dropOff_search_screen.dart';
+import 'package:slahly/screens/car_management/addCars.dart';
+import 'package:slahly/screens/history_management/ongoing_requests.dart';
 import 'package:slahly/screens/userMangament/editProfile.dart';
 import 'package:slahly/screens/userMangament/pofile.dart';
 import 'package:slahly/screens/reminder/addReminderScreen.dart';
@@ -30,6 +33,8 @@ import 'package:slahly/screens/switchLanguage.dart';
 import 'package:slahly/screens/test_screens/test_user_SM.dart';
 import 'package:slahly/screens/userMangament/addSubowner.dart';
 import 'package:slahly/screens/userMangament/manageSubowner.dart';
+import 'package:slahly/widgets/location/directionMap.dart';
+import 'package:slahly/widgets/location/finalScreen.dart';
 import 'screens/roadsideassistance/arrival.dart';
 import 'package:slahly/screens/userMangament/transferOwner.dart';
 import 'package:slahly/screens/test_screens/testscreen_foula.dart';
@@ -41,6 +46,7 @@ import 'package:slahly/screens/userMangament/editProfile.dart';
 class Routing {
   get router => GoRouter(
         initialLocation: LoginSignupScreen.routeName,
+        // initialLocation: RequestFinalScreen.routeName,
         routes: <GoRoute>[
           GoRoute(
             //TESTING
@@ -58,7 +64,8 @@ class Routing {
           ),
           GoRoute(
             path: ManageSubowner.routeName,
-            builder: (context, state) => ManageSubowner(),
+            builder: (context, state) =>
+                ManageSubowner(chasis: state.extra! as String),
           ),
           GoRoute(
             path: TransferOwner.routeName,
@@ -196,6 +203,24 @@ class Routing {
           GoRoute(
             path: AddReminder.routeName,
             builder: (context, state) => AddReminder(),
+          ),
+          GoRoute(
+            path: DirectionMap.routeName,
+            builder: (context, state) => DirectionMap(
+                currentLocation: state.extra as CustomLocation,
+                destinationLocation: state.extra as CustomLocation),
+          ),
+          GoRoute(
+            path: RequestFinalScreen.routeName,
+            builder: (context, state) => RequestFinalScreen(),
+          ),
+          GoRoute(
+            path: Addcar.routeName,
+            builder: (context, state) => Addcar(),
+          ),
+          GoRoute(
+            path: OngoingRequests.routeName,
+            builder: (context, state) => OngoingRequests(),
           ),
         ],
       );

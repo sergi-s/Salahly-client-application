@@ -6,35 +6,32 @@ import 'package:slahly/classes/models/location.dart';
 import 'package:slahly/classes/provider/rsadata.dart';
 import 'package:slahly/utils/constants.dart';
 import 'package:slahly/utils/http_request.dart';
-import 'package:slahly/classes/firebase/roadsideassistance/roadsideassistance.dart';
 import 'package:slahly/classes/provider/app_data.dart';
 import 'package:slahly/screens/roadsideassistance/chooseprovider.dart';
 
-import 'package:slahly/widgets/dialogues/none_found.dart';
-
-class PredictionTile extends ConsumerWidget {
+class PredictionTile extends ConsumerStatefulWidget {
   const PredictionTile({Key? key, required this.placePredictions})
       : super(key: key);
   final PlacePredictions placePredictions;
 
+  _PredictionTileState createState() => _PredictionTileState();
+}
+
+class _PredictionTileState extends ConsumerState<PredictionTile> {
   @override
-  Widget build(BuildContext context, ref) {
+  Widget build(BuildContext context) {
     return TextButton(
       onPressed: () async {
-        final rsaNotifier = ref.watch(rsaProvider.notifier);
-        final RSA rsa = ref.watch(rsaProvider);
+        getPlaceAddressDetails(widget.placePredictions.place_id!);
 
-        getPlaceAddressDetails(placePredictions.place_id!, ref, context);
-
-        rsaNotifier.assignRequestTypeToTTA();
-        await rsaNotifier.requestTta();
-        rsaNotifier.searchNearbyMechanicsAndProviders();
+        ref.watch(rsaProvider.notifier).assignRequestTypeToTTA();
+        await ref.watch(rsaProvider.notifier).requestTta();
+        ref.watch(rsaProvider.notifier).searchNearbyMechanicsAndProviders();
 
         print("before app state");
 
         ref.watch(salahlyClientProvider.notifier).assignRequest(
-            ref.watch(rsaProvider.notifier).getRequestType(),
-            ref.watch(rsaProvider).rsaID!);
+            ref.watch(rsaProvider).requestType!, ref.watch(rsaProvider).rsaID!);
         print("after app state");
 
         context.push(ChooseProviderScreen.routeName);
@@ -51,13 +48,13 @@ class PredictionTile extends ConsumerWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      placePredictions.main_text.toString(),
+                      widget.placePredictions.main_text.toString(),
                       overflow: TextOverflow.ellipsis,
                       style: const TextStyle(fontSize: 16),
                     ),
                     const SizedBox(height: 2),
                     Text(
-                      placePredictions.secondary_text.toString(),
+                      widget.placePredictions.secondary_text.toString(),
                       overflow: TextOverflow.ellipsis,
                       style: const TextStyle(fontSize: 12, color: Colors.grey),
                     ),
@@ -72,7 +69,7 @@ class PredictionTile extends ConsumerWidget {
     );
   }
 
-  void getPlaceAddressDetails(String placeId, ref, context) async {
+  void getPlaceAddressDetails(String placeId) async {
     // showDialog(
     //     context: context,
     //     builder: (BuildContext context) =>
@@ -91,5 +88,7 @@ class PredictionTile extends ConsumerWidget {
         longitude: res["result"]["geometry"]["location"]["lng"]);
 
     ref.watch(rsaProvider.notifier).assignDropOffLocation(customLocation);
+
+    print("drop off location is at ${ref.watch(rsaProvider).dropOffLocation!}");
   }
 }
