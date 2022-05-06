@@ -23,18 +23,22 @@ class _State extends ConsumerState<EditProfile> {
   final TextEditingController nameController = TextEditingController();
   final TextEditingController addressController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  final TextEditingController confirmPassController = TextEditingController();
+
   final TextEditingController emailyController = TextEditingController();
   final TextEditingController phoneController = TextEditingController();
   DatabaseReference user = dbRef.child("users");
   File? _image;
   String? phone, address, email, name, data;
   File? url;
-  dynamic? path;
+  dynamic path;
   String? emaily;
   String? passwordy;
 
   @override
   Widget build(BuildContext context) {
+    String? avatary = ref.watch(userProvider).avatar;
+    File? stateimage = File(avatary!);
     return Scaffold(
       backgroundColor: const Color(0xFFd1d9e6),
       body: CustomPaint(
@@ -48,86 +52,93 @@ class _State extends ConsumerState<EditProfile> {
               children: [
                 Padding(
                   padding: EdgeInsets.only(
-                      top: MediaQuery.of(context).size.height * 0.05,
                       left: MediaQuery.of(context).size.width * 0.3),
                   child: Text(
                     "Edit Profile",
-                    style: TextStyle(fontSize: 25, fontWeight: FontWeight.w500),
+                    style: TextStyle(
+                        fontSize: 30,
+                        fontWeight: FontWeight.w500,
+                        color: Colors.white),
                   ),
                 ),
                 SizedBox(
                   height: 15,
                 ),
                 Center(
-                  child: Stack(
-                    children: [
-                      GestureDetector(
-                        child: Container(
-                          width: 130,
-                          height: 130,
-                          decoration: BoxDecoration(
-                            border: Border.all(width: 4),
-                            boxShadow: [
-                              BoxShadow(
-                                  spreadRadius: 2,
-                                  blurRadius: 10,
-                                  color: Colors.black.withOpacity(0.1),
-                                  offset: Offset(0, 10))
-                            ],
-                            shape: BoxShape.circle,
-                            // image: DecorationImage(
-                            //     fit: BoxFit.cover, image: FileImage(_image!))),
-                          ),
-                          child: CircleAvatar(
-                            backgroundImage:
-                                (_image != null) ? FileImage(_image!) : null,
-                          ),
-                        ),
-                        onTap: () {
-                          chooseImage();
-                        },
-                      ),
-                      Positioned(
-                          bottom: 0,
-                          right: 0,
+                  child: SingleChildScrollView(
+                    child: Stack(
+                      children: [
+                        GestureDetector(
                           child: Container(
-                            height: 40,
-                            width: 40,
+                            width: 130,
+                            height: 130,
                             decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                border: Border.all(width: 4),
-                                color: Colors.green),
-                            child: GestureDetector(
-                              onTap: () {
-                                final snackBar =
-                                    SnackBar(content: Text('Image uploaded'));
-
-                                try {
-                                  uploadImage(context);
-                                  ScaffoldMessenger.of(context)
-                                      .showMaterialBanner(MaterialBanner(
-                                    content: const Text(
-                                        'Image updated Successfully'),
-                                    actions: [
-                                      TextButton(
-                                          onPressed: () {
-                                            ScaffoldMessenger.of(context)
-                                                .hideCurrentMaterialBanner();
-                                          },
-                                          child: const Text('Dismiss')),
-                                    ],
-                                  ));
-                                  // ScaffoldMessenger.of(context)
-                                  //     .showSnackBar(snackBar);
-                                } catch (e) {}
-                              },
-                              child: Icon(
-                                Icons.edit,
-                                color: Colors.white,
-                              ),
+                              border: Border.all(width: 4),
+                              boxShadow: [
+                                BoxShadow(
+                                    spreadRadius: 2,
+                                    blurRadius: 10,
+                                    color: Colors.black.withOpacity(0.1),
+                                    offset: Offset(0, 10))
+                              ],
+                              shape: BoxShape.circle,
+                              // image: DecorationImage(
+                              //     fit: BoxFit.cover, image: FileImage(_image!))),
                             ),
-                          ))
-                    ],
+                            child: CircleAvatar(
+                              backgroundImage: (_image != null)
+                                  ? FileImage(_image!) as ImageProvider
+                                  : NetworkImage(
+                                      ref.watch(userProvider).avatar ??
+                                          "https://via.placeholder.com/150"),
+                            ),
+                          ),
+                          onTap: () {
+                            chooseImage();
+                          },
+                        ),
+                        Positioned(
+                            bottom: 0,
+                            right: 0,
+                            child: Container(
+                              height: 40,
+                              width: 40,
+                              decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  border: Border.all(width: 4),
+                                  color: Colors.green),
+                              child: GestureDetector(
+                                onTap: () {
+                                  final snackBar =
+                                      SnackBar(content: Text('Image uploaded'));
+
+                                  try {
+                                    uploadImage(context);
+                                    ScaffoldMessenger.of(context)
+                                        .showMaterialBanner(MaterialBanner(
+                                      content: const Text(
+                                          'Image updated Successfully'),
+                                      actions: [
+                                        TextButton(
+                                            onPressed: () {
+                                              ScaffoldMessenger.of(context)
+                                                  .hideCurrentMaterialBanner();
+                                            },
+                                            child: const Text('Dismiss')),
+                                      ],
+                                    ));
+                                    // ScaffoldMessenger.of(context)
+                                    //     .showSnackBar(snackBar);
+                                  } catch (e) {}
+                                },
+                                child: Icon(
+                                  Icons.edit,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ))
+                      ],
+                    ),
                   ),
                 ),
                 SizedBox(
@@ -181,29 +192,137 @@ class _State extends ConsumerState<EditProfile> {
                 SizedBox(
                   height: 20,
                 ),
-                TextField(
-                  controller: passwordController,
-                  decoration: InputDecoration(
-                      prefixIcon: Icon(
-                        Icons.password,
-                        color: Colors.grey[500],
-                      ),
-                      border: OutlineInputBorder(
-                        // width: 0.0 produces a thin "hairline" border
-                        borderRadius: BorderRadius.all(Radius.circular(90.0)),
-                        borderSide: BorderSide.none,
-                      ),
-                      hintStyle: TextStyle(
-                          color: Colors.black, fontFamily: "WorkSansLight"),
-                      filled: true,
-                      enabled: true,
-                      labelText: "password",
-                      fillColor: Colors.white70,
-                      floatingLabelBehavior: FloatingLabelBehavior.always),
-                ),
-                SizedBox(
-                  height: 20,
-                ),
+                // GestureDetector(
+                //   onTap: () {
+                //     showDialog(
+                //         context: context,
+                //         builder: (BuildContext context) {
+                //           return Form(
+                //             child: AlertDialog(
+                //               backgroundColor: Color(0xFFd1d9e6),
+                //               content: Text("Password Update"),
+                //               title: Text("Warning"),
+                //               actions: [
+                //                 TextFormField(
+                //                   validator: (validator) {
+                //                     if (validator!.isEmpty) return 'Empty';
+                //                     return null;
+                //                   },
+                //                   obscureText: true,
+                //                   controller: passwordController,
+                //                   decoration: InputDecoration(
+                //                       prefixIcon: Icon(
+                //                         Icons.password,
+                //                         color: Colors.grey[500],
+                //                       ),
+                //                       border: OutlineInputBorder(
+                //                         // width: 0.0 produces a thin "hairline" border
+                //                         borderRadius: BorderRadius.all(
+                //                             Radius.circular(90.0)),
+                //                         borderSide: BorderSide.none,
+                //                       ),
+                //                       hintStyle: TextStyle(
+                //                           color: Colors.black,
+                //                           fontFamily: "WorkSansLight"),
+                //                       filled: true,
+                //                       enabled: true,
+                //                       labelText: "password",
+                //                       fillColor: Colors.white70,
+                //                       floatingLabelBehavior:
+                //                           FloatingLabelBehavior.always),
+                //                 ),
+                //                 SizedBox(
+                //                   height: 16,
+                //                 ),
+                //                 TextFormField(
+                //                   controller: confirmPassController,
+                //                   validator: (validator) {
+                //                     if (validator!.isEmpty) return 'Empty';
+                //                     if (validator != passwordController.text)
+                //                       return 'The passwords do not match';
+                //                     return null;
+                //                   },
+                //                   decoration: InputDecoration(
+                //                       prefixIcon: Icon(
+                //                         Icons.password,
+                //                         color: Colors.grey[500],
+                //                       ),
+                //                       border: OutlineInputBorder(
+                //                         // width: 0.0 produces a thin "hairline" border
+                //                         borderRadius: BorderRadius.all(
+                //                             Radius.circular(90.0)),
+                //                         borderSide: BorderSide.none,
+                //                       ),
+                //                       hintStyle: TextStyle(
+                //                           color: Colors.black,
+                //                           fontFamily: "WorkSansLight"),
+                //                       filled: true,
+                //                       enabled: true,
+                //                       labelText: "Confirm password",
+                //                       fillColor: Colors.white70,
+                //                       floatingLabelBehavior:
+                //                           FloatingLabelBehavior.always),
+                //                 ),
+                //                 Row(
+                //                   children: [
+                //                     TextButton(
+                //                         onPressed: () {
+                //                           Navigator.of(context).pop();
+                //                         },
+                //                         child: Text("Cancel")),
+                //                     SizedBox(width: 150),
+                //                     TextButton(
+                //                         onPressed: () {
+                //                           final snackBar = SnackBar(
+                //                               content: Text('profile updated'));
+                //                           final snackBar2 = SnackBar(
+                //                               content:
+                //                                   Text('invalid password'));
+                //                           if (passwordController.text ==
+                //                                   confirmPassController.text &&
+                //                               passwordController.text.length >=
+                //                                   6) {
+                //                             updateAuth();
+                //                             Navigator.of(context).pop();
+                //                             ScaffoldMessenger.of(context)
+                //                                 .showSnackBar(snackBar);
+                //                           } else {
+                //                             ScaffoldMessenger.of(context)
+                //                                 .showSnackBar(snackBar2);
+                //                           }
+                //                         },
+                //                         child: Text("Confirm")),
+                //                   ],
+                //                 ),
+                //               ],
+                //             ),
+                //           );
+                //         });
+                //   },
+                //   child: TextField(
+                //     controller: passwordController,
+                //     decoration: InputDecoration(
+                //         prefixIcon: Icon(
+                //           Icons.password,
+                //           color: Colors.grey[500],
+                //         ),
+                //         border: OutlineInputBorder(
+                //           // width: 0.0 produces a thin "hairline" border
+                //           borderRadius: BorderRadius.all(Radius.circular(90.0)),
+                //           borderSide: BorderSide.none,
+                //         ),
+                //         hintStyle: TextStyle(
+                //             color: Colors.black, fontFamily: "WorkSansLight"),
+                //         filled: true,
+                //         enabled: false,
+                //         labelText: "password",
+                //         fillColor: Colors.white70,
+                //         floatingLabelBehavior: FloatingLabelBehavior.always),
+                //   ),
+                // ),
+                // SizedBox(
+                //   height: 20,
+                // ),
                 TextField(
                   controller: phoneController,
                   decoration: InputDecoration(
@@ -282,6 +401,11 @@ class _State extends ConsumerState<EditProfile> {
                                 actions: [
                                   TextButton(
                                       onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                      child: Text("Cancel")),
+                                  TextButton(
+                                      onPressed: () {
                                         final snackBar = SnackBar(
                                             content: Text('profile updated'));
                                         updateProfile(context);
@@ -291,11 +415,6 @@ class _State extends ConsumerState<EditProfile> {
                                             .showSnackBar(snackBar);
                                       },
                                       child: Text("Confirm")),
-                                  TextButton(
-                                      onPressed: () {
-                                        Navigator.of(context).pop();
-                                      },
-                                      child: Text("Cancel"))
                                 ],
                               );
                             });
@@ -313,7 +432,124 @@ class _State extends ConsumerState<EditProfile> {
                       ),
                     )
                   ],
-                )
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                Column(
+                  children: [
+                    TextFormField(
+                      controller: passwordController,
+                      validator: (validator) {
+                        if (validator!.isEmpty) return 'Empty';
+                        return null;
+                      },
+                      obscureText: true,
+                      decoration: InputDecoration(
+                          prefixIcon: Icon(
+                            Icons.password,
+                            color: Colors.grey[500],
+                          ),
+                          border: OutlineInputBorder(
+                            // width: 0.0 produces a thin "hairline" border
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(20.0)),
+                            borderSide: BorderSide.none,
+                          ),
+                          hintStyle: TextStyle(
+                              color: Colors.black, fontFamily: "WorkSansLight"),
+                          filled: true,
+                          fillColor: Colors.white70,
+                          enabled: true,
+                          labelText: "password",
+                          floatingLabelBehavior: FloatingLabelBehavior.always),
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    TextFormField(
+                      controller: confirmPassController,
+                      validator: (validator) {
+                        if (validator!.isEmpty) return 'Empty';
+                        if (validator != passwordController.text)
+                          return 'The passwords do not match';
+                        return null;
+                      },
+                      decoration: InputDecoration(
+                          prefixIcon: Icon(
+                            Icons.password,
+                            color: Colors.grey[500],
+                          ),
+                          border: OutlineInputBorder(
+                            // width: 0.0 produces a thin "hairline" border
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(20.0)),
+                            borderSide: BorderSide.none,
+                          ),
+                          hintStyle: TextStyle(
+                              color: Colors.black, fontFamily: "WorkSansLight"),
+                          filled: true,
+                          fillColor: Colors.white70,
+                          enabled: true,
+                          labelText: "confirm password",
+                          floatingLabelBehavior: FloatingLabelBehavior.always),
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    RaisedButton(
+                      onPressed: () {
+                        showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                content: Text(
+                                    "are you sure u want to update password?"),
+                                title: Text("Warning"),
+                                actions: [
+                                  TextButton(
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                      child: Text("Cancel")),
+                                  TextButton(
+                                      onPressed: () {
+                                        final snackBar = SnackBar(
+                                            content: Text('Password updated'));
+                                        final snackBar2 = SnackBar(
+                                            content: Text('invalid password'));
+                                        if (passwordController.text ==
+                                                confirmPassController.text &&
+                                            passwordController.text.length >=
+                                                6) {
+                                          updateAuth();
+                                          Navigator.of(context).pop();
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(snackBar);
+                                        } else {
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(snackBar2);
+                                        }
+                                      },
+                                      child: Text("Confirm")),
+                                ],
+                              );
+                            });
+                      },
+                      color: Color(0xFF193566),
+                      padding: EdgeInsets.symmetric(horizontal: 50),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20)),
+                      child: Text(
+                        "update password",
+                        style: TextStyle(
+                            fontSize: 14,
+                            letterSpacing: 2.2,
+                            color: Colors.white),
+                      ),
+                    )
+                  ],
+                ),
               ],
             ),
           ),
@@ -376,7 +612,7 @@ class _State extends ConsumerState<EditProfile> {
         ? ref.watch(userProvider).email
         : emailyController.text;
 
-    await user
+    user
         .child("clients")
         .child(FirebaseAuth.instance.currentUser!.uid)
         .update(map);

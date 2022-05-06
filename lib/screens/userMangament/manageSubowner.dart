@@ -13,6 +13,7 @@ import '../../main.dart';
 class ManageSubowner extends ConsumerStatefulWidget {
   static final routeName = "/manageSubowner";
   String? chasis;
+
   ManageSubowner({this.chasis});
 
   @override
@@ -22,16 +23,18 @@ class ManageSubowner extends ConsumerStatefulWidget {
 class _State extends ConsumerState<ManageSubowner> {
   @override
   void initState() {
-    allSubowner(widget.chasis);
+    showSubowner(widget.chasis);
     super.initState();
   }
 
-  List<String> info = ['mizo', '7amo', '7amama'];
+  List<Client> subowners = [];
+
+  // List<String> info = ['mizo', '7amo', '7amama'];
   // String? name, email, avatar, phone;
-  List emails = [];
-  List name = [];
-  List avatar = [];
-  List phone = [];
+  // List emails = [];
+  // List name = [];
+  // List avatar = [];
+  // List phone = [];
 
   // Addinfo() {
   Widget showList() {
@@ -50,7 +53,7 @@ class _State extends ConsumerState<ManageSubowner> {
       ListView.builder(
           padding: EdgeInsets.all(17),
           shrinkWrap: true,
-          itemCount: name.length,
+          itemCount: subowners.length,
           itemBuilder: (BuildContext context, index) {
             return Column(children: [
               Container(
@@ -66,13 +69,12 @@ class _State extends ConsumerState<ManageSubowner> {
     // Key k = Key(randomNumber.toString());
     return Dismissible(
         confirmDismiss: (DismissDirection) async {
-          return await showAlertbox(context, name[index], index);
+          return await showAlertbox(context, subowners[index], index);
         },
-        key: ValueKey(name),
+        key: ValueKey(subowners),
         // key: Key(randomNumber.toString()),
         onDismissed: (direction) {
-          // _deleteRecord(k)
-          var info = this.name[index];
+          removeSubowner(widget.chasis, subowners[index].email.toString());
         },
         background: deleteBgItem(),
         child: Container(
@@ -82,11 +84,11 @@ class _State extends ConsumerState<ManageSubowner> {
               leading: CircleAvatar(
                 radius: 30,
                 backgroundImage: NetworkImage(
-                  avatar[index].toString(),
+                  subowners[index].avatar.toString(),
                 ),
                 backgroundColor: Colors.blue,
               ),
-              title: Text(name[index],
+              title: Text(subowners[index].name.toString(),
                   style: TextStyle(
                       fontSize: 20,
                       color: Colors.black,
@@ -95,13 +97,19 @@ class _State extends ConsumerState<ManageSubowner> {
                 children: [
                   Row(
                     children: [
-                      Text(emails[index],
-                          style: TextStyle(fontSize: 17, color: Colors.black))
+                      Text(subowners[index].email.toString(),
+                          style: TextStyle(fontSize: 17, color: Colors.black)),
+                      TextButton(
+                          onPressed: () {
+                            removeSubowner(widget.chasis,
+                                subowners[index].email.toString());
+                          },
+                          child: Text("delete"))
                     ],
                   ),
                   Row(
                     children: [
-                      Text("",
+                      Text(subowners[index].address.toString(),
                           style: TextStyle(fontSize: 17, color: Colors.black)),
                     ],
                   )
@@ -165,6 +173,7 @@ class _State extends ConsumerState<ManageSubowner> {
 
   @override
   Widget build(BuildContext context) {
+    // showSubowner(widget.chasis);
     Size size = MediaQuery.of(context).size;
 
     return Scaffold(
@@ -199,7 +208,28 @@ class _State extends ConsumerState<ManageSubowner> {
     );
   }
 
-  allSubowner(chasis) async {
+  removeSubowner(chasis, email) async {
+    DatabaseReference carsUsers = dbRef.child("cars_users").child(chasis);
+    DatabaseReference users = dbRef.child("users").child("clients");
+    users.orderByChild("email").equalTo(email).once().then((event) {
+      final dataSnapshot = event.snapshot;
+      print("idddd");
+      print(dataSnapshot.value);
+      dataSnapshot.children.forEach((element) {
+        print(element.key);
+        carsUsers
+            .child(FirebaseAuth.instance.currentUser!.uid)
+            .child(element.key.toString())
+            .remove();
+        setState(() {
+          showSubowner(chasis);
+        });
+      });
+    });
+  }
+
+  showSubowner(chasis) async {
+    subowners = [];
     DatabaseReference carsUsers = dbRef.child("cars_users").child(chasis);
     DatabaseReference users = dbRef.child("users").child("clients");
 
@@ -217,16 +247,14 @@ class _State extends ConsumerState<ManageSubowner> {
           final dataSnapshot = event.snapshot;
           print("read" + dataSnapshot.value.toString());
           print(dataSnapshot.child("name").value.toString());
-          print(name);
-          print(emails);
-          print(avatar);
-
           setState(() {
-            name.add(dataSnapshot.child("name").value);
-            emails.add(dataSnapshot.child("email").value);
-            avatar.add(dataSnapshot.child("image").value);
+            subowners.add(Client(
+                name: dataSnapshot.child("name").value.toString(),
+                email: dataSnapshot.child("email").value.toString(),
+                avatar: dataSnapshot.child("image").value.toString(),
+                address: dataSnapshot.child("address").value.toString()));
           });
-          // print(dataSnapshot.child("email").value.toString());
+          print(subowners);
 
           // print(dataSnapshot.child("email").value.toString());
         });

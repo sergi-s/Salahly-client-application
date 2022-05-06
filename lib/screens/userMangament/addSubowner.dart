@@ -29,7 +29,7 @@ class _State extends ConsumerState<AddSubowner> {
   DatabaseReference subowners =
       FirebaseDatabase.instance.ref().child("subowners");
   final TextEditingController getUserController = TextEditingController();
-
+  bool found = false;
   String? email = "";
   String? subId;
   String? avatar;
@@ -79,134 +79,128 @@ class _State extends ConsumerState<AddSubowner> {
     Size size = MediaQuery.of(context).size;
 
     return Scaffold(
-        resizeToAvoidBottomInset: false,
-        backgroundColor: const Color(0xFFd1d9e6),
-        appBar: AppBar(
-          elevation: 0.0,
-          backgroundColor: const Color(0xFF193566),
-          title: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-            // Image.asset(
-            //   'assets/images/logo ta5arog white car.png',
-            //   fit: BoxFit.contain,
-            //   height: 32,
-            // ),
-          ]),
-        ),
-        body: CustomPaint(
-          child: Container(
-            width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.height,
-            padding: const EdgeInsets.only(left: 40, right: 40),
-            child: Form(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        Text(
-                          "Add_Subowner".tr(),
-                          style: TextStyle(fontSize: 40, color: Colors.white),
-                          textAlign: TextAlign.center,
-                        ),
-                      ]),
-                  const SizedBox(
-                    height: 100,
-                  ),
-
-                  // Text(
-                  //   " Sergi Samir",
-                  //   style: TextStyle(fontSize: 30, color: Colors.black),
-                  //   textAlign: TextAlign.center,
-                  // ),
-                  const SizedBox(width: 50),
-                  const SizedBox(height: 20),
-                  Row(children: [
-                    Container(
-                      width: 250,
-                      child: TextFormField(
-                        controller: getUserController,
-                        decoration: InputDecoration(
-                          labelText: "Enter_Subowner_Email".tr(),
-                          filled: true,
-                          fillColor: const Color(0xFFd1d9e6).withOpacity(0.1),
-                        ),
+      resizeToAvoidBottomInset: false,
+      backgroundColor: const Color(0xFFd1d9e6),
+      appBar: AppBar(
+        elevation: 0.0,
+        backgroundColor: const Color(0xFF193566),
+        title: Row(mainAxisAlignment: MainAxisAlignment.center, children: []),
+      ),
+      body: CustomPaint(
+        child: Container(
+          width: MediaQuery.of(context).size.width,
+          height: MediaQuery.of(context).size.height,
+          padding: const EdgeInsets.only(left: 40, right: 40),
+          child: Form(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Text(
+                        "Add_Subowner".tr(),
+                        style: TextStyle(fontSize: 40, color: Colors.white),
+                        textAlign: TextAlign.center,
+                      ),
+                    ]),
+                const SizedBox(
+                  height: 100,
+                ),
+                const SizedBox(width: 50),
+                const SizedBox(height: 20),
+                Row(children: [
+                  Container(
+                    width: 250,
+                    child: TextFormField(
+                      controller: getUserController,
+                      decoration: InputDecoration(
+                        labelText: "Enter_Subowner_Email".tr(),
+                        filled: true,
+                        errorText:
+                            email != getUserController.text ? "invalid" : null,
+                        fillColor: const Color(0xFFd1d9e6).withOpacity(0.1),
                       ),
                     ),
-                    FloatingActionButton(
-                      onPressed: () {
-                        getuser();
+                  ),
+                  FloatingActionButton(
+                    onPressed: () {
+                      getuser();
+                    },
+                    tooltip: 'search',
+                    child: Icon(Icons.search),
+                  ),
+                ]),
+                const SizedBox(height: 30),
+                Row(
+                  children: [
+                    Text('Choose_Car'.tr(),
+                        style: TextStyle(fontSize: 25, color: Colors.black)),
+                    SizedBox(width: 20),
+                    DropdownButton<dynamic>(
+                      value: dropdownvalue,
+                      icon: Icon(Icons.keyboard_arrow_down),
+                      items: models.map((dynamic items) {
+                        return DropdownMenuItem(
+                            value: items,
+                            child: Text(items,
+                                style: TextStyle(
+                                    fontSize: 15, color: Colors.black)));
+                      }).toList(),
+                      onChanged: (dynamic? value) {
+                        setState(() {
+                          this.dropdownvalue = value!;
+                          selected = map[this.dropdownvalue];
+                        });
                       },
-                      tooltip: 'search',
-                      child: Icon(Icons.search),
                     ),
-                  ]),
-                  const SizedBox(height: 30),
-                  Row(
-                    children: [
-                      Text('Choose_Car'.tr(),
-                          style: TextStyle(fontSize: 25, color: Colors.black)),
-                      SizedBox(width: 20),
-                      DropdownButton<dynamic>(
-                        value: dropdownvalue,
-                        icon: Icon(Icons.keyboard_arrow_down),
-                        items: models.map((dynamic items) {
-                          return DropdownMenuItem(
-                              value: items,
-                              child: Text(items,
-                                  style: TextStyle(
-                                      fontSize: 15, color: Colors.black)));
-                        }).toList(),
-                        onChanged: (dynamic? value) {
-                          setState(() {
-                            this.dropdownvalue = value!;
-                            selected = map[this.dropdownvalue];
-                          });
-                        },
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 20),
-
-                  Row(
-                    children: [
-                      CircleAvatar(
-                        radius: 30.0,
-                        backgroundImage: NetworkImage(avatar ?? "sad"),
-                        backgroundColor: Colors.blue,
-                      ),
-                      SizedBox(width: 50),
-                      Text(email!, style: TextStyle(fontSize: 25))
-                    ],
-                  )
-                ],
-              ),
+                  ],
+                ),
+                SizedBox(height: 20),
+                Row(
+                  children: [
+                    CircleAvatar(
+                      radius: 30.0,
+                      backgroundImage: NetworkImage(avatar ?? "sad"),
+                      backgroundColor: Colors.transparent,
+                    ),
+                    const SizedBox(width: 20),
+                    Text(email!, style: TextStyle(fontSize: 25))
+                  ],
+                )
+              ],
             ),
           ),
-          painter: HeaderCurvedContainer(),
         ),
-        floatingActionButton: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(32.0),
-              child: FloatingActionButton(
-                onPressed: () => scanQRcode(),
-                child: const Icon(Icons.qr_code),
-                backgroundColor: const Color(0xFF193566),
-              ),
+        painter: HeaderCurvedContainer(),
+      ),
+      floatingActionButton: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(32.0),
+            child: FloatingActionButton(
+              onPressed: () => scanQRcode(),
+              child: const Icon(Icons.qr_code),
+              backgroundColor: const Color(0xFF193566),
             ),
-            // SizedBox(width: MediaQuery.of(context).size.width * 0.7),
-            FloatingActionButton(
+          ),
+          // SizedBox(width: MediaQuery.of(context).size.width * 0.7),
+
+          Visibility(
+            visible: found,
+            child: FloatingActionButton(
               onPressed: () {
                 showAlertbox(context);
               },
               child: const Icon(Icons.add),
               backgroundColor: Color(0xFF193566),
             ),
-          ],
-        ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.endFloat);
+          ),
+        ],
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+    );
   }
 
   Future<void> scanQRcode() async {
@@ -301,10 +295,14 @@ class _State extends ConsumerState<AddSubowner> {
       var data = dataSnapshot.value as Map;
 
       if (data != null) {
-        email = data[f]["email"];
-        avatar = data[f]["image"];
-        subId = f;
+        setState(() {
+          email = data[f]["email"];
+          avatar = data[f]["image"];
+          subId = f;
+          found = true;
+        });
       }
+
       print(subId);
       print(avatar);
       print(email);

@@ -71,6 +71,7 @@ dependencies:
   path: ^1.8.1
   cloud_firestore: ^3.1.13
   flutter_colorpicker: ^1.0.3
+  cached_network_image: ^3.2.0
   flutter_local_notifications: ^9.4.1
   flutter_custom_cards: ^0.2.1
   shared_preferences: ^2.0.13

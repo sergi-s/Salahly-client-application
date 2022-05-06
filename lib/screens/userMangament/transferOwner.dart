@@ -33,6 +33,7 @@ class _State extends ConsumerState<TransferOwner> {
   List models = [];
   List chasis = [];
   String? sub;
+  bool found = false;
   String? selected;
   Map<String, String> map = new Map();
 
@@ -50,7 +51,7 @@ class _State extends ConsumerState<TransferOwner> {
         actions: [
           ElevatedButton(
               onPressed: () {
-                // getuser();
+                transferOwner(selected);
                 Navigator.pop(context, true);
 
                 // ShowSnackbar(context, info, index);
@@ -108,12 +109,35 @@ class _State extends ConsumerState<TransferOwner> {
               SizedBox(
                 height: 120,
               ),
-              TextFormField(
-                controller: getUserController,
-                decoration: InputDecoration(
-                  labelText: "Enter New Ownership email",
+              Row(children: [
+                Container(
+                  width: 250,
+                  child: TextFormField(
+                    controller: getUserController,
+                    decoration: InputDecoration(
+                      labelText: "enter_new_owner_email".tr(),
+                      filled: true,
+                      errorText:
+                          email != getUserController.text ? "invalid" : null,
+                      fillColor: const Color(0xFFd1d9e6).withOpacity(0.1),
+                    ),
+                  ),
                 ),
-              ),
+                FloatingActionButton(
+                  onPressed: () {
+                    getuser();
+                  },
+                  tooltip: 'search',
+                  child: Icon(Icons.search),
+                ),
+              ]),
+
+              // TextFormField(
+              //   controller: getUserController,
+              //   decoration: InputDecoration(
+              //     labelText: "Enter New Ownership email",
+              //   ),
+              // ),
               SizedBox(
                 height: 50,
               ),
@@ -139,79 +163,67 @@ class _State extends ConsumerState<TransferOwner> {
                       });
                     },
                   ),
-                  // DropdownButton(
-                  //   value: dropdownvalue,
-                  //   icon: Icon(Icons.keyboard_arrow_down),
-                  //   items: items.map((String items) {
-                  //     return DropdownMenuItem(
-                  //         value: items,
-                  //         child: Text(items,
-                  //             style: TextStyle(
-                  //                 fontSize: 15, color: Colors.black)));
-                  //   }).toList(),
-                  //   onChanged: (dynamic? value) {
-                  //     setState(() {
-                  //       this.dropdownvalue = value!;
-                  //     });
-                  //   },
-                  // ),
                 ],
               ),
               SizedBox(
-                height: 30,
+                height: 15,
               ),
               Row(
                 children: [
                   CircleAvatar(
                     radius: 30.0,
                     backgroundImage: NetworkImage(avatar ?? "sad"),
-                    backgroundColor: Colors.blue,
+                    backgroundColor: Colors.transparent,
                   ),
-                  SizedBox(width: 50),
+                  SizedBox(width: 20),
                   Text(email!, style: TextStyle(fontSize: 25))
                 ],
               ),
               SizedBox(
                 height: 70,
               ),
-              Container(
-                  width: 300,
-                  child: Center(
-                    child: TextButton(
-                        child: Text("Confirm_Transfer".tr(),
-                            style:
-                                // <<<<<<< HEAD
-                                TextStyle(fontSize: 15, color: Colors.white)),
-                        // >>>>>>> 931e111d966e6532a25d6451b6fa85ee81a45bd7
-                        style: ButtonStyle(
-                            padding: MaterialStateProperty.all<EdgeInsets>(
-                                EdgeInsets.all(15)),
-                            foregroundColor: MaterialStateProperty.all<Color>(
-                                Color(0xFF193566)),
-                            backgroundColor: MaterialStateProperty.all<Color>(
-                                Color(0xFF193566)),
-                            shape: MaterialStateProperty.all(
-                                RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(18.0),
-                                    side: BorderSide(color: Colors.blue)))),
-                        onPressed: () => showAlertbox(context)),
-                  )),
-              ElevatedButton(
-                  onPressed: () {
-                    // cardata();
-                    getuser();
-                  },
-                  child: Text("dataa")),
-              ElevatedButton(
-                  onPressed: () {
-                    context.push(AddCars.routeName);
-                  },
-                  child: Text("goooo")),
-              ElevatedButton(
-                  onPressed: () {
-                    transferOwner(selected);
-                  },
-                  child: Text("transfer"))
+              Visibility(
+                visible: found,
+                child: Container(
+                    width: 300,
+                    child: Center(
+                      child: TextButton(
+                          child: Text("Confirm_Transfer".tr(),
+                              style:
+                                  // <<<<<<< HEAD
+                                  TextStyle(fontSize: 15, color: Colors.white)),
+                          // >>>>>>> 931e111d966e6532a25d6451b6fa85ee81a45bd7
+                          style: ButtonStyle(
+                              padding: MaterialStateProperty.all<EdgeInsets>(
+                                  EdgeInsets.all(15)),
+                              foregroundColor: MaterialStateProperty.all<Color>(
+                                  Color(0xFF193566)),
+                              backgroundColor: MaterialStateProperty.all<Color>(
+                                  Color(0xFF193566)),
+                              shape: MaterialStateProperty.all(
+                                  RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(18.0),
+                                      side: BorderSide(
+                                          color: Color(0xFF193566))))),
+                          onPressed: () => showAlertbox(context)),
+                    )),
+              ),
+              // ElevatedButton(
+              //     onPressed: () {
+              //       // cardata();
+              //       getuser();
+              //     },
+              //     child: Text("dataa")),
+              // ElevatedButton(
+              //     onPressed: () {
+              //       context.push(AddCars.routeName);
+              //     },
+              //     child: Text("goooo")),
+              // ElevatedButton(
+              //     onPressed: () {
+              //       transferOwner(selected);
+              //     },
+              //     child: Text("transfer"))
             ]),
           ),
         ),
@@ -221,25 +233,7 @@ class _State extends ConsumerState<TransferOwner> {
   }
 
   cardata() async {
-    // DatabaseReference cars = dbRef.child("cars");
-    // final userNotifier = ref.watch(userProvider.notifier);
-    //
-    // cars
-    //     .orderByChild("owner")
-    //     .equalTo(FirebaseAuth.instance.currentUser!.uid)
-    //     .once()
-    //     .then((event) {
-    //   final dataSnapshot = event.snapshot;
-    //
-    //   dataSnapshot.children.forEach((carsSnapShot) {
-    //     print("this user's cars=>${carsSnapShot.child("model").value}");
-    //
-    //     models.add(carsSnapShot.child("model").value.toString());
-    //     print(models);
-    //   });
-    // });
     DatabaseReference cars = dbRef.child("cars");
-    // final userNotifier = ref.watch(userProvider.notifier);
 
     cars
         .orderByChild("owner")
@@ -271,12 +265,21 @@ class _State extends ConsumerState<TransferOwner> {
     DatabaseReference cars = dbRef.child("cars");
     DatabaseReference carsUsers = dbRef.child("cars_users");
     DatabaseReference Userscar = dbRef.child("users_cars");
-
     cars.child(selected).update({"owner": subId});
     carsUsers.child(selected).remove();
     Userscar.child(FirebaseAuth.instance.currentUser!.uid)
         .update({selected: "false"});
-    Userscar.child(subId!).child(selected).set(true);
+    Userscar.child(subId!).child(selected).set("true");
+    for (int i = 0; i < ref.watch(userProvider).cars.length; i++) {
+      if (ref.watch(userProvider).cars[i].noChassis == selected) {
+        ref
+            .watch(userProvider.notifier)
+            .removeCar(ref.watch(userProvider).cars[i]);
+      }
+    }
+    // ref
+    //     .watch(userProvider.notifier)
+    //     .removeCar(ref.watch(userProvider).cars[index]);
   }
 
   getuser() async {
@@ -298,9 +301,12 @@ class _State extends ConsumerState<TransferOwner> {
       var data = dataSnapshot.value as Map;
 
       if (data != null) {
-        email = data[userId]["email"];
-        avatar = data[userId]["image"];
-        subId = userId;
+        setState(() {
+          email = data[userId]["email"];
+          avatar = data[userId]["image"];
+          subId = userId;
+          found = true;
+        });
       }
       print(subId);
       print(avatar);
