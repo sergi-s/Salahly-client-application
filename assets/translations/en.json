@@ -123,5 +123,18 @@
   "ok": "Ok",
   "withTowTruck": "with to truck",
   "withNoTowTruck": "without a tow truck",
-  "goOnYourOwn": "Go on your own"
+  "goOnYourOwn": "Go on your own",
+  "request": "Request",
+  "plzSpecCar": "Please, Select a Car",
+  "onGoingRequest": "There is an ongoing request",
+  "subType": "Sub Type",
+  "km": "KM",
+  "silver": "Silver",
+  "gold": "Gold",
+  "platinum": "Platinum",
+  "expectedTime":"Expected Time",
+  "rsa": "RoadSide Assistant",
+  "wsa": "WorkShop Assistant",
+  "tta": "Tow Truck Assistant",
+  "workingOn": "Working ON"
 }

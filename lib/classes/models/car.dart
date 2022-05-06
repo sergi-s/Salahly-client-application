@@ -38,7 +38,7 @@ class Car {
 
   @override
   String toString() {
-    return "$model $noPlate $noChassis $color";
+    return "model:$model\tnoPlate:$noPlate\tnoChassis:$noChassis";
   }
 }
 

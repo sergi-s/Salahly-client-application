@@ -9,6 +9,7 @@ import 'package:slahly/classes/provider/user_data.dart';
 import 'package:slahly/screens/userMangament/choose_car.dart';
 import 'package:slahly/utils/firebase/get_mechanic_data.dart';
 import 'package:slahly/utils/firebase/get_provider_data.dart';
+import 'package:slahly/widgets/roadsideassistance/select_car_request.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 import 'package:slahly/classes/provider/app_data.dart';
@@ -48,12 +49,14 @@ class _WSAScreenState extends ConsumerState<WSAScreen> {
 
   final PanelController _pcTowProvider = PanelController();
 
-  final PanelController _pcSlider = PanelController();
+  final PanelController _pcServiceSlider = PanelController();
+
+  final PanelController _pcCarSlider = PanelController();
 
   @override
   void initState() {
     Future.delayed(Duration.zero, () async {
-      ref.watch(salahlyClientProvider.notifier).getSavedData();
+      // ref.watch(salahlyClientProvider.notifier).getSavedData();
       final prefs = await SharedPreferences.getInstance();
       print("YARAB ${prefs.getBool("needProvider")}");
       print("didRequest${didRequest}");
@@ -65,6 +68,7 @@ class _WSAScreenState extends ConsumerState<WSAScreen> {
 
       if (ref.watch(salahlyClientProvider).requestType == RequestType.WSA) {
         // ref.watch(rsaProvider.notifier).searchNearbyMechanicsAndProviders();
+        ref.watch(rsaProvider.notifier).assignRequestType(RequestType.WSA);
         ref.watch(rsaProvider.notifier).assignRequestID(
             ref.watch(salahlyClientProvider).requestID.toString());
         print("there is a onging request");
@@ -76,7 +80,7 @@ class _WSAScreenState extends ConsumerState<WSAScreen> {
             gotMechanics = true;
           }
         });
-        if (didRequest) _pcSlider.open();
+        if (didRequest) _pcServiceSlider.open();
         if (prefs.getString("mechanic") != null) {
           ref.watch(rsaProvider.notifier).assignMechanic(
               await getMechanicData(prefs.getString("mechanic")!), false);
@@ -181,7 +185,7 @@ class _WSAScreenState extends ConsumerState<WSAScreen> {
                                 style: ElevatedButton.styleFrom(
                                   primary: const Color(0xFF193566),
                                 ),
-                                child: const Text("confirm").tr(),
+                                child: const Text("request").tr(),
                                 onPressed: () {
                                   if (ref
                                           .watch(salahlyClientProvider)
@@ -192,63 +196,17 @@ class _WSAScreenState extends ConsumerState<WSAScreen> {
                                             .requestType ==
                                         RequestType.WSA) {
                                       // _pcMechanic.open();
-                                      _pcSlider.open();
+                                      _pcServiceSlider.open();
                                     } else {
                                       ScaffoldMessenger.of(context)
-                                          .showSnackBar(const SnackBar(
-                                        content: Text(
-                                            "There is another ongoing request"),
-                                      ));
+                                          .showSnackBar(SnackBar(
+                                              content:
+                                                  Text("onGoingRequest".tr())));
                                     }
                                     return;
                                   }
-                                  requestConfirmationDialogue(context,
-                                      titleChildren: [
-                                        const Text("confirm").tr()
-                                      ],
-                                      content: Text("wsaConfirmation".tr() +
-                                          "\n" +
-                                          (needProvider
-                                              ? ("withTowTruck".tr() +
-                                                  "at".tr() +
-                                                  " " +
-                                                  myMapWidgetState
-                                                      .currentState!
-                                                      .currentCustomLoc
-                                                      .address!)
-                                              : "withNoTowTruck".tr())),
-                                      actionChildren: [
-                                        ElevatedButton(
-                                          onPressed: () =>
-                                              Navigator.pop(context),
-                                          style: ElevatedButton.styleFrom(
-                                            primary: const Color(0xFF193566),
-                                          ),
-                                          child: Text("Cancel".tr()),
-                                        ),
-                                        ElevatedButton(
-                                            style: ElevatedButton.styleFrom(
-                                              primary: const Color(0xFF193566),
-                                            ),
-                                            onPressed: () async {
-                                              Navigator.pop(context);
-                                              setState(() {
-                                                didRequest = true;
-                                              });
-                                              await requestWSA();
-                                              print(
-                                                  "2=>WE FOUND ${ref.watch(rsaProvider).newNearbyProviders!.keys.length} Provider");
-                                              print(
-                                                  "2=>WE FOUND ${ref.watch(rsaProvider).newNearbyMechanics!.keys.length} Mechanics");
-                                            },
-                                            child: const Text("confirm").tr()),
-                                      ]);
+                                  _pcCarSlider.open();
                                 }),
-                        ElevatedButton(
-                            onPressed: () {
-                              context.push(Choose_car.routeName);
-                            },
-                            child: Text("Choose Car"))
                       ],
                     ),
                   ],
@@ -286,11 +244,61 @@ class _WSAScreenState extends ConsumerState<WSAScreen> {
           WSASlider(
             needTowProvider: needProvider,
             needMechanic: needMechanic,
-            pc: _pcSlider,
+            pc: _pcServiceSlider,
+          ),
+          SelectCarRequest(
+            pc: _pcCarSlider,
+            onTap: onTapOfConfirm,
           )
         ],
       ),
     );
+  }
+
+  void onTapOfConfirm() {
+    if (ref.watch(rsaProvider).car == null) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text("plzSpecCar".tr()),
+      ));
+      return;
+    }
+
+    requestConfirmationDialogue(context,
+        titleChildren: [const Text("confirm").tr()],
+        content: Text("wsaConfirmation".tr() +
+            "\n" +
+            (needProvider
+                ? ("withTowTruck".tr() +
+                    "at".tr() +
+                    " " +
+                    myMapWidgetState.currentState!.currentCustomLoc.address!)
+                : "withNoTowTruck".tr())),
+        actionChildren: [
+          ElevatedButton(
+            onPressed: () => Navigator.pop(context),
+            style: ElevatedButton.styleFrom(
+              primary: const Color(0xFF193566),
+            ),
+            child: Text("Cancel".tr()),
+          ),
+          ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                primary: const Color(0xFF193566),
+              ),
+              onPressed: () async {
+                Navigator.pop(context);
+                setState(() {
+                  didRequest = true;
+                });
+                await requestWSA();
+                print(
+                    "2=>WE FOUND ${ref.watch(rsaProvider).newNearbyProviders!.keys.length} Provider");
+                print(
+                    "2=>WE FOUND ${ref.watch(rsaProvider).newNearbyMechanics!.keys.length} Mechanics");
+                _pcCarSlider.close();
+              },
+              child: const Text("confirm").tr()),
+        ]);
   }
 
   //wait 3 minute
@@ -324,7 +332,7 @@ class _WSAScreenState extends ConsumerState<WSAScreen> {
       await rsaNotifier.searchNearbyMechanicsAndProviders();
     }
     // _pcMechanic.open();
-    _pcSlider.open();
+    _pcServiceSlider.open();
     //salahlyClientProvider
     ref.watch(salahlyClientProvider.notifier).assignRequest(
         ref.watch(rsaProvider).requestType!, ref.watch(rsaProvider).rsaID!);
@@ -479,8 +487,9 @@ class _WSAScreenState extends ConsumerState<WSAScreen> {
                 final prefs = await SharedPreferences.getInstance();
                 prefs.setBool("needProvider", needProvider);
               },
-              activeTrackColor: Colors.lightGreenAccent,
-              activeColor: Colors.green,
+              // activeTrackColor: Colors.lightGreenAccent,
+              activeTrackColor: Colors.blueAccent,
+              activeColor: const Color(0xFF193566),
             ),
     ));
   }
@@ -499,37 +508,5 @@ class _WSAScreenState extends ConsumerState<WSAScreen> {
         color: Color(0xFF193566),
       ),
     ));
-  }
-
-  void addCars() {
-    List tempCars = [
-      Car(
-          color: "blue",
-          noPlate: '1945stak',
-          model: "Ferari",
-          id: "145",
-          noChassis: "1294sfas"),
-      Car(
-          color: "green",
-          noPlate: '1945stak',
-          model: "BMW",
-          id: "145",
-          noChassis: "1294sfas"),
-      Car(
-          color: "black",
-          noPlate: '1945stak',
-          model: "porche",
-          id: "145",
-          noChassis: "1294sfas"),
-      Car(
-          color: "red",
-          noPlate: '1945stak',
-          model: "lada",
-          id: "145",
-          noChassis: "1294sfas")
-    ];
-    for (var car in tempCars) {
-      ref.watch(userProvider.notifier).assignCar(car);
-    }
   }
 }

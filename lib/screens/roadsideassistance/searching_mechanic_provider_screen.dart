@@ -9,6 +9,7 @@ import 'package:slahly/classes/provider/app_data.dart';
 import 'package:slahly/classes/provider/rsadata.dart';
 import 'package:slahly/classes/models/location.dart';
 import 'package:slahly/classes/firebase/roadsideassistance/roadsideassistance.dart';
+import 'package:slahly/widgets/location/finalScreen.dart';
 
 import 'package:slahly/widgets/roadsideassistance/HoldPlease.dart';
 import 'package:slahly/widgets/roadsideassistance/services_provider_card.dart';
@@ -16,8 +17,8 @@ import 'package:slahly/widgets/dialogues/confirm_cancellation.dart';
 import 'package:slahly/widgets/dialogues/all_rejected.dart';
 import 'package:slahly/widgets/dialogues/none_found.dart';
 
-import '../../utils/firebase/get_mechanic_data.dart';
-import '../../utils/firebase/get_provider_data.dart';
+import 'package:slahly/utils/firebase/get_mechanic_data.dart';
+import 'package:slahly/utils/firebase/get_provider_data.dart';
 import 'arrival.dart';
 
 class SearchingMechanicProviderScreen extends ConsumerStatefulWidget {
@@ -37,6 +38,7 @@ class _SearchingMechanicProviderScreenState
     extends ConsumerState<SearchingMechanicProviderScreen> {
   @override
   void initState() {
+    print("YA RAB OSTOR${widget.userLocation.toString()}");
     Future.delayed(Duration.zero, () async {
       final prefs = await SharedPreferences.getInstance();
       if (ref.watch(salahlyClientProvider).requestType == RequestType.RSA) {
@@ -54,6 +56,8 @@ class _SearchingMechanicProviderScreenState
               await getProviderData(prefs.getString("towProvider")!), false);
         }
         _getRsaDataStream();
+      } else {
+        requestRSA();
       }
     });
     super.initState();
@@ -102,7 +106,8 @@ class _SearchingMechanicProviderScreenState
   void check() {
     if ((ref.watch(rsaProvider).mechanic != null) &&
         (ref.watch(rsaProvider).towProvider != null)) {
-      context.push(Arrival.routeName, extra: true);
+      // context.push(Arrival.routeName, extra: true);
+      context.push(RequestFinalScreen.routeName);
     }
   }
 
@@ -280,6 +285,7 @@ class _SearchingMechanicProviderScreenState
     RSANotifier rsaNotifier = ref.watch(rsaProvider.notifier);
     rsaNotifier.assignRequestTypeToRSA();
 
+    ref.watch(rsaProvider.notifier).assignUserLocation(widget.userLocation!);
     await rsaNotifier.requestRSA();
     await rsaNotifier.searchNearbyMechanicsAndProviders();
     ref.watch(salahlyClientProvider.notifier).assignRequest(

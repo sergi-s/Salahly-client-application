@@ -16,8 +16,8 @@ Future getMechanicData(String id) async {
   DataSnapshot ds =
       await dbRef.child("users").child(id).get();
 
-  print(">>>>>>>${ds.value}");
-  print("saddddddde");
+  // print(">>>>>>>${ds.value}");
+  // print("saddddddde");
   return Mechanic(
       isCenter: false,
       avatar: "",

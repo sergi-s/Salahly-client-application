@@ -3,19 +3,23 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:slahly/widgets/location/finalScreen.dart';
+import 'package:sliding_up_panel/sliding_up_panel.dart';
+
 import 'package:slahly/screens/roadsideassistance/chooseprovider.dart';
-
-import "package:slahly/widgets/dropOff/TextFieldOnMap.dart";
-import 'package:slahly/widgets/location/mapWidget.dart';
-
 import 'package:slahly/screens/DropOff_screens/dropOff_search_screen.dart';
+
+import 'package:slahly/widgets/dropOff/TextFieldOnMap.dart';
+import 'package:slahly/widgets/location/mapWidget.dart';
+import 'package:slahly/widgets/roadsideassistance/select_car_request.dart';
+
 import 'package:slahly/classes/firebase/roadsideassistance/roadsideassistance.dart';
 import 'package:slahly/classes/provider/app_data.dart';
-
 import 'package:slahly/classes/provider/rsadata.dart';
-import 'package:slahly/widgets/roadsideassistance/services_provider_card.dart';
 
 import 'package:slahly/utils/firebase/get_provider_data.dart';
+
+import 'package:slahly/screens/roadsideassistance/arrival.dart';
 
 class DropOffLocationScreen extends ConsumerStatefulWidget {
   static const String routeName = "/DropOffLocationScreen";
@@ -30,23 +34,25 @@ class _DropOffLocationScreenState extends ConsumerState<DropOffLocationScreen> {
   GlobalKey<MapWidgetState> myMapWidgetState = GlobalKey();
   bool didRequest = false;
 
+  final PanelController _pcCarSlider = PanelController();
+
   @override
   void initState() {
-    Future.delayed(Duration.zero, () async {
-      ref.watch(salahlyClientProvider.notifier).getSavedData();
-      final prefs = await SharedPreferences.getInstance();
-
-      if (prefs.getString("towProvider") != null) {
-        ref.watch(rsaProvider.notifier).assignProvider(
-            await getProviderData(prefs.getString("towProvider")!), false);
-      }
-
-      if (ref.watch(salahlyClientProvider).requestType == RequestType.TTA) {
-        ref.watch(rsaProvider.notifier).assignRequestID(
-            ref.watch(salahlyClientProvider).requestID.toString());
-        context.push(ChooseProviderScreen.routeName);
-      }
-    });
+    // Future.delayed(Duration.zero, () async {
+    //   ref.watch(salahlyClientProvider.notifier).getSavedData();
+    //   final prefs = await SharedPreferences.getInstance();
+    //
+    //   if (prefs.getString("towProvider") != null) {
+    //     ref.watch(rsaProvider.notifier).assignProvider(
+    //         await getProviderData(prefs.getString("towProvider")!), false);
+    //   }
+    //
+    //   if (ref.watch(salahlyClientProvider).requestType == RequestType.TTA) {
+    //     ref.watch(rsaProvider.notifier).assignRequestID(
+    //         ref.watch(salahlyClientProvider).requestID.toString());
+    //     context.push(ChooseProviderScreen.routeName);
+    //   }
+    // });
     super.initState();
   }
 
@@ -92,44 +98,36 @@ class _DropOffLocationScreenState extends ConsumerState<DropOffLocationScreen> {
                       textToDisplay: ("your_current_location".tr()),
                       iconToDisplay: const Icon(
                         Icons.my_location,
-                        color: Colors.blue,
+                        color: Color(0xFF193566),
                       ),
                     ),
                     const SizedBox(height: 15),
-                    Consumer(
-                      builder: (context, ref, child) {
-                        return GestureDetector(
-                          onTap: () {
-                            print(
-                                "before next scree${myMapWidgetState.currentState!.currentCustomLoc.toString()}");
+                    GestureDetector(
+                      onTap: () {
+                        print(
+                            "before next scree${myMapWidgetState.currentState!.currentCustomLoc.toString()}");
 
-                            if (ref.watch(salahlyClientProvider).requestType !=
-                                null) {
-                              if (ref
-                                      .watch(salahlyClientProvider)
-                                      .requestType ==
-                                  RequestType.TTA) {
-                                context.push(DropOffSearchScreen.routeName,
-                                    extra: myMapWidgetState
-                                        .currentState!.currentCustomLoc);
-                              } else {
-                                ScaffoldMessenger.of(context)
-                                    .showSnackBar(const SnackBar(
-                                  content:
-                                      Text("There is another ongoing request"),
-                                ));
-                              }
-
-                              return;
+                        if (ref.watch(salahlyClientProvider).requestType !=
+                            null) {
+                          if (ref.watch(salahlyClientProvider).requestType ==
+                              RequestType.TTA) {
+                            if (ref.watch(rsaProvider).towProvider != null) {
+                              // context.push(Arrival.routeName,extra: true);
+                              context.push(RequestFinalScreen.routeName);
+                            } else {
+                              context.push(ChooseProviderScreen.routeName);
                             }
-                            context.push(DropOffSearchScreen.routeName,
-                                extra: myMapWidgetState
-                                    .currentState!.currentCustomLoc);
-                          },
-                          child: getProviderWidget(),
-                        );
+                          } else {
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              content: Text("onGoingRequest".tr()),
+                            ));
+                          }
+                          return;
+                        }
+                        _pcCarSlider.open();
                       },
-                    ),
+                      child: getProviderWidget(),
+                    )
                   ],
                 ),
               )),
@@ -144,10 +142,24 @@ class _DropOffLocationScreenState extends ConsumerState<DropOffLocationScreen> {
               Icons.location_on,
             ),
             style: ElevatedButton.styleFrom(
+              primary: const Color(0xFF193566),
               shape: const CircleBorder(),
               padding: const EdgeInsets.all(10),
             ),
           ),
+        ),
+        SelectCarRequest(
+          pc: _pcCarSlider,
+          onTap: () {
+            if (ref.watch(rsaProvider).car == null) {
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                content: Text("plzSpecCar".tr()),
+              ));
+              return;
+            }
+            context.push(DropOffSearchScreen.routeName,
+                extra: myMapWidgetState.currentState!.currentCustomLoc);
+          },
         ),
       ],
     ));
@@ -155,15 +167,17 @@ class _DropOffLocationScreenState extends ConsumerState<DropOffLocationScreen> {
 
 // Get assigned Provider
   Widget getProviderWidget() {
-    return (ref.watch(rsaProvider).towProvider != null
-        ? mapTowProviderToWidget(ref.watch(rsaProvider).towProvider!)
-        // ? Container(child: Text("Mech exits"))
-        : TextFieldOnMap(
-            textToDisplay:
-                didRequest ? "choose_provider".tr() : "where_to".tr(),
-            imageIconToDisplay:
-                const ImageIcon(AssetImage('assets/images/tow-truck 2.png')),
-            isSelected: !didRequest,
-          ));
+    return (
+        // ref.watch(rsaProvider).towProvider != null
+        // ? mapTowProviderToWidget(ref.watch(rsaProvider).towProvider!)
+        // // ? Container(child: Text("Mech exits"))
+        // :
+        TextFieldOnMap(
+      textToDisplay: didRequest ? "choose_provider".tr() : "where_to".tr(),
+      imageIconToDisplay: ImageIcon(
+          color: Color(0xFF193566),
+          AssetImage('assets/images/tow-truck 2.png')),
+      isSelected: !didRequest,
+    ));
   }
 }

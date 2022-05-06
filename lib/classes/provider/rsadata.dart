@@ -206,19 +206,6 @@ class RSANotifier extends StateNotifier<RSA> {
     print("After await");
   }
 
-  void cancelRequest() async {
-    assignState(RSAStates.canceled);
-    DatabaseReference localRef = state.requestType == RequestType.WSA
-        ? wsaRef
-        : state.requestType == RequestType.RSA
-            ? rsaRef
-            : ttaRef;
-    await localRef
-        .child(state.rsaID!)
-        .update({"state": RSA.stateToString(RSAStates.canceled)});
-    state = RSA();
-  }
-
   void assignNearbyProviders(List<TowProvider> nearbyProviders) =>
       state = state.copyWith(nearbyProviders: nearbyProviders);
 
@@ -275,6 +262,7 @@ class RSANotifier extends StateNotifier<RSA> {
     DatabaseReference newRSA = dbRef.child("rsa").push();
     Map<String, dynamic> rsaData = {
       "userID": userID,
+      "carID": state.car!.noChassis,
       "latitude": state.location!.latitude,
       "longitude": state.location!.longitude,
       "mechanicsResponses": {},
@@ -305,6 +293,7 @@ class RSANotifier extends StateNotifier<RSA> {
     DatabaseReference newWSA = dbRef.child("wsa").push();
     Map<String, dynamic> rsaData = {
       "userID": userID,
+      "carID": state.car!.noChassis,
       "latitude": state.location!.latitude,
       "longitude": state.location!.longitude,
       "mechanicsResponses": {},
@@ -354,9 +343,14 @@ class RSANotifier extends StateNotifier<RSA> {
     // print("ssssss");
     Map<String, dynamic> ttaData = {
       "userID": userID,
+      "carID": state.car!.noChassis,
       "latitude": state.location!.latitude,
       "longitude": state.location!.longitude,
       "providersResponses": {},
+      "destination": {
+        "latitude": state.dropOffLocation!.latitude,
+        "longitude": state.dropOffLocation!.longitude,
+      },
       "state": RSA.stateToString(RSAStates.waitingForProviderResponse)
     };
     // print("b4 for");
@@ -365,6 +359,44 @@ class RSANotifier extends StateNotifier<RSA> {
     state = state.copyWith(rsaID: newRSA.key);
     // print(state.rsaID);
     return newRSA.key;
+  }
+
+  void cancelRequest() async {
+    assignState(RSAStates.canceled);
+    DatabaseReference localRef = state.requestType == RequestType.WSA
+        ? wsaRef
+        : state.requestType == RequestType.RSA
+            ? rsaRef
+            : ttaRef;
+    await localRef
+        .child(state.rsaID!)
+        .update({"state": RSA.stateToString(RSAStates.canceled)});
+    state = RSA();
+  }
+
+  void finishRequest() async {
+    assignState(RSAStates.done);
+    DatabaseReference localRef = state.requestType == RequestType.WSA
+        ? wsaRef
+        : state.requestType == RequestType.RSA
+            ? rsaRef
+            : ttaRef;
+    await localRef
+        .child(state.rsaID!)
+        .update({"state": RSA.stateToString(RSAStates.done)});
+    state = RSA();
+  }
+
+  void confirmTowArrival() async {
+    assignState(RSAStates.confirmedArrival);
+    DatabaseReference localRef = state.requestType == RequestType.WSA
+        ? wsaRef
+        : state.requestType == RequestType.RSA
+            ? rsaRef
+            : ttaRef;
+    await localRef
+        .child(state.rsaID!)
+        .update({"state": RSA.stateToString(RSAStates.confirmedArrival)});
   }
 
   assignRequestTypeToRSA() => assignRequestType(RequestType.RSA);

@@ -7,13 +7,14 @@ import 'package:easy_localization/easy_localization.dart';
 
 import 'package:slahly/abstract_classes/user.dart';
 import 'package:slahly/classes/firebase/roadsideassistance/roadsideassistance.dart';
-import 'package:slahly/classes/models/towProvider.dart';
 import 'package:slahly/classes/provider/rsadata.dart';
 import 'package:slahly/screens/roadsideassistance/arrival.dart';
 import 'package:slahly/widgets/dialogues/all_rejected.dart';
 import 'package:slahly/widgets/ChooseTile.dart';
 
 import 'package:slahly/widgets/dialogues/none_found.dart';
+
+import 'package:slahly/widgets/location/finalScreen.dart';
 
 class ChooseProviderScreen extends ConsumerStatefulWidget {
   static const String routeName = "/chooseproviderscreen";
@@ -138,7 +139,8 @@ class _ChooseProviderScreenState extends ConsumerState<ChooseProviderScreen> {
     // Future.delayed(Duration.zero, () async {
     if (ref.watch(rsaProvider).towProvider != null) {
       print(">>>>prov");
-      context.push(Arrival.routeName, extra: true);
+      // context.push(Arrival.routeName, extra: true);
+      context.push(RequestFinalScreen.routeName);
       print("after push");
       // await _myStream.cancel();
     }

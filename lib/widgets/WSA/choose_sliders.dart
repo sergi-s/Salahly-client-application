@@ -14,8 +14,6 @@ import 'package:slahly/widgets/ChooseTile.dart';
 import 'package:slahly/widgets/dialogues/confirm_cancellation.dart';
 import 'package:slahly/widgets/location/finalScreen.dart';
 
-import '../../screens/userMangament/pofile.dart';
-
 class WSASlider extends ConsumerStatefulWidget {
   bool needTowProvider, needMechanic;
   PanelController pc;
@@ -146,8 +144,9 @@ class _WSASliderState extends ConsumerState<WSASlider> {
       ),
       onPressed: () {
         print("SADSAADASD");
-        context.push(RequestFinalScreen.routeName);
+        // context.push(RequestFinalScreen.routeName);
         // context.push(Profile.routeName);
+        context.push(RequestFinalScreen.routeName);
       },
       child: const Icon(
         Icons.navigate_next_outlined,

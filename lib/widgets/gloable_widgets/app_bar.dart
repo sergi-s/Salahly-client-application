@@ -2,6 +2,7 @@ import "package:flutter/material.dart";
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:slahly/screens/userMangament/pofile.dart';
+import 'package:slahly/classes/provider/user_data.dart';
 
 PreferredSizeWidget salahlyAppBar({String? title}) {
   return AppBar(
@@ -20,8 +21,8 @@ PreferredSizeWidget salahlyAppBar({String? title}) {
               child: GestureDetector(
                 onTap: ()=>context.push(Profile.routeName),
                 child: CircleAvatar(
-                    //   backgroundImage:
-                    //       NetworkImage(ref.watch(userProvider).avatar ?? ""),
+                      backgroundImage:
+                          NetworkImage(ref.watch(userProvider).avatar ?? ""),
                     ),
               ));
         },

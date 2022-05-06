@@ -3,6 +3,7 @@ import 'package:path/path.dart';
 import 'package:slahly/classes/models/location.dart';
 import 'package:slahly/screens/DropOff_screens/dropOff_search_screen.dart';
 import 'package:slahly/screens/car_management/addCars.dart';
+import 'package:slahly/screens/history_management/ongoing_requests.dart';
 import 'package:slahly/screens/userMangament/editProfile.dart';
 import 'package:slahly/screens/userMangament/pofile.dart';
 import 'package:slahly/screens/reminder/addReminderScreen.dart';
@@ -216,6 +217,10 @@ class Routing {
           GoRoute(
             path: Addcar.routeName,
             builder: (context, state) => Addcar(),
+          ),
+          GoRoute(
+            path: OngoingRequests.routeName,
+            builder: (context, state) => OngoingRequests(),
           ),
         ],
       );

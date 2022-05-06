@@ -3,14 +3,17 @@ import "package:flutter/material.dart";
 import 'package:go_router/go_router.dart';
 
 import 'package:slahly/screens/history_management/view_history.dart';
+import 'package:slahly/screens/homepage.dart';
 import 'package:slahly/screens/reminder/reminderScreen.dart';
 import 'package:slahly/screens/switchLanguage.dart';
 import 'package:slahly/screens/test_screens/test_user_SM.dart';
 import 'package:slahly/screens/userMangament/editProfile.dart';
 import 'package:slahly/screens/test_screens/testscreen_foula.dart';
 import 'package:slahly/screens/userMangament/pofile.dart';
-
-import '../../screens/car_management/view_cars_screen.dart';
+import 'package:slahly/screens/car_management/view_cars_screen.dart';
+import 'package:slahly/screens/history_management/ongoing_requests.dart';
+import 'package:slahly/widgets/location/finalScreen.dart';
+import 'package:slahly/screens/car_management/addCars.dart';
 
 Widget salahlyDrawer(BuildContext context) {
   return Drawer(
@@ -33,17 +36,18 @@ Widget salahlyDrawer(BuildContext context) {
           ).tr(),
           onTap: () {
             Navigator.pop(context);
-            context.push(Profile.routeName);
+            // context.push(Profile.routeName);
+            context.push(HomePage.routeName);
           },
         ),
         ListTile(
           title: const Text(
-            "Test Car Screen",
+            "add Car Screen",
             style: TextStyle(fontWeight: FontWeight.bold),
           ),
           onTap: () {
             Navigator.pop(context);
-            context.push(TestUserCAR.routeName);
+            context.push(Addcar.routeName);
           },
         ),
         ListTile(
@@ -92,6 +96,13 @@ Widget salahlyDrawer(BuildContext context) {
           onTap: () {
             Navigator.pop(context);
             context.push(ViewCars.routeName);
+          },
+        ),
+        ListTile(
+          title: Text('View Ongoing'),
+          onTap: () {
+            Navigator.pop(context);
+            context.push(OngoingRequests.routeName);
           },
         ),
       ],
