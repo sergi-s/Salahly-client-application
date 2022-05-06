@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:go_router/go_router.dart';
+import 'package:path/path.dart';
 import 'package:slahly/classes/models/car.dart';
 import 'package:slahly/classes/models/client.dart';
 
@@ -159,7 +160,7 @@ class _State extends ConsumerState<Choose_car> {
                                 title: Row(
                                   children: [
                                     Text(carstate.cars[index].model.toString(),
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                             fontSize: 25,
                                             fontWeight: FontWeight.bold)),
                                     Padding(
@@ -176,15 +177,23 @@ class _State extends ConsumerState<Choose_car> {
                                         onTap: () {
                                           print("huuu");
                                           final snackBar = SnackBar(
-                                              content: Text('Car removed'));
+                                              content:
+                                                  Text('Car_removed'.tr()));
                                           showDialog(
                                               context: context,
                                               builder: (BuildContext context) {
                                                 return AlertDialog(
                                                   content: Text(
                                                       "are you sure u want to delete car"),
-                                                  title: Text("Warning"),
+                                                  title: Text("Warning".tr()),
                                                   actions: [
+                                                    TextButton(
+                                                        onPressed: () {
+                                                          Navigator.of(context)
+                                                              .pop();
+                                                        },
+                                                        child: Text(
+                                                            "Cancel".tr())),
                                                     TextButton(
                                                         onPressed: () {
                                                           deleteCar(index);
@@ -195,7 +204,8 @@ class _State extends ConsumerState<Choose_car> {
                                                               .showSnackBar(
                                                                   snackBar);
                                                         },
-                                                        child: Text("Confirm"))
+                                                        child: Text(
+                                                            "Confirm".tr())),
                                                   ],
                                                 );
                                               });

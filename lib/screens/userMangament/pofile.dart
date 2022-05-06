@@ -236,13 +236,7 @@ class _ProfileState extends ConsumerState<Profile> {
       appBar: AppBar(
         elevation: 0.0,
         backgroundColor: const Color(0xFF193566),
-        title: Row(mainAxisAlignment: MainAxisAlignment.end, children: [
-          // Image.asset(
-          //   'assets/images/logo ta5arog white car.png',
-          //   fit: BoxFit.contain,
-          //   height: 32,
-          // ),
-        ]),
+        title: Row(mainAxisAlignment: MainAxisAlignment.end, children: []),
       ),
       body: CustomPaint(
         child: Container(
@@ -265,12 +259,11 @@ class _ProfileState extends ConsumerState<Profile> {
                             offset: Offset(0, 10))
                       ],
                       shape: BoxShape.circle,
-                      // image: DecorationImage(
-                      //     fit: BoxFit.cover, image: FileImage(_image!))),
                     ),
                     child: CircleAvatar(
                         backgroundImage: NetworkImage(
-                            ref.watch(userProvider).avatar ?? "SAD")),
+                            ref.watch(userProvider).avatar ??
+                                "https://via.placeholder.com/150")),
                   ),
                 ),
                 onTap: () {},
@@ -287,224 +280,13 @@ class _ProfileState extends ConsumerState<Profile> {
               SizedBox(
                 height: 5,
               ),
-              // Center(child: Text(ref.watch(userProvider).email ?? "wait")),
-              // Center(
-              //     child: Text(ref.watch(userProvider).phoneNumber ?? "wait")),
-              // SizedBox(
-              //   height: 30,
-              // ),
-              // Text(
-              //   "User Information",
-              //   style: TextStyle(fontSize: 25, fontWeight: FontWeight.w500),
-              // ),
-              // SizedBox(
-              //   height: 20,
-              // ),
-              // Center(
-              //   child: Row(children: [
-              //     Text("Phone : ",
-              //         style:
-              //             TextStyle(fontSize: 20, fontWeight: FontWeight.w500)),
-              //     Text(ref.watch(userProvider).phoneNumber ?? "wait",
-              //         style:
-              //             TextStyle(fontSize: 20, fontWeight: FontWeight.w500)),
-              //   ]),
-              // ),
-              // Row(children: [
-              //   Text("email : ",
-              //       style:
-              //           TextStyle(fontSize: 20, fontWeight: FontWeight.w500)),
-              //   Text(ref.watch(userProvider).email ?? "wait",
-              //       style:
-              //           TextStyle(fontSize: 20, fontWeight: FontWeight.w500)),
-              // ]),
-              // Row(children: [
-              //   Text("address : ",
-              //       style:
-              //           TextStyle(fontSize: 20, fontWeight: FontWeight.w500)),
-              //   Text(ref.watch(userProvider).address ?? "wait",
-              //       style:
-              //           TextStyle(fontSize: 20, fontWeight: FontWeight.w500)),
-              // ]),
-              // Align(
-              //   alignment: Alignment.bottomCenter,
-              //   child: Column(
-              //     crossAxisAlignment: CrossAxisAlignment.end,
-              //     children: [
-              //       RaisedButton(
-              //         onPressed: () {
-              //           context.push(EditProfile.routeName);
-              //         },
-              //         color: Colors.green,
-              //         padding: EdgeInsets.symmetric(horizontal: 50),
-              //         shape: RoundedRectangleBorder(
-              //             borderRadius: BorderRadius.circular(20)),
-              //         child: Text(
-              //           "update profile",
-              //           style: TextStyle(
-              //               fontSize: 14,
-              //               letterSpacing: 2.2,
-              //               color: Colors.white),
-              //         ),
-              //       ),
-
-              //     ],
-              //   ),
-              // )
-              // Container(
-              //   padding: EdgeInsets.symmetric(horizontal: 16),
-              //   child: Column(
-              //       crossAxisAlignment: CrossAxisAlignment.start,
-              //       children: [
-              //         Row(
-              //           children: [
-              //             Text(
-              //               "email",
-              //               style: TextStyle(
-              //                   fontSize: 16, color: Color(0xFF193566)),
-              //             ),
-              //             SizedBox(
-              //               width: 7,
-              //             ),
-              //             Icon(
-              //               Icons.email,
-              //               color: Color(0xFF193566),
-              //             )
-              //           ],
-              //         ),
-              //         SizedBox(
-              //           height: 4,
-              //         ),
-              //         Text(ref.watch(userProvider).email ?? "wait",
-              //             style: TextStyle(
-              //                 fontSize: 25, fontWeight: FontWeight.w500)),
-              //         SizedBox(
-              //           height: 20,
-              //         ),
-              //         Row(
-              //           children: [
-              //             Text(
-              //               "Phone",
-              //               style: TextStyle(
-              //                   fontSize: 18, color: Color(0xFF193566)),
-              //             ),
-              //             SizedBox(
-              //               width: 5,
-              //             ),
-              //             Icon(
-              //               Icons.phone,
-              //               color: Color(0xFF193566),
-              //             )
-              //           ],
-              //         ),
-              //         SizedBox(
-              //           height: 4,
-              //         ),
-              //         Text(ref.watch(userProvider).phoneNumber ?? "wait",
-              //             style: TextStyle(
-              //                 fontSize: 25, fontWeight: FontWeight.w500)),
-              //         SizedBox(
-              //           height: 20,
-              //         ),
-              //         Row(
-              //           children: [
-              //             Text(
-              //               "Address",
-              //               style: TextStyle(
-              //                   fontSize: 20, color: Color(0xFF193566)),
-              //             ),
-              //             Icon(
-              //               Icons.map,
-              //               color: Color(0xFF193566),
-              //             )
-              //           ],
-              //         ),
-              //         SizedBox(
-              //           height: 4,
-              //         ),
-              //         Text(ref.watch(userProvider).address ?? "wait",
-              //             style: TextStyle(
-              //                 fontSize: 25, fontWeight: FontWeight.w500)),
-              //         SizedBox(
-              //           height: 10,
-              //         ),
-              //         Padding(
-              //           padding: EdgeInsets.symmetric(
-              //             vertical: MediaQuery.of(context).size.height * 0.2,
-              //           ),
-              //           child: Align(
-              //             alignment: FractionalOffset.bottomRight,
-              //             child: RaisedButton(
-              //               onPressed: () {
-              //                 context.push(EditProfile.routeName);
-              //               },
-              //               color: Color(0xFF193566),
-              //               shape: RoundedRectangleBorder(
-              //                   borderRadius: BorderRadius.circular(20)),
-              //               child: Text(
-              //                 "update profile",
-              //                 style: TextStyle(
-              //                     fontSize: 14,
-              //                     letterSpacing: 2.2,
-              //                     color: Colors.white),
-              //               ),
-              //             ),
-              //           ),
-              //         ),
-              //       ]),
-              // )
-              // Padding(
-              //   padding: EdgeInsets.all(25),
-              //   child: Container(
-              //       height: 52,
-              //       padding: const EdgeInsets.only(left: 14),
-              //       margin: const EdgeInsets.only(top: 8),
-              //       decoration: BoxDecoration(
-              //           borderRadius: BorderRadius.circular(20),
-              //           color: Colors.grey[100],
-              //           boxShadow: [
-              //             BoxShadow(
-              //               color: Colors.blueGrey,
-              //               blurRadius: 2.0,
-              //               spreadRadius: 0.0,
-              //               offset: Offset(3, 0),
-              //             ),
-              //           ]),
-              //       child: TextField(
-              //         autofocus: false,
-              //         cursorColor: Colors.blue,
-              //         // controller: controller,
-              //         style: TextStyle(
-              //           fontSize: 15,
-              //           fontWeight: FontWeight.w400,
-              //           color: Colors.grey[900],
-              //         ),
-              //
-              //         decoration: InputDecoration(
-              //             border: InputBorder.none,
-              //             focusedBorder: InputBorder.none,
-              //             enabledBorder: InputBorder.none,
-              //             // errorBorder: InputBorder.none,
-              //             disabledBorder: InputBorder.none,
-              //             // contentPadding: EdgeInsets.symmetric(vertical: 15),
-              //             filled: true,
-              //             enabled: false,
-              //             hintStyle: TextStyle(
-              //               fontSize: 14,
-              //               fontWeight: FontWeight.w400,
-              //               color: Colors.grey[600],
-              //             ),
-              //             hintText: "Type in your text",
-              //             fillColor: Colors.white70),
-              //       )),
-              // ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Column(
                   children: [
                     Padding(
                       padding: EdgeInsets.only(right: screenSize.width * 0.8),
-                      child: Text("name"),
+                      child: Text("Name"),
                     ),
                     TextFormField(
                       decoration: InputDecoration(
@@ -546,7 +328,6 @@ class _ProfileState extends ConsumerState<Profile> {
                             color: Colors.grey[500],
                           ),
                           border: OutlineInputBorder(
-                            // width: 0.0 produces a thin "hairline" border
                             borderRadius:
                                 BorderRadius.all(Radius.circular(90.0)),
                             borderSide: BorderSide.none,
@@ -592,7 +373,7 @@ class _ProfileState extends ConsumerState<Profile> {
                               style:
                                   TextStyle(fontSize: 20, color: Colors.black)),
                           fillColor: Colors.white70,
-                          hintText: ref.watch(userProvider).name ?? "wait"),
+                          hintText: ref.watch(userProvider).address ?? "wait"),
                     ),
                   ],
                 ),
@@ -626,7 +407,8 @@ class _ProfileState extends ConsumerState<Profile> {
                               style:
                                   TextStyle(fontSize: 20, color: Colors.black)),
                           fillColor: Colors.white70,
-                          hintText: ref.watch(userProvider).name ?? "wait"),
+                          hintText:
+                              ref.watch(userProvider).phoneNumber ?? "wait"),
                     ),
                     SizedBox(
                       height: 10,
@@ -682,6 +464,7 @@ class _ProfileState extends ConsumerState<Profile> {
         }
       });
     });
+    print("addddressssssssssssss ${address}");
     print("here");
     print(path);
     print(firebaseuser!.email);
