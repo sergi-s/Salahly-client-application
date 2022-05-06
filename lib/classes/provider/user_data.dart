@@ -27,7 +27,17 @@ class ClientNotifier extends StateNotifier<Client> {
 
   assignAddress(String address) => state = state.copyWith(address: address);
 
-  assignCar(Car car) => state = state.copyWith(cars: [...state.cars, car]);
+  assignCar(Car car) {
+    bool flag = true;
+    for (int i = 0; i < state.cars.length; i++) {
+      if (state.cars[i].noChassis == car.noChassis) {
+        flag = false;
+      }
+    }
+    if (flag) {
+      state = state.copyWith(cars: [...state.cars, car]);
+    }
+  }
 
   removeCar(Car car) {
     // state = state.copyWith(cars: [

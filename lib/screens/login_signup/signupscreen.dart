@@ -21,7 +21,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen>
   @override
   void initState() {
     super.initState();
-    SystemChrome.setEnabledSystemUIOverlays([]);
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
     animationController =
         AnimationController(vsync: this, duration: animationDuration);
   }

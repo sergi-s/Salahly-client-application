@@ -8,16 +8,19 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:overlay_support/overlay_support.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:slahly/classes/firebase/nearbylocations.dart';
 import 'package:slahly/classes/firebase/roadsideassistance/roadsideassistance.dart';
 import 'package:slahly/classes/models/location.dart';
 import 'package:slahly/classes/models/mechanic.dart';
 import 'package:slahly/classes/models/towProvider.dart';
+import 'package:slahly/classes/provider/app_data.dart';
 import 'package:slahly/classes/provider/rsadata.dart';
 import 'package:go_router/go_router.dart';
 import 'package:slahly/main.dart';
 import 'package:slahly/screens/roadsideassistance/rsaconfirmationScreen.dart';
 import 'package:slahly/screens/roadsideassistance/searching_mechanic_provider_screen.dart';
+import 'package:slahly/utils/constants.dart';
 
 import '../login_signup/signupscreen.dart';
 
@@ -52,6 +55,33 @@ class TestScreen_nearbymechanics_and_create_rsa extends ConsumerWidget {
       body: SafeArea(
           child: Column(
         children: [
+          ElevatedButton(
+              onPressed: () async{
+                ref.watch(salahlyClientProvider.notifier).getSavedData();
+                final prefs = await SharedPreferences.getInstance();
+
+                print("${ref.watch(salahlyClientProvider).requestType}\n"
+                    "${ref.watch(salahlyClientProvider).requestID}\n"
+                    "${ref.watch(salahlyClientProvider).appState}\n"
+                    "provider: ${prefs.getString("towProvider")}\n"
+                    "mechanic: ${prefs.getString("mechanic")}");
+
+                print("sad");
+              },
+              child: const Text("See App state")),
+          ElevatedButton(
+            onPressed: () {
+              ref.watch(rsaProvider.notifier).cancelRequest();
+              ref.watch(salahlyClientProvider.notifier).deAssignRequest();
+            },
+            child: Text("cancel request"),
+          ),
+          ElevatedButton(
+              onPressed: () {
+                ref.watch(rsaProvider.notifier).cancelRequest();
+                ref.watch(salahlyClientProvider.notifier).deAssignRequest();
+              },
+              child: const Text("Clear RSA")),
           ElevatedButton(
             onPressed: () async {
               FirebaseAuth.instance.signOut();

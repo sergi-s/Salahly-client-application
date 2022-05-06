@@ -55,7 +55,7 @@ class MapWidgetState extends State<MapWidget> {
             myLocationButtonEnabled: true,
             // myLocationEnabled: true,
             zoomGesturesEnabled: true,
-            zoomControlsEnabled: true,
+            zoomControlsEnabled: false,
             initialCameraPosition: _kGooglePlex,
             onMapCreated: (GoogleMapController controller) {
               _controllerGoogleMap.complete(controller);
@@ -71,23 +71,26 @@ class MapWidgetState extends State<MapWidget> {
   locatePosition() async {
     currentCustomLoc = await getUserLocation();
     cameraZoom = 19;
-    print(
-        "::lat:${currentCustomLoc.latitude} - long:${currentCustomLoc.longitude}");
-    print("::address: ${currentCustomLoc.address}");
-    print("::::insied map");
-
     moveCamera(currentCustomLoc);
   }
 
   //move camera to current position
   moveCamera(CustomLocation cus) async {
     currentCustomLoc = cus;
-
     currentCustomLoc.address = await searchCoordinateAddress_google(
         currentCustomLoc.latitude, currentCustomLoc.longitude);
 
     LatLng latLatPosition =
         LatLng(currentCustomLoc.latitude, currentCustomLoc.longitude);
+
+    setState(() {
+      myMarkers = [];
+      myMarkers.add(
+        Marker(
+            markerId: MarkerId(latLatPosition.toString()),
+            position: latLatPosition),
+      );
+    });
 
     CameraPosition camPos =
         CameraPosition(target: latLatPosition, zoom: cameraZoom);

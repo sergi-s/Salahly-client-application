@@ -4,7 +4,7 @@ class TextFieldOnMap extends StatelessWidget {
   const TextFieldOnMap({
     Key? key,
     required this.textToDisplay,
-    this.imageIconTodisplay,
+    this.imageIconToDisplay,
     this.iconToDisplay,
     required this.isSelected,
     this.child,
@@ -12,7 +12,7 @@ class TextFieldOnMap extends StatelessWidget {
 
   final String textToDisplay;
 
-  final ImageIcon? imageIconTodisplay;
+  final ImageIcon? imageIconToDisplay;
   final Icon? iconToDisplay;
   final bool isSelected;
   final Widget? child;
@@ -38,7 +38,7 @@ class TextFieldOnMap extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           const SizedBox(width: 10),
-          iconToDisplay ?? imageIconTodisplay ?? Icon(Icons.close),
+          iconToDisplay ?? imageIconToDisplay ?? const Icon(Icons.close),
           const SizedBox(width: 5),
           Text(
             textToDisplay,

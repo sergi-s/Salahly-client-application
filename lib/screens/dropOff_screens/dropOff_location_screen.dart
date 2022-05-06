@@ -1,50 +1,58 @@
-import 'dart:async';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:geolocator/geolocator.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:slahly/classes/models/location.dart';
-import 'package:slahly/screens/DropOff_screens/dropOff_search_screen.dart';
-import 'package:slahly/utils/location/getuserlocation.dart';
-import 'package:slahly/utils/location/geocoding.dart';
-import "package:slahly/widgets/dropOff/TextFieldOnMap.dart";
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:slahly/widgets/location/finalScreen.dart';
+import 'package:sliding_up_panel/sliding_up_panel.dart';
 
-class DropOffLocationScreen extends StatefulWidget {
+import 'package:slahly/screens/roadsideassistance/chooseprovider.dart';
+import 'package:slahly/screens/DropOff_screens/dropOff_search_screen.dart';
+
+import 'package:slahly/widgets/dropOff/TextFieldOnMap.dart';
+import 'package:slahly/widgets/location/mapWidget.dart';
+import 'package:slahly/widgets/roadsideassistance/select_car_request.dart';
+
+import 'package:slahly/classes/firebase/roadsideassistance/roadsideassistance.dart';
+import 'package:slahly/classes/provider/app_data.dart';
+import 'package:slahly/classes/provider/rsadata.dart';
+
+import 'package:slahly/utils/firebase/get_provider_data.dart';
+
+import 'package:slahly/screens/roadsideassistance/arrival.dart';
+
+class DropOffLocationScreen extends ConsumerStatefulWidget {
   static const String routeName = "/DropOffLocationScreen";
+
+  const DropOffLocationScreen({Key? key}) : super(key: key);
 
   @override
   _DropOffLocationScreenState createState() => _DropOffLocationScreenState();
 }
 
-class _DropOffLocationScreenState extends State<DropOffLocationScreen> {
-  //Google maps
-  final Completer<GoogleMapController> _controllerGoogleMap = Completer();
-  late GoogleMapController newGoogleMapController;
+class _DropOffLocationScreenState extends ConsumerState<DropOffLocationScreen> {
+  GlobalKey<MapWidgetState> myMapWidgetState = GlobalKey();
+  bool didRequest = false;
 
-  static const double initialCameraZoom = 15;
-  double cameraZoom = 14;
-
-  // Current Location
-  // late Position currentPos;
-  late LatLng currentPos;
-  late CustomLocation currentCustomLoc;
-
-  Geolocator geoLocator = Geolocator();
-
-  //initial Camera position
-  final CameraPosition _kGooglePlex = const CameraPosition(
-    target: LatLng(30.0444, 31.2357),
-    zoom: initialCameraZoom,
-  );
-
-  //Markers
-  List<Marker> myMarkers = [];
+  final PanelController _pcCarSlider = PanelController();
 
   @override
   void initState() {
-    initialLocation();
-    locatePosition();
+    // Future.delayed(Duration.zero, () async {
+    //   ref.watch(salahlyClientProvider.notifier).getSavedData();
+    //   final prefs = await SharedPreferences.getInstance();
+    //
+    //   if (prefs.getString("towProvider") != null) {
+    //     ref.watch(rsaProvider.notifier).assignProvider(
+    //         await getProviderData(prefs.getString("towProvider")!), false);
+    //   }
+    //
+    //   if (ref.watch(salahlyClientProvider).requestType == RequestType.TTA) {
+    //     ref.watch(rsaProvider.notifier).assignRequestID(
+    //         ref.watch(salahlyClientProvider).requestID.toString());
+    //     context.push(ChooseProviderScreen.routeName);
+    //   }
+    // });
     super.initState();
   }
 
@@ -53,35 +61,7 @@ class _DropOffLocationScreenState extends State<DropOffLocationScreen> {
     return Scaffold(
         body: Stack(
       children: [
-        GoogleMap(
-          mapType: MapType.normal,
-          myLocationButtonEnabled: true,
-          myLocationEnabled: true,
-          zoomGesturesEnabled: true,
-          zoomControlsEnabled: true,
-          initialCameraPosition: _kGooglePlex,
-          onMapCreated: (GoogleMapController controller) {
-            _controllerGoogleMap.complete(controller);
-            newGoogleMapController = controller;
-          },
-          markers: Set.from(myMarkers),
-          onTap: _handleTap,
-        ),
-        Positioned(
-          left: 300,
-          right: 0,
-          bottom: 275,
-          child: ElevatedButton(
-            onPressed: locatePosition,
-            child: const Icon(
-              Icons.location_on,
-            ),
-            style: ElevatedButton.styleFrom(
-              shape: CircleBorder(),
-              padding: EdgeInsets.all(10),
-            ),
-          ),
-        ),
+        MapWidget(key: myMapWidgetState),
         Positioned(
           left: 0,
           right: 0,
@@ -108,92 +88,96 @@ class _DropOffLocationScreenState extends State<DropOffLocationScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const SizedBox(height: 6),
-                    Text(("hi_there".tr()), style: TextStyle(fontSize: 12)),
-                    Text(("where_to".tr()), style: TextStyle(fontSize: 20)),
+                    Text(("hi_there".tr()),
+                        style: const TextStyle(fontSize: 12)),
+                    Text(("where_to".tr()),
+                        style: const TextStyle(fontSize: 20)),
                     const SizedBox(height: 20),
                     TextFieldOnMap(
                       isSelected: false,
                       textToDisplay: ("your_current_location".tr()),
                       iconToDisplay: const Icon(
                         Icons.my_location,
-                        color: Colors.blue,
+                        color: Color(0xFF193566),
                       ),
                     ),
                     const SizedBox(height: 15),
                     GestureDetector(
                       onTap: () {
                         print(
-                            "before next scree${currentCustomLoc.toString()}");
-                        context.push(DropOffSearchScreen.routeName,
-                            extra: currentCustomLoc);
+                            "before next scree${myMapWidgetState.currentState!.currentCustomLoc.toString()}");
+
+                        if (ref.watch(salahlyClientProvider).requestType !=
+                            null) {
+                          if (ref.watch(salahlyClientProvider).requestType ==
+                              RequestType.TTA) {
+                            if (ref.watch(rsaProvider).towProvider != null) {
+                              // context.push(Arrival.routeName,extra: true);
+                              context.push(RequestFinalScreen.routeName);
+                            } else {
+                              context.push(ChooseProviderScreen.routeName);
+                            }
+                          } else {
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              content: Text("onGoingRequest".tr()),
+                            ));
+                          }
+                          return;
+                        }
+                        _pcCarSlider.open();
                       },
-                      child: TextFieldOnMap(
-                        isSelected: true,
-                        textToDisplay: ("where_to".tr()),
-                        iconToDisplay: const Icon(
-                          Icons.search,
-                          color: Colors.blue,
-                        ),
-                      ),
-                    ),
+                      child: getProviderWidget(),
+                    )
                   ],
                 ),
               )),
+        ),
+        Positioned(
+          left: MediaQuery.of(context).size.width * 0.80,
+          right: 0,
+          bottom: MediaQuery.of(context).size.height * 0.19,
+          child: ElevatedButton(
+            onPressed: () => myMapWidgetState.currentState?.locatePosition(),
+            child: const Icon(
+              Icons.location_on,
+            ),
+            style: ElevatedButton.styleFrom(
+              primary: const Color(0xFF193566),
+              shape: const CircleBorder(),
+              padding: const EdgeInsets.all(10),
+            ),
+          ),
+        ),
+        SelectCarRequest(
+          pc: _pcCarSlider,
+          onTap: () {
+            if (ref.watch(rsaProvider).car == null) {
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                content: Text("plzSpecCar".tr()),
+              ));
+              return;
+            }
+            context.push(DropOffSearchScreen.routeName,
+                extra: myMapWidgetState.currentState!.currentCustomLoc);
+          },
         ),
       ],
     ));
   }
 
-  void locatePosition() async {
-    currentCustomLoc = await getUserLocation();
-    cameraZoom = 19;
-    print(
-        "::lat:${currentCustomLoc.latitude} - long:${currentCustomLoc.longitude}");
-    print("::address: ${currentCustomLoc.address}");
-
-    moveCamera(currentCustomLoc);
-  }
-
-  moveCamera(CustomLocation cus) async {
-    currentCustomLoc = cus;
-
-    currentCustomLoc.address = await searchCoordinateAddress_google(
-        currentCustomLoc.latitude, currentCustomLoc.longitude);
-
-    LatLng latLatPosition =
-        LatLng(currentCustomLoc.latitude, currentCustomLoc.longitude);
-
-    CameraPosition camPos =
-        CameraPosition(target: latLatPosition, zoom: cameraZoom);
-    newGoogleMapController
-        .animateCamera(CameraUpdate.newCameraPosition(camPos));
-  }
-
-  _handleTap(LatLng tappedPoint) {
-    setState(() {
-      cameraZoom = 19;
-      moveCamera(CustomLocation(
-          latitude: tappedPoint.latitude, longitude: tappedPoint.longitude));
-      myMarkers = [];
-      myMarkers.add(
-        Marker(
-            draggable: true,
-            markerId: MarkerId(tappedPoint.toString()),
-            position: tappedPoint,
-            onDragEnd: (dragEndPosition) {
-              moveCamera(CustomLocation(
-                  latitude: dragEndPosition.latitude,
-                  longitude: dragEndPosition.longitude));
-            }),
-      );
-    });
-  }
-
-  initialLocation() async {
-    List temp = await getApproximateLocation();
-    CustomLocation initialPos =
-        CustomLocation(latitude: temp[0], longitude: temp[1]);
-
-    moveCamera(initialPos);
+// Get assigned Provider
+  Widget getProviderWidget() {
+    return (
+        // ref.watch(rsaProvider).towProvider != null
+        // ? mapTowProviderToWidget(ref.watch(rsaProvider).towProvider!)
+        // // ? Container(child: Text("Mech exits"))
+        // :
+        TextFieldOnMap(
+      textToDisplay: didRequest ? "choose_provider".tr() : "where_to".tr(),
+      imageIconToDisplay: ImageIcon(
+          color: Color(0xFF193566),
+          AssetImage('assets/images/tow-truck 2.png')),
+      isSelected: !didRequest,
+    ));
   }
 }

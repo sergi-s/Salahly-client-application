@@ -1,7 +1,9 @@
+import 'dart:ui';
+
 class Car {
   String? id;
   String? model;
-  String? color;
+  Color? color;
   String noPlate;
   String? noChassis;
   CarAccess? carAccess;
@@ -38,7 +40,7 @@ class Car {
 
   @override
   String toString() {
-    return "$model $noPlate";
+    return "model:$model\tnoPlate:$noPlate\tnoChassis:$noChassis";
   }
 }
 
