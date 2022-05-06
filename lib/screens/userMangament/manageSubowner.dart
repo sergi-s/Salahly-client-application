@@ -74,8 +74,7 @@ class _State extends ConsumerState<ManageSubowner> {
         key: ValueKey(subowners),
         // key: Key(randomNumber.toString()),
         onDismissed: (direction) {
-          // _deleteRecord(k)
-          var info = this.subowners[index];
+          removeSubowner(widget.chasis, subowners[index].email.toString());
         },
         background: deleteBgItem(),
         child: Container(

@@ -269,7 +269,7 @@ class _State extends ConsumerState<TransferOwner> {
     carsUsers.child(selected).remove();
     Userscar.child(FirebaseAuth.instance.currentUser!.uid)
         .update({selected: "false"});
-    Userscar.child(subId!).child(selected).set(true);
+    Userscar.child(subId!).child(selected).set("true");
     for (int i = 0; i < ref.watch(userProvider).cars.length; i++) {
       if (ref.watch(userProvider).cars[i].noChassis == selected) {
         ref

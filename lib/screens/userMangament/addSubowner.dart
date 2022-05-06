@@ -164,7 +164,7 @@ class _State extends ConsumerState<AddSubowner> {
                       backgroundImage: NetworkImage(avatar ?? "sad"),
                       backgroundColor: Colors.transparent,
                     ),
-                    const SizedBox(width: 50),
+                    const SizedBox(width: 20),
                     Text(email!, style: TextStyle(fontSize: 25))
                   ],
                 )
