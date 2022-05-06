@@ -2,8 +2,11 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:slahly/screens/reminder/reminderScreen.dart';
-
+import 'package:awesome_notifications/awesome_notifications.dart';
+import 'package:intl/intl.dart';
+import '../../utils/local_notifications/notifications.dart';
 import '../../widgets/reminder/MyInputField.dart';
+import 'package:slahly/main.dart';
 
 class AddReminder extends StatefulWidget {
   static final routeName = "/addreminderscreen";
@@ -15,17 +18,17 @@ class AddReminder extends StatefulWidget {
 }
 
 class _AddReminderState extends State<AddReminder> {
+
   // final TaskController _taskController = Get.put(TaskController());
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _noteController = TextEditingController();
-  DateTime _selectedDate = DateTime.now();
-  String _endTime = "9:30 PM";
+  DateTime? _selectedDate =DateTime.now();
   String _startTime = DateFormat("hh:mm a").format(DateTime.now());
-  int _selectedRemind = 5;
-  List<int> remindList = [0, 5, 10, 15, 20];
+  // int _selectedRemind = 5;
+  // List<int> remindList = [0, 5, 10, 15, 20];
   String _selectedRepeat = "None";
   List<String> repeatList = ["None", "Daily", "Weekly", "Month"];
-  int _selectedColor = 0;
+
   TimeOfDay selectedTime = TimeOfDay.now();
   String title = "";
   String note = "";
@@ -46,17 +49,57 @@ class _AddReminderState extends State<AddReminder> {
     selectedTime = st;
   }
 
-  updateEndTime(String et) {
-    _endTime = et;
-  }
-
-  updateReminder(int rem) {
-    _selectedRemind = rem;
-  }
+  // updateReminder(int rem) {
+  //   _selectedRemind = rem;
+  // }
 
   updateSelectRepeat(String sp) {
     _selectedRepeat = sp;
   }
+  @override
+  void initState() {
+    // dateinput.text = "";
+    // timeinput.text = "";
+    super.initState();
+    AwesomeNotifications().isNotificationAllowed().then((isAllowed) {
+      if (!isAllowed) {
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: Text('Allow Notifications'),
+            content: Text('Our app would like to send you notifications'),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text(
+                  'Don\'t Allow',
+                  style: TextStyle(color: Colors.grey, fontSize: 18),
+                ),
+              ),
+              TextButton(
+                onPressed: () => AwesomeNotifications()
+                    .requestPermissionToSendNotifications()
+                    .then((_) => Navigator.pop(context)),
+                child: Text(
+                  'Allow',
+                  style: TextStyle(
+                    color: Colors.teal,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      }
+    });
+
+
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -111,9 +154,9 @@ class _AddReminderState extends State<AddReminder> {
                 fn: updateNote,
               ),
               MyInputField(
-                fn: updateDate,
+                fn:(){},
                 title: "Date",
-                hint: DateFormat.yMd().format(_selectedDate),
+                hint: DateFormat.yMd().format(_selectedDate!),
                 widget: IconButton(
                   onPressed: () {
                     _getDateFromUser();
@@ -128,7 +171,7 @@ class _AddReminderState extends State<AddReminder> {
                 children: [
                   Expanded(
                     child: MyInputField(
-                      fn: updateStartTime,
+                      fn: (){},
                       title: 'Start Time',
                       hint: "${selectedTime.hour}:${selectedTime.minute}",
                       widget: IconButton(
@@ -163,33 +206,33 @@ class _AddReminderState extends State<AddReminder> {
                 ],
               ),
               // //Remind field
-              MyInputField(
-                fn: updateReminder,
-                title: "Remind",
-                hint: "$_selectedRemind minutes early",
-                widget: DropdownButton(
-                  icon: const Icon(
-                    Icons.keyboard_arrow_down,
-                    color: Colors.grey,
-                  ),
-                  onChanged: (String? newValue) {
-                    setState(() {
-                      _selectedRemind = int.parse(newValue!);
-                    });
-                  },
-                  underline: Container(
-                    height: 0,
-                  ),
-                  elevation: 4,
-                  iconSize: 32,
-                  items: remindList.map<DropdownMenuItem<String>>((int value) {
-                    return DropdownMenuItem<String>(
-                      child: Text(value.toString()),
-                      value: value.toString(),
-                    );
-                  }).toList(),
-                ),
-              ),
+              // MyInputField(
+              //   fn: updateReminder,
+              //   title: "Remind",
+              //   hint: "$_selectedRemind minutes early",
+              //   widget: DropdownButton(
+              //     icon: const Icon(
+              //       Icons.keyboard_arrow_down,
+              //       color: Colors.grey,
+              //     ),
+              //     onChanged: (String? newValue) {
+              //       setState(() {
+              //         _selectedRemind = int.parse(newValue!);
+              //       });
+              //     },
+              //     underline: Container(
+              //       height: 0,
+              //     ),
+              //     elevation: 4,
+              //     iconSize: 32,
+              //     items: remindList.map<DropdownMenuItem<String>>((int value) {
+              //       return DropdownMenuItem<String>(
+              //         child: Text(value.toString()),
+              //         value: value.toString(),
+              //       );
+              //     }).toList(),
+              //   ),
+              // ),
               // //Repeat field
               MyInputField(
                 fn: updateSelectRepeat,
@@ -224,7 +267,7 @@ class _AddReminderState extends State<AddReminder> {
               ),
               Row(
                 // crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.end,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   // Container(
                   //   height: 50,
@@ -275,8 +318,8 @@ class _AddReminderState extends State<AddReminder> {
     DateTime? _pickerDate = await showDatePicker(
         context: context,
         initialDate: DateTime.now(),
-        firstDate: DateTime(2015),
-        lastDate: DateTime(2023));
+        firstDate: DateTime.now(),
+        lastDate: DateTime.now().add(const Duration(days: 365)));
     if (_pickerDate != null) {
       setState(() {
         _selectedDate = _pickerDate;
@@ -311,7 +354,7 @@ class _AddReminderState extends State<AddReminder> {
     } else if (isStartTime == false) {
       setState(() {
         print("CCCCCCCC");
-        _endTime = _formattedTime;
+
       });
     }
   }
@@ -327,7 +370,7 @@ class _AddReminderState extends State<AddReminder> {
 
   _validateData() {
     if (title == null || title == "") {
-      print(title + note + _selectedRepeat + _endTime + _startTime);
+      print(title + note + _selectedRepeat  + _startTime);
 
       ScaffoldMessenger.of(context).showSnackBar(
           // SnackBar(content: Text('please_add_fields'.tr())));
@@ -337,7 +380,7 @@ class _AddReminderState extends State<AddReminder> {
     } else {
       print(title + " " + note + " " + _selectedRepeat + " ");
       print(_selectedDate);
-      print(_selectedRemind);
+      // print(_selectedRemind);
       print(selectedTime);
       showDialog<String>(
         context: context,
@@ -363,7 +406,18 @@ class _AddReminderState extends State<AddReminder> {
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12)),
               color: Color(0xFF193566),
-              onPressed: () => Navigator.pop(context, 'OK'),
+              onPressed: (){
+                NotificationDateAndTime nwt = NotificationDateAndTime(
+                    year: _selectedDate!.year,
+                    month: _selectedDate!.month,
+                    day: _selectedDate!.day,
+                    timeOfDay:selectedTime);
+                addReminder(
+                    title: "Salhlay",
+                    body: title,
+                    notificationSchedule: nwt);
+                Navigator.pop(context);
+              },
               child: const Text(
                 'OK',
                 style: TextStyle(
@@ -379,9 +433,3 @@ class _AddReminderState extends State<AddReminder> {
   }
 }
 
-// class TaskController extends GetxController {
-//   void onReady() {
-//     super.onReady();
-//   }
-//
-// }

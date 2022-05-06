@@ -74,9 +74,10 @@ dependencies:
   cached_network_image: ^3.2.0
   flutter_local_notifications: ^9.4.1
   flutter_custom_cards: ^0.2.1
+  awesome_notifications: ^0.6.21
+  intl: ^0.17.0
   shared_preferences: ^2.0.13
   flutter_polyline_points: ^1.0.0
-
 
 dev_dependencies:
   flutter_test:
