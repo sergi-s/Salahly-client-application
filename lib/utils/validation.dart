@@ -2,6 +2,7 @@ import 'package:string_validator/string_validator.dart';
 
 class Validator {
   static bool emailValidator(String email) {
+    print("inside validator ${isEmail(email)} ${email}");
     if (email != "" && isEmail(email)) {
       return true;
     }
@@ -60,7 +61,6 @@ class Validator {
   static bool ageValidator(DateTime dateTime) {
     // regex for validation of date format : dd.mm.yyyy, dd/mm/yyyy, dd-mm-yyyy
     if (dateTime != "" && dateTime.isBefore(DateTime.now())) {
-
       return true;
     }
     return false;

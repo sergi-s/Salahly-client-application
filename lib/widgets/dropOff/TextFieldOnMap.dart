@@ -38,7 +38,7 @@ class TextFieldOnMap extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           const SizedBox(width: 10),
-          iconToDisplay ?? imageIconToDisplay ?? Icon(Icons.close),
+          iconToDisplay ?? imageIconToDisplay ?? const Icon(Icons.close),
           const SizedBox(width: 5),
           Text(
             textToDisplay,

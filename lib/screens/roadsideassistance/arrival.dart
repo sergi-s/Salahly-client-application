@@ -57,7 +57,7 @@ class _ArrivalState extends State<Arrival> with SingleTickerProviderStateMixin {
                     child: Padding(
                       padding: EdgeInsets.only(left: 70, top: 130),
                       child: Image.asset(
-                        !widget.type!
+                        widget.type!
                             ? 'assets/images/mechanic.png'
                             : "assets/images/tow-truck 2.png",
                         height: 150,

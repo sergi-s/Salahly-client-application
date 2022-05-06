@@ -153,6 +153,8 @@ class RSA {
 
   Map<String, TowProvider>? get newNearbyProviders => _newNearbyProviders;
 
+  Car? get car=>_car;
+
   RequestType? get requestType => _requestType;
 
   static String stateToString(RSAStates state) {

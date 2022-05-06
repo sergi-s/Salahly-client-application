@@ -303,7 +303,7 @@ class _State extends ConsumerState<Choose_car> {
     //TODO check if this user is the owner of this car
     //authorization
     DatabaseReference carsUsers = dbRef.child("cars_users").child(chasis!);
-    DatabaseReference cars = dbRef.child("cars").child(chasis!);
+    DatabaseReference cars = dbRef.child("cars").child(chasis);
     DatabaseReference userCars = dbRef
         .child("users_cars")
         .child(FirebaseAuth.instance.currentUser!.uid)

@@ -3,8 +3,248 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import '../../classes/models/mechanic.dart';
-import '../../classes/models/towProvider.dart';
+import 'package:slahly/classes/models/mechanic.dart';
+import 'package:slahly/classes/models/towProvider.dart';
+
+Widget mapMechanicToFullWidget(Mechanic mec) {
+  return ServicesProviderWiget(
+    serviceProviderEmail: mec.email,
+    serviceProviderName: mec.name,
+    serviceProviderIsCenter: mec.isCenter,
+    serviceProviderType: mec.getUserType(),
+    serviceProviderPhoneNumber: mec.phoneNumber,
+    serviceProviderRating: mec.rating,
+    serviceProviderAddress: mec.address,
+  );
+}
+
+Widget mapTowProviderToFullWidget(TowProvider prov) {
+  return ServicesProviderWiget(
+    serviceProviderEmail: prov.email,
+    serviceProviderName: prov.name,
+    serviceProviderIsCenter: prov.isCenter,
+    serviceProviderType: prov.getUserType(),
+    serviceProviderPhoneNumber: prov.phoneNumber,
+    serviceProviderRating: prov.rating,
+    serviceProviderAddress: prov.address,
+  );
+}
+
+class ServicesProviderWiget extends StatelessWidget {
+  late String foundType;
+
+  ServicesProviderWiget({
+    Key? key,
+    this.serviceProviderType,
+    this.serviceProviderName,
+    this.serviceProviderEmail,
+    this.serviceProviderIsCenter,
+    this.serviceProviderPhoneNumber,
+    this.serviceProviderRating,
+    this.serviceProviderAddress,
+  }) : super(key: key) {
+    foundType = serviceProviderType == "Mechanic"
+        ? "found_Mechanic"
+        : "found_tow_provider";
+  }
+
+  String? serviceProviderType,
+      serviceProviderName,
+      serviceProviderEmail,
+      serviceProviderPhoneNumber,
+      serviceProviderAddress;
+  bool? serviceProviderIsCenter;
+  double? serviceProviderRating;
+
+  @override
+  Widget build(BuildContext context) {
+    return DefaultTextStyle(
+      style: const TextStyle(fontSize: 20, color: Color(0xFF193566)),
+      child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            SizedBox(height: MediaQuery.of(context).size.height * 0.04),
+            CircleAvatar(
+              backgroundImage: Image.network(
+                      "https://www.biography.com/.image/ar_1:1%2Cc_fill%2Ccs_srgb%2Cfl_progressive%2Cq_auto:good%2Cw_1200/MTY3MDUxMjkzMjI1OTIwMTcz/brad-pitt-attends-the-premiere-of-20th-century-foxs--square.jpg")
+                  .image,
+              radius: 35,
+            ),
+            Container(
+              padding: const EdgeInsets.only(
+                  left: 60.0, right: 60, bottom: 50, top: 50),
+              child: Table(
+                columnWidths: const {0: FractionColumnWidth(0.3)},
+                defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+                children: [
+                  TableRow(children: [
+                    TableCell(
+                        child: Text(
+                      "${"Name".tr()}:",
+                      textAlign: TextAlign.justify,
+                    )),
+                    TableCell(
+                        child: Text(
+                      serviceProviderName ?? "name",
+                      textAlign: TextAlign.center,
+                    ))
+                  ]),
+                  TableRow(children: [
+                    TableCell(
+                        child: Text(
+                      "${"Phone".tr()}:",
+                      textAlign: TextAlign.justify,
+                    )),
+                    TableCell(
+                        child: ElevatedButton.icon(
+                      onPressed: () {
+                        Clipboard.setData(
+                            ClipboardData(text: serviceProviderPhoneNumber));
+                      },
+                      label: Text(
+                        serviceProviderPhoneNumber ?? "01..",
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(
+                            color: Color(0xFF193566),
+                            fontWeight: FontWeight.bold),
+                      ),
+                      style: ElevatedButton.styleFrom(
+                        primary: const Color(0xffff193566).withOpacity(0),
+                        elevation: 0,
+                        animationDuration: Duration.zero,
+                      ),
+                      icon: const Icon(
+                        Icons.copy,
+                        color: Color(0xFF193566),
+                      ),
+                    ))
+                  ]),
+                  TableRow(children: [
+                    TableCell(
+                        child: Text(
+                      "${"Rating".tr()}:",
+                    )),
+                    TableCell(
+                        child: Text(
+                      serviceProviderRating.toString(),
+                      textAlign: TextAlign.center,
+                    ))
+                  ]),
+                  TableRow(children: [
+                    TableCell(
+                      child: Text(
+                        "${"Address".tr()}:",
+                      ),
+                    ),
+                    TableCell(
+                      child: Text(
+                        serviceProviderAddress ?? "address",
+                        textAlign: TextAlign.center,
+                      ),
+                    )
+                  ]),
+                ],
+              ),
+            ),
+            // SizedBox(height: 15),
+            // Row(
+            //   mainAxisAlignment: MainAxisAlignment.center,
+            //   crossAxisAlignment: CrossAxisAlignment.center,
+            //   children: [
+            //     Text(
+            //       "${"Name".tr()}:",
+            //       textAlign: TextAlign.justify,
+            //       style: const TextStyle(fontSize: 25),
+            //     ),
+            //     const SizedBox(width: 15),
+            //     Text(
+            //       serviceProviderName ?? "name",
+            //       textAlign: TextAlign.center,
+            //       style: const TextStyle(fontSize: 20),
+            //     )
+            //   ],
+            // ),
+            // Row(
+            //   mainAxisAlignment: MainAxisAlignment.center,
+            //   crossAxisAlignment: CrossAxisAlignment.center,
+            //   children: [
+            //     Text(
+            //       "${"Phone".tr()}:",
+            //       textAlign: TextAlign.justify,
+            //       style: const TextStyle(fontSize: 25),
+            //     ),
+            //     // const SizedBox(width: ),
+            //     Container(
+            //       child: ElevatedButton.icon(
+            //         onPressed: () {
+            //           Clipboard.setData(
+            //               ClipboardData(text: serviceProviderPhoneNumber));
+            //         },
+            //         label: Text(
+            //           serviceProviderPhoneNumber ?? "01..",
+            //           style: const TextStyle(
+            //               color: Colors.black,
+            //               fontWeight: FontWeight.bold,
+            //               fontSize: 14),
+            //         ),
+            //         style: ElevatedButton.styleFrom(
+            //           primary: const Color(0xFFff193566).withOpacity(0),
+            //           elevation: 0,
+            //           animationDuration: Duration.zero,
+            //         ),
+            //         icon: const Icon(
+            //           Icons.copy,
+            //           color: Colors.black,
+            //         ),
+            //       ),
+            //     )
+            //   ],
+            // ),
+            // //end phone number
+            // //rating
+            // Row(
+            //   mainAxisAlignment: MainAxisAlignment.center,
+            //   crossAxisAlignment: CrossAxisAlignment.center,
+            //   children: [
+            //     Text(
+            //       "${"Rating".tr()}:",
+            //       textAlign: TextAlign.justify,
+            //       style: const TextStyle(fontSize: 25),
+            //     ),
+            //     const SizedBox(width: 15),
+            //     Text(
+            //       serviceProviderRating.toString(),
+            //       textAlign: TextAlign.center,
+            //       style: const TextStyle(fontSize: 20),
+            //     )
+            //   ],
+            // ),
+            // //end rating
+            //
+            // //address
+            // Row(
+            //   mainAxisAlignment: MainAxisAlignment.center,
+            //   crossAxisAlignment: CrossAxisAlignment.center,
+            //   children: [
+            //     Text(
+            //       "${"Address".tr()}:",
+            //       textAlign: TextAlign.justify,
+            //       style: const TextStyle(fontSize: 25),
+            //     ),
+            //     const SizedBox(width: 15),
+            //     Text(
+            //       serviceProviderAddress ?? "address",
+            //       textAlign: TextAlign.center,
+            //       style: const TextStyle(fontSize: 20),
+            //     )
+            //   ],
+            // ),
+            //end address
+          ]),
+    );
+  }
+}
 
 class ServicesProviderCard extends StatelessWidget {
   late String foundType;
@@ -214,7 +454,6 @@ class ServicesProviderCard extends StatelessWidget {
       child: Center(
         child: GestureDetector(
           onTap: () {
-
             customDialog(context);
           },
           child: Row(
@@ -243,7 +482,6 @@ class ServicesProviderCard extends StatelessWidget {
   }
 }
 
-
 Widget mapMechanicToWidget(Mechanic mec) {
   return ServicesProviderCard(
     serviceProviderEmail: mec.email,
@@ -255,6 +493,7 @@ Widget mapMechanicToWidget(Mechanic mec) {
     serviceProviderAddress: mec.address,
   );
 }
+
 Widget mapTowProviderToWidget(TowProvider prov) {
   return ServicesProviderCard(
     serviceProviderEmail: prov.email,

@@ -89,6 +89,13 @@ class Client extends UserType {
 
   SubscriptionTypes get subscription => _subscription;
 
+  static String subscriptionToString(SubscriptionTypes subscription) {
+    return (subscription.toString()).isNotEmpty
+        ? (subscription.toString()).substring(18)
+        : "";
+    // deletes "RSAStates." at the beginning
+  }
+
   List<Car> get cars => _cars;
 
   Map<SubscriptionTypes, double> get subscriptionData => _subscriptionData;

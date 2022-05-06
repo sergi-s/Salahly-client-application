@@ -1,14 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import "package:go_router/go_router.dart";
-import 'package:slahly/classes/models/location.dart';
-import 'package:slahly/widgets/dropOff/prediction_tile.dart';
+
 import 'package:slahly/utils/constants.dart';
 import 'package:slahly/utils/http_request.dart';
-import 'package:slahly/classes/models/place_predictions.dart';
-import 'package:slahly/widgets/dropOff/search_text_field.dart';
-import 'package:easy_localization/easy_localization.dart';
 
-class DropOffSearchScreen extends StatefulWidget {
+import 'package:slahly/classes/models/location.dart';
+import 'package:slahly/classes/models/place_predictions.dart';
+import 'package:slahly/classes/provider/rsadata.dart';
+
+import 'package:slahly/widgets/dropOff/search_text_field.dart';
+import 'package:slahly/widgets/dropOff/prediction_tile.dart';
+
+class DropOffSearchScreen extends ConsumerStatefulWidget {
   static const String routeName = "/DropOffSearchScreen";
 
   final CustomLocation pikUpLocation;
@@ -20,11 +25,19 @@ class DropOffSearchScreen extends StatefulWidget {
   _DropOffSearchScreenState createState() => _DropOffSearchScreenState();
 }
 
-class _DropOffSearchScreenState extends State<DropOffSearchScreen> {
+class _DropOffSearchScreenState extends ConsumerState<DropOffSearchScreen> {
   TextEditingController pickUpTextEditingController = TextEditingController();
   TextEditingController dropOffTextEditingController = TextEditingController();
 
   List<PlacePredictions> dropOffPlacePredictionList = [];
+
+  @override
+  void initState() {
+    Future.delayed(Duration.zero, () {
+      ref.watch(rsaProvider.notifier).assignUserLocation(widget.pikUpLocation);
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -90,8 +103,8 @@ class _DropOffSearchScreenState extends State<DropOffSearchScreen> {
                 ? SizedBox(
                     height: MediaQuery.of(context).size.height * 0.6,
                     child: Padding(
-                      padding:
-                          const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 8, horizontal: 16),
                       child: ListView.separated(
                         keyboardDismissBehavior:
                             ScrollViewKeyboardDismissBehavior.manual,

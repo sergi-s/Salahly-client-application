@@ -1,5 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import "package:flutter/material.dart";
+import 'package:slahly/utils/constants.dart';
+
 
 void noneFound(
   context, {
@@ -9,7 +11,7 @@ void noneFound(
       context: context,
       builder: (BuildContext context) => AlertDialog(
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(30),
+                borderRadius: BorderRadius.circular(dialogRadius),
               ),
               title: const Text("sorry").tr(),
               content:

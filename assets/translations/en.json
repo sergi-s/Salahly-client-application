@@ -125,5 +125,19 @@
   "withNoTowTruck": "without a tow truck",
   "are_you_sure_u_want_to_add_car": "are you sure you want to add car",
   "Select_Color": "Select Color",
-  "Car_removed": "Car removed"
+  "Car_removed": "Car removed",
+  "goOnYourOwn": "Go on your own",
+  "request": "Request",
+  "plzSpecCar": "Please, Select a Car",
+  "onGoingRequest": "There is an ongoing request",
+  "subType": "Sub Type",
+  "km": "KM",
+  "silver": "Silver",
+  "gold": "Gold",
+  "platinum": "Platinum",
+  "expectedTime":"Expected Time",
+  "rsa": "RoadSide Assistant",
+  "wsa": "WorkShop Assistant",
+  "tta": "Tow Truck Assistant",
+  "workingOn": "Working ON"
 }

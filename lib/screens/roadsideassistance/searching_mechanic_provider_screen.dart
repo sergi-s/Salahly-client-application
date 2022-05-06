@@ -3,11 +3,13 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:slahly/classes/provider/app_data.dart';
 import 'package:slahly/classes/provider/rsadata.dart';
 import 'package:slahly/classes/models/location.dart';
 import 'package:slahly/classes/firebase/roadsideassistance/roadsideassistance.dart';
+import 'package:slahly/widgets/location/finalScreen.dart';
 
 import 'package:slahly/widgets/roadsideassistance/HoldPlease.dart';
 import 'package:slahly/widgets/roadsideassistance/services_provider_card.dart';
@@ -15,6 +17,8 @@ import 'package:slahly/widgets/dialogues/confirm_cancellation.dart';
 import 'package:slahly/widgets/dialogues/all_rejected.dart';
 import 'package:slahly/widgets/dialogues/none_found.dart';
 
+import 'package:slahly/utils/firebase/get_mechanic_data.dart';
+import 'package:slahly/utils/firebase/get_provider_data.dart';
 import 'arrival.dart';
 
 class SearchingMechanicProviderScreen extends ConsumerStatefulWidget {
@@ -34,17 +38,33 @@ class _SearchingMechanicProviderScreenState
     extends ConsumerState<SearchingMechanicProviderScreen> {
   @override
   void initState() {
-    super.initState();
+    print("YA RAB OSTOR${widget.userLocation.toString()}");
+    Future.delayed(Duration.zero, () async {
+      final prefs = await SharedPreferences.getInstance();
+      if (ref.watch(salahlyClientProvider).requestType == RequestType.RSA) {
+        ref.watch(rsaProvider.notifier).assignRequestID(
+            ref.watch(salahlyClientProvider).requestID.toString());
+        print("there is a onging request");
+        print("HELLO::${ref.watch(rsaProvider).rsaID}");
 
-    Future.delayed(Duration.zero, () {
-      ref.watch(rsaProvider.notifier).assignUserLocation(widget.userLocation!);
-      requestRSA();
+        if (prefs.getString("mechanic") != null) {
+          ref.watch(rsaProvider.notifier).assignMechanic(
+              await getMechanicData(prefs.getString("mechanic")!), false);
+        }
+        if (prefs.getString("towProvider") != null) {
+          ref.watch(rsaProvider.notifier).assignProvider(
+              await getProviderData(prefs.getString("towProvider")!), false);
+        }
+        _getRsaDataStream();
+      } else {
+        requestRSA();
+      }
     });
+    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    RSANotifier rsaNotifier = ref.watch(rsaProvider.notifier);
     return Scaffold(
       backgroundColor: const Color(0xFFd1d9e6),
       body: SafeArea(
@@ -68,7 +88,6 @@ class _SearchingMechanicProviderScreenState
                 const SizedBox(height: 50),
                 ElevatedButton(
                   onPressed: () {
-                    rsaNotifier.assignState(RSAStates.canceled);
                     confirmCancellation(context, ref);
                   },
                   child: Text("Cancel".tr()),
@@ -87,7 +106,8 @@ class _SearchingMechanicProviderScreenState
   void check() {
     if ((ref.watch(rsaProvider).mechanic != null) &&
         (ref.watch(rsaProvider).towProvider != null)) {
-      context.push(Arrival.routeName, extra: true);
+      // context.push(Arrival.routeName, extra: true);
+      context.push(RequestFinalScreen.routeName);
     }
   }
 
@@ -135,6 +155,7 @@ class _SearchingMechanicProviderScreenState
           bool flagAllRejected = true;
           bool flagFindYet = false;
           dataSnapshot.child("mechanicsResponses").children.forEach((mechanic) {
+            ref.watch(rsaProvider.notifier).atLeastOneMechanic = true;
             flagFindYet = true;
             if (mechanic.value == "pending") {
               flagAllRejected = false;
@@ -142,19 +163,31 @@ class _SearchingMechanicProviderScreenState
             if (mechanic.value == "accepted") {
               flagAllRejected = false;
               print("Someone is accepted");
-              for (var mech
-                  in ref.watch(rsaProvider).newNearbyMechanics!.keys) {
-                print("l2it 7ad");
-                if (mech == mechanic.key) {
-                  print("this is the mechanic${mechanic.key}");
-                  rsaNotifier.assignMechanic(
-                      ref.watch(rsaProvider).newNearbyMechanics![mech]!, false);
-                  rsaNotifier.assignState(RSAStates.waitingForProviderResponse);
-                  print(rsa.mechanic!.name.toString());
-                  print("mech got assigned");
-                }
-                print("end of mech loop");
+              if (ref
+                  .watch(rsaProvider)
+                  .newNearbyMechanics!
+                  .containsKey(mechanic.key)) {
+                ref.watch(rsaProvider.notifier).assignMechanic(
+                    ref.watch(rsaProvider).newNearbyMechanics![mechanic.key]!,
+                    false);
+              } else {
+                getMechanicData(mechanic.key!).then((value) {
+                  ref.watch(rsaProvider.notifier).assignMechanic(value, false);
+                });
               }
+              // for (var mech
+              //     in ref.watch(rsaProvider).newNearbyMechanics!.keys) {
+              //   print("l2it 7ad");
+              //   if (mech == mechanic.key) {
+              //     print("this is the mechanic${mechanic.key}");
+              //     rsaNotifier.assignMechanic(
+              //         ref.watch(rsaProvider).newNearbyMechanics![mech]!, false);
+              //     rsaNotifier.assignState(RSAStates.waitingForProviderResponse);
+              //     print(rsa.mechanic!.name.toString());
+              //     print("mech got assigned");
+              //   }
+              //   print("end of mech loop");
+              // }
             }
             if (mechanic.value == "rejected") {
               if (ref.watch(rsaProvider).mechanic != null) {
@@ -182,6 +215,7 @@ class _SearchingMechanicProviderScreenState
           bool flagFindYet = false;
 
           dataSnapshot.child("providersResponses").children.forEach((prov) {
+            ref.watch(rsaProvider.notifier).atLeastOneProvider = true;
             flagFindYet = true;
             print("PROV $prov:\t ${prov.value} ${prov.key}");
             if (prov.value == "pending") {
@@ -192,17 +226,29 @@ class _SearchingMechanicProviderScreenState
               print("Someone is accepted");
               print(rsa.newNearbyProviders);
               print("Someone is accepted2");
-              for (var provider
-                  in ref.watch(rsaProvider).newNearbyProviders!.keys) {
-                print("l2it 7ad");
-                if (provider == prov.key) {
-                  print("this is the provider${prov.key}");
-                  rsaNotifier.assignProvider(
-                      ref.watch(rsaProvider).newNearbyProviders![provider]!,
-                      false);
-                  print("prov got assigned");
-                }
-                print("end of prov loop");
+              // for (var provider
+              //     in ref.watch(rsaProvider).newNearbyProviders!.keys) {
+              //   print("l2it 7ad");
+              //   if (provider == prov.key) {
+              //     print("this is the provider${prov.key}");
+              //     rsaNotifier.assignProvider(
+              //         ref.watch(rsaProvider).newNearbyProviders![provider]!,
+              //         false);
+              //     print("prov got assigned");
+              //   }
+              //   print("end of prov loop");
+              // }
+              if (ref
+                  .watch(rsaProvider)
+                  .newNearbyProviders!
+                  .containsKey(prov.key)) {
+                ref.watch(rsaProvider.notifier).assignProvider(
+                    ref.watch(rsaProvider).newNearbyProviders![prov.key]!,
+                    false);
+              } else {
+                getProviderData(prov.key!).then((value) {
+                  ref.watch(rsaProvider.notifier).assignProvider(value, false);
+                });
               }
             }
           });
@@ -239,6 +285,7 @@ class _SearchingMechanicProviderScreenState
     RSANotifier rsaNotifier = ref.watch(rsaProvider.notifier);
     rsaNotifier.assignRequestTypeToRSA();
 
+    ref.watch(rsaProvider.notifier).assignUserLocation(widget.userLocation!);
     await rsaNotifier.requestRSA();
     await rsaNotifier.searchNearbyMechanicsAndProviders();
     ref.watch(salahlyClientProvider.notifier).assignRequest(

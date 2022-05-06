@@ -125,5 +125,19 @@
   "withNoTowTruck": "مبدون شاحنه سحب",
   "are_you_sure_u_want_to_add_car": "هل انت متاكد من اضافة هذة السياره",
   "Select_Color": "اختر اللون",
-  "Car_removed": "تم حذف السياره"
+  "Car_removed": "تم حذف السياره",
+  "goOnYourOwn": "اذهب بمفردي",
+  "request": "اطلب",
+  "plzSpecCar": "اختار سياره من فضلك",
+  "onGoingRequest": "ناسف, هناك طلب لم ينتهي بعد",
+  "subType": "نوع اشتراكك",
+  "km": "كم",
+  "silver": "فضي",
+  "gold": "ذهبي",
+  "platinum": "بلاتين",
+  "expectedTime": "الوقت المحتمل",
+  "rsa": "مساعده الطريق",
+  "wsa": "حجز وؤشه",
+  "tta": "حدمة سياره سحب",
+  "workingOn": "يعمل على"
 }

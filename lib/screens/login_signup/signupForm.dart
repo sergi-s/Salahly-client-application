@@ -8,19 +8,28 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:slahly/utils/validation.dart';
 import 'package:slahly/classes/firebase/firebase.dart';
 
-class SignUpForm extends StatelessWidget {
+class SignUpForm extends StatefulWidget {
   SignUpForm({
     Key? key,
     required this.defaultLogin,
   }) : super(key: key);
 
   final double defaultLogin;
+
+  @override
+  State<SignUpForm> createState() => _SignUpFormState();
+}
+
+class _SignUpFormState extends State<SignUpForm> {
   Validator validation = Validator();
+
   FirebaseCustom fb = FirebaseCustom();
 
   //late TextEditingController emailController = TextEditingController();
   String email = "";
+
   String password = "";
+
   String confirmPassword = "";
 
   updateEmail(String e) {
@@ -40,7 +49,7 @@ class SignUpForm extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: MediaQuery.of(context).size.width,
-      height: defaultLogin,
+      height: widget.defaultLogin,
       //color: Colors.blue,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
