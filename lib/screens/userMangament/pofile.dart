@@ -1,16 +1,15 @@
 import 'dart:io';
 
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:slahly/screens/userMangament/editProfile.dart';
+import 'package:slahly/utils/firebase/get_user_data.dart';
 
 import '../../classes/provider/user_data.dart';
 import '../../main.dart';
-import '../../widgets/reminder/MyInputField.dart';
 
 class Profile extends ConsumerStatefulWidget {
   static const String routeName = "/profile";
@@ -19,8 +18,10 @@ class Profile extends ConsumerStatefulWidget {
 }
 
 class _ProfileState extends ConsumerState<Profile> {
+  @override
   void initState() {
-    fetch();
+    // fetch();
+    getUserData(ref);
     super.initState();
   }
 
@@ -30,6 +31,7 @@ class _ProfileState extends ConsumerState<Profile> {
   File? url;
   dynamic? path;
   String? title;
+
   updateTitle(title) {
     this.title;
   }
@@ -297,7 +299,7 @@ class _ProfileState extends ConsumerState<Profile> {
                           border: OutlineInputBorder(
                             // width: 0.0 produces a thin "hairline" border
                             borderRadius:
-                                BorderRadius.all(Radius.circular(90.0)),
+                            BorderRadius.all(Radius.circular(90.0)),
                             borderSide: BorderSide.none,
                           ),
                           hintStyle: TextStyle(
@@ -306,7 +308,7 @@ class _ProfileState extends ConsumerState<Profile> {
                           enabled: false,
                           label: Text(ref.watch(userProvider).name ?? "wait",
                               style:
-                                  TextStyle(fontSize: 20, color: Colors.black)),
+                              TextStyle(fontSize: 20, color: Colors.black)),
                           fillColor: Colors.white70,
                           hintText: ref.watch(userProvider).name ?? "wait"),
                     ),
@@ -329,7 +331,7 @@ class _ProfileState extends ConsumerState<Profile> {
                           ),
                           border: OutlineInputBorder(
                             borderRadius:
-                                BorderRadius.all(Radius.circular(90.0)),
+                            BorderRadius.all(Radius.circular(90.0)),
                             borderSide: BorderSide.none,
                           ),
                           hintStyle: TextStyle(
@@ -338,7 +340,7 @@ class _ProfileState extends ConsumerState<Profile> {
                           enabled: false,
                           label: Text(ref.watch(userProvider).email ?? "wait",
                               style:
-                                  TextStyle(fontSize: 20, color: Colors.black)),
+                              TextStyle(fontSize: 20, color: Colors.black)),
                           fillColor: Colors.white70,
                           hintText: ref.watch(userProvider).email ?? "wait"),
                     ),
@@ -362,7 +364,7 @@ class _ProfileState extends ConsumerState<Profile> {
                           border: OutlineInputBorder(
                             // width: 0.0 produces a thin "hairline" border
                             borderRadius:
-                                BorderRadius.all(Radius.circular(90.0)),
+                            BorderRadius.all(Radius.circular(90.0)),
                             borderSide: BorderSide.none,
                           ),
                           hintStyle: TextStyle(
@@ -371,7 +373,7 @@ class _ProfileState extends ConsumerState<Profile> {
                           enabled: false,
                           label: Text(ref.watch(userProvider).address ?? "wait",
                               style:
-                                  TextStyle(fontSize: 20, color: Colors.black)),
+                              TextStyle(fontSize: 20, color: Colors.black)),
                           fillColor: Colors.white70,
                           hintText: ref.watch(userProvider).address ?? "wait"),
                     ),
@@ -395,7 +397,7 @@ class _ProfileState extends ConsumerState<Profile> {
                           border: OutlineInputBorder(
                             // width: 0.0 produces a thin "hairline" border
                             borderRadius:
-                                BorderRadius.all(Radius.circular(90.0)),
+                            BorderRadius.all(Radius.circular(90.0)),
                             borderSide: BorderSide.none,
                           ),
                           hintStyle: TextStyle(
@@ -405,10 +407,10 @@ class _ProfileState extends ConsumerState<Profile> {
                           label: Text(
                               ref.watch(userProvider).phoneNumber ?? "wait",
                               style:
-                                  TextStyle(fontSize: 20, color: Colors.black)),
+                              TextStyle(fontSize: 20, color: Colors.black)),
                           fillColor: Colors.white70,
                           hintText:
-                              ref.watch(userProvider).phoneNumber ?? "wait"),
+                          ref.watch(userProvider).phoneNumber ?? "wait"),
                     ),
                     SizedBox(
                       height: 10,
@@ -438,38 +440,38 @@ class _ProfileState extends ConsumerState<Profile> {
     );
   }
 
-  fetch() async {
-    final firebaseuser = await FirebaseAuth.instance.currentUser;
-    user
-        .child("clients")
-        .child(FirebaseAuth.instance.currentUser!.uid)
-        .once()
-        .then((event) {
-      final dataSnapshot = event.snapshot;
-      print("read" + dataSnapshot.value.toString());
-      var data = dataSnapshot.value as Map;
-      setState(() {
-        if (data != null) {
-          email = data["email"];
-          name = data["name"];
-          phone = data["phoneNumber"];
-          path = data["image"];
-          address = data["address"];
-          ref.watch(userProvider.notifier).assignEmail(email!);
-          ref.watch(userProvider.notifier).assignName(name!);
-          ref.watch(userProvider.notifier).assignPhoneNumber(phone!);
-          ref.watch(userProvider.notifier).assignAvatar(path);
-          ref.watch(userProvider.notifier).assignAddress(address!);
-          print(ref.watch(userProvider).avatar);
-        }
-      });
-    });
-    print("addddressssssssssssss ${address}");
-    print("here");
-    print(path);
-    print(firebaseuser!.email);
-    print(firebaseuser.displayName);
-  }
+// fetch() async {
+//   final firebaseuser = await FirebaseAuth.instance.currentUser;
+//   user
+//       .child("clients")
+//       .child(FirebaseAuth.instance.currentUser!.uid)
+//       .once()
+//       .then((event) {
+//     final dataSnapshot = event.snapshot;
+//     print("read" + dataSnapshot.value.toString());
+//     var data = dataSnapshot.value as Map;
+//     setState(() {
+//       if (data != null) {
+//         email = data["email"];
+//         name = data["name"];
+//         phone = data["phoneNumber"];
+//         path = data["image"];
+//         address = data["address"];
+//         ref.watch(userProvider.notifier).assignEmail(email!);
+//         ref.watch(userProvider.notifier).assignName(name!);
+//         ref.watch(userProvider.notifier).assignPhoneNumber(phone!);
+//         ref.watch(userProvider.notifier).assignAvatar(path);
+//         ref.watch(userProvider.notifier).assignAddress(address!);
+//         print(ref.watch(userProvider).avatar);
+//       }
+//     });
+//   });
+//   print("addddressssssssssssss ${address}");
+//   print("here");
+//   print(path);
+//   print(firebaseuser!.email);
+//   print(firebaseuser.displayName);
+// }
 }
 
 class HeaderCurvedContainer extends CustomPainter {

@@ -8,13 +8,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:slahly/classes/models/client.dart';
 import 'package:slahly/screens/car_management/view_cars_screen.dart';
-import 'package:slahly/screens/userMangament/manageSubowner.dart';
+
 import '../../classes/models/car.dart';
 import '../../classes/provider/user_data.dart';
 import '../../main.dart';
-import '../userMangament/addSubowner.dart';
-import '../userMangament/choose_car.dart';
-import '../userMangament/transferOwner.dart';
+import '../../utils/constants.dart';
 
 class Addcar extends ConsumerStatefulWidget {
   static const String routeName = "/addcar";
@@ -173,9 +171,21 @@ class _State extends ConsumerState<Addcar> {
                       ),
                       FlatButton(
                         textColor: Colors.white,
-                        child: Text('Add Car'.tr()),
+                        child: const Text('Add_Car').tr(),
                         color: const Color(0xFF193566),
                         onPressed: () {
+                          ///////////////
+                          print("YAYAYAAYAYAY");
+                          print(plateController.text.isEmpty);
+                          print(carModelController.text.isEmpty);
+                          print(chasisController.text.isEmpty);
+
+                          if (plateController.text.isEmpty ||
+                              carModelController.text.isEmpty ||
+                              chasisController.text.isEmpty) {
+                            noData(context);
+                            return;
+                          }
                           const snackBar = SnackBar(content: Text('Car Added'));
                           showDialog(
                               context: context,
@@ -198,6 +208,7 @@ class _State extends ConsumerState<Addcar> {
                                           Navigator.of(context).pop();
                                           ScaffoldMessenger.of(context)
                                               .showSnackBar(snackBar);
+                                          context.push(ViewCars.routeName);
                                         },
                                         child: Text("confirm".tr())),
                                     TextButton(
@@ -272,6 +283,32 @@ class _State extends ConsumerState<Addcar> {
             ),
           );
         });
+  }
+
+  void noData(context) {
+    showDialog(
+        context: context,
+        barrierDismissible: true,
+        builder: (BuildContext context) => AlertDialog(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(dialogRadius),
+              ),
+              title: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text("Data Error").tr(),
+                ],
+              ),
+              content: Text("Please fill all data").tr(),
+              actions: <Widget>[
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: const Text("ok").tr(),
+                ),
+              ],
+            ));
   }
 
   addCar(ref) async {

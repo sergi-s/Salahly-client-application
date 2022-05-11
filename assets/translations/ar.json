@@ -139,5 +139,9 @@
   "rsa": "مساعده الطريق",
   "wsa": "حجز وؤشه",
   "tta": "حدمة سياره سحب",
-  "workingOn": "يعمل على"
+  "workingOn": "يعمل على",
+  "add_car_screen": "أضف سياره",
+  "myCars": "سياراتي",
+  "transfer_ownership": "نقل ملكيه",
+  "viewOngoing": "الطلابات الجاريه"
 }

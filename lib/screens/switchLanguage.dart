@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:slahly/widgets/gloable_widgets/app_bar.dart';
-import 'package:slahly/widgets/gloable_widgets/app_drawer.dart';
-import 'package:slahly/widgets/login_signup/roundedInput.dart';
+import 'package:slahly/widgets/global_widgets/app_bar.dart';
+import 'package:slahly/widgets/global_widgets/app_drawer.dart';
 
 class SwitchLanguageScreen extends StatefulWidget {
   static const routeName = "/switchlanguage";
@@ -39,7 +38,6 @@ class _SwitchLanguageScreenState extends State<SwitchLanguageScreen> {
                   onChanged: (v) {
                     setState(() {
                       context.setLocale(Locale(v as String));
-                      print("::lange");
                       _dropDownValue = v;
                     });
                   },

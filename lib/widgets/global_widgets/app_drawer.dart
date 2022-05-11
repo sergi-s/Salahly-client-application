@@ -1,21 +1,18 @@
 import 'package:easy_localization/easy_localization.dart';
 import "package:flutter/material.dart";
 import 'package:go_router/go_router.dart';
-
+import 'package:slahly/screens/car_management/addCars.dart';
+import 'package:slahly/screens/history_management/ongoing_requests.dart';
 import 'package:slahly/screens/history_management/view_history.dart';
 import 'package:slahly/screens/homepage.dart';
 import 'package:slahly/screens/reminder/reminderScreen.dart';
 import 'package:slahly/screens/switchLanguage.dart';
-import 'package:slahly/screens/test_screens/test_user_SM.dart';
 import 'package:slahly/screens/userMangament/choose_car.dart';
-import 'package:slahly/screens/userMangament/editProfile.dart';
-import 'package:slahly/screens/test_screens/testscreen_foula.dart';
-import 'package:slahly/screens/userMangament/pofile.dart';
-import 'package:slahly/screens/car_management/view_cars_screen.dart';
-import 'package:slahly/screens/history_management/ongoing_requests.dart';
+import 'package:slahly/screens/userMangament/manageSubowner.dart';
 import 'package:slahly/screens/userMangament/transferOwner.dart';
-import 'package:slahly/widgets/location/finalScreen.dart';
-import 'package:slahly/screens/car_management/addCars.dart';
+
+import '../../screens/car_management/view_cars_screen.dart';
+import '../../screens/userMangament/addSubowner.dart';
 
 Widget salahlyDrawer(BuildContext context) {
   return Drawer(
@@ -31,9 +28,15 @@ Widget salahlyDrawer(BuildContext context) {
               color: Colors.transparent),
           child: Text(''),
         ),
+        // ListTile(
+        //   title: Text('Test Sergi'),
+        //   onTap: () {
+        //     context.push(TestSergi.routeName);
+        //   },
+        // ),
         ListTile(
-          title: const Text(
-            'home',
+          title: Text(
+            'home'.tr(),
             style: TextStyle(fontWeight: FontWeight.bold),
           ).tr(),
           onTap: () {
@@ -43,8 +46,29 @@ Widget salahlyDrawer(BuildContext context) {
           },
         ),
         ListTile(
-          title: const Text(
-            "add Car Screen",
+          title: const Text('Your Cars').tr(),
+          onTap: () {
+            Navigator.pop(context);
+            context.push(ViewCars.routeName);
+          },
+        ),
+        ListTile(
+          title: const Text('Manage Sub Owners').tr(),
+          onTap: () {
+            Navigator.pop(context);
+            context.push(Choose_car.routeName);
+          },
+        ),
+        // ListTile(
+        //   title: const Text('Add sub owners').tr(),
+        //   onTap: () {
+        //     Navigator.pop(context);
+        //     context.push(AddSubowner.routeName);
+        //   },
+        // ),
+        ListTile(
+          title: Text(
+            "add_car_screen".tr(),
             style: TextStyle(fontWeight: FontWeight.bold),
           ),
           onTap: () {
@@ -53,14 +77,22 @@ Widget salahlyDrawer(BuildContext context) {
           },
         ),
         ListTile(
-          title: const Text('updateProfile').tr(),
+          title: const Text('transfer_ownership').tr(),
           onTap: () {
             Navigator.pop(context);
-            context.push(EditProfile.routeName);
+            context.push(TransferOwner.routeName);
           },
         ),
+        // ListTile(
+        //   title: const Text('updateProfile').tr(),
+        //   onTap: () {
+        //     Navigator.pop(context);
+        //     context.push(EditProfile.routeName);
+        //   },
+        // ),
+
         ListTile(
-          title: const Text("Mange Reminders").tr(),
+          title: const Text('reminder').tr(),
           onTap: () {
             Navigator.pop(context);
             context.push(ReminderScreen.routeName);
@@ -73,52 +105,25 @@ Widget salahlyDrawer(BuildContext context) {
             context.push(ViewHistory.routeName);
           },
         ),
+        // ListTile(
+        //   title: Text("Test APP state"),
+        //   onTap: () {
+        //     Navigator.pop(context);
+        //     context.push(TestScreen_nearbymechanics_and_create_rsa.routeName);
+        //   },
+        // ),
         ListTile(
-          title: const Text('reminder').tr(),
-          onTap: () {
-            Navigator.pop(context);
-          },
-        ),
-        ListTile(
-          title: Text("Test APP state"),
-          onTap: () {
-            Navigator.pop(context);
-            context.push(TestScreen_nearbymechanics_and_create_rsa.routeName);
-          },
-        ),
-        ListTile(
-          title: Text('settings'.tr()),
+          title: const Text('settings').tr(),
           onTap: () {
             Navigator.pop(context);
             context.push(SwitchLanguageScreen.routeName);
           },
         ),
         ListTile(
-          title: Text('View CArs'),
-          onTap: () {
-            Navigator.pop(context);
-            context.push(ViewCars.routeName);
-          },
-        ),
-        ListTile(
-          title: Text('View Ongoing'),
+          title: const Text('viewOngoing').tr(),
           onTap: () {
             Navigator.pop(context);
             context.push(OngoingRequests.routeName);
-          },
-        ),
-        ListTile(
-          title: Text('Choose car'),
-          onTap: () {
-            Navigator.pop(context);
-            context.push(Choose_car.routeName);
-          },
-        ),
-        ListTile(
-          title: Text('Transfer ownership'),
-          onTap: () {
-            Navigator.pop(context);
-            context.push(TransferOwner.routeName);
           },
         ),
       ],

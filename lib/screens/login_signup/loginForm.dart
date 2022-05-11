@@ -8,6 +8,8 @@ import 'package:slahly/widgets/login_signup/Rounded_password.dart';
 import 'package:slahly/widgets/login_signup/roundedInput.dart';
 import 'package:slahly/classes/firebase/firebase.dart';
 
+import 'package:slahly/utils/validation.dart';
+
 class LoginForm extends StatefulWidget {
   LoginForm({
     Key? key,
@@ -76,11 +78,11 @@ class _LoginFormState extends State<LoginForm> {
           RoundedButton(
             title: 'login'.tr(),
             onPressedFunction: () async {
-              // if (!Validator.emailValidator(email)) {
-              //   return ScaffoldMessenger.of(context).showSnackBar(
-              //       const SnackBar(
-              //           content: Text('Invalid Email!! Please try again')));
-              // }
+              if (!Validator.emailValidator(email)) {
+                return ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                        content: Text('Invalid Email!! Please try again')));
+              }
               // if (!Validator.passValidator(password)) {
               //   return ScaffoldMessenger.of(context).showSnackBar(
               //       const SnackBar(
@@ -88,7 +90,7 @@ class _LoginFormState extends State<LoginForm> {
               // }
               bool check = await fb.login(email, password);
               // bool check = await fb.login("mohamed@h.moh", "123456");
-              // bool check = await fb.login("sergi@client.sergi", "123456");
+              // bool check = await fb.login("sergi@client.sergi", "1234567");
               if (check) {
                 ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(content: Text('Login_successful'.tr())));

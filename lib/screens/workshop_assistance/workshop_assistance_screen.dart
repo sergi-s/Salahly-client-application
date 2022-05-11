@@ -1,31 +1,25 @@
 import 'dart:async';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:slahly/classes/provider/user_data.dart';
-import 'package:slahly/screens/userMangament/choose_car.dart';
-import 'package:slahly/utils/firebase/get_mechanic_data.dart';
-import 'package:slahly/utils/firebase/get_provider_data.dart';
-import 'package:slahly/widgets/roadsideassistance/select_car_request.dart';
-import 'package:sliding_up_panel/sliding_up_panel.dart';
-
+import 'package:slahly/classes/firebase/roadsideassistance/roadsideassistance.dart';
 import 'package:slahly/classes/provider/app_data.dart';
 import 'package:slahly/classes/provider/rsadata.dart';
-import 'package:slahly/classes/firebase/roadsideassistance/roadsideassistance.dart';
-
-import "package:slahly/widgets/dropOff/TextFieldOnMap.dart";
-import 'package:slahly/widgets/WSA/choose_sliders.dart';
-import 'package:slahly/widgets/location/mapWidget.dart';
-import 'package:slahly/widgets/dialogues/request_confirmation_dialogue.dart';
-import 'package:slahly/widgets/dialogues/all_rejected.dart';
-import 'package:slahly/widgets/dialogues/none_found.dart';
-import 'package:slahly/widgets/dialogues/confirm_cancellation.dart';
 import 'package:slahly/utils/constants.dart';
-
-import 'package:slahly/classes/models/car.dart';
+import 'package:slahly/utils/firebase/get_mechanic_data.dart';
+import 'package:slahly/utils/firebase/get_provider_data.dart';
+import 'package:slahly/widgets/WSA/choose_sliders.dart';
+import 'package:slahly/widgets/dialogues/all_rejected.dart';
+import 'package:slahly/widgets/dialogues/confirm_cancellation.dart';
+import 'package:slahly/widgets/dialogues/none_found.dart';
+import 'package:slahly/widgets/dialogues/request_confirmation_dialogue.dart';
+import "package:slahly/widgets/dropOff/TextFieldOnMap.dart";
+import 'package:slahly/widgets/location/mapWidget.dart';
+import 'package:slahly/widgets/roadsideassistance/select_car_request.dart';
+import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 class WSAScreen extends ConsumerStatefulWidget {
   static const String routeName = "/WSAScreen";
@@ -63,6 +57,7 @@ class _WSAScreenState extends ConsumerState<WSAScreen> {
       if (prefs.getBool("needProvider") ?? false) {
         setState(() {
           needProvider = true;
+          ref.watch(rsaProvider.notifier).needTowProvider = true;
         });
       }
 
@@ -482,6 +477,9 @@ class _WSAScreenState extends ConsumerState<WSAScreen> {
               onChanged: (value) async {
                 setState(() {
                   needProvider = !needProvider;
+
+                  ref.watch(rsaProvider.notifier).needTowProvider =
+                      needProvider;
                 });
 
                 final prefs = await SharedPreferences.getInstance();

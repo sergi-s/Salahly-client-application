@@ -1,49 +1,38 @@
 import 'package:flutter/material.dart';
-
-import 'package:slahly/classes/models/location.dart';
-import 'package:slahly/classes/models/towProvider.dart';
 import 'package:slahly/abstract_classes/user.dart';
-
-
-
+import 'package:slahly/classes/models/location.dart';
 import 'package:slahly/classes/models/road_side_assistance.dart';
-
+import 'package:slahly/classes/models/towProvider.dart';
 import 'package:slahly/screens/history_management/accordion.dart';
 import 'package:slahly/screens/history_management/add_custom_history.dart';
 
-
-
-
 class ViewHistory extends StatelessWidget {
-  static final routeName = "/viewhistory";
+  static const routeName = "/viewhistory";
+
   ViewHistory({Key? key}) : super(key: key);
 
-
-
-  List<RSA> rsaHistory=[
-  ];
+  List<RSA> rsaHistory = [];
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
         home: DefaultTabController(
-          length: 2,
-          child: Scaffold(
-            backgroundColor: const Color(0xFFd1d9e6),
-            appBar: AppBar(
-              backgroundColor: const Color(0xFF193566),
-              bottom: const TabBar(
-                tabs: [
-                  Tab(text: "History"),
-                  Tab(text: "Custom History"),
-                ],
-              ),
-            ),
-            body: TabBarView(
-              children: [
-                Builder(
-                    builder: (context) {
-                      return Column(
+      length: 2,
+      child: Scaffold(
+        backgroundColor: const Color(0xFFd1d9e6),
+        appBar: AppBar(
+          backgroundColor: const Color(0xFF193566),
+          bottom: const TabBar(
+            tabs: [
+              Tab(text: "History"),
+              Tab(text: "Custom History"),
+            ],
+          ),
+        ),
+        body: TabBarView(
+          children: [
+            Builder(builder: (context) {
+              return Column(
                         children: [
                           SizedBox(height: 10),
                           ListView.builder(

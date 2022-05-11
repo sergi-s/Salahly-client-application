@@ -185,23 +185,23 @@ class RSA {
     if (id == RSA.stateToString(RSAStates.waitingForMechanicResponse)) {
       return RSAStates.waitingForMechanicResponse;
     } else if (id == RSA.stateToString(RSAStates.waitingForProviderResponse)) {
-      RSAStates.waitingForProviderResponse;
+      return RSAStates.waitingForProviderResponse;
     } else if (id == RSA.stateToString(RSAStates.requestingRSA)) {
-      RSAStates.requestingRSA;
+      return RSAStates.requestingRSA;
     } else if (id == RSA.stateToString(RSAStates.failedToRequestRSA)) {
-      RSAStates.failedToRequestRSA;
+      return RSAStates.failedToRequestRSA;
     } else if (id == RSA.stateToString(RSAStates.created)) {
-      RSAStates.created;
+      return RSAStates.created;
     } else if (id == RSA.stateToString(RSAStates.done)) {
-      RSAStates.done;
+      return RSAStates.done;
     } else if (id == RSA.stateToString(RSAStates.mechanicConfirmed)) {
-      RSAStates.mechanicConfirmed;
+      return RSAStates.mechanicConfirmed;
     } else if (id == RSA.stateToString(RSAStates.providerConfirmed)) {
-      RSAStates.providerConfirmed;
+      return RSAStates.providerConfirmed;
     } else if (id == RSA.stateToString(RSAStates.waitingForArrival)) {
-      RSAStates.waitingForArrival;
+      return RSAStates.waitingForArrival;
     } else if (id == RSA.stateToString(RSAStates.confirmedArrival)) {
-      RSAStates.confirmedArrival;
+      return RSAStates.confirmedArrival;
     }
     return RSAStates.canceled;
   }

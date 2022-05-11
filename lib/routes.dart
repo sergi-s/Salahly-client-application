@@ -3,7 +3,9 @@ import 'package:path/path.dart';
 import 'package:slahly/classes/models/location.dart';
 import 'package:slahly/screens/DropOff_screens/dropOff_search_screen.dart';
 import 'package:slahly/screens/car_management/addCars.dart';
+import 'package:slahly/screens/chatbot/chatbotscreen.dart';
 import 'package:slahly/screens/history_management/ongoing_requests.dart';
+import 'package:slahly/screens/test_screens/sergiTestScreen.dart';
 import 'package:slahly/screens/userMangament/editProfile.dart';
 import 'package:slahly/screens/userMangament/pofile.dart';
 import 'package:slahly/screens/reminder/addReminderScreen.dart';
@@ -221,6 +223,14 @@ class Routing {
           GoRoute(
             path: OngoingRequests.routeName,
             builder: (context, state) => OngoingRequests(),
+          ),
+          GoRoute(
+            path: ChatBotScreen.routeName,
+            builder: (context, state) => ChatBotScreen(),
+          ),
+          GoRoute(
+            path: TestSergi.routeName,
+            builder: (context, state) => TestSergi(),
           ),
         ],
       );

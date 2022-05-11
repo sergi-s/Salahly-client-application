@@ -4,19 +4,17 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:go_router/go_router.dart';
-import 'package:path/path.dart';
 import 'package:slahly/classes/models/car.dart';
 import 'package:slahly/classes/models/client.dart';
-
 import 'package:slahly/classes/provider/user_data.dart';
 import 'package:slahly/utils/firebase/get_all_cars.dart';
+
 import '../../main.dart';
 import 'manageSubowner.dart';
 
 class Choose_car extends ConsumerStatefulWidget {
-  static final routeName = "/Choose_car";
+  static const routeName = "/Choose_car";
 
   @override
   _State createState() => _State();
@@ -25,7 +23,6 @@ class Choose_car extends ConsumerStatefulWidget {
 class _State extends ConsumerState<Choose_car> {
   @override
   void initState() {
-    allCars(ref);
     super.initState();
   }
 
@@ -59,41 +56,6 @@ class _State extends ConsumerState<Choose_car> {
     ),
   ];
 
-  // List<Car> car = [
-  //   Car(
-  //       color: "blue",
-  //       noPlate: '1945stak',
-  //       model: "Ferari",
-  //       id: "145",
-  //       noChassis: "1294sfas"),
-  //   Car(
-  //       color: "green",
-  //       noPlate: '1945stak',
-  //       model: "BMW",
-  //       id: "145",
-  //       noChassis: "1294sfas"),
-  //   Car(
-  //       color: "black",
-  //       noPlate: '1945stak',
-  //       model: "porche",
-  //       id: "145",
-  //       noChassis: "1294sfas"),
-  //   Car(
-  //       color: "red",
-  //       noPlate: '1945stak',
-  //       model: "lada",
-  //       id: "145",
-  //       noChassis: "1294sfas")
-  // ];
-  //
-  // Map<String, Color> btncolor = {
-  //   "red": Colors.red,
-  //   "black": Colors.black,
-  //   "blue": Colors.blue,
-  //   "yellow": Colors.yellow,
-  //   "green": Colors.green
-  // };
-
   @override
   Widget build(BuildContext context) {
     final Client carstate = ref.watch(userProvider);
@@ -120,171 +82,182 @@ class _State extends ConsumerState<Choose_car> {
                 color: const Color(0xFFd1d9e6),
               ), // red as border color
               child: SafeArea(
-                child: ListView.builder(
-                  itemCount: ref.watch(userProvider).cars.length,
-                  itemBuilder: (context, index) {
-                    if (carstate.cars[index].carAccess != CarAccess.sub) {
-                      return Card(
-                        elevation: 6,
-                        margin: EdgeInsets.all(10),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            boxShadow: [
-                              new BoxShadow(
-                                blurRadius: 10.0,
-                              ),
-                            ],
-                            borderRadius: BorderRadius.circular(8.0),
-                            color: const Color(0xFFd1d9e6),
-                          ),
-                          child: SingleChildScrollView(
-                            child: GestureDetector(
-                              onTap: () {
-                                context.push(ManageSubowner.routeName,
-                                    extra: carstate.cars[index].noChassis
-                                        .toString());
-
-                                print('welcome'.tr());
-                              },
-                              child: ListTile(
-                                leading: CircleAvatar(
-                                  radius: 30,
-                                  backgroundColor: carstate.cars[index].color,
-                                  // ref
-                                  //     .watch(userProvider)
-                                  //     .cars[index]
-                                  //     .color as Color
-                                  child: Icon(Icons.directions_car_filled,
-                                      size: 40),
+                child: RefreshIndicator(
+                  onRefresh: () {
+                    return Future.delayed(const Duration(seconds: 2), () {
+                      allCars(ref);
+                    });
+                  },
+                  child: ListView.builder(
+                    itemCount: ref.watch(userProvider).cars.length,
+                    itemBuilder: (context, index) {
+                      if (carstate.cars[index].carAccess != CarAccess.sub) {
+                        return Card(
+                          elevation: 6,
+                          margin: EdgeInsets.all(10),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              boxShadow: [
+                                new BoxShadow(
+                                  blurRadius: 10.0,
                                 ),
-                                title: Row(
-                                  children: [
-                                    Text(carstate.cars[index].model.toString(),
-                                        style: const TextStyle(
-                                            fontSize: 25,
-                                            fontWeight: FontWeight.bold)),
-                                    Padding(
-                                      padding: EdgeInsets.only(
-                                          top: MediaQuery.of(context)
-                                                  .size
-                                                  .height *
-                                              0.01,
-                                          right: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                              0.01),
-                                      child: GestureDetector(
-                                        onTap: () {
-                                          print("huuu");
-                                          final snackBar = SnackBar(
-                                              content:
-                                                  Text('Car_removed'.tr()));
-                                          showDialog(
-                                              context: context,
-                                              builder: (BuildContext context) {
-                                                return AlertDialog(
-                                                  content: Text(
-                                                      "are you sure u want to delete car"),
-                                                  title: Text("Warning".tr()),
-                                                  actions: [
-                                                    TextButton(
-                                                        onPressed: () {
-                                                          Navigator.of(context)
-                                                              .pop();
-                                                        },
-                                                        child: Text(
-                                                            "Cancel".tr())),
-                                                    TextButton(
-                                                        onPressed: () {
-                                                          deleteCar(index);
-                                                          Navigator.of(context)
-                                                              .pop();
-                                                          ScaffoldMessenger.of(
-                                                                  context)
-                                                              .showSnackBar(
-                                                                  snackBar);
-                                                        },
-                                                        child: Text(
-                                                            "Confirm".tr())),
-                                                  ],
-                                                );
-                                              });
-                                        },
-                                        child: CircleAvatar(
-                                          backgroundColor: Colors.black,
-                                          radius: 15,
-                                          child: Icon(
-                                            Icons.delete,
-                                            size: 20,
-                                            color: Colors.white,
+                              ],
+                              borderRadius: BorderRadius.circular(8.0),
+                              color: const Color(0xFFd1d9e6),
+                            ),
+                            child: SingleChildScrollView(
+                              child: GestureDetector(
+                                onTap: () {
+                                  context.push(ManageSubowner.routeName,
+                                      extra: carstate.cars[index].noChassis
+                                          .toString());
+
+                                  print('welcome'.tr());
+                                },
+                                child: ListTile(
+                                  leading: CircleAvatar(
+                                    radius: 30,
+                                    backgroundColor: carstate.cars[index].color,
+                                    // ref
+                                    //     .watch(userProvider)
+                                    //     .cars[index]
+                                    //     .color as Color
+                                    child: Icon(Icons.directions_car_filled,
+                                        size: 40),
+                                  ),
+                                  title: Row(
+                                    children: [
+                                      Text(
+                                          carstate.cars[index].model.toString(),
+                                          style: const TextStyle(
+                                              fontSize: 25,
+                                              fontWeight: FontWeight.bold)),
+                                      Padding(
+                                        padding: EdgeInsets.only(
+                                            top: MediaQuery.of(context)
+                                                    .size
+                                                    .height *
+                                                0.01,
+                                            right: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.01),
+                                        child: GestureDetector(
+                                          onTap: () {
+                                            print("huuu");
+                                            final snackBar = SnackBar(
+                                                content:
+                                                    Text('Car_removed'.tr()));
+                                            showDialog(
+                                                context: context,
+                                                builder:
+                                                    (BuildContext context) {
+                                                  return AlertDialog(
+                                                    content: Text(
+                                                        "are you sure u want to delete car"),
+                                                    title: Text("Warning".tr()),
+                                                    actions: [
+                                                      TextButton(
+                                                          onPressed: () {
+                                                            Navigator.of(
+                                                                    context)
+                                                                .pop();
+                                                          },
+                                                          child: Text(
+                                                              "Cancel".tr())),
+                                                      TextButton(
+                                                          onPressed: () {
+                                                            deleteCar(index);
+                                                            Navigator.of(
+                                                                    context)
+                                                                .pop();
+                                                            ScaffoldMessenger
+                                                                    .of(context)
+                                                                .showSnackBar(
+                                                                    snackBar);
+                                                          },
+                                                          child: Text(
+                                                              "Confirm".tr())),
+                                                    ],
+                                                  );
+                                                });
+                                          },
+                                          child: CircleAvatar(
+                                            backgroundColor: Colors.black,
+                                            radius: 15,
+                                            child: Icon(
+                                              Icons.delete,
+                                              size: 20,
+                                              color: Colors.white,
+                                            ),
                                           ),
                                         ),
                                       ),
-                                    ),
-                                  ],
-                                ),
-                                subtitle: Padding(
-                                  padding: const EdgeInsets.all(0),
-                                  child: Column(children: [
-                                    Row(
-                                      children: [
-                                        Text(
-                                          "Plate_Number".tr(),
-                                          style: TextStyle(
-                                              fontSize: 18,
-                                              fontWeight: FontWeight.bold,
-                                              color: Colors.black),
-                                        ),
-                                        Text(
-                                          carstate.cars[index].noPlate
-                                              .toString(),
-                                          style: TextStyle(
-                                              fontSize: 18,
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                      ],
-                                    ),
-                                    Row(
-                                      children: [
-                                        Text(
-                                          "Chassis_Number".tr(),
-                                          style: TextStyle(
-                                              fontSize: 18,
-                                              fontWeight: FontWeight.bold,
-                                              color: Colors.black),
-                                        ),
-                                        Text(
-                                            carstate.cars[index].noChassis
+                                    ],
+                                  ),
+                                  subtitle: Padding(
+                                    padding: const EdgeInsets.all(0),
+                                    child: Column(children: [
+                                      Row(
+                                        children: [
+                                          Text(
+                                            "Plate_Number".tr(),
+                                            style: TextStyle(
+                                                fontSize: 18,
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.black),
+                                          ),
+                                          Text(
+                                            carstate.cars[index].noPlate
                                                 .toString(),
                                             style: TextStyle(
                                                 fontSize: 18,
-                                                fontWeight: FontWeight.bold)),
-                                      ],
-                                    ),
-                                    // Row(
-                                    //   children: [
-                                    //     Text("Color".tr(),
-                                    //         style: TextStyle(
-                                    //             color: Colors.black,
-                                    //             fontSize: 19,
-                                    //             fontWeight: FontWeight.bold)),
-                                    //     Text("color",
-                                    //         style: TextStyle(
-                                    //             fontSize: 19,
-                                    //             color: Colors.red,
-                                    //             fontWeight: FontWeight.bold)),
-                                    //   ],
-                                    // ),
-                                  ]),
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                        ],
+                                      ),
+                                      Row(
+                                        children: [
+                                          Text(
+                                            "Chassis_Number".tr(),
+                                            style: TextStyle(
+                                                fontSize: 18,
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.black),
+                                          ),
+                                          Text(
+                                              carstate.cars[index].noChassis
+                                                  .toString(),
+                                              style: TextStyle(
+                                                  fontSize: 18,
+                                                  fontWeight: FontWeight.bold)),
+                                        ],
+                                      ),
+                                      // Row(
+                                      //   children: [
+                                      //     Text("Color".tr(),
+                                      //         style: TextStyle(
+                                      //             color: Colors.black,
+                                      //             fontSize: 19,
+                                      //             fontWeight: FontWeight.bold)),
+                                      //     Text("color",
+                                      //         style: TextStyle(
+                                      //             fontSize: 19,
+                                      //             color: Colors.red,
+                                      //             fontWeight: FontWeight.bold)),
+                                      //   ],
+                                      // ),
+                                    ]),
+                                  ),
                                 ),
                               ),
                             ),
                           ),
-                        ),
-                      );
-                    }
-                    return Container();
-                  },
+                        );
+                      }
+                      return Container();
+                    },
+                  ),
                 ),
               )),
           painter: HeaderCurvedContainer(),

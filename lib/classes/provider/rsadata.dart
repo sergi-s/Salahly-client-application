@@ -4,17 +4,15 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:slahly/classes/firebase/nearbylocations.dart';
 import 'package:slahly/classes/firebase/roadsideassistance/roadsideassistance.dart';
+import 'package:slahly/classes/models/car.dart';
 import 'package:slahly/classes/models/client.dart';
 import 'package:slahly/classes/models/location.dart';
 import 'package:slahly/classes/models/mechanic.dart';
 import 'package:slahly/classes/models/towProvider.dart';
 import 'package:slahly/main.dart';
 import 'package:slahly/utils/constants.dart';
-
 import 'package:slahly/utils/firebase/get_mechanic_data.dart';
 import 'package:slahly/utils/firebase/get_provider_data.dart';
-
-import 'package:slahly/classes/models/car.dart';
 
 // Global for anyone to use it
 final rsaProvider = StateNotifierProvider<RSANotifier, RSA>((ref) {
@@ -32,6 +30,8 @@ class RSANotifier extends StateNotifier<RSA> {
 
   bool atLeastOneProvider = false;
   bool atLeastOneMechanic = false;
+
+  bool needTowProvider = false;
 
   Future<bool> atLeastOne(
       {required bool needMechanic, required bool needProvider}) async {
@@ -87,33 +87,22 @@ class RSANotifier extends StateNotifier<RSA> {
 
   void onFindNewProvider(TowProvider newNearbyProvider) async {
     atLeastOneProvider = true;
-
-    //copy to new map (make sure their is no conflict between call by ref and call by value) and not null
     Map<String, TowProvider> tempMap = {...state.newNearbyProviders ?? {}};
-
-    // print("PROV::MAP1:${state.newNearbyProviders!.keys}");
     if (!tempMap.containsKey(newNearbyProvider.id)) {
-      // print("PROV::Temp1:${tempMap}");
       tempMap[newNearbyProvider.id!] = newNearbyProvider;
-      // print("PROV::Temp2:${tempMap}");
-      // print("PROV:::::add ${newNearbyProvider.name} to request table");
       DatabaseReference localRef = state.requestType == RequestType.WSA
           ? wsaRef
           : (state.requestType == RequestType.RSA)
               ? rsaRef
               : ttaRef;
-
-      // if (_requestType != _RequestType.TTA) {
+      if (!needTowProvider) return;
       localRef
           .child(state.rsaID!)
           .child("providersResponses")
           .child(newNearbyProvider.id!)
           .set("pending");
-      // }
     }
-    // print("MAP2:${state.newNearbyMechanics!.keys}");
     state = state.copyWith(newNearbyProviders: tempMap);
-    // print("PROV::MAP2:${state.newNearbyProviders}");
   }
 
   void addAcceptedNearbyMechanic(String newMechanicID) async {
@@ -257,6 +246,7 @@ class RSANotifier extends StateNotifier<RSA> {
   assignCar(Car car) => state = state.copyWith(car: car);
 
   Future _requestRSA() async {
+    needTowProvider = true;
     String userID = FirebaseAuth.instance.currentUser!.uid;
 
     DatabaseReference newRSA = dbRef.child("rsa").push();
@@ -340,6 +330,7 @@ class RSANotifier extends StateNotifier<RSA> {
   Future requestTta() async {
     String userID = FirebaseAuth.instance.currentUser!.uid;
     DatabaseReference newRSA = dbRef.child("tta").push();
+    needTowProvider = true;
     // print("ssssss");
     Map<String, dynamic> ttaData = {
       "userID": userID,
