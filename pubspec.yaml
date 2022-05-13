@@ -78,8 +78,8 @@ dependencies:
   intl: ^0.17.0
   shared_preferences: ^2.0.13
   bubble: ^1.2.1
-#  sad
-#  dialogflow_flutter: ^1.0.0
+  rating_dialog: ^2.0.0
+
 
 dev_dependencies:
   flutter_test:

@@ -396,6 +396,14 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.5"
+
+  flutter_rating_bar:
+    dependency: transitive
+    description:
+      name: flutter_rating_bar
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "4.0.0"
   flutter_riverpod:
     dependency: "direct main"
     description:
@@ -700,6 +708,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "4.2.4"
+  rating_dialog:
+    dependency: "direct main"
+    description:
+      name: rating_dialog
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.4"
   riverpod:
     dependency: transitive
     description:
