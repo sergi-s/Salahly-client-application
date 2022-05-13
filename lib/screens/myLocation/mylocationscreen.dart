@@ -107,6 +107,7 @@ class _MyLocationScreenState extends ConsumerState<MyLocationScreen> {
                           primary: const Color(0xFF193566),
                         ),
                         onPressed: () {
+                          Navigator.pop(context);
                           print(myMapWidgetState.currentState!.currentCustomLoc);
                           context.push(SearchingMechanicProviderScreen.routeName,
                               extra: myMapWidgetState.currentState!.currentCustomLoc);

@@ -100,8 +100,8 @@ class _State extends ConsumerState<TransferOwner> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   Text(
-                    "Transfer Ownership".tr(),
-                    style: TextStyle(fontSize: 35, color: Colors.white),
+                    "transfer_ownership".tr(),
+                    style: TextStyle(fontSize: 30, color: Colors.white),
                     textAlign: TextAlign.center,
                   ),
                 ],

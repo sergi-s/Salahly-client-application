@@ -37,8 +37,8 @@ class _State extends ConsumerState<EditProfile> {
 
   @override
   Widget build(BuildContext context) {
-    String? avatary = ref.watch(userProvider).avatar;
-    File? stateimage = File(avatary!);
+    String? avatary = ref.watch(userProvider).avatar??"";
+    File? stateimage = File(avatary);
     return Scaffold(
       backgroundColor: const Color(0xFFd1d9e6),
       body: CustomPaint(

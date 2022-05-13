@@ -77,8 +77,9 @@ dependencies:
   awesome_notifications: ^0.6.21
   intl: ^0.17.0
   shared_preferences: ^2.0.13
-  flutter_polyline_points: ^1.0.0
+  bubble: ^1.2.1
   rating_dialog: ^2.0.0
+
 
 dev_dependencies:
   flutter_test:

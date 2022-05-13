@@ -22,7 +22,9 @@ class AddSubowner extends ConsumerStatefulWidget {
 class _State extends ConsumerState<AddSubowner> {
   @override
   void initState() {
-    cardata();
+    Future.delayed(Duration.zero, () {
+      cardata();
+    });
     super.initState();
   }
 
@@ -40,7 +42,7 @@ class _State extends ConsumerState<AddSubowner> {
   Map<String, String> map = new Map();
 
   DatabaseReference user = dbRef.child("users");
-  late String dropdownvalue;
+  late String dropdownvalue = "Choose Car";
 
   Future showAlertbox(context) {
     return showDialog(
@@ -165,7 +167,11 @@ class _State extends ConsumerState<AddSubowner> {
                       backgroundColor: Colors.transparent,
                     ),
                     const SizedBox(width: 20),
-                    Text(email!, style: TextStyle(fontSize: 25))
+                    Text(email!,
+                        style: TextStyle(
+                          fontSize: 16,
+                          overflow: TextOverflow.ellipsis,
+                        ))
                   ],
                 )
               ],
@@ -244,6 +250,7 @@ class _State extends ConsumerState<AddSubowner> {
   }
 
   addSubowner(selected) async {
+    print("selected ${selected}");
     DatabaseReference carsUsers = dbRef.child("cars_users").child(selected);
     DatabaseReference cars = dbRef.child("cars");
     DatabaseReference usersCars = dbRef.child("users_cars").child(subId!);

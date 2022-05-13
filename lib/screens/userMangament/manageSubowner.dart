@@ -1,10 +1,10 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:firebase_database/firebase_database.dart';
 import 'package:slahly/classes/models/client.dart';
 import 'package:slahly/screens/userMangament/addSubowner.dart';
 
@@ -78,7 +78,7 @@ class _State extends ConsumerState<ManageSubowner> {
         },
         background: deleteBgItem(),
         child: Container(
-          height: 100,
+          // height: 100,
           child: Card(
             child: ListTile(
               leading: CircleAvatar(
@@ -97,14 +97,20 @@ class _State extends ConsumerState<ManageSubowner> {
                 children: [
                   Row(
                     children: [
-                      Text(subowners[index].email.toString(),
-                          style: TextStyle(fontSize: 17, color: Colors.black)),
-                      TextButton(
-                          onPressed: () {
-                            removeSubowner(widget.chasis,
-                                subowners[index].email.toString());
-                          },
-                          child: Text("delete"))
+                      Flexible(
+                        child: Text(subowners[index].email.toString(),
+                            style: TextStyle(
+                                overflow: TextOverflow.ellipsis,
+                                fontSize: 17,
+                                color: Colors.black)),
+                      ),
+                      // TextButton(
+                      //     onPressed: () {
+                      //       removeSubowner(
+                      //           widget.chasis, subowners[index].email.toString());
+                      //     },
+                      //     child: Text("delete"),
+                      //   ),
                     ],
                   ),
                   Row(

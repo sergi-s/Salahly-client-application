@@ -20,7 +20,8 @@ Future getMechanicData(String id) async {
   // print("saddddddde");
   return Mechanic(
       isCenter: false,
-      avatar: "",
+      avatar:
+          "https://www.tenforums.com/geek/gars/images/2/types/thumb_15951118880user.png",
       phoneNumber: (ds.child("phoneNumber").value).toString(),
       id: id,
       name: (ds.child("name").value).toString(),

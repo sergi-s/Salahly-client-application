@@ -2,24 +2,16 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:slahly/widgets/location/finalScreen.dart';
-import 'package:sliding_up_panel/sliding_up_panel.dart';
-
-import 'package:slahly/screens/roadsideassistance/chooseprovider.dart';
-import 'package:slahly/screens/DropOff_screens/dropOff_search_screen.dart';
-
-import 'package:slahly/widgets/dropOff/TextFieldOnMap.dart';
-import 'package:slahly/widgets/location/mapWidget.dart';
-import 'package:slahly/widgets/roadsideassistance/select_car_request.dart';
-
 import 'package:slahly/classes/firebase/roadsideassistance/roadsideassistance.dart';
 import 'package:slahly/classes/provider/app_data.dart';
 import 'package:slahly/classes/provider/rsadata.dart';
-
-import 'package:slahly/utils/firebase/get_provider_data.dart';
-
-import 'package:slahly/screens/roadsideassistance/arrival.dart';
+import 'package:slahly/screens/DropOff_screens/dropOff_search_screen.dart';
+import 'package:slahly/screens/roadsideassistance/chooseprovider.dart';
+import 'package:slahly/widgets/dropOff/TextFieldOnMap.dart';
+import 'package:slahly/widgets/location/finalScreen.dart';
+import 'package:slahly/widgets/location/mapWidget.dart';
+import 'package:slahly/widgets/roadsideassistance/select_car_request.dart';
+import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 class DropOffLocationScreen extends ConsumerStatefulWidget {
   static const String routeName = "/DropOffLocationScreen";
@@ -155,6 +147,9 @@ class _DropOffLocationScreenState extends ConsumerState<DropOffLocationScreen> {
               ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                 content: Text("plzSpecCar".tr()),
               ));
+              return;
+            }
+            if (ref.watch(rsaProvider).car!.noChassis == null) {
               return;
             }
             context.push(DropOffSearchScreen.routeName,

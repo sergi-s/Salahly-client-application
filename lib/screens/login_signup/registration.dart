@@ -1,10 +1,13 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:slahly/classes/firebase/firebase.dart';
 import 'package:slahly/classes/models/client.dart';
 import 'package:slahly/utils/validation.dart';
 import 'package:slahly/widgets/login_signup/Registration_TextField.dart';
 import 'package:slahly/widgets/login_signup/Rounded_Bottom.dart';
+
+import '../homepage.dart';
 
 class Registration extends StatelessWidget {
   static const routeName = "/registrationscreen";
@@ -71,6 +74,7 @@ class Registration extends StatelessWidget {
     if (check) {
       ScaffoldMessenger.of(context)
           .showSnackBar(SnackBar(content: Text('Sucessfully'.tr())));
+      context.go(HomePage.routeName);
     } else {
       return ScaffoldMessenger.of(context)
           .showSnackBar(SnackBar(content: Text('Failed_to_Register'.tr())));

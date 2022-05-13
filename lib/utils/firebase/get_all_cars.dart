@@ -1,13 +1,12 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
-
 import 'package:slahly/classes/models/car.dart';
 import 'package:slahly/classes/provider/user_data.dart';
 import 'package:slahly/main.dart';
 
 allCars(ref) async {
-  Color? pickerColor = new Color(0xff443a49);
+  Color? pickerColor = Color(0xff443a49);
   String? color;
   print("GET ALL CARS");
   DatabaseReference carsUsers = dbRef.child("users_cars");
@@ -37,11 +36,19 @@ allCars(ref) async {
             FirebaseAuth.instance.currentUser!.uid) {
           carAccess = CarAccess.owner;
         }
+        Color temp;
+        String tempColorStr = carsSnapshot.child("color").value.toString();
+        if (tempColorStr.contains("(")) {
+          tempColorStr = tempColorStr.substring(
+              tempColorStr.indexOf("(") + 1, tempColorStr.indexOf(")"));
+        }
+        temp = Color(int.parse(tempColorStr));
         Car newCar = Car(
             noPlate: carsSnapshot.child("plate").value.toString(),
             model: carsSnapshot.child("model").value.toString(),
             noChassis: carsSnapshot.key.toString(),
-            // color: carsSnapshot.child("color").value.toString() as Color,
+            color: temp,
+            // color: carsSnapshot.child("color").value.toString() as Color,//class/firebase/controller/req
             carAccess: carAccess);
         print(newCar);
         ref.watch(userProvider.notifier).assignCar(newCar);

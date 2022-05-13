@@ -1,195 +1,102 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-
-import 'package:slahly/classes/models/location.dart';
-import 'package:slahly/classes/models/towProvider.dart';
-import 'package:slahly/abstract_classes/user.dart';
-
-
-
-import 'package:slahly/classes/models/road_side_assistance.dart';
-
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+import 'package:slahly/classes/provider/ongoing_data.dart';
 import 'package:slahly/screens/history_management/accordion.dart';
+
+import 'package:slahly/classes/firebase/roadsideassistance/roadsideassistance.dart';
 import 'package:slahly/screens/history_management/add_custom_history.dart';
 
+class ViewHistory extends ConsumerStatefulWidget {
+  static const routeName = "/viewhistory";
 
-
-
-class ViewHistory extends StatelessWidget {
-  static final routeName = "/viewhistory";
   ViewHistory({Key? key}) : super(key: key);
 
+  @override
+  ConsumerState<ViewHistory> createState() => _ViewHistoryState();
+}
 
-
-  List<RSA> rsaHistory=[
-  ];
+class _ViewHistoryState extends ConsumerState<ViewHistory> {
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-        home: DefaultTabController(
-          length: 2,
-          child: Scaffold(
-            backgroundColor: const Color(0xFFd1d9e6),
-            appBar: AppBar(
-              backgroundColor: const Color(0xFF193566),
-              bottom: const TabBar(
-                tabs: [
-                  Tab(text: "History"),
-                  Tab(text: "Custom History"),
-                ],
-              ),
-            ),
-            body: TabBarView(
-              children: [
-                Builder(
-                    builder: (context) {
-                      return Column(
-                        children: [
-                          SizedBox(height: 10),
-                          ListView.builder(
-                            itemBuilder: (BuildContext, index) {
-                              return Accordion(
-                                  providers[index].email.toString(),
-                                  providers[index].avatar.toString(),
-                                  providers[index].phoneNumber.toString(),
-                                  providers[index].name.toString(),
-                                  providers[index].loc!.address.toString(),
-                                  providers[index].type!,
-                                  false);
-                            },
-                            itemCount: providers.length,
-                            shrinkWrap: true,
-                            padding: EdgeInsets.all(5),
-                            scrollDirection: Axis.vertical,
-                          ),
-                        ],
-                      );
-                    }
-                ),
-
-
-                Builder(
-                    builder: (context) {
-                      return Column(
-                        children: [
-                          SizedBox(height: 10),
-                          ListView.builder(
-                            itemBuilder: (BuildContext, index) {
-                              return Accordion(
-                                  providers[index].email.toString(),
-                                  providers[index].avatar.toString(),
-                                  providers[index].phoneNumber.toString(),
-                                  providers[index].name.toString(),
-                                  providers[index].loc!.address.toString(),
-                                  providers[index].type!,
-                                  false);
-                            },
-                            itemCount: providers.length,
-                            shrinkWrap: true,
-                            padding: EdgeInsets.all(5),
-                            scrollDirection: Axis.vertical,
-                          ),
-                          FloatingActionButton(
-                            backgroundColor: const Color(0xFF193566),
-                            foregroundColor: Colors.white,
-                            onPressed: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(builder: (context) => AddCustomHistory()));
-                            },
-                            child: Icon(Icons.add),)
-
-                        ],
-                      );
-
-                    }
-
-                ),
-
-
-              ],
-            ),
+    return DefaultTabController(
+      length: 2,
+      child: Scaffold(
+        backgroundColor: const Color(0xFFd1d9e6),
+        appBar: AppBar(
+          backgroundColor: const Color(0xFF193566),
+          bottom: TabBar(
+            tabs: [
+              Tab(text: "history".tr()),
+              Tab(text: "customHistory".tr()),
+            ],
           ),
-        ));
+        ),
+        body: TabBarView(
+          children: [
+            SingleChildScrollView(
+              child: Builder(builder: (context) {
+                return SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      const SizedBox(height: 10),
+                      ListView.builder(
+                        itemBuilder: (BuildContext context, index) {
+                          if (ref.watch(HistoryProvider)[index].state !=
+                                  RSAStates.canceled &&
+                              ref.watch(HistoryProvider)[index].state !=
+                                  RSAStates.done) {
+                            return Container();
+                          }
+                          return Accordion(
+                              rsa: ref.watch(HistoryProvider)[index]);
+                        },
+                        itemCount: ref.watch(HistoryProvider).length,
+                        shrinkWrap: true,
+                        padding: const EdgeInsets.all(5),
+                        scrollDirection: Axis.vertical,
+                      ),
+                    ],
+                  ),
+                );
+              }),
+            ),
+            Builder(builder: (context) {
+              return Scaffold(
+                body: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      const SizedBox(height: 10),
+                      ListView.builder(
+                        itemBuilder: (BuildContext context, index) {
+                          return Accordion(
+                              rsa: ref.watch(HistoryProvider)[index]);
+                        },
+                        itemCount: ref.watch(HistoryProvider).length,
+                        shrinkWrap: true,
+                        padding: const EdgeInsets.all(5),
+                        scrollDirection: Axis.vertical,
+                      ),
+                    ],
+                  ),
+                ),
+                floatingActionButton: ElevatedButton(
+                  child: const Icon(Icons.add),
+                  onPressed: () {
+                    context.push(AddCustomHistory.routeName);
+                  },
+                ),
+              );
+            }),
+          ],
+        ),
+      ),
+    );
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-List<TowProvider> providers = [
-  TowProvider(
-      nationalID: '123132',
-      name: 'Report 1',
-      phoneNumber: 'MG 6',
-      loc: CustomLocation(
-          address:
-          "Factorya, shar3 45 odam mtafy 12311321312312hasdhdashjss221",
-          longitude: 11,
-          latitude: 11),
-      avatar: 'https://www.woolha.com/media/2020/03/eevee.png',
-      email: 'email@yahoo.com',
-      type: Type.provider),
-  TowProvider(
-      nationalID: '123132',
-      name: 'Report 2',
-      phoneNumber: 'Bmw 320I',
-      loc: CustomLocation(
-          address:
-          "Factorya, shar3 45 odam mtafy 12311321312312hasdhdashjss221",
-          longitude: 11,
-          latitude: 11),
-      avatar: 'https://www.woolha.com/media/2020/03/eevee.png',
-      email: 'email@yahoo.com',
-      type: Type.provider),
-];
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

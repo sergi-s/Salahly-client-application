@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:slahly/screens/homepage.dart';
 import 'package:slahly/screens/login_signup/registration.dart';
 import 'package:slahly/widgets/login_signup/Rounded_Bottom.dart';
 import 'package:slahly/widgets/login_signup/Rounded_password.dart';

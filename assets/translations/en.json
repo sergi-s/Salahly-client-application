@@ -31,6 +31,7 @@
   "Send": "Send",
   "Add_History": "Add History",
   "history": "History",
+  "customHistory": "Custom History",
   "Cancel": "Cancel",
   "Problem": "Problem",
   "confirm_location": "Confirm Location",
@@ -52,7 +53,7 @@
   "found_tow_provider": "Tow truck on it's way",
   "Phone": "Phone",
   "Model_Year": "Model Year",
-  "Plate_Number": "Plate_Number",
+  "Plate_Number": "Plate number",
   "Car_Model": "Car Model",
   "Color_Picker": "Pick Color",
   "Color": "Color",
@@ -135,9 +136,13 @@
   "silver": "Silver",
   "gold": "Gold",
   "platinum": "Platinum",
-  "expectedTime":"Expected Time",
+  "expectedTime": "Expected Time",
   "rsa": "RoadSide Assistant",
   "wsa": "WorkShop Assistant",
   "tta": "Tow Truck Assistant",
-  "workingOn": "Working ON"
+  "workingOn": "Working ON",
+  "add_car_screen": "Add Car",
+  "myCars": "My Cars",
+  "transfer_ownership": "Transfer Ownership",
+  "viewOngoing": "View Ongoing"
 }

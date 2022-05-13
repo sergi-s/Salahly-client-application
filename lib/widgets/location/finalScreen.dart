@@ -1,16 +1,12 @@
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/cupertino.dart';
 import "package:flutter/material.dart";
-import 'package:flutter/rendering.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:slahly/classes/firebase/roadsideassistance/roadsideassistance.dart';
-import 'package:slahly/widgets/gloable_widgets/app_bar.dart';
-import 'package:slahly/widgets/gloable_widgets/app_drawer.dart';
 import 'package:slahly/classes/models/client.dart';
-
-import '../../classes/provider/app_data.dart';
-import '../../classes/provider/rsadata.dart';
-import '../dialogues/finish_request_dialog_confirmation.dart';
+import 'package:slahly/classes/provider/rsadata.dart';
+import 'package:slahly/widgets/dialogues/finish_request_dialog_confirmation.dart';
+import 'package:slahly/widgets/global_widgets/app_bar.dart';
+import 'package:slahly/widgets/global_widgets/app_drawer.dart';
 
 extension StringExtension on String {
   String capitalize() {
@@ -185,7 +181,8 @@ class _RequestFinalScreenState extends ConsumerState<RequestFinalScreen> {
                                     height: MediaQuery.of(context).size.height *
                                         0.01),
                                 Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
                                   children: buttonsList,
                                 )
                               ],
@@ -201,8 +198,12 @@ class _RequestFinalScreenState extends ConsumerState<RequestFinalScreen> {
 
 class MyTwoEndTextDivided extends StatelessWidget {
   final String? firstStr, secondStr;
+  double customThickness;
 
-  const MyTwoEndTextDivided({required this.firstStr, required this.secondStr});
+  MyTwoEndTextDivided(
+      {required this.firstStr,
+      required this.secondStr,
+      this.customThickness = 2});
 
   @override
   Widget build(BuildContext context) {
@@ -212,9 +213,9 @@ class MyTwoEndTextDivided extends StatelessWidget {
           padding: const EdgeInsets.all(8.0),
           child: Text(firstStr!),
         ),
-        const Expanded(
+        Expanded(
             child: Divider(
-          thickness: 2,
+          thickness: customThickness,
           color: Colors.grey,
         )),
         Padding(

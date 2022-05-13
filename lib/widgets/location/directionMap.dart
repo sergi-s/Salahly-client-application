@@ -1,12 +1,10 @@
 import 'dart:async';
 
 import "package:flutter/material.dart";
-import 'package:flutter_polyline_points/flutter_polyline_points.dart';
+// import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-
 import 'package:slahly/classes/models/location.dart';
-import 'package:slahly/utils/constants.dart';
 
 class DirectionMap extends StatefulWidget {
   static const routeName = "/staticDirectionOnMap";
@@ -53,7 +51,8 @@ class _DirectionMapState extends State<DirectionMap> {
   List<Polyline> tempPolylines = [];
 
   List<LatLng> polylineCoordinates = [];
-  PolylinePoints polylinePoints = PolylinePoints();
+
+  // PolylinePoints polylinePoints = PolylinePoints();
 
   @override
   void initState() {
@@ -67,7 +66,7 @@ class _DirectionMapState extends State<DirectionMap> {
     /// destination marker
     _addMarker(LatLng(_destLatitude, _destLongitude), "destination",
         BitmapDescriptor.defaultMarkerWithHue(90));
-    _getPolyline();
+    // _getPolyline();
     super.initState();
   }
 
@@ -114,23 +113,23 @@ class _DirectionMapState extends State<DirectionMap> {
     setState(() {});
   }
 
-  _getPolyline() async {
-    PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
-      getGoogleMapsAPI(),
-      PointLatLng(_originLatitude, _originLongitude),
-      PointLatLng(_destLatitude, _destLongitude),
-      travelMode: TravelMode.driving,
-      // wayPoints: [PolylineWayPoint(location: "Sabo, Yaba Lagos Nigeria")],
-    );
-    print("is empty?");
-    if (result.points.isNotEmpty) {
-      print("Not empty");
-      result.points.forEach((PointLatLng point) {
-        polylineCoordinates.add(LatLng(point.latitude, point.longitude));
-      });
-    } else {
-      print("SAAAAAD${result.errorMessage}");
-    }
-    _addPolyLine();
-  }
+// _getPolyline() async {
+//   PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
+//     getGoogleMapsAPI(),
+//     PointLatLng(_originLatitude, _originLongitude),
+//     PointLatLng(_destLatitude, _destLongitude),
+//     travelMode: TravelMode.driving,
+//     // wayPoints: [PolylineWayPoint(location: "Sabo, Yaba Lagos Nigeria")],
+//   );
+//   print("is empty?");
+//   if (result.points.isNotEmpty) {
+//     print("Not empty");
+//     result.points.forEach((PointLatLng point) {
+//       polylineCoordinates.add(LatLng(point.latitude, point.longitude));
+//     });
+//   } else {
+//     print("SAAAAAD${result.errorMessage}");
+//   }
+//   _addPolyLine();
+// }
 }
