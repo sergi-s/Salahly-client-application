@@ -3,12 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:slahly/classes/firebase/roadsideassistance/roadsideassistance.dart';
+import 'package:slahly/classes/provider/ongoing_data.dart';
 import 'package:slahly/classes/provider/user_data.dart';
 import 'package:slahly/widgets/global_widgets/app_bar.dart';
 import 'package:slahly/widgets/global_widgets/app_drawer.dart';
 import 'package:slahly/widgets/location/finalScreen.dart';
-
-import '../../classes/provider/ongoing_data.dart';
 
 class OngoingRequests extends ConsumerStatefulWidget {
   static const String routeName = "/ongoingRequests";
@@ -36,9 +35,9 @@ class _OngoingRequestsState extends ConsumerState<OngoingRequests> {
 
       // print("inside ui init ${ref.read(HistoryProvider)[0].mechanic!.name}");
       // });
-      ref
-          .watch(HistoryProvider.notifier)
-          .assignRequests(ref.watch(userProvider).cars);
+      // ref
+      //     .watch(HistoryProvider.notifier)
+      //     .assignRequests(ref.watch(userProvider).cars);
     });
     super.initState();
   }
@@ -204,6 +203,22 @@ class _OngoingRequestsState extends ConsumerState<OngoingRequests> {
                                           RSA.requestTypeToString(ref
                                               .watch(HistoryProvider)[index]
                                               .requestType!),
+                                          style: const TextStyle(
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.black),
+                                        ),
+                                      ],
+                                    ),
+
+                                    Row(
+                                      children: [
+                                        Text("When".tr() + " ",
+                                            style: const TextStyle(
+                                              fontSize: 18,
+                                            )),
+                                        Text(
+                                          "${ref.watch(HistoryProvider)[index].createdAt}",
                                           style: const TextStyle(
                                               fontSize: 18,
                                               fontWeight: FontWeight.bold,

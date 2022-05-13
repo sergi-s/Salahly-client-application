@@ -192,6 +192,8 @@ class RSANotifier extends StateNotifier<RSA> {
         .child(state.rsaID!)
         .child("mechanicsResponses")
         .update({mechanic.id!: "chosen"});
+
+    await localRef.child(state.rsaID!).update({"updatedAt": DateTime.now().toString()});
     print("After await");
   }
 
@@ -220,6 +222,8 @@ class RSANotifier extends StateNotifier<RSA> {
         .child(state.rsaID!)
         .child("providersResponses")
         .update({provider.id!: "chosen"});
+
+    await localRef.child(state.rsaID!).update({"updatedAt": DateTime.now().toString()});
   }
 
   assignRequestType(RequestType requestType) =>
@@ -257,6 +261,8 @@ class RSANotifier extends StateNotifier<RSA> {
       "longitude": state.location!.longitude,
       "mechanicsResponses": {},
       "providersResponses": {},
+      "createdAt": DateTime.now().toString(),
+      "updatedAt": DateTime.now().toString(),
       "state": RSA.stateToString(RSAStates.waitingForMechanicResponse)
     };
     await newRSA.set(rsaData);
@@ -286,6 +292,8 @@ class RSANotifier extends StateNotifier<RSA> {
       "carID": state.car!.noChassis,
       "latitude": state.location!.latitude,
       "longitude": state.location!.longitude,
+      "createdAt": DateTime.now().toString(),
+      "updatedAt": DateTime.now().toString(),
       "mechanicsResponses": {},
       "providersResponses": {},
       "state": RSA.stateToString(RSAStates.waitingForMechanicResponse)
@@ -338,6 +346,8 @@ class RSANotifier extends StateNotifier<RSA> {
       "latitude": state.location!.latitude,
       "longitude": state.location!.longitude,
       "providersResponses": {},
+      "createdAt": DateTime.now().toString(),
+      "updatedAt": DateTime.now().toString(),
       "destination": {
         "latitude": state.dropOffLocation!.latitude,
         "longitude": state.dropOffLocation!.longitude,
@@ -359,9 +369,11 @@ class RSANotifier extends StateNotifier<RSA> {
         : state.requestType == RequestType.RSA
             ? rsaRef
             : ttaRef;
-    await localRef
-        .child(state.rsaID!)
-        .update({"state": RSA.stateToString(RSAStates.canceled)});
+    await localRef.child(state.rsaID!).update({
+      "state": RSA.stateToString(RSAStates.canceled),
+      "updatedAt": DateTime.now().toString()
+    });
+
     state = RSA();
   }
 
@@ -372,9 +384,10 @@ class RSANotifier extends StateNotifier<RSA> {
         : state.requestType == RequestType.RSA
             ? rsaRef
             : ttaRef;
-    await localRef
-        .child(state.rsaID!)
-        .update({"state": RSA.stateToString(RSAStates.done)});
+    await localRef.child(state.rsaID!).update({
+      "state": RSA.stateToString(RSAStates.done),
+      "updatedAt": DateTime.now().toString()
+    });
     state = RSA();
   }
 
@@ -385,9 +398,10 @@ class RSANotifier extends StateNotifier<RSA> {
         : state.requestType == RequestType.RSA
             ? rsaRef
             : ttaRef;
-    await localRef
-        .child(state.rsaID!)
-        .update({"state": RSA.stateToString(RSAStates.confirmedArrival)});
+    await localRef.child(state.rsaID!).update({
+      "state": RSA.stateToString(RSAStates.confirmedArrival),
+      "updatedAt": DateTime.now().toString()
+    });
   }
 
   assignRequestTypeToRSA() => assignRequestType(RequestType.RSA);

@@ -1,9 +1,9 @@
+import 'package:slahly/classes/models/car.dart';
 import 'package:slahly/classes/models/client.dart';
 import 'package:slahly/classes/models/location.dart';
 import 'package:slahly/classes/models/mechanic.dart';
-import 'package:slahly/classes/models/towProvider.dart';
 import 'package:slahly/classes/models/report.dart';
-import 'package:slahly/classes/models/car.dart';
+import 'package:slahly/classes/models/towProvider.dart';
 
 //TODO delete this and make the one in the model folder the primary one or the one in the packge
 class RSA {
@@ -22,6 +22,9 @@ class RSA {
   TowProvider? _towProvider;
   Mechanic? _mechanic;
   DateTime? _estimatedTime;
+
+  DateTime? _createdAt;
+  DateTime? _updatedAt;
 
   ///
   List<Mechanic>? _nearbyMechanics; // not included in FB
@@ -54,6 +57,8 @@ class RSA {
     Map<String, TowProvider>? newNearbyProviders,
     Car? car,
     RequestType? requestType,
+    DateTime? createdAt,
+    DateTime? updatedAt,
   }) {
     _report = report ?? _report;
     _mechanic = mechanic ?? _mechanic;
@@ -77,6 +82,9 @@ class RSA {
     _newNearbyProviders = newNearbyProviders ?? _newNearbyProviders;
     _car = car ?? _car;
     _requestType = requestType ?? _requestType;
+
+    _createdAt = createdAt ?? _createdAt;
+    _updatedAt = updatedAt ?? _updatedAt;
   }
 
   RSA copyWith({
@@ -98,6 +106,8 @@ class RSA {
     List<TowProvider>? acceptedNearbyProviders,
     Car? car,
     RequestType? requestType,
+    DateTime? createdAt,
+    DateTime? updatedAt,
   }) =>
       RSA(
         report: report ?? _report,
@@ -120,6 +130,8 @@ class RSA {
         newNearbyProviders: newNearbyProviders ?? _newNearbyProviders,
         car: car ?? _car,
         requestType: requestType ?? _requestType,
+        createdAt: createdAt ?? _createdAt,
+        updatedAt: updatedAt ?? _updatedAt,
       );
 
   //Getters
@@ -153,9 +165,13 @@ class RSA {
 
   Map<String, TowProvider>? get newNearbyProviders => _newNearbyProviders;
 
-  Car? get car=>_car;
+  Car? get car => _car;
 
   RequestType? get requestType => _requestType;
+
+  DateTime? get createdAt => _createdAt;
+
+  DateTime? get updatedAt => _updatedAt;
 
   static String stateToString(RSAStates state) {
     return (state.toString()).isNotEmpty

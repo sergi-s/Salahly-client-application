@@ -118,29 +118,41 @@ class HistoryNotifier extends StateNotifier<List<RSA>> {
           .once()
           .then((event) async {
         DataSnapshot rsaDataSnapShot = event.snapshot;
+        print("SHIT ${rsaDataSnapShot}");
 
         for (var element in rsaDataSnapShot.children) {
-          String mechanicID = "";
-
-          for (var response in element.child("mechanicsResponses").children) {
-            if (response.value == "accepted") {
-              mechanicID = response.key.toString();
-            }
-          }
-          Mechanic mechanic = await getMechanicData(mechanicID);
-
           late RequestType requestType;
           if (local == rsaRef) requestType = RequestType.RSA;
           if (local == wsaRef) requestType = RequestType.WSA;
           if (local == ttaRef) requestType = RequestType.TTA;
 
+          print(element.key.toString());
+          print(requestType.toString());
+          print(element.child("createdAt").value.toString());
+
+          String mechanicID = "";
+
+          for (var response in element.child("mechanicsResponses").children) {
+            if ((response.value == "accepted" &&
+                    requestType == RequestType.RSA) ||
+                (response.value == "chosen" &&
+                    requestType != RequestType.RSA)) {
+              mechanicID = response.key.toString();
+            }
+          }
+          Mechanic mechanic = await getMechanicData(mechanicID);
+
           RSA rsa = RSA(
-              rsaID: element.key.toString(),
-              car: car,
-              mechanic: mechanic,
-              requestType: requestType,
-              state:
-                  RSA.stringToState(element.child("state").value.toString()));
+            rsaID: element.key.toString(),
+            car: car,
+            mechanic: mechanic,
+            requestType: requestType,
+            state: RSA.stringToState(element.child("state").value.toString()),
+            // createdAt:
+            //     DateTime.parse(element.child("createdAt").value.toString()),
+            // updatedAt:
+            //     DateTime.parse(element.child("updatedAt").value.toString()),
+          );
 
           // print("${rsa.rsaID} isa 5er ${rsa.requestType} and el mafrod ${element.child("state").value.toString()} ${rsa.state} he should sees it as"
           //     " ${RSA.stateToString(RSAStates.done)}");
