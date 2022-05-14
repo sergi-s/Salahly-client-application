@@ -34,7 +34,7 @@ class _State extends ConsumerState<ViewCars> {
     return Scaffold(
         backgroundColor: const Color(0xFFd1d9e6),
         appBar: salahlyAppBar(title: "View Cars"),
-        drawer: salahlyDrawer(context),
+        // drawer: salahlyDrawer(context),
         body: CustomPaint(
           child: Container(
             width: MediaQuery.of(context).size.width,

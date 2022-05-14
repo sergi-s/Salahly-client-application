@@ -10,7 +10,7 @@ import 'package:slahly/classes/provider/rsadata.dart';
 import 'package:slahly/classes/provider/user_data.dart';
 import 'package:slahly/screens/chatbot/chatbotscreen.dart';
 import 'package:slahly/screens/dropOff_screens/dropOff_location_screen.dart';
-import 'package:slahly/screens/myLocation/mylocationscreen.dart';
+import 'package:slahly/screens/roadsideassistance/roadside_assistance_map.dart';
 import 'package:slahly/screens/workshop_assistance/workshop_assistance_screen.dart';
 import 'package:slahly/utils/firebase/get_all_cars.dart';
 import 'package:slahly/utils/firebase/get_mechanic_data.dart';
@@ -59,7 +59,7 @@ class _HomePageState extends ConsumerState<HomePage> {
           ).tr(),
           CardWidget(
               fun: () {
-                context.push(MyLocationScreen.routeName);
+                context.push(RoadSideAssistanceScreen.routeName);
               },
               title: 'Roadside assistant',
               subtitle:

@@ -141,6 +141,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.7.3"
+  dropdown_button2:
+    dependency: "direct main"
+    description:
+      name: dropdown_button2
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.4.0"
   easy_localization:
     dependency: "direct main"
     description:
@@ -396,7 +403,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.5"
-
   flutter_rating_bar:
     dependency: transitive
     description:
@@ -575,6 +581,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.1"
+  localstore:
+    dependency: "direct main"
+    description:
+      name: localstore
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.2.3"
   logging:
     dependency: transitive
     description:

@@ -84,11 +84,12 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:slahly/classes/firebase/roadsideassistance/roadsideassistance.dart';
+import 'package:slahly/classes/models/car.dart';
+import 'package:slahly/classes/models/mechanic.dart';
+import 'package:slahly/classes/models/towProvider.dart';
 import 'package:slahly/utils/constants.dart';
-
-import '../../utils/firebase/get_mechanic_data.dart';
-import '../models/car.dart';
-import '../models/mechanic.dart';
+import 'package:slahly/utils/firebase/get_mechanic_data.dart';
+import 'package:slahly/utils/firebase/get_provider_data.dart';
 
 final HistoryProvider =
     StateNotifierProvider<HistoryNotifier, List<RSA>>((ref) {
@@ -130,8 +131,9 @@ class HistoryNotifier extends StateNotifier<List<RSA>> {
           print(requestType.toString());
           print(element.child("createdAt").value.toString());
 
-          String mechanicID = "";
-
+          //get mechanic
+          String? mechanicID;
+          Mechanic? mechanic;
           for (var response in element.child("mechanicsResponses").children) {
             if ((response.value == "accepted" &&
                     requestType == RequestType.RSA) ||
@@ -140,22 +142,54 @@ class HistoryNotifier extends StateNotifier<List<RSA>> {
               mechanicID = response.key.toString();
             }
           }
-          Mechanic mechanic = await getMechanicData(mechanicID);
+          if (mechanicID != null) {
+            mechanic = await getMechanicData(mechanicID);
+          }
+
+          //get provider
+          String? towProviderID;
+          TowProvider? towProvider;
+          for (var response in element.child("providersResponses").children) {
+            print("response el provider ${response.value}");
+            if ((response.value == "accepted" &&
+                    requestType == RequestType.RSA) ||
+                (response.value == "chosen" &&
+                    requestType != RequestType.RSA)) {
+              towProviderID = response.key.toString();
+            }
+          }
+          if (towProviderID != null) {
+            print("l2it provider y3am ${towProviderID}");
+            towProvider = await getProviderData(towProviderID);
+          }else{
+            print("asdasdasda no provider");
+          }
+
+          //get date
+          DateTime? createdAt;
+          if (element.child("createdAt").value != null) {
+            createdAt =
+                DateTime.parse(element.child("createdAt").value.toString());
+          }
+          DateTime? updatedAt;
+          if (element.child("updatedAt").value != null) {
+            updatedAt =
+                DateTime.parse(element.child("updatedAt").value.toString());
+          }
 
           RSA rsa = RSA(
-            rsaID: element.key.toString(),
-            car: car,
-            mechanic: mechanic,
-            requestType: requestType,
-            state: RSA.stringToState(element.child("state").value.toString()),
-            // createdAt:
-            //     DateTime.parse(element.child("createdAt").value.toString()),
-            // updatedAt:
-            //     DateTime.parse(element.child("updatedAt").value.toString()),
-          );
+              rsaID: element.key.toString(),
+              car: car,
+              mechanic: mechanic,
+              towProvider: towProvider,
+              requestType: requestType,
+              state: RSA.stringToState(element.child("state").value.toString()),
+              createdAt: createdAt,
+              updatedAt: updatedAt);
 
           // print("${rsa.rsaID} isa 5er ${rsa.requestType} and el mafrod ${element.child("state").value.toString()} ${rsa.state} he should sees it as"
           //     " ${RSA.stateToString(RSAStates.done)}");
+          print(rsa.createdAt.toString());
           addRequest(rsa);
         }
       });

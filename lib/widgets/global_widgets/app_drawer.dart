@@ -5,14 +5,13 @@ import 'package:slahly/screens/car_management/addCars.dart';
 import 'package:slahly/screens/history_management/ongoing_requests.dart';
 import 'package:slahly/screens/history_management/view_history.dart';
 import 'package:slahly/screens/homepage.dart';
+import 'package:slahly/screens/rating/rating.dart';
 import 'package:slahly/screens/reminder/reminderScreen.dart';
 import 'package:slahly/screens/switchLanguage.dart';
 import 'package:slahly/screens/userMangament/choose_car.dart';
-import 'package:slahly/screens/userMangament/manageSubowner.dart';
 import 'package:slahly/screens/userMangament/transferOwner.dart';
-
-import '../../screens/car_management/view_cars_screen.dart';
-import '../../screens/userMangament/addSubowner.dart';
+import 'package:slahly/screens/car_management/view_cars_screen.dart';
+import 'package:slahly/screens/test_screens/testscreen_foula.dart';
 
 Widget salahlyDrawer(BuildContext context) {
   return Drawer(
@@ -37,7 +36,7 @@ Widget salahlyDrawer(BuildContext context) {
         ListTile(
           title: Text(
             'home'.tr(),
-            style: TextStyle(fontWeight: FontWeight.bold),
+            style: const TextStyle(fontWeight: FontWeight.bold),
           ).tr(),
           onTap: () {
             Navigator.pop(context);
@@ -90,7 +89,13 @@ Widget salahlyDrawer(BuildContext context) {
         //     context.push(EditProfile.routeName);
         //   },
         // ),
-
+        ListTile(
+          title: const Text('rating').tr(),
+          onTap: () {
+            Navigator.pop(context);
+            context.push(RatingScreen.routeName);
+          },
+        ),
         ListTile(
           title: const Text('reminder').tr(),
           onTap: () {
@@ -105,13 +110,6 @@ Widget salahlyDrawer(BuildContext context) {
             context.push(ViewHistory.routeName);
           },
         ),
-        // ListTile(
-        //   title: Text("Test APP state"),
-        //   onTap: () {
-        //     Navigator.pop(context);
-        //     context.push(TestScreen_nearbymechanics_and_create_rsa.routeName);
-        //   },
-        // ),
         ListTile(
           title: const Text('settings').tr(),
           onTap: () {
@@ -124,6 +122,13 @@ Widget salahlyDrawer(BuildContext context) {
           onTap: () {
             Navigator.pop(context);
             context.push(OngoingRequests.routeName);
+          },
+        ),
+        ListTile(
+          title: Text("Test APP state"),
+          onTap: () {
+            Navigator.pop(context);
+            context.push(TestScreen_nearbymechanics_and_create_rsa.routeName);
           },
         ),
       ],

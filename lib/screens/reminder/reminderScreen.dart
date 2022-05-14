@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:slahly/screens/reminder/addReminderScreen.dart';
+import 'package:slahly/widgets/global_widgets/app_bar.dart';
 
 class ReminderScreen extends StatefulWidget {
   static final routeName = "/reminderscreen";
@@ -169,35 +170,7 @@ class _ReminderScreenState extends State<ReminderScreen> {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: const Color(0xFFd1d9e6),
-      appBar: AppBar(
-        elevation: 0.0,
-        backgroundColor: const Color(0xFF193566),
-        leading: IconButton(
-          icon: Icon(
-            Icons.arrow_back,
-            color: Colors.white,
-          ),
-          onPressed: () {},
-        ),
-        title:
-            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-          Text(""),
-          Text(
-            "Reminder",
-            style: TextStyle(
-              fontSize: 25,
-              letterSpacing: 1.5,
-              color: Colors.white,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-          Image.asset(
-            'assets/images/logo white.png',
-            fit: BoxFit.contain,
-            height: 32,
-          ),
-        ]),
-      ),
+      appBar: salahlyAppBar(title: "Reminder"),
       body: SingleChildScrollView(
         child: Center(
           child: Column(

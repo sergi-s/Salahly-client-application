@@ -144,5 +144,7 @@
   "add_car_screen": "Add Car",
   "myCars": "My Cars",
   "transfer_ownership": "Transfer Ownership",
-  "viewOngoing": "View Ongoing"
+  "viewOngoing": "View Ongoing",
+  "signOut": "Sign Out",
+  "confirmSignOut": "Are you sure you want to sign out?"
 }

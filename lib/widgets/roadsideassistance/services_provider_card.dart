@@ -2,7 +2,6 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
 import 'package:slahly/classes/models/mechanic.dart';
 import 'package:slahly/classes/models/towProvider.dart';
 
@@ -324,41 +323,6 @@ class ServicesProviderCard extends StatelessWidget {
               )
             ],
           ),
-          //email
-          // Row(
-          //   children: [
-          //     Text(
-          //       "${"Email".tr()}:",
-          //       textAlign: TextAlign.justify,
-          //       style: const TextStyle(fontSize: 20),
-          //     ),
-          //     const SizedBox(width: 15),
-          //     Text(
-          //       serviceProviderEmail,
-          //       textAlign: TextAlign.center,
-          //       style: const TextStyle(fontSize: 15),
-          //       overflow: TextOverflow.ellipsis,
-          //     )
-          //   ],
-          // ),
-          //end email
-          // Row(
-          //   children: [
-          //     Text(
-          //       "${"Phone".tr()}:",
-          //       textAlign: TextAlign.justify,
-          //       style: const TextStyle(fontSize: 20),
-          //     ),
-          //     const SizedBox(width: 15),
-          //     Text(
-          //       serviceProviderPhoneNumber,
-          //       textAlign: TextAlign.center,
-          //       style: const TextStyle(fontSize: 15),
-          //       overflow: TextOverflow.ellipsis,
-          //     )
-          //   ],
-          // )
-          //phone number
           Row(
             children: [
               Text(
@@ -459,11 +423,6 @@ class ServicesProviderCard extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              // Image.asset(
-              //   'assets/images/Checkmark.png',
-              //   fit: BoxFit.contain,
-              //   height: 33,
-              // ),
               const Icon(
                 Icons.check_circle,
                 color: Colors.green,

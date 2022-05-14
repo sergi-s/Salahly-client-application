@@ -1,25 +1,22 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
+import 'package:slahly/classes/firebase/roadsideassistance/roadsideassistance.dart';
+import 'package:slahly/classes/models/location.dart';
 import 'package:slahly/classes/provider/app_data.dart';
 import 'package:slahly/classes/provider/rsadata.dart';
-import 'package:slahly/classes/models/location.dart';
-import 'package:slahly/classes/firebase/roadsideassistance/roadsideassistance.dart';
-import 'package:slahly/widgets/location/finalScreen.dart';
-
-import 'package:slahly/widgets/roadsideassistance/HoldPlease.dart';
-import 'package:slahly/widgets/roadsideassistance/services_provider_card.dart';
-import 'package:slahly/widgets/dialogues/confirm_cancellation.dart';
-import 'package:slahly/widgets/dialogues/all_rejected.dart';
-import 'package:slahly/widgets/dialogues/none_found.dart';
-
 import 'package:slahly/utils/firebase/get_mechanic_data.dart';
 import 'package:slahly/utils/firebase/get_provider_data.dart';
-import 'arrival.dart';
+import 'package:slahly/widgets/dialogues/all_rejected.dart';
+import 'package:slahly/widgets/dialogues/confirm_cancellation.dart';
+import 'package:slahly/widgets/dialogues/none_found.dart';
+import 'package:slahly/widgets/global_widgets/app_bar.dart';
+import 'package:slahly/widgets/location/finalScreen.dart';
+import 'package:slahly/widgets/roadsideassistance/HoldPlease.dart';
+import 'package:slahly/widgets/roadsideassistance/services_provider_card.dart';
 
 class SearchingMechanicProviderScreen extends ConsumerStatefulWidget {
   static const String routeName = "/searchingmechanicprovider";
@@ -66,6 +63,7 @@ class _SearchingMechanicProviderScreenState
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: salahlyAppBar(),
       backgroundColor: const Color(0xFFd1d9e6),
       body: SafeArea(
         child: DefaultTextStyle(

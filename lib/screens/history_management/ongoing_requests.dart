@@ -6,7 +6,6 @@ import 'package:slahly/classes/firebase/roadsideassistance/roadsideassistance.da
 import 'package:slahly/classes/provider/ongoing_data.dart';
 import 'package:slahly/classes/provider/user_data.dart';
 import 'package:slahly/widgets/global_widgets/app_bar.dart';
-import 'package:slahly/widgets/global_widgets/app_drawer.dart';
 import 'package:slahly/widgets/location/finalScreen.dart';
 
 class OngoingRequests extends ConsumerStatefulWidget {
@@ -24,20 +23,9 @@ class _OngoingRequestsState extends ConsumerState<OngoingRequests> {
   @override
   initState() {
     Future.delayed(Duration.zero, () {
-      // getOngoingRequests();
-      // setState(() {
-      print("inside ui init ${ref.watch(userProvider).cars}");
-      // print("${ref.watch(HistoryProvider).requests}");
-      // ongoingRequestsList = ref.watch(HistoryProvider).requests;
       ref
           .watch(HistoryProvider.notifier)
           .assignRequests(ref.watch(userProvider).cars);
-
-      // print("inside ui init ${ref.read(HistoryProvider)[0].mechanic!.name}");
-      // });
-      // ref
-      //     .watch(HistoryProvider.notifier)
-      //     .assignRequests(ref.watch(userProvider).cars);
     });
     super.initState();
   }
@@ -47,7 +35,7 @@ class _OngoingRequestsState extends ConsumerState<OngoingRequests> {
     return SafeArea(
       child: Scaffold(
           appBar: salahlyAppBar(title: "Ongoing Requests"),
-          drawer: salahlyDrawer(context),
+          // drawer: salahlyDrawer(context),
           body: CustomPaint(
             child: Container(
               width: MediaQuery.of(context).size.width,
@@ -67,7 +55,6 @@ class _OngoingRequestsState extends ConsumerState<OngoingRequests> {
                   },
                   child: ListView.builder(
                       scrollDirection: Axis.vertical,
-                      reverse: false,
                       itemCount: ref.watch(HistoryProvider).length,
                       itemBuilder: (context, index) {
                         if (ref.watch(HistoryProvider)[index].state ==
@@ -79,7 +66,7 @@ class _OngoingRequestsState extends ConsumerState<OngoingRequests> {
                         print(ref.watch(HistoryProvider)[index].state);
                         return Card(
                           elevation: 6,
-                          margin: const EdgeInsets.all(10),
+                          margin: const EdgeInsets.all(14),
                           child: Container(
                             decoration: BoxDecoration(
                               boxShadow: const [
@@ -110,21 +97,36 @@ class _OngoingRequestsState extends ConsumerState<OngoingRequests> {
                                           .capitalize(),
                                       style: const TextStyle(
                                           fontSize: 20,
-                                          fontWeight: FontWeight.bold),
+                                          fontWeight: FontWeight.bold,
+                                          color: Color(0xFF193566)),
                                     ),
                                     const Expanded(
                                         child: Divider(
                                       thickness: 0,
                                     )),
-                                    Text(
-                                      ref
-                                          .watch(HistoryProvider)[index]
-                                          .mechanic!
-                                          .rating
-                                          .toString()
-                                          .capitalize(),
-                                      style: const TextStyle(fontSize: 20),
-                                    ),
+                                    (ref
+                                                .watch(HistoryProvider)[index]
+                                                .mechanic!
+                                                .rating ==
+                                            null)
+                                        ? Container()
+                                        : Text(
+                                            ref
+                                                .watch(HistoryProvider)[index]
+                                                .mechanic!
+                                                .rating
+                                                .toString()
+                                                .capitalize(),
+                                            style: const TextStyle(
+                                                fontSize: 20,
+                                                color: Color.fromARGB(
+                                                  255,
+                                                  127,
+                                                  97,
+                                                  11,
+                                                )),
+                                          ),
+                                    const SizedBox(height: 50),
                                   ],
                                 ),
                                 subtitle: Padding(
@@ -147,12 +149,12 @@ class _OngoingRequestsState extends ConsumerState<OngoingRequests> {
                                               .capitalize(),
                                           style: const TextStyle(
                                               fontSize: 18,
-                                              color: Colors.black,
+                                              color: Color(0xFF193566),
                                               fontWeight: FontWeight.bold),
                                         ),
                                       ],
                                     ),
-
+                                    const SizedBox(height: 5),
                                     Row(
                                       children: [
                                         Text(
@@ -167,15 +169,10 @@ class _OngoingRequestsState extends ConsumerState<OngoingRequests> {
                                                 .car!
                                                 .noPlate
                                                 .toString(),
-                                            // ref
-                                            //     .watch(userProvider)
-                                            //     .cars[index]
-                                            //     .noPlate
-                                            //     .toString(),
                                             style: const TextStyle(
                                                 fontSize: 18,
                                                 fontWeight: FontWeight.bold,
-                                                color: Colors.black)),
+                                                color: Color(0xFF193566))),
                                         const Expanded(
                                             child: Divider(
                                           thickness: 0,
@@ -186,13 +183,10 @@ class _OngoingRequestsState extends ConsumerState<OngoingRequests> {
                                               .car!
                                               .getCarAccess()
                                               .toString(),
-                                          // ref
-                                          // .watch(userProvider)
-                                          // .cars[index].getCarAccess().toString()
                                         ),
                                       ],
                                     ),
-
+                                    const SizedBox(height: 5),
                                     Row(
                                       children: [
                                         Text("request".tr() + " ",
@@ -206,35 +200,36 @@ class _OngoingRequestsState extends ConsumerState<OngoingRequests> {
                                           style: const TextStyle(
                                               fontSize: 18,
                                               fontWeight: FontWeight.bold,
-                                              color: Colors.black),
+                                              color: Color(0xFF193566)),
                                         ),
                                       ],
                                     ),
-
-                                    Row(
-                                      children: [
-                                        Text("When".tr() + " ",
-                                            style: const TextStyle(
-                                              fontSize: 18,
-                                            )),
-                                        Text(
-                                          "${ref.watch(HistoryProvider)[index].createdAt}",
-                                          style: const TextStyle(
-                                              fontSize: 18,
-                                              fontWeight: FontWeight.bold,
-                                              color: Colors.black),
-                                        ),
-                                      ],
-                                    ),
-                                    // Row(
-                                    //   children: [
-                                    //     Text("Color".tr(),
-                                    //         style: TextStyle(
-                                    //             color: Colors.black,
-                                    //             fontSize: 19,
-                                    //             fontWeight: FontWeight.bold)),
-                                    //   ],
-                                    // ),
+                                    const SizedBox(height: 5),
+                                    (ref
+                                                .watch(HistoryProvider)[index]
+                                                .createdAt ==
+                                            null)
+                                        ? Container()
+                                        : Row(
+                                            children: [
+                                              Text("When".tr() + " ",
+                                                  style: const TextStyle(
+                                                    fontSize: 18,
+                                                  )),
+                                              Text(
+                                                DateFormat('yyyy-MM-dd – kk:mm')
+                                                    .format(ref
+                                                        .watch(HistoryProvider)[
+                                                            index]
+                                                        .createdAt!),
+                                                style: const TextStyle(
+                                                    fontSize: 18,
+                                                    fontWeight: FontWeight.bold,
+                                                    color: Color(0xFF193566)),
+                                              ),
+                                            ],
+                                          ),
+                                    const SizedBox(height: 5),
                                   ]),
                                 ),
                               ),
@@ -248,52 +243,4 @@ class _OngoingRequestsState extends ConsumerState<OngoingRequests> {
           )),
     );
   }
-
-// typeOngoingRequests(DatabaseReference local) {
-//   for (var car in ref.watch(userProvider).cars) {
-//     // print("Will try car ${car.noChassis}");
-//     local
-//         .orderByChild("carID")
-//         .equalTo(car.noChassis)
-//         .once()
-//         .then((event) async {
-//       DataSnapshot rsaDataSnapShot = event.snapshot;
-//       // print("found this: ${rsaDataSnapShot.value}");
-//
-//       for (var element in rsaDataSnapShot.children) {
-//         String mechanicID = "";
-//
-//         if (element.child("state").value.toString() != "canceled" &&
-//             element.child("state").value.toString() != "done") {
-//           for (var response in element.child("mechanicsResponses").children) {
-//             // print("isa 5er ${response.value}");
-//             if (response.value == "accepted") {
-//               mechanicID = response.key.toString();
-//             }
-//           }
-//           Mechanic mechanic = await getMechanicData(mechanicID);
-//
-//           RequestType requestType =
-//               (local == rsaRef) ? RequestType.RSA : RequestType.WSA;
-//           RSA rsa = RSA(
-//               rsaID: element.key.toString(),
-//               car: car,
-//               mechanic: mechanic,
-//               requestType: requestType);
-//
-//           setState(() {
-//             ongoingRequestsList.add(rsa);
-//           });
-//           // print("list length${ongoingRequestsList.length}");
-//         }
-//       }
-//     });
-//   }
-// }
-
-// getOngoingRequests() async {
-//   allCars(ref);
-//   typeOngoingRequests(rsaRef);
-//   typeOngoingRequests(wsaRef);
-// }
 }

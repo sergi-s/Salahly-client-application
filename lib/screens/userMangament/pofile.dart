@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:easy_localization/easy_localization.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -10,6 +12,7 @@ import 'package:slahly/utils/firebase/get_user_data.dart';
 
 import '../../classes/provider/user_data.dart';
 import '../../main.dart';
+import '../login_signup/check_login.dart';
 
 class Profile extends ConsumerStatefulWidget {
   static const String routeName = "/profile";
@@ -427,7 +430,22 @@ class _ProfileState extends ConsumerState<Profile> {
                           onPressed: () {
                             context.push(EditProfile.routeName);
                           },
-                          child: Text("Edit profile")),
+                          child: const Text("Edit profile")),
+                    ),
+                    SizedBox(
+                      width: 200,
+                      child: ElevatedButton(
+                        onPressed: () async {
+                          signOutConfirmation(context);
+                        },
+                        style: ElevatedButton.styleFrom(
+                          primary: const Color(0xFF193566),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                        ),
+                        child: const Text("signOut").tr(),
+                      ),
                     )
                   ],
                 ),
@@ -440,6 +458,51 @@ class _ProfileState extends ConsumerState<Profile> {
     );
   }
 
+  void signOutConfirmation(context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          title: Container(
+            alignment: Alignment.center,
+            child: const Text("signOut").tr(),
+          ),
+          content: const Text("confirmSignOut").tr(),
+          actions: [
+            ElevatedButton(
+                onPressed: () => Navigator.pop(context),
+                child: const Text("Cancel").tr(),
+                style: ElevatedButton.styleFrom(
+                  primary: const Color(0xFF193566),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                )),
+            ElevatedButton(
+                onPressed: () async {
+
+                  await FirebaseDatabase.instance
+                      .ref()
+                      .child("FCMTokens")
+                      .child(FirebaseAuth.instance.currentUser!.uid)
+                      .remove();
+
+                  await FirebaseAuth.instance.signOut();
+
+                  context.go(CheckLogin.routeName);
+                },
+                child: const Text("confirm").tr(),
+                style: ElevatedButton.styleFrom(
+                  primary: const Color(0xFF193566),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                ))
+          ]),
+    );
+  }
 // fetch() async {
 //   final firebaseuser = await FirebaseAuth.instance.currentUser;
 //   user

@@ -144,5 +144,7 @@
   "add_car_screen": "أضف سياره",
   "myCars": "سياراتي",
   "transfer_ownership": "نقل ملكيه",
-  "viewOngoing": "الطلابات الجاريه"
+  "viewOngoing": "الطلابات الجاريه",
+  "signOut": "تسجيل خروج",
+  "confirmSignOut": "هل انت متاكد من تسجيل خروج"
 }
