@@ -8,7 +8,7 @@ import 'package:slahly/screens/reminder/addReminderScreen.dart';
 class ReminderScreen extends StatefulWidget {
   static final routeName = "/reminderscreen";
 
-  ReminderScreen({
+  const ReminderScreen({
     Key? key,
   }) : super(key: key);
 
@@ -26,15 +26,15 @@ if(!isListening){
   isListening=true;
     AwesomeNotifications().createdStream.listen((notification) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Notification Created '),
+        const SnackBar(
+          content: Text('Reminder added Sucessfully'),
         ),
 
       );
 start();
     });
   }}
-bool isListening =false;
+static bool isListening =false;
   Map<String,bool> map={};
   // @override
   // void dispose() {
@@ -43,7 +43,16 @@ bool isListening =false;
   //   super.dispose();
   // }
 
+  Future<void> cancelScheduledNotifications() async {
+   List<NotificationModel>deletereminder=await AwesomeNotifications().listScheduledNotifications();
+   deletereminder.forEach((element) {
+     if(element.content!= null && element.content!.body   !=  null && !(map.containsKey(element.content!.body))){
+       map[element.content!.body!]=true;
+       reminder.remove(element.content!.id);
 
+   }});
+
+  }
 
   start ()async{
     List<NotificationModel>reminders=await AwesomeNotifications().listScheduledNotifications();
@@ -51,6 +60,7 @@ bool isListening =false;
       if(element.content!= null && element.content!.body   !=  null && !(map.containsKey(element.content!.body))){
         map[element.content!.body!]=true;
         reminder.add(Reminder(title: element.content!.body! , date: element.content!.displayedDate??DateTime.now().toString()));
+
       }else{
         print("element not valid ");
       }
@@ -84,7 +94,10 @@ bool isListening =false;
           child: InkWell(
           splashColor: Colors.blue.withAlpha(30),
           highlightColor: Colors.grey[200],
-          onTap: () {
+          onLongPress: (){
+            // cancelScheduledNotifications();
+            },
+            onTap: () {
             showDialog<String>(
               context: context,
               builder: (BuildContext context) => AlertDialog(
@@ -98,27 +111,27 @@ bool isListening =false;
                 actions: <Widget>[
                   TextButton.icon(
                     style: TextButton.styleFrom(
-                      textStyle: TextStyle(color: Colors.white),
+                      textStyle: const TextStyle(color: Colors.white),
                       backgroundColor: Colors.blueGrey[300],
                       shape:RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),
                     ),
                     onPressed: () => {Navigator.pop(context, 'Delete')},
-                    icon: Icon(Icons.delete_outline_outlined,color: Colors.white,),
-                    label: Text('Delete',style:TextStyle(color: Colors.white,)),
+                    icon: const Icon(Icons.delete_outline_outlined,color: Colors.white,),
+                    label: const Text('Delete',style:TextStyle(color: Colors.white,)),
                   ),
                   TextButton.icon(
                     style: TextButton.styleFrom(
-                      textStyle: TextStyle(color: Colors.white),
-                      backgroundColor: Color(0xFF193566),
+                      textStyle: const TextStyle(color: Colors.white),
+                      backgroundColor: const Color(0xFF193566),
                       shape:RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),
                     ),
                     onPressed: () => {Navigator.pop(context, 'Okay')},
-                    icon: Icon(Icons.done,color: Colors.white,),
-                    label: Text('Okay',style:TextStyle(color: Colors.white,)),
+                    icon: const Icon(Icons.done,color: Colors.white,),
+                    label: const Text('Okay',style:TextStyle(color: Colors.white,)),
                   ),
                 ],
               ),
@@ -128,17 +141,17 @@ bool isListening =false;
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
               ListTile(
-                leading: Icon(CupertinoIcons.alarm,
+                leading: const Icon(CupertinoIcons.alarm,
                     color: Color(0xFF193566), size: 40),
                 title: Text(title,
                         textScaleFactor: 1.4,
-                        style: TextStyle(
+                        style: const TextStyle(
                             color: Color(0xff193566),
                             fontWeight: FontWeight.bold))
                     .tr(),
                 subtitle: Text(date,
                         textScaleFactor: 1.1,
-                        style: TextStyle(color: Colors.black54))
+                        style: const TextStyle(color: Colors.black54))
                     .tr(),
 
               )
@@ -159,7 +172,7 @@ bool isListening =false;
         elevation: 0.0,
         backgroundColor: const Color(0xFF193566),
         leading: IconButton(
-          icon: Icon(
+          icon: const Icon(
             Icons.arrow_back,
             color: Colors.white,
           ),
@@ -167,8 +180,8 @@ bool isListening =false;
         ),
         title:
             Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-          Text(""),
-          Text(
+          const Text(""),
+          const Text(
             "Reminder",
             style: TextStyle(
               fontSize: 25,
@@ -195,8 +208,8 @@ bool isListening =false;
       floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
       floatingActionButton: FloatingActionButton(
         isExtended: true,
-        child: Icon(Icons.add),
-        backgroundColor: Color(0xFF193566),
+        child: const Icon(Icons.add),
+        backgroundColor: const Color(0xFF193566),
         onPressed: () { context.push(AddReminder.routeName);
           print("after add");
           start();},
@@ -223,10 +236,12 @@ class HeaderCurvedContainer extends CustomPainter {
 }
 
 class Reminder {
+
   final String title;
   final String date;
 
   Reminder({
+
     required this.title,
     required this.date,
   });

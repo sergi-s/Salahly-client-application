@@ -414,7 +414,7 @@ class _AddReminderState extends State<AddReminder> {
                     timeOfDay:selectedTime);
                 addReminder(
                     title: "Salhlay",
-                    body: title,
+                    body:note ,
                     notificationSchedule: nwt);
                 Navigator.pop(context);
               },

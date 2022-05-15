@@ -71,9 +71,7 @@ Future<void> addReminder({required String title,required String body,
     ),
   );
 }
-Future<void> cancelScheduledNotifications() async {
-  await AwesomeNotifications().listScheduledNotifications();
-}
+
 class NotificationWeekAndTime {
   final int date;
   final TimeOfDay timeofday;
@@ -92,6 +90,7 @@ class NotificationDateAndTime {
       {this.year, this.month, this.week, this.day, this.timeOfDay});
 
 }
+
 int CreateUniqueId() {
   return DateTime.now().millisecondsSinceEpoch.remainder(100000);
 }
