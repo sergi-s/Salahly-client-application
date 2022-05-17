@@ -25,9 +25,17 @@ Future getMechanicData(String id) async {
 
   double? rating;
   if (ds.child("rating").value != null) {
-    rating = toDouble((ds.child("rating").value).toString());
+    double count =
+        toDouble((ds.child("rating").child("count").value).toString());
+    if (count == 0) count = 1;
+    rating =
+        toDouble((ds.child("rating").child("sum").value).toString()) / count;
   }
 
+  String address = "address";
+  if ((ds.child("address").value) != null) {
+    address = (ds.child("address").value).toString();
+  }
   return Mechanic(
       isCenter: false,
       avatar: avatar,
@@ -37,5 +45,5 @@ Future getMechanicData(String id) async {
       type: Type.mechanic,
       email: (ds.child("email").value).toString(),
       rating: rating,
-      address: "address");
+      address: address);
 }

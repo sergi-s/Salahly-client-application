@@ -1,17 +1,15 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:slahly/classes/models/client.dart';
+import 'package:slahly/main.dart';
 import 'package:slahly/screens/userMangament/addSubowner.dart';
 
-import '../../main.dart';
-
 class ManageSubowner extends ConsumerStatefulWidget {
-  static final routeName = "/manageSubowner";
+  static const routeName = "/manageSubowner";
   String? chasis;
 
   ManageSubowner({this.chasis});
@@ -29,29 +27,19 @@ class _State extends ConsumerState<ManageSubowner> {
 
   List<Client> subowners = [];
 
-  // List<String> info = ['mizo', '7amo', '7amama'];
-  // String? name, email, avatar, phone;
-  // List emails = [];
-  // List name = [];
-  // List avatar = [];
-  // List phone = [];
-
-  // Addinfo() {
   Widget showList() {
     return SingleChildScrollView(
         child: Column(children: [
       Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
         Text(
-          "Manage_Ownership".tr(),
-          style: TextStyle(fontSize: 35, color: Colors.white),
+          "manageSubOwner".tr(),
+          style: const TextStyle(fontSize: 35, color: Colors.white),
           textAlign: TextAlign.center,
         ),
       ]),
-      SizedBox(
-        height: 150,
-      ),
+      const SizedBox(height: 150),
       ListView.builder(
-          padding: EdgeInsets.all(17),
+          padding: const EdgeInsets.all(17),
           shrinkWrap: true,
           itemCount: subowners.length,
           itemBuilder: (BuildContext context, index) {
@@ -89,7 +77,7 @@ class _State extends ConsumerState<ManageSubowner> {
                 backgroundColor: Colors.blue,
               ),
               title: Text(subowners[index].name.toString(),
-                  style: TextStyle(
+                  style: const TextStyle(
                       fontSize: 20,
                       color: Colors.black,
                       fontWeight: FontWeight.bold)),
@@ -99,7 +87,7 @@ class _State extends ConsumerState<ManageSubowner> {
                     children: [
                       Flexible(
                         child: Text(subowners[index].email.toString(),
-                            style: TextStyle(
+                            style: const TextStyle(
                                 overflow: TextOverflow.ellipsis,
                                 fontSize: 17,
                                 color: Colors.black)),
@@ -115,8 +103,14 @@ class _State extends ConsumerState<ManageSubowner> {
                   ),
                   Row(
                     children: [
-                      Text(subowners[index].address.toString(),
-                          style: TextStyle(fontSize: 17, color: Colors.black)),
+                      Flexible(
+                        child: Text(subowners[index].address.toString(),
+                            maxLines: 1,
+                            softWrap: false,
+                            overflow: TextOverflow.fade,
+                            style: const TextStyle(
+                                fontSize: 17, color: Colors.black)),
+                      ),
                     ],
                   )
                 ],
@@ -170,7 +164,7 @@ class _State extends ConsumerState<ManageSubowner> {
       alignment: Alignment.centerRight,
       padding: EdgeInsets.only(right: 20),
       color: Colors.red,
-      child: Icon(
+      child: const Icon(
         Icons.delete_forever,
         color: Colors.white,
       ),

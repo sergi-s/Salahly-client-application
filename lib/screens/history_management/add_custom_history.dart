@@ -19,7 +19,16 @@ class _AddCustomHistoryState extends ConsumerState<AddCustomHistory> {
   String? systemName, partId, partName, description;
   double? actualDistance, distance, partCost, maintenanceCost, otherCost;
   DateTime selectedTime = DateTime.now();
-  late Car? dropDownValue = Car(noPlate: "There is no Car");
+  late Car? dropDownValue
+
+      // = Car(noPlate: "There is no Car", noChassis: "No cars")
+      ;
+
+  @override
+  void initState() {
+    dropDownValue = Car(noPlate: "noCar".tr(), noChassis: "noCar".tr());
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -59,38 +68,12 @@ class _AddCustomHistoryState extends ConsumerState<AddCustomHistory> {
                           offset: Offset(3, 0),
                         ),
                       ]),
-
-                  // dropdown below..
-                  child: DropdownButton<Car>(
-                    hint: const Text("selectCar"),
-                    value: dropDownValue,
-                    onChanged: (dynamic value) {
-                      setState(() {
+                  child: CustomDropdownMenu(
+                      values: ref.watch(userProvider).cars,
+                      defaultValue: ref.watch(userProvider).cars[0],
+                      onItemSelected: (value) {
                         dropDownValue = value;
-                      });
-                    },
-                    icon: const Padding(
-                      padding: EdgeInsets.fromLTRB(120, 0, 0, 0),
-                      child: Icon(
-                        Icons.arrow_drop_down,
-                        color: Color(0xFF193566),
-                      ),
-                    ),
-                    items: ref.watch(userProvider).cars.map((Car car) {
-                      return DropdownMenuItem<Car>(
-                        value: car,
-                        child: Row(
-                          children: [
-                            const SizedBox(width: 10),
-                            Text(
-                              car.model!,
-                              style: const TextStyle(color: Colors.black),
-                            ),
-                          ],
-                        ),
-                      );
-                    }).toList(),
-                  ),
+                      }),
                 ),
                 SizedBox(
                   width: MediaQuery.of(context).size.width,
@@ -101,60 +84,60 @@ class _AddCustomHistoryState extends ConsumerState<AddCustomHistory> {
                       children: [
                         const SizedBox(width: 20),
                         InputTextField(
-                            hintText: 'System Name'.tr(),
+                            hintText: 'systemName'.tr(),
                             fn: (String value) {
                               systemName = value;
                             }),
                         InputTextField(
-                            hintText: 'Part Id'.tr(),
+                            hintText: 'partId'.tr(),
                             fn: (String value) {
                               partId = value;
                             }),
                         InputTextField(
-                          hintText: 'Part Name'.tr(),
+                          hintText: 'partName'.tr(),
                           fn: (value) {
                             partName = value;
                           },
                         ),
                         InputTextField(
-                          hintText: 'Actual Distance'.tr(),
+                          hintText: 'actualDistance'.tr(),
                           fn: (String value) {
                             actualDistance = double.parse(value.toString());
                           },
                         ),
                         InputTextField(
-                          hintText: 'Distance'.tr(),
+                          hintText: 'distance'.tr(),
                           fn: (String value) {
                             distance = double.parse(value.toString());
                           },
                         ),
                         InputTextField(
-                          hintText: 'Part Cost'.tr(),
+                          hintText: 'partCost'.tr(),
                           fn: (String value) {
                             partCost = double.parse(value.toString());
                           },
                         ),
                         InputTextField(
-                          hintText: 'Maintance Cost'.tr(),
+                          hintText: 'maintenanceCost'.tr(),
                           fn: (String value) {
                             maintenanceCost = double.parse(value.toString());
                           },
                         ),
                         InputTextField(
-                          hintText: 'Other Cost'.tr(),
+                          hintText: 'otherCost'.tr(),
                           fn: (String value) {
                             otherCost = double.parse(value.toString());
                           },
                         ),
                         BuildMultipleTextField(
-                          hintText: 'Description'.tr(),
+                          hintText: 'description'.tr(),
                           fn: (String value) {
                             description = value;
                           },
                         ),
                         RaisedButton(
                           child: Text(
-                            "Submit".tr(),
+                            "submit".tr(),
                             style: const TextStyle(color: Colors.white),
                           ),
                           color: const Color(0xFF193566),
@@ -164,13 +147,13 @@ class _AddCustomHistoryState extends ConsumerState<AddCustomHistory> {
                             if (systemName == "") {
                               ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(
-                                      content: Text('please_add_fields'.tr())));
-                              const SnackBar(
-                                  content: Text('Please Add Fields'));
+                                      content: Text('pleaseAddField'.tr())));
+                              SnackBar(content: Text('pleaseAddField'.tr()));
                             } else if (dropDownValue!.model == null) {
                               ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(content: Text("Select a car plz")));
-                              const SnackBar(content: Text('Select a car plz'));
+                                  SnackBar(
+                                      content: const Text("plzSpecCar").tr()));
+                              SnackBar(content: const Text('plzSpecCar').tr());
                             } else {
                               confirmCustomHistory(context, ref,
                                   car: dropDownValue,
@@ -194,24 +177,6 @@ class _AddCustomHistoryState extends ConsumerState<AddCustomHistory> {
                     ),
                   ),
                 ),
-                // Row(
-                //   children: [
-                //     FlatButton(
-                //       child: Text('Cancel'.tr()),
-                //       onPressed: () {
-                //         Navigator.of(context).pop();
-                //       },
-                //     ),
-                //     FlatButton(
-                //       textColor: Colors.white,
-                //       child: Text('Send'.tr()),
-                //       color: const Color(0xFF193566),
-                //       onPressed: () {
-                //         Navigator.of(context).pop();
-                //       },
-                //     ),
-                //   ],
-                // ),
               ],
             ),
           ),
@@ -276,6 +241,61 @@ class BuildMultipleTextField extends StatelessWidget {
         ),
         maxLines: 10,
       ),
+    );
+  }
+}
+
+class CustomDropdownMenu extends StatefulWidget {
+  const CustomDropdownMenu(
+      {Key? key,
+      required this.defaultValue,
+      required this.values,
+      required this.onItemSelected})
+      : super(key: key);
+  final dynamic Function(Car? selectedValue) onItemSelected;
+  final Car defaultValue;
+  final List<Car> values;
+
+  @override
+  _CustomDropdownMenuState createState() => _CustomDropdownMenuState();
+}
+
+class _CustomDropdownMenuState extends State<CustomDropdownMenu> {
+  late Car dropdownValue;
+
+  @override
+  void initState() {
+    super.initState();
+    dropdownValue = widget.defaultValue;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+          margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+          padding: const EdgeInsets.all(5.0),
+          child: DropdownButtonHideUnderline(
+            child: DropdownButton<Car>(
+              value: dropdownValue,
+              items: widget.values.map((dropValue) {
+                return DropdownMenuItem<Car>(
+                  value: dropValue,
+                  child: Text(dropValue.noPlate),
+                );
+              }).toList(),
+              onChanged: (newDropdownValue) {
+                setState(() {
+                  dropdownValue = newDropdownValue!;
+                });
+                widget.onItemSelected(newDropdownValue);
+              },
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

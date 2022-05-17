@@ -1,11 +1,12 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 import 'package:slahly/classes/models/car.dart';
 import 'package:slahly/classes/provider/rsadata.dart';
 import 'package:slahly/classes/provider/user_data.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
+
+import '../../utils/firebase/get_all_cars.dart';
 
 class SelectCarRequest extends ConsumerStatefulWidget {
   SelectCarRequest({
@@ -21,8 +22,11 @@ class SelectCarRequest extends ConsumerStatefulWidget {
 }
 
 class _SelectCarRequestState extends ConsumerState<SelectCarRequest> {
+  List<Widget> selectCarRadioItems = [];
+
   @override
   Widget build(BuildContext context) {
+    getCarsRadio();
     return SlidingUpPanel(
         controller: widget.pc,
         panelSnapping: true,
@@ -48,7 +52,7 @@ class _SelectCarRequestState extends ConsumerState<SelectCarRequest> {
                       return Padding(
                         padding: const EdgeInsets.only(left: 10, top: 15),
                         child: Column(
-                          children: [...getCarsRadio()],
+                          children: selectCarRadioItems, //[...getCarsRadio()],
                         ),
                       );
                     }),
@@ -69,20 +73,31 @@ class _SelectCarRequestState extends ConsumerState<SelectCarRequest> {
 
   Car? selectedCar;
 
-  List<Widget> getCarsRadio() {
-    List<Widget> widgets = [];
+  // List<Widget>
+  getCarsRadio() async {
+    // List<Widget> widgets = [];
+    selectCarRadioItems = [];
     for (Car car in ref.watch(userProvider).cars) {
-      widgets.add(
+      selectCarRadioItems.add(
         RadioListTile<Car>(
           value: car,
           groupValue: selectedCar,
           //ref.watch(rsaProvider).car,
           toggleable: true,
           title: Text(car.noPlate),
-          secondary: Text(car.getCarAccess() ?? ""),
-          isThreeLine:true,
-          subtitle: Text(car.model  ?? ""),
-          onChanged: (Car? currentCar) {
+          secondary: Text(
+              (car.getCarAccess() == null) ? "" : car.getCarAccess()!.tr()),
+          isThreeLine: true,
+          subtitle: Text(car.model ?? ""),
+          onChanged: (Car? currentCar) async {
+            bool isAvailable = await doesExistInRequest(currentCar!.noChassis!);
+            if (!isAvailable) {
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                content: Text("carAlreadyInUse".tr()),
+              ));
+              return;
+            }
+
             print("Current User ${car.noPlate}");
             setState(() {
               selectedCar = currentCar;
@@ -97,7 +112,7 @@ class _SelectCarRequestState extends ConsumerState<SelectCarRequest> {
         ),
       );
     }
-    return widgets;
+    // return widgets;
   }
 
   chooseCarDialog() {

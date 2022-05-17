@@ -52,7 +52,7 @@ Widget salahlyDrawer(BuildContext context) {
           },
         ),
         ListTile(
-          title: const Text('Manage Sub Owners').tr(),
+          title: const Text('Manage_Ownership').tr(),
           onTap: () {
             Navigator.pop(context);
             context.push(Choose_car.routeName);
@@ -89,13 +89,13 @@ Widget salahlyDrawer(BuildContext context) {
         //     context.push(EditProfile.routeName);
         //   },
         // ),
-        ListTile(
-          title: const Text('rating').tr(),
-          onTap: () {
-            Navigator.pop(context);
-            context.push(RatingScreen.routeName);
-          },
-        ),
+        // ListTile(
+        //   title: const Text('rating').tr(),
+        //   onTap: () {
+        //     Navigator.pop(context);
+        //     context.push(RatingScreen.routeName);
+        //   },
+        // ),
         ListTile(
           title: const Text('reminder').tr(),
           onTap: () {
@@ -124,13 +124,13 @@ Widget salahlyDrawer(BuildContext context) {
             context.push(OngoingRequests.routeName);
           },
         ),
-        ListTile(
-          title: Text("Test APP state"),
-          onTap: () {
-            Navigator.pop(context);
-            context.push(TestScreen_nearbymechanics_and_create_rsa.routeName);
-          },
-        ),
+        // ListTile(
+        //   title: Text("Test APP state"),
+        //   onTap: () {
+        //     Navigator.pop(context);
+        //     context.push(TestScreen_nearbymechanics_and_create_rsa.routeName);
+        //   },
+        // ),
       ],
     ),
   );

@@ -119,6 +119,7 @@ flutter:
     - assets/images/logo white.png
     - assets/images/bot2.png
     - assets/images/tarek.jpg
+    - assets/chatbot/chatbot.json
   #   - images/a_dot_ham.jpeg
 
 flutter_flavor:

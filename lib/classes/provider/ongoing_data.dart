@@ -85,11 +85,15 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:slahly/classes/firebase/roadsideassistance/roadsideassistance.dart';
 import 'package:slahly/classes/models/car.dart';
+import 'package:slahly/classes/models/client.dart';
 import 'package:slahly/classes/models/mechanic.dart';
 import 'package:slahly/classes/models/towProvider.dart';
 import 'package:slahly/utils/constants.dart';
 import 'package:slahly/utils/firebase/get_mechanic_data.dart';
 import 'package:slahly/utils/firebase/get_provider_data.dart';
+
+import '../../main.dart';
+import '../models/location.dart';
 
 final HistoryProvider =
     StateNotifierProvider<HistoryNotifier, List<RSA>>((ref) {
@@ -102,13 +106,12 @@ class HistoryNotifier extends StateNotifier<List<RSA>> {
   void assignRequests(List<Car> cars) {
     state = [];
     // print("in ass 1${state.requests}");
-    getRequestOfType(rsaRef, cars);
     print("in assignRequests $cars");
+    getRequestOfType(rsaRef, cars);
     // print("in ass 2${state.requests}");
     getRequestOfType(wsaRef, cars);
     // print("in ass 3${state.requests}");
   }
-
   getRequestOfType(DatabaseReference local, List<Car> cars) {
     // List<RSA> ongoingRequestsList = [];
     for (var car in cars) {
@@ -176,10 +179,26 @@ class HistoryNotifier extends StateNotifier<List<RSA>> {
             updatedAt =
                 DateTime.parse(element.child("updatedAt").value.toString());
           }
+          DataSnapshot userSnapshot = await dbRef
+              .child("users")
+              .child("clients")
+              .child(element.child("userID").value.toString())
+              .get();
 
           RSA rsa = RSA(
+              user: Client(
+                name: userSnapshot.child("name").value.toString(),
+                phoneNumber: userSnapshot.child("phoneNumber").value.toString(),
+              ),
               rsaID: element.key.toString(),
               car: car,
+              location: CustomLocation(
+                name: "Location",
+                latitude:
+                    double.parse(element.child("latitude").value.toString()),
+                longitude:
+                    double.parse(element.child("longitude").value.toString()),
+              ),
               mechanic: mechanic,
               towProvider: towProvider,
               requestType: requestType,

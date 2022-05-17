@@ -3,10 +3,7 @@ import 'package:slahly/classes/models/location.dart';
 import 'package:slahly/classes/models/mechanic.dart';
 import 'package:slahly/abstract_classes/user.dart';
 import 'package:slahly/widgets/ChooseTile.dart';
-import 'package:slahly/classes/models/mechanic.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
-
-import '../../widgets/WSA/choose_sliders.dart';
 
 class ChooseMechanicScreen extends StatelessWidget {
   ChooseMechanicScreen({Key? key}) : super(key: key);

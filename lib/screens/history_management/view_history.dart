@@ -7,6 +7,7 @@ import 'package:go_router/go_router.dart';
 import 'package:localstore/localstore.dart';
 import 'package:slahly/classes/firebase/roadsideassistance/roadsideassistance.dart';
 import 'package:slahly/classes/provider/ongoing_data.dart';
+import 'package:slahly/classes/provider/user_data.dart';
 import 'package:slahly/screens/history_management/accordion.dart';
 import 'package:slahly/screens/history_management/add_custom_history.dart';
 
@@ -28,6 +29,12 @@ class _ViewHistoryState extends ConsumerState<ViewHistory> {
   @override
   void initState() {
     Future.delayed(Duration.zero, () async {
+      //History
+      ref
+          .watch(HistoryProvider.notifier)
+          .assignRequests(ref.watch(userProvider).cars);
+
+      //Custom History
       final data = await db.collection('customHistory').get();
       print("the saved custom history $data");
 
@@ -80,12 +87,13 @@ class _ViewHistoryState extends ConsumerState<ViewHistory> {
             Builder(builder: (context) {
               return ListView.builder(
                 itemBuilder: (BuildContext context, index) {
-                  if (ref
-                              .watch(HistoryProvider)[
-                                  (ref.watch(HistoryProvider).length - 1) -
-                                      index]
-                              .state !=
-                          RSAStates.canceled &&
+                  if (
+                      // ref
+                      //             .watch(HistoryProvider)[
+                      //                 (ref.watch(HistoryProvider).length - 1) -
+                      //                     index]
+                      //             .state !=
+                      //         RSAStates.canceled &&
                       ref
                               .watch(HistoryProvider)[
                                   (ref.watch(HistoryProvider).length - 1) -

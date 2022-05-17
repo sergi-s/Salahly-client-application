@@ -5,9 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:slahly/classes/firebase/roadsideassistance/roadsideassistance.dart';
 import 'package:slahly/classes/provider/app_data.dart';
-import 'package:slahly/classes/provider/ongoing_data.dart';
 import 'package:slahly/classes/provider/rsadata.dart';
-import 'package:slahly/classes/provider/user_data.dart';
 import 'package:slahly/screens/chatbot/chatbotscreen.dart';
 import 'package:slahly/screens/dropOff_screens/dropOff_location_screen.dart';
 import 'package:slahly/screens/roadsideassistance/roadside_assistance_map.dart';
@@ -31,19 +29,16 @@ class HomePage extends ConsumerStatefulWidget {
 class _HomePageState extends ConsumerState<HomePage> {
   @override
   initState() {
-    Future.delayed(Duration.zero, () {
+    Future.delayed(Duration.zero, () async {
       getUserData(ref);
       allCars(ref);
       revive();
     });
-
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    // allCars(ref); //TODO refactor and uncomment
-    //TODO: get all users data and put it in state management
     return Scaffold(
       appBar: salahlyAppBar(),
       drawer: salahlyDrawer(context),
@@ -61,26 +56,28 @@ class _HomePageState extends ConsumerState<HomePage> {
               fun: () {
                 context.push(RoadSideAssistanceScreen.routeName);
               },
-              title: 'Roadside assistant',
-              subtitle:
-                  'Lorem ipsum dolor sit consectetur adipiscing sed do eiusmod tempor ',
+              title: 'rsa'.tr(),
+              subtitle: 'rsaDescription'.tr(),
               image: 'assets/images/tow-truck 2.png'),
           CardWidget(
               fun: () {
                 context.push(WSAScreen.routeName);
               },
-              title: 'Workshop assistant',
-              subtitle:
-                  'Lorem ipsum dolor sit consectetur adipiscing sed do eiusmod tempor',
+              title: 'wsa'.tr(),
+              subtitle: 'wsaDescription'.tr(),
               image: 'assets/images/mechanic.png'),
           CardWidget(
               fun: () {
                 context.push(DropOffLocationScreen.routeName);
               },
-              title: 'Tow Truck assistant',
-              subtitle:
-                  'Lorem ipsum dolor sit consectetur adipiscing sed do eiusmod tempor',
+              title: 'tta'.tr(),
+              subtitle: 'ttaDescription'.tr(),
               image: 'assets/images/mechanic.png'),
+          // ElevatedButton(
+          //     onPressed: () {
+          //       print(ref.watch(userProvider).cars);
+          //     },
+          //     child: Text("tesst"))
         ],
       ),
       floatingActionButton: FloatingActionButton(
@@ -121,7 +118,3 @@ class _HomePageState extends ConsumerState<HomePage> {
     ////////////////////////
   }
 }
-//TODO: el translate m4 byt3ml keda, fa edit it
-// and complete translation
-// TODO: add photo to TTA line:55
-// Use state management to get user data

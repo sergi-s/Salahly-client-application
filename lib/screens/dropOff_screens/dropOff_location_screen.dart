@@ -127,7 +127,7 @@ class _DropOffLocationScreenState extends ConsumerState<DropOffLocationScreen> {
         Positioned(
           left: MediaQuery.of(context).size.width * 0.80,
           right: 0,
-          bottom: MediaQuery.of(context).size.height * 0.19,
+          bottom: MediaQuery.of(context).size.height * 0.30,
           child: ElevatedButton(
             onPressed: () => myMapWidgetState.currentState?.locatePosition(),
             child: const Icon(
