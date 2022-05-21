@@ -94,28 +94,34 @@ class _ChooseProviderScreenState extends ConsumerState<ChooseProviderScreen> {
                                 extra: true);
                           },
                           child: ChooseTile(
-                              email: ref
-                                  .watch(rsaProvider)
-                                  .acceptedNearbyProviders![index]
-                                  .email
-                                  .toString(),
-                              avatar: ref
-                                  .watch(rsaProvider)
-                                  .acceptedNearbyProviders![index]
-                                  .avatar
-                                  .toString(),
-                              phone: ref
-                                  .watch(rsaProvider)
-                                  .acceptedNearbyProviders![index]
-                                  .phoneNumber
-                                  .toString(),
-                              name: ref
-                                  .watch(rsaProvider)
-                                  .acceptedNearbyProviders![index]
-                                  .name
-                                  .toString(),
-                              type: Type.provider,
-                              isCenter: false),
+                            email: ref
+                                .watch(rsaProvider)
+                                .acceptedNearbyProviders![index]
+                                .email
+                                .toString(),
+                            avatar: ref
+                                .watch(rsaProvider)
+                                .acceptedNearbyProviders![index]
+                                .avatar
+                                .toString(),
+                            phone: ref
+                                .watch(rsaProvider)
+                                .acceptedNearbyProviders![index]
+                                .phoneNumber
+                                .toString(),
+                            name: ref
+                                .watch(rsaProvider)
+                                .acceptedNearbyProviders![index]
+                                .name
+                                .toString(),
+                            type: Type.provider,
+                            isCenter: false,
+                            estimatedTime: ref
+                                .watch(rsaProvider)
+                                .acceptedNearbyProviders![index]
+                                .estimatedTime
+                                .toString(),
+                          ),
                         );
                       },
                       // itemCount: providers.length,

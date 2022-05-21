@@ -196,5 +196,19 @@
   "Owner": "Owner",
   "SubOwner": "SubOwner",
   "searching": "Searching",
-  "carAlreadyInUse": "This car is already in use"
+  "carAlreadyInUse": "This car is already in use",
+  "ratePlease": "Rate Please",
+  "requestType": "Request Type",
+  "requests": "Requests",
+  "enterCarModel": "Enter Model",
+  "enterCarChassisNo": "Enter Chassis number",
+  "enterCarNoPlate": "Enter number Plate",
+  "carAdded": "Car Added",
+  "dataError": "Data error",
+  "fillAllData": "Please fill all data",
+  "conflict": "Conflict",
+  "carAlreadyInSystem": "This Car is already in the system",
+  "requestConflict": "Request Conflict",
+  "requestAlreadyPut": "You already submited a conflict",
+  "min": "min"
 }

@@ -248,16 +248,17 @@ class ServicesProviderWiget extends StatelessWidget {
 class ServicesProviderCard extends StatelessWidget {
   late String foundType;
 
-  ServicesProviderCard({
-    Key? key,
-    this.serviceProviderType,
-    this.serviceProviderName,
-    this.serviceProviderEmail,
-    this.serviceProviderIsCenter,
-    this.serviceProviderPhoneNumber,
-    this.serviceProviderRating,
-    this.serviceProviderAddress,
-  }) : super(key: key) {
+  ServicesProviderCard(
+      {Key? key,
+      this.serviceProviderType,
+      this.serviceProviderName,
+      this.serviceProviderEmail,
+      this.serviceProviderIsCenter,
+      this.serviceProviderPhoneNumber,
+      this.serviceProviderRating,
+      this.serviceProviderAddress,
+      this.avatar})
+      : super(key: key) {
     foundType = serviceProviderType == "Mechanic"
         ? "found_Mechanic"
         : "found_tow_provider";
@@ -267,7 +268,8 @@ class ServicesProviderCard extends StatelessWidget {
       serviceProviderName,
       serviceProviderEmail,
       serviceProviderPhoneNumber,
-      serviceProviderAddress;
+      serviceProviderAddress,
+      avatar;
   bool? serviceProviderIsCenter;
   double? serviceProviderRating;
 
@@ -302,7 +304,7 @@ class ServicesProviderCard extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           CircleAvatar(
-            backgroundImage: Image.network(
+            backgroundImage: Image.network(avatar ??
                     "https://www.biography.com/.image/ar_1:1%2Cc_fill%2Ccs_srgb%2Cfl_progressive%2Cq_auto:good%2Cw_1200/MTY3MDUxMjkzMjI1OTIwMTcz/brad-pitt-attends-the-premiere-of-20th-century-foxs--square.jpg")
                 .image,
             radius: 25,
@@ -450,6 +452,7 @@ Widget mapMechanicToWidget(Mechanic mec) {
     serviceProviderPhoneNumber: mec.phoneNumber,
     serviceProviderRating: mec.rating,
     serviceProviderAddress: mec.address,
+    avatar: mec.avatar,
   );
 }
 
@@ -462,5 +465,6 @@ Widget mapTowProviderToWidget(TowProvider prov) {
     serviceProviderPhoneNumber: prov.phoneNumber,
     serviceProviderRating: prov.rating,
     serviceProviderAddress: prov.address,
+    avatar: prov.avatar,
   );
 }

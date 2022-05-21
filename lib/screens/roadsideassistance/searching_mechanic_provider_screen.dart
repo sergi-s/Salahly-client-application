@@ -50,12 +50,15 @@ class _SearchingMechanicProviderScreenState
         }
         if (prefs.getString("towProvider") != null) {
           ref.watch(rsaProvider.notifier).assignProvider(
-              await getProviderData(prefs.getString("towProvider")!), false);
+              await getProviderData(prefs.getString("towProvider")!,
+                  rsaID: ref.watch(rsaProvider).rsaID),
+              false);
         }
         _getRsaDataStream();
       } else {
         requestRSA();
       }
+      check();
     });
     super.initState();
   }

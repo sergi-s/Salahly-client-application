@@ -1,11 +1,10 @@
 import 'package:easy_localization/easy_localization.dart';
-import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:rating_dialog/rating_dialog.dart';
-import 'package:slahly/abstract_classes/user.dart';
 import 'package:slahly/classes/firebase/roadsideassistance/roadsideassistance.dart';
 import 'package:slahly/widgets/global_widgets/custom_row.dart';
+
+import '../../widgets/dialogues/rating.dart';
 
 class Accordion extends StatefulWidget {
   RSA? rsa;
@@ -33,7 +32,10 @@ class _AccordionState extends State<Accordion> {
               ),
               onPressed: () {
                 print(widget.rsa!.rsaID);
-                _showRatingDialog(widget.rsa!.towProvider!);
+                // _showRatingDialog(widget.rsa!.towProvider!);
+
+                rateServiceProvider(
+                    widget.rsa!.towProvider!, widget.rsa!, context);
               },
               child: const Text("Review Tow Provider")),
         ),
@@ -51,7 +53,10 @@ class _AccordionState extends State<Accordion> {
               ),
               onPressed: () {
                 print(widget.rsa!.rsaID);
-                _showRatingDialog(widget.rsa!.mechanic!);
+                // _showRatingDialog(widget.rsa!.mechanic!);
+
+                rateServiceProvider(
+                    widget.rsa!.mechanic!, widget.rsa!, context);
               },
               child: const Text("Review Mechanic")),
         ),
@@ -78,12 +83,12 @@ class _AccordionState extends State<Accordion> {
                   style: const TextStyle(
                       fontWeight: FontWeight.bold, fontSize: 20),
                 ),
-                widget.rsa!.state == RSAStates.done
-                    ? const Icon(
-                        Icons.check,
-                        color: Colors.green,
-                      )
-                    : const Icon(Icons.access_time, color: Colors.grey),
+                // widget.rsa!.state == RSAStates.done
+                //     ? const Icon(
+                //         Icons.check,
+                //         color: Colors.green,
+                //       )
+                //     : const Icon(Icons.access_time, color: Colors.grey),
               ],
             ),
             trailing: IconButton(
@@ -101,18 +106,10 @@ class _AccordionState extends State<Accordion> {
                 child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            RSA
-                                .requestTypeToString(widget.rsa!.requestType!)
-                                .tr(),
-                            style: const TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 16),
-                          ),
-                        ],
-                      ),
+                      customRow(title: "requestType".tr(),content:
+                      RSA
+                          .requestTypeToString(widget.rsa!.requestType!)
+                          .tr()),
                       Row(
                         children: [
                           widget.rsa!.mechanic!.phoneNumber != null
@@ -189,90 +186,9 @@ class _AccordionState extends State<Accordion> {
                         children: reviewList,
                       )
                     ]),
-              )
+        )
             : Container()
       ]),
-    );
-  }
-
-  void _showRatingDialog(UserType toBeRated) {
-    print("idddddddddd-> ${toBeRated.id!}");
-    final _ratingDialog = RatingDialog(
-      title: Text('Rate Please'),
-      message: Text('Rate Your ${toBeRated.getUserType()}'),
-      image: Image.asset(
-        "assets/images/as.jpg",
-        height: 100,
-      ),
-      submitButtonText: 'Submit',
-      onCancelled: () => print('cancelled'),
-      onSubmitted: (response) async {
-        print('rating: ${response.rating}, '
-            'comment: ${response.comment}');
-
-        String childWho = (toBeRated.type == Type.mechanic)
-            ? "mechanicsRequests"
-            : "providersRequests";
-
-        DataSnapshot old = await FirebaseDatabase.instance
-            .ref()
-            .child(childWho)
-            .child(toBeRated.id!)
-            .child(widget.rsa!.rsaID!)
-            .child("rating")
-            .get();
-
-        await FirebaseDatabase.instance
-            .ref()
-            .child(childWho)
-            .child(toBeRated.id!)
-            .child(widget.rsa!.rsaID!)
-            .child("rating")
-            .set({"rating": response.rating, "review": response.comment});
-
-        DataSnapshot ds = await FirebaseDatabase.instance
-            .ref()
-            .child("users")
-            .child(toBeRated.id!)
-            .child("rating")
-            .get();
-
-        int count = 0;
-        if ((ds.child("count").value) != null) {
-          count = int.parse((ds.child("count").value).toString());
-        }
-
-        double sum = 0;
-        if ((ds.child("sum").value) != null) {
-          sum = double.parse((ds.child("sum").value).toString());
-        }
-        if (old.value != null) {
-          print("Test${old.child("rating").value}");
-          sum -= double.parse(old.child("rating").value.toString());
-          count -= 1;
-        }
-        sum += response.rating;
-        count += 1;
-
-        await FirebaseDatabase.instance
-            .ref()
-            .child("users")
-            .child(toBeRated.id!)
-            .child("rating")
-            .set({"sum": sum, "count": count});
-        //
-        // if (response.rating < 3.0) {
-        //   print('response.rating: ${response.rating}');
-        // } else {
-        //   Container();
-        // }
-      },
-    );
-
-    showDialog(
-      context: context,
-      barrierDismissible: true,
-      builder: (context) => _ratingDialog,
     );
   }
 }

@@ -1,21 +1,21 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:slahly/classes/models/client.dart';
+import 'package:slahly/classes/models/car.dart';
+import 'package:slahly/classes/provider/user_data.dart';
+import 'package:slahly/main.dart';
 import 'package:slahly/screens/car_management/view_cars_screen.dart';
+import 'package:slahly/utils/constants.dart';
+import 'package:slahly/widgets/global_widgets/app_bar.dart';
 
-import '../../classes/models/car.dart';
-import '../../classes/provider/user_data.dart';
-import '../../main.dart';
-import '../../utils/constants.dart';
+class AddCar extends ConsumerStatefulWidget {
+  static const String routeName = "/addCar";
 
-class Addcar extends ConsumerStatefulWidget {
-  static const String routeName = "/addcar";
+  AddCar({Key? key}) : super(key: key);
 
   @override
   _State createState() => _State();
@@ -28,10 +28,10 @@ final TextEditingController chasisController = TextEditingController();
 final TextEditingController numberController = TextEditingController();
 Car? carData;
 
-class _State extends ConsumerState<Addcar> {
+class _State extends ConsumerState<AddCar> {
   // create some values
-  Color pickerColor = Color(0xff443a49);
-  Color currentColor = Color(0xff443a49);
+  Color pickerColor = const Color(0xff443a49);
+  Color currentColor = const Color(0xff443a49);
   String? color;
 // ValueChanged<Color> callback
   void changeColor(Color color) {
@@ -40,9 +40,9 @@ class _State extends ConsumerState<Addcar> {
 
   @override
   Widget build(BuildContext context) {
-    final userNotifier = ref.watch(userProvider.notifier);
     final screenSize = MediaQuery.of(context).size;
     return Scaffold(
+        appBar: salahlyAppBar(title: "Add_Car".tr()),
         backgroundColor: const Color(0xFFd1d9e6),
         body: CustomPaint(
           child: GestureDetector(
@@ -50,7 +50,7 @@ class _State extends ConsumerState<Addcar> {
               FocusScope.of(context).unfocus();
             },
             child: SingleChildScrollView(
-              child: Container(
+              child: SizedBox(
                 width: MediaQuery.of(context).size.width,
                 height: MediaQuery.of(context).size.height,
                 child: Padding(
@@ -87,10 +87,10 @@ class _State extends ConsumerState<Addcar> {
                               color: Colors.black, fontFamily: "WorkSansLight"),
                           filled: true,
                           label: Text("Car_Model".tr(),
-                              style:
-                                  TextStyle(fontSize: 20, color: Colors.black)),
+                              style: const TextStyle(
+                                  fontSize: 20, color: Colors.black)),
                           fillColor: Colors.white70,
-                          hintText: "Enter Car Model",
+                          hintText: "enterCarModel".tr(),
                         ),
                       ),
                       const SizedBox(
@@ -116,12 +116,10 @@ class _State extends ConsumerState<Addcar> {
                               style: const TextStyle(
                                   fontSize: 20, color: Colors.black)),
                           fillColor: Colors.white70,
-                          hintText: "Enter chasis Number",
+                          hintText: "enterCarChassisNo".tr(),
                         ),
                       ),
-                      const SizedBox(
-                        height: 30,
-                      ),
+                      const SizedBox(height: 30),
                       TextFormField(
                         controller: plateController,
                         decoration: InputDecoration(
@@ -142,12 +140,10 @@ class _State extends ConsumerState<Addcar> {
                               style: const TextStyle(
                                   fontSize: 20, color: Colors.black)),
                           fillColor: Colors.white70,
-                          hintText: "Enter car plate",
+                          hintText: "enterCarNoPlate".tr(),
                         ),
                       ),
-                      const SizedBox(
-                        height: 20,
-                      ),
+                      const SizedBox(height: 20),
                       Row(
                         children: [
                           Text("Color_Picker".tr(),
@@ -173,12 +169,13 @@ class _State extends ConsumerState<Addcar> {
                         textColor: Colors.white,
                         child: const Text('Add_Car').tr(),
                         color: const Color(0xFF193566),
-                        onPressed: () {
+                        onPressed: () async {
                           ///////////////
                           print("YAYAYAAYAYAY");
                           print(plateController.text.isEmpty);
                           print(carModelController.text.isEmpty);
                           print(chasisController.text.isEmpty);
+                          print(pickerColor.toString());
 
                           if (plateController.text.isEmpty ||
                               carModelController.text.isEmpty ||
@@ -186,57 +183,9 @@ class _State extends ConsumerState<Addcar> {
                             noData(context);
                             return;
                           }
-                          const snackBar = SnackBar(content: Text('Car Added'));
-                          showDialog(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return AlertDialog(
-                                  content: Text(
-                                      "are_you_sure_u_want_to_add_car".tr()),
-                                  title: Text("Warning".tr()),
-                                  actions: [
-                                    TextButton(
-                                        onPressed: () {
-                                          userNotifier.assignCar(Car(
-                                              noPlate: plateController.text,
-                                              model: carModelController.text,
-                                              noChassis: chasisController.text,
-                                              color: pickerColor,
-                                              id: numberController.text,
-                                              carAccess: CarAccess.owner));
-                                          addCar(ref);
-                                          Navigator.of(context).pop();
-                                          ScaffoldMessenger.of(context)
-                                              .showSnackBar(snackBar);
-                                          context.push(ViewCars.routeName);
-                                        },
-                                        child: Text("confirm".tr())),
-                                    TextButton(
-                                        onPressed: () {
-                                          Navigator.of(context).pop();
-                                        },
-                                        child: Text("Cancel".tr()))
-                                  ],
-                                );
-                              });
+                          conflictController();
                         },
                       ),
-                      // FloatingActionButton(
-                      //   onPressed: () => context.push(Choose_car.routeName),
-                      //   child: Text("choosecar"),
-                      // ),
-                      // FloatingActionButton(
-                      //   onPressed: () => context.push(ViewCars.routeName),
-                      //   child: Text("viewcar"),
-                      // ),
-                      // FloatingActionButton(
-                      //   onPressed: () => context.push(TransferOwner.routeName),
-                      //   child: Text("transfer"),
-                      // ),
-                      // FloatingActionButton(
-                      //   onPressed: () => context.push(AddSubowner.routeName),
-                      //   child: Text("add subowner"),
-                      // ),
                     ],
                   ),
                 ),
@@ -249,16 +198,18 @@ class _State extends ConsumerState<Addcar> {
 
   Widget buildColorPicker() => ColorPicker(
       pickerColor: pickerColor,
-      onColorChanged: (pickerColor) => setState(() {
+      onColorChanged: (Color pickerColor) => setState(() {
             this.pickerColor = pickerColor;
           }));
+
   pickColor(BuildContext context) {
     showDialog(
         context: context,
         builder: (context) {
           return AlertDialog(
-            insetPadding: EdgeInsets.symmetric(horizontal: 30, vertical: 60),
-            title: Text("Pick Color"),
+            insetPadding:
+                const EdgeInsets.symmetric(horizontal: 30, vertical: 60),
+            title: const Text("Color_Picker").tr(),
             content: Column(
               children: [
                 buildColorPicker(),
@@ -268,10 +219,8 @@ class _State extends ConsumerState<Addcar> {
                         onPressed: () {
                           Navigator.of(context).pop();
                         },
-                        child: Text("cancel".tr())),
-                    SizedBox(
-                      width: 20,
-                    ),
+                        child: Text("Cancel".tr())),
+                    const SizedBox(width: 20),
                     TextButton(
                         onPressed: () {
                           Navigator.of(context).pop();
@@ -290,54 +239,222 @@ class _State extends ConsumerState<Addcar> {
         context: context,
         barrierDismissible: true,
         builder: (BuildContext context) => AlertDialog(
-              shape: RoundedRectangleBorder(
+          shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(dialogRadius),
               ),
               title: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text("Data Error").tr(),
+                  const Text("dataError").tr(),
                 ],
               ),
-              content: Text("Please fill all data").tr(),
+              content: const Text("fillAllData").tr(),
               actions: <Widget>[
                 ElevatedButton(
                   onPressed: () {
                     Navigator.pop(context);
                   },
                   child: const Text("ok").tr(),
+                  style: ElevatedButton.styleFrom(
+                    primary: const Color(0xFF193566),
+                    padding: const EdgeInsets.all(10),
+                  ),
                 ),
               ],
             ));
   }
 
+  youAreAlreadyTheUserDialog(context) {
+    showDialog(
+        context: context,
+        barrierDismissible: true,
+        builder: (BuildContext context) => AlertDialog(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(dialogRadius),
+              ),
+              title: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text("youAreAlreadyTheUser").tr(),
+                ],
+              ),
+              content: const Text("youAreAlreadyTheUser").tr(),
+              actions: <Widget>[
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: const Text("ok").tr(),
+                  style: ElevatedButton.styleFrom(
+                    primary: const Color(0xFF193566),
+                    padding: const EdgeInsets.all(10),
+                  ),
+                ),
+              ],
+            ));
+  }
+
+  addCarDialog() {
+    final snackBar = SnackBar(content: Text("carAdded".tr()));
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          content: Text("are_you_sure_u_want_to_add_car".tr()),
+          title: Text("Warning".tr()),
+          actions: [
+            TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: Text("Cancel".tr())),
+            TextButton(
+                onPressed: () async {
+                  addCar(ref);
+                  Navigator.of(context).pop();
+                  ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                  context.push(ViewCars.routeName);
+                },
+                child: Text("confirm".tr())),
+          ],
+        );
+      },
+    );
+  }
+
+  conflictDialog(context) {
+    showDialog(
+        context: context,
+        barrierDismissible: true,
+        builder: (BuildContext context) => AlertDialog(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(dialogRadius),
+              ),
+              title: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text("conflict").tr(),
+                ],
+              ),
+              content: const Text("carAlreadyInSystem").tr(),
+              actions: <Widget>[
+                ElevatedButton(
+                  onPressed: () async {
+                    await requestConflict();
+                    Navigator.pop(context);
+                  },
+                  child: const Text("requestConflict").tr(),
+                  style: ElevatedButton.styleFrom(
+                    primary: const Color(0xFF193566),
+                    padding: const EdgeInsets.all(10),
+                  ),
+                ),
+              ],
+            ));
+  }
+
+  conflictAlreadyExitsDialog(context) {
+    showDialog(
+        context: context,
+        barrierDismissible: true,
+        builder: (BuildContext context) => AlertDialog(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(dialogRadius),
+              ),
+              title: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text("conflict").tr(),
+                ],
+              ),
+              content: const Text("requestAlreadyPut").tr(),
+              actions: <Widget>[
+                ElevatedButton(
+                  onPressed: () async {
+                    Navigator.pop(context);
+                  },
+                  child: const Text("cancel").tr(),
+                  style: ElevatedButton.styleFrom(
+                    primary: const Color(0xFF193566),
+                    padding: const EdgeInsets.all(10),
+                  ),
+                ),
+              ],
+            ));
+  }
+
+  conflictController() async {
+    String newCarID = chasisController.text;
+    DataSnapshot ds = await dbRef.child("cars").child(newCarID).get();
+
+    if (ds.value != null) {
+      if (ds.child("owner").value == FirebaseAuth.instance.currentUser!.uid) {
+        youAreAlreadyTheUserDialog(context);
+      } else {
+        DataSnapshot conflictSnapShot = await conflictRef.child(newCarID).get();
+        if (conflictSnapShot
+                .child(FirebaseAuth.instance.currentUser!.uid)
+                .value !=
+            null) {
+          conflictAlreadyExitsDialog(context);
+        } else {
+          conflictDialog(context);
+        }
+      }
+    } else {
+      addCarDialog();
+    }
+  }
+
   addCar(ref) async {
-    Client car = ref.watch(userProvider);
     DatabaseReference cars = dbRef.child("cars").child(chasisController.text);
     DatabaseReference usersCars = dbRef
         .child("users_cars")
         .child(FirebaseAuth.instance.currentUser!.uid)
         .child(chasisController.text);
-    color = pickerColor.toString().substring(6);
-    color = color.toString().substring(0, color.toString().length - 1);
+    // color = pickerColor.toString().substring(6);
+    // color = color.toString().substring(0, color.toString().length - 1);
     // String? key = dbRef.child("cars").push().key;
-    String? key = cars.key;
+    // String? key = cars.key;
     usersCars.set("true");
 
     await cars.set({
       "model": carModelController.text,
       "plate": plateController.text,
       "color": pickerColor.toString(),
-      "owner": FirebaseAuth.instance.currentUser!.uid
+      "owner": FirebaseAuth.instance.currentUser!.uid,
+      "addedAt": DateTime.now().toString(),
     });
 
     carData = Car(
-        noPlate: plateController.text,
-        model: carModelController.text,
-        noChassis: chasisController.text,
-        color: pickerColor);
+      noPlate: plateController.text,
+      model: carModelController.text,
+      noChassis: chasisController.text,
+      color: pickerColor,
+      id: numberController.text,
+      carAccess: CarAccess.owner,
+    );
     ref.watch(userProvider.notifier).assignCar(carData);
-    print(color);
+
+    // print(color);
+  }
+
+  requestConflict() async {
+    String newCarID = chasisController.text;
+    DataSnapshot carSnapShot = await dbRef.child("cars").child(newCarID).get();
+    if (carSnapShot.value != null) {
+      await conflictRef
+          .child(newCarID)
+          .child(carSnapShot.child("owner").value.toString())
+          .set(carSnapShot.child("addedAt").value.toString());
+
+      await conflictRef
+          .child(newCarID)
+          .child(FirebaseAuth.instance.currentUser!.uid)
+          .set(DateTime.now().toString());
+      return true;
+    }
+    return false;
   }
 }
 

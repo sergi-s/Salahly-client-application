@@ -58,6 +58,10 @@ class _RequestFinalScreenState extends ConsumerState<RequestFinalScreen> {
       towEndedText.add(MyTwoEndTextDivided(
           firstStr: "provider".tr(),
           secondStr: ref.watch(rsaProvider).towProvider!.name));
+      towEndedText.add(MyTwoEndTextDivided(
+          firstStr: "expectedTime".tr(),
+          secondStr: (ref.watch(rsaProvider).towProvider!.estimatedTime ??
+              "--") + "min".tr()));
       buttonsList.add(
         Center(
           child: ElevatedButton(
@@ -173,9 +177,6 @@ class _RequestFinalScreenState extends ConsumerState<RequestFinalScreen> {
                                           firstStr: "subType".tr(),
                                           secondStr: subType),
                                       ...towEndedText,
-                                      MyTwoEndTextDivided(
-                                          firstStr: "expectedTime".tr(),
-                                          secondStr: "1.15"),
                                     ],
                                   )),
                               SizedBox(

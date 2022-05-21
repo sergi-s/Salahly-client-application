@@ -219,7 +219,7 @@ class RSA {
     } else if (id == RSA.stateToString(RSAStates.confirmedArrival)) {
       return RSAStates.confirmedArrival;
     }
-    return RSAStates.canceled;
+    return RSAStates.cancelled;
   }
 }
 
@@ -237,7 +237,7 @@ class RSA {
 enum RequestType { RSA, WSA, TTA}
 
 enum RSAStates {
-  canceled,
+  cancelled,
 
   // searchingForNearbyMechanic,// started searching                               App state
   // userChoosingMechanic,// list loaded (at least 1) and user choosing            App state

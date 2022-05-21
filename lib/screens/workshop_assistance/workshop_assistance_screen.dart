@@ -303,7 +303,7 @@ class _WSAScreenState extends ConsumerState<WSAScreen> {
         .watch(rsaProvider.notifier)
         .atLeastOne(needMechanic: true, needProvider: needProvider);
 
-    if (!foundAny && ref.watch(rsaProvider).state != RSAStates.canceled) {
+    if (!foundAny && ref.watch(rsaProvider).state != RSAStates.cancelled) {
       !ref.watch(rsaProvider.notifier).atLeastOneProvider
           ? noneFound(context, who: false)
           : null;

@@ -60,7 +60,7 @@ class _OngoingRequestsState extends ConsumerState<OngoingRequests> {
                       itemCount: ref.watch(HistoryProvider).length,
                       itemBuilder: (context, index) {
                         if (ref.watch(HistoryProvider)[index].state ==
-                                RSAStates.canceled ||
+                                RSAStates.cancelled ||
                             ref.watch(HistoryProvider)[index].state ==
                                 RSAStates.done) {
                           return Container();

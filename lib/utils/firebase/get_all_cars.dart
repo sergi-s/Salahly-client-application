@@ -8,8 +8,6 @@ import 'package:slahly/main.dart';
 import 'package:slahly/utils/constants.dart';
 
 allCars(ref) async {
-  Color? pickerColor = Color(0xff443a49);
-  String? color;
   print("GET ALL CARS");
   DatabaseReference carsUsers = dbRef.child("users_cars");
   DatabaseReference cars = dbRef.child("cars");
@@ -22,7 +20,7 @@ allCars(ref) async {
     final dataSnapshot = event.snapshot;
     print("carssss${dataSnapshot.value.toString()}");
 
-    dataSnapshot.children.forEach((element) {
+    for (var element in dataSnapshot.children) {
       print(element.key.toString());
       cars.child(element.key.toString()).once().then((value) {
         final carsSnapshot = value.snapshot;
@@ -56,8 +54,17 @@ allCars(ref) async {
 
         print("all cars in SM${ref.watch(userProvider).cars},");
       });
-    });
+    }
   });
+}
+
+Future<bool> isCarInConflict(String carNoChassis) async {
+  DataSnapshot conflictSnapShot = await conflictRef.child(carNoChassis).get();
+  print("saadasdasdasd${conflictSnapShot.value.toString()}");
+  if (conflictSnapShot.value != null) {
+    return true;
+  }
+  return false;
 }
 
 Future<bool> doesExistInRequest(String carNoChassis) async {
@@ -88,7 +95,7 @@ Future<bool> getCarRequests(
           RSA.stringToState(element.child("state").value.toString());
       print(rsaState);
       print(element.child("state").value.toString());
-      if (rsaState != RSAStates.canceled && rsaState != RSAStates.done) {
+      if (rsaState != RSAStates.cancelled && rsaState != RSAStates.done) {
         print(
             "We found this car ${carNoChassis} in request state ${rsaState} == ${element.child("state").value.toString()} id:${element.key.toString()}");
         isCarAvailable = false;

@@ -55,6 +55,7 @@ class RSANotifier extends StateNotifier<RSA> {
       state = state.copyWith(acceptedNearbyProviders: acceptedNearbyProviders);
 
   void onFindNewMechanic(Mechanic nearbyMechanic) async {
+    if (nearbyMechanic.id == null) return;
     atLeastOneMechanic = true;
     // print("onFIndNew mechanic::");
     //copy to new map (make sure their is no conflict between call by ref and call by value) and not null
@@ -70,8 +71,8 @@ class RSANotifier extends StateNotifier<RSA> {
       DatabaseReference localRef = state.requestType == RequestType.WSA
           ? wsaRef
           : (state.requestType == RequestType.RSA)
-              ? rsaRef
-              : ttaRef;
+          ? rsaRef
+          : ttaRef;
 
       if (state.requestType != RequestType.TTA) {
         localRef
@@ -86,6 +87,7 @@ class RSANotifier extends StateNotifier<RSA> {
   }
 
   void onFindNewProvider(TowProvider newNearbyProvider) async {
+    if (newNearbyProvider.id == null) return;
     atLeastOneProvider = true;
     Map<String, TowProvider> tempMap = {...state.newNearbyProviders ?? {}};
     if (!tempMap.containsKey(newNearbyProvider.id)) {
@@ -93,8 +95,8 @@ class RSANotifier extends StateNotifier<RSA> {
       DatabaseReference localRef = state.requestType == RequestType.WSA
           ? wsaRef
           : (state.requestType == RequestType.RSA)
-              ? rsaRef
-              : ttaRef;
+          ? rsaRef
+          : ttaRef;
       if (!needTowProvider) return;
       localRef
           .child(state.rsaID!)
@@ -142,7 +144,9 @@ class RSANotifier extends StateNotifier<RSA> {
     TowProvider newTowProvider;
 
     if (!state.newNearbyProviders!.containsKey(newTowProviderID)) {
-      newTowProvider = await getProviderData(newTowProviderID) as TowProvider;
+      newTowProvider =
+          await getProviderData(newTowProviderID, rsaID: state.rsaID)
+              as TowProvider;
       state.newNearbyProviders![newTowProviderID] = newTowProvider;
       state = state.copyWith(newNearbyProviders: state.newNearbyProviders);
     } else {
@@ -165,6 +169,18 @@ class RSANotifier extends StateNotifier<RSA> {
         ...?state.acceptedNearbyProviders,
         newTowProvider
       ]);
+
+      print("estimatedTime");
+      DataSnapshot tp = await dbRef
+          .child("providersRequests")
+          .child(newTowProviderID)
+          .child(state.rsaID!)
+          .get();
+      if (tp.value != null) {
+        state.newNearbyProviders![newTowProviderID]?.estimatedTime =
+            tp.child("estimatedTime").value.toString();
+        print(tp.value);
+      }
 
       // print("added ${newTowProvider.name}");
     }
@@ -192,9 +208,28 @@ class RSANotifier extends StateNotifier<RSA> {
         .child(state.rsaID!)
         .child("mechanicsResponses")
         .update({mechanic.id!: "chosen"});
+    if (state.requestType == RequestType.WSA && needTowProvider) {
+      await localRef.child(state.rsaID!).update(
+          {"state": RSA.stateToString(RSAStates.waitingForProviderResponse)});
+    } else {
+      await localRef
+          .child(state.rsaID!)
+          .update({"state": RSA.stateToString(RSAStates.mechanicConfirmed)});
+    }
 
-    await localRef.child(state.rsaID!).update({"updatedAt": DateTime.now().toString()});
+    await localRef
+        .child(state.rsaID!)
+        .update({"updatedAt": DateTime.now().toString()});
     print("After await");
+
+    if (state.requestType != RequestType.RSA) {
+      DatabaseReference tempDB =
+          FirebaseDatabase.instance.ref().child("mechanicsRequests");
+      tempDB
+          .child(mechanic.id!)
+          .child(state.rsaID!)
+          .update({'state': 'chosen'});
+    }
   }
 
   void assignNearbyProviders(List<TowProvider> nearbyProviders) =>
@@ -218,12 +253,35 @@ class RSANotifier extends StateNotifier<RSA> {
     //         ? "rsaRef"
     //         : "ttaRef");
 
+    //temp here;
+    DataSnapshot tp = await dbRef
+        .child("providersRequests")
+        .child(provider.id!)
+        .child(state.rsaID!)
+        .get();
+    if (tp.value != null) {
+      provider.estimatedTime = tp.child("estimatedTime").value.toString();
+      print(tp.value);
+    }
+
     await localRef
         .child(state.rsaID!)
         .child("providersResponses")
         .update({provider.id!: "chosen"});
 
-    await localRef.child(state.rsaID!).update({"updatedAt": DateTime.now().toString()});
+    await localRef.child(state.rsaID!).update({
+      "updatedAt": DateTime.now().toString(),
+      "state": RSA.stateToString(RSAStates.waitingForArrival)
+    });
+
+    if (state.requestType != RequestType.RSA) {
+      DatabaseReference tempDB =
+          FirebaseDatabase.instance.ref().child("providersRequests");
+      tempDB
+          .child(provider.id!)
+          .child(state.rsaID!)
+          .update({'state': 'chosen'});
+    }
   }
 
   assignRequestType(RequestType requestType) =>
@@ -363,14 +421,14 @@ class RSANotifier extends StateNotifier<RSA> {
   }
 
   void cancelRequest() async {
-    assignState(RSAStates.canceled);
+    assignState(RSAStates.cancelled);
     DatabaseReference localRef = state.requestType == RequestType.WSA
         ? wsaRef
         : state.requestType == RequestType.RSA
             ? rsaRef
             : ttaRef;
     await localRef.child(state.rsaID!).update({
-      "state": RSA.stateToString(RSAStates.canceled),
+      "state": RSA.stateToString(RSAStates.cancelled),
       "updatedAt": DateTime.now().toString()
     });
 

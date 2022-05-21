@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:slahly/classes/firebase/roadsideassistance/roadsideassistance.dart';
@@ -10,21 +12,40 @@ import 'package:slahly/main.dart';
 import 'package:slahly/utils/constants.dart';
 import 'package:slahly/utils/firebase/get_mechanic_data.dart';
 
-loadRequestFromDB(
-    {required String id,
-    required String requestType,
-    Car? alreadyHaveCar}) async {
+loadRequestFromDB({required String id,
+  required String requestType,
+  Car? alreadyHaveCar}) async {
   DataSnapshot dataSnapshot = await dbRef.child(requestType).child(id).get();
   RequestType t = RSA.stringToRequestType(requestType.toUpperCase())!;
   if (alreadyHaveCar == null) {
     DataSnapshot carSnapshot = await dbRef
         .child("cars")
-        .child(dataSnapshot.child("carID").value.toString())
+        .child(dataSnapshot
+        .child("carID")
+        .value
+        .toString())
         .get();
+
+    Color? color;
+    if (carSnapshot
+        .child("color")
+        .value != null) {
+      color = Color(int.parse(carSnapshot
+          .child("color")
+          .value
+          .toString()));
+    }
+
     alreadyHaveCar = Car(
-      // color: carSnapshot.child("color").value.toString(),
-      noPlate: carSnapshot.child("plate").value.toString(),
-      model: carSnapshot.child("model").value.toString(),
+      color:color,
+      noPlate: carSnapshot
+          .child("plate")
+          .value
+          .toString(),
+      model: carSnapshot
+          .child("model")
+          .value
+          .toString(),
     );
   }
 
@@ -53,8 +74,8 @@ loadRequestFromDB(
   Mechanic? mechanic;
   for (var response in dataSnapshot.child("mechanicsResponses").children) {
     if ((response.value == "accepted" &&
-            RSA.stringToRequestType(requestType.toUpperCase()) ==
-                RequestType.RSA) ||
+        RSA.stringToRequestType(requestType.toUpperCase()) ==
+            RequestType.RSA) ||
         (response.value == "chosen" &&
             RSA.stringToRequestType(requestType.toUpperCase()) !=
                 RequestType.RSA)) {

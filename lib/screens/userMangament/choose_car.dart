@@ -58,9 +58,7 @@ class _State extends ConsumerState<Choose_car> {
 
   @override
   Widget build(BuildContext context) {
-    final Client carstate = ref.watch(userProvider);
-    final userNotifier = ref.watch(userProvider.notifier);
-    Size size = MediaQuery.of(context).size;
+    final Client carState = ref.watch(userProvider);
     return Scaffold(
         backgroundColor: const Color(0xFFd1d9e6),
         appBar: AppBar(
@@ -91,7 +89,7 @@ class _State extends ConsumerState<Choose_car> {
                   child: ListView.builder(
                     itemCount: ref.watch(userProvider).cars.length,
                     itemBuilder: (context, index) {
-                      if (carstate.cars[index].carAccess != CarAccess.sub) {
+                      if (carState.cars[index].carAccess != CarAccess.sub) {
                         return Card(
                           elevation: 6,
                           margin: EdgeInsets.all(10),
@@ -109,7 +107,7 @@ class _State extends ConsumerState<Choose_car> {
                               child: GestureDetector(
                                 onTap: () {
                                   context.push(ManageSubowner.routeName,
-                                      extra: carstate.cars[index].noChassis
+                                      extra: carState.cars[index].noChassis
                                           .toString());
 
                                   print('welcome'.tr());
@@ -117,7 +115,7 @@ class _State extends ConsumerState<Choose_car> {
                                 child: ListTile(
                                   leading: CircleAvatar(
                                     radius: 30,
-                                    backgroundColor: carstate.cars[index].color,
+                                    backgroundColor: carState.cars[index].color,
                                     // ref
                                     //     .watch(userProvider)
                                     //     .cars[index]
@@ -129,7 +127,7 @@ class _State extends ConsumerState<Choose_car> {
                                   title: Row(
                                     children: [
                                       Text(
-                                          carstate.cars[index].model.toString(),
+                                          carState.cars[index].model.toString(),
                                           style: const TextStyle(
                                               fontSize: 25,
                                               fontWeight: FontWeight.bold)),
@@ -211,7 +209,7 @@ class _State extends ConsumerState<Choose_car> {
                                                 color: Colors.black),
                                           ),
                                           Text(
-                                            carstate.cars[index].noPlate
+                                            carState.cars[index].noPlate
                                                 .toString(),
                                             style: const TextStyle(
                                                 fontSize: 18,
@@ -229,7 +227,7 @@ class _State extends ConsumerState<Choose_car> {
                                                 color: Colors.black),
                                           ),
                                           Text(
-                                              carstate.cars[index].noChassis
+                                              carState.cars[index].noChassis
                                                   .toString(),
                                               style: const TextStyle(
                                                   fontSize: 18,
@@ -273,8 +271,6 @@ class _State extends ConsumerState<Choose_car> {
 
   deleteCar(index) async {
     String? chasis = ref.watch(userProvider).cars[index].noChassis;
-    final userNotifier = ref.watch(userProvider.notifier);
-    final Client carstate = ref.watch(userProvider);
 
     //TODO check if this user is the owner of this car
     //authorization

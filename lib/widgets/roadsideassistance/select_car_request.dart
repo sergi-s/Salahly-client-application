@@ -90,7 +90,15 @@ class _SelectCarRequestState extends ConsumerState<SelectCarRequest> {
           isThreeLine: true,
           subtitle: Text(car.model ?? ""),
           onChanged: (Car? currentCar) async {
-            bool isAvailable = await doesExistInRequest(currentCar!.noChassis!);
+            bool isInConflict = await isCarInConflict(currentCar!.noChassis!);
+            if (isInConflict) {
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                content: Text("conflictExits".tr()),
+              ));
+              return;
+            }
+
+            bool isAvailable = await doesExistInRequest(currentCar.noChassis!);
             if (!isAvailable) {
               ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                 content: Text("carAlreadyInUse".tr()),

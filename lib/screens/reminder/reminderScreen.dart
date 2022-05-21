@@ -181,7 +181,7 @@ class _ReminderScreenState extends State<ReminderScreen> {
           }).toList()),
         ),
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
+      // floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
       floatingActionButton: FloatingActionButton(
         isExtended: true,
         child: const Icon(Icons.add),

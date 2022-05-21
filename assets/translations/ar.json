@@ -197,5 +197,19 @@
   "Owner": "مالك",
   "SubOwner": "مالك فرعي",
   "searching": "جاري البحث",
-  "carAlreadyInUse": "هذه السياره بالفعل مستخدمة"
+  "carAlreadyInUse": "هذه السياره بالفعل مستخدمة",
+  "ratePlease": "فضلا قيم",
+  "requestType": "النوع",
+  "requests": "الطلابات",
+  "enterCarModel": "ادخل موديل السياره",
+  "enterCarChassisNo": "ادخل رقم الشسيه",
+  "enterCarNoPlate": "ادخل رقم اللوحه",
+  "carAdded": "سياره اضافت",
+  "dataError": "خطأ في البيانتات",
+  "fillAllData": "املء المبيانات كامله",
+  "conflict": "خلاف",
+  "carAlreadyInSystem": "هذه السياره في النظام بالفعل",
+  "requestConflict": "طلب الطعن",
+  "requestAlreadyPut": "انت طلبت بالفعل",
+  "min": "دقيقه"
 }

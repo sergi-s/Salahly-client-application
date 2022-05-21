@@ -50,15 +50,21 @@ class _HomePageState extends ConsumerState<HomePage> {
             "welcome".tr(),
             textScaleFactor: 1.4,
             style: const TextStyle(
-                fontWeight: FontWeight.bold, color: Color(0xff193566)),
+                fontSize: 23,
+                letterSpacing: 1,
+                fontWeight: FontWeight.w500,
+                color: Color(0xff193566)),
           ).tr(),
+          SizedBox(height: MediaQuery.of(context).size.height * 0.01),
           CardWidget(
               fun: () {
                 context.push(RoadSideAssistanceScreen.routeName);
               },
               title: 'rsa'.tr(),
               subtitle: 'rsaDescription'.tr(),
-              image: 'assets/images/tow-truck 2.png'),
+              image: 'assets/images/car job.png'),
+
+          SizedBox(height: MediaQuery.of(context).size.height * 0.002),
           CardWidget(
               fun: () {
                 context.push(WSAScreen.routeName);
@@ -66,13 +72,15 @@ class _HomePageState extends ConsumerState<HomePage> {
               title: 'wsa'.tr(),
               subtitle: 'wsaDescription'.tr(),
               image: 'assets/images/mechanic.png'),
+
+          SizedBox(height: MediaQuery.of(context).size.height * 0.002),
           CardWidget(
               fun: () {
                 context.push(DropOffLocationScreen.routeName);
               },
               title: 'tta'.tr(),
               subtitle: 'ttaDescription'.tr(),
-              image: 'assets/images/mechanic.png'),
+              image: 'assets/images/tow-truck 2.png'),
           // ElevatedButton(
           //     onPressed: () {
           //       print(ref.watch(userProvider).cars);

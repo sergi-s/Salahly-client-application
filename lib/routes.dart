@@ -138,10 +138,10 @@ class Routing {
         path: ViewCars.routeName,
         builder: (context, state) => ViewCars(),
       ),
-      GoRoute(
-        path: AddCars.routeName,
-        builder: (context, state) => AddCars(),
-      ),
+      // GoRoute(
+      //   path: AddCars.routeName,
+      //   builder: (context, state) => AddCars(),
+      // ),
       GoRoute(
         path: SwitchLanguageScreen.routeName,
         builder: (context, state) => SwitchLanguageScreen(),
@@ -217,8 +217,8 @@ class Routing {
         builder: (context, state) => RequestFinalScreen(),
       ),
       GoRoute(
-        path: Addcar.routeName,
-        builder: (context, state) => Addcar(),
+        path: AddCar.routeName,
+        builder: (context, state) => AddCar(),
       ),
       GoRoute(
         path: OngoingRequests.routeName,

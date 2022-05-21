@@ -36,11 +36,11 @@ class _ViewHistoryState extends ConsumerState<ViewHistory> {
 
       //Custom History
       final data = await db.collection('customHistory').get();
-      print("the saved custom history $data");
+      // print("the saved custom history $data");
 
       _subscription = db.collection('customHistory').stream.listen((event) {
         setState(() {
-          print("event-=> ${event}");
+          // print("event-=> ${event}");
           Map item = {};
           item['id'] = event['id'];
           item['carNoPlate'] = event['carNoPlate'];

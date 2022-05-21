@@ -4,7 +4,7 @@ import 'package:slahly/classes/models/towProvider.dart';
 import 'package:slahly/main.dart';
 import 'package:string_validator/string_validator.dart';
 
-Future getProviderData(String id) async {
+Future getProviderData(String id, {String? rsaID}) async {
   // FirebaseEmulatorScreen().readmsg();
   DataSnapshot ds = await dbRef.child("users").child(id).get();
 
@@ -26,6 +26,16 @@ Future getProviderData(String id) async {
   if ((ds.child("address").value) != null) {
     avatar = (ds.child("address").value).toString();
   }
+  String? estimatedTime;
+  print("estimatedTime");
+  if(rsaID!=null){
+  DataSnapshot tp =
+        await dbRef.child("providersRequests").child(id).child(rsaID!).get();
+    if (tp.value != null) {
+      estimatedTime = tp.child("estimatedTime").value.toString();
+      print(tp.value);
+    }
+  }
 
   return TowProvider(
       isCenter: toBoolean((ds.child("isCenter").value).toString()),
@@ -37,5 +47,6 @@ Future getProviderData(String id) async {
       email: (ds.child("email").value).toString(),
       rating: rating,
       address: address,
-      nationalID: (ds.child("nationalID").value).toString());
+      nationalID: (ds.child("nationalID").value).toString(),
+      estimatedTime: estimatedTime);
 }
