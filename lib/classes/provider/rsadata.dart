@@ -140,6 +140,29 @@ class RSANotifier extends StateNotifier<RSA> {
     // print("THE ACCEPTED LIST IS mechs${state.acceptedNearbyMechanics}");
   }
 
+  getEstimatedTime(String towProviderId) async {
+    print("hello estimated time");
+    TowProvider towProvider;
+    if (state.newNearbyProviders!.containsKey(towProviderId)) {
+      towProvider = state.newNearbyProviders![towProviderId]!;
+
+      DataSnapshot tp = await dbRef
+          .child("providersRequests")
+          .child(towProviderId)
+          .child(state.rsaID!)
+          .get();
+      if (tp.value != null) {
+        state.newNearbyProviders![towProvider.id]?.estimatedTime =
+            tp.child("estimatedTime").value.toString();
+
+        state = state.copyWith(acceptedNearbyProviders: [
+          ...?state.acceptedNearbyProviders,
+        ]);
+        print(tp.value);
+      }
+    }
+  }
+
   void addAcceptedNearbyProvider(String newTowProviderID) async {
     TowProvider newTowProvider;
 
@@ -152,6 +175,8 @@ class RSANotifier extends StateNotifier<RSA> {
     } else {
       newTowProvider = state.newNearbyProviders![newTowProviderID]!;
     }
+    print("hello estimated time2222");
+    getEstimatedTime(newTowProviderID);
 
     // print("Will try to add ${newTowProvider.name}");
     bool flag = true;
@@ -169,18 +194,6 @@ class RSANotifier extends StateNotifier<RSA> {
         ...?state.acceptedNearbyProviders,
         newTowProvider
       ]);
-
-      print("estimatedTime");
-      DataSnapshot tp = await dbRef
-          .child("providersRequests")
-          .child(newTowProviderID)
-          .child(state.rsaID!)
-          .get();
-      if (tp.value != null) {
-        state.newNearbyProviders![newTowProviderID]?.estimatedTime =
-            tp.child("estimatedTime").value.toString();
-        print(tp.value);
-      }
 
       // print("added ${newTowProvider.name}");
     }
@@ -236,7 +249,6 @@ class RSANotifier extends StateNotifier<RSA> {
       state = state.copyWith(nearbyProviders: nearbyProviders);
 
   void assignProvider(TowProvider provider, bool stopListener) async {
-    state = state.copyWith(provider: provider);
     if (stopListener) {
       NearbyLocations.stopListener();
     }
@@ -244,9 +256,6 @@ class RSANotifier extends StateNotifier<RSA> {
     // print(_requestType.toString());
     final prefs = await SharedPreferences.getInstance();
     prefs.setString("towProvider", provider.id!);
-    if (state.requestType == RequestType.RSA) return;
-    DatabaseReference localRef =
-        state.requestType == RequestType.WSA ? wsaRef : ttaRef;
     // print((_requestType == _RequestType.WSA)
     //     ? "wsaRef"
     //     : _requestType == _RequestType.RSA
@@ -254,15 +263,11 @@ class RSANotifier extends StateNotifier<RSA> {
     //         : "ttaRef");
 
     //temp here;
-    DataSnapshot tp = await dbRef
-        .child("providersRequests")
-        .child(provider.id!)
-        .child(state.rsaID!)
-        .get();
-    if (tp.value != null) {
-      provider.estimatedTime = tp.child("estimatedTime").value.toString();
-      print(tp.value);
-    }
+    getEstimatedTime(provider.id!);
+    state = state.copyWith(provider: provider);
+    if (state.requestType == RequestType.RSA) return;
+    DatabaseReference localRef =
+        state.requestType == RequestType.WSA ? wsaRef : ttaRef;
 
     await localRef
         .child(state.rsaID!)
@@ -379,9 +384,9 @@ class RSANotifier extends StateNotifier<RSA> {
 
   searchNearbyMechanicsAndProviders() {
     // _assignState(RSAStates.searchingForNearbyMechanic);
-    // double radius =
-    //     state.user != null ? state.user!.getSubscriptionRange()! : 100;
-    double radius = 400;
+    double radius =
+        state.user != null ? state.user!.getSubscriptionRange()! : 100;
+    // double radius = 400;
     NearbyLocations.getNearbyMechanicsAndProviders(
         state.location!.latitude, state.location!.longitude, radius, ref);
   }

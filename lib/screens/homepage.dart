@@ -40,6 +40,7 @@ class _HomePageState extends ConsumerState<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color(0xFFd1d9e6),
       appBar: salahlyAppBar(),
       drawer: salahlyDrawer(context),
       body: Column(
@@ -124,5 +125,9 @@ class _HomePageState extends ConsumerState<HomePage> {
       }
     }
     ////////////////////////
+  }
+
+  void reviveFromCloud() {
+
   }
 }

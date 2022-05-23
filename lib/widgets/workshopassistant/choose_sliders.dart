@@ -56,8 +56,8 @@ class _WSASliderState extends ConsumerState<WSASlider> {
                         who: "mechanic",
                         size: ref
                             .watch(rsaProvider)
-                            .acceptedNearbyMechanics!
-                            .length,
+                            .newNearbyMechanics!
+                            .values.length,
                       )
                     : ListView.separated(
                         itemCount: ref
@@ -454,7 +454,7 @@ class SearchingWidget extends StatelessWidget {
       alignment: Alignment.center,
       color: const Color(0xFFd1d9e6),
       child: Text(
-        "weFound".tr() + " $size, " + who!,
+        "weFound".tr() + " $size, ${who!.tr()}",
         style: const TextStyle(fontSize: 20),
       ),
     );

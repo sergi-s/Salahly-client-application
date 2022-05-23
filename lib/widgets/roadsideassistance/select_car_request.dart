@@ -7,6 +7,7 @@ import 'package:slahly/classes/provider/user_data.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 import '../../utils/firebase/get_all_cars.dart';
+import '../location/progressDialog.dart';
 
 class SelectCarRequest extends ConsumerStatefulWidget {
   SelectCarRequest({
@@ -23,14 +24,15 @@ class SelectCarRequest extends ConsumerStatefulWidget {
 
 class _SelectCarRequestState extends ConsumerState<SelectCarRequest> {
   List<Widget> selectCarRadioItems = [];
+  Car? selectedCar;
 
   @override
   Widget build(BuildContext context) {
     getCarsRadio();
     return SlidingUpPanel(
         controller: widget.pc,
-        panelSnapping: true,
-        isDraggable: true,
+        panelSnapping: false,
+        isDraggable: false,
         minHeight: 0,
         defaultPanelState: PanelState.CLOSED,
         panelBuilder: (sc) {
@@ -49,11 +51,16 @@ class _SelectCarRequestState extends ConsumerState<SelectCarRequest> {
                 body: TabBarView(
                   children: [
                     Builder(builder: (context) {
-                      return Padding(
-                        padding: const EdgeInsets.only(left: 10, top: 15),
-                        child: Column(
-                          children: selectCarRadioItems, //[...getCarsRadio()],
-                        ),
+                      return Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          ListView.separated(
+                              itemBuilder: (context, index) =>
+                                  selectCarRadioItems[index],
+                              separatorBuilder: (context, index) =>
+                                  const Divider(height: 5),
+                              itemCount: selectCarRadioItems.length)
+                        ], //[...getCarsRadio()],
                       );
                     }),
                   ],
@@ -70,8 +77,6 @@ class _SelectCarRequestState extends ConsumerState<SelectCarRequest> {
               ));
         });
   }
-
-  Car? selectedCar;
 
   // List<Widget>
   getCarsRadio() async {
@@ -90,40 +95,45 @@ class _SelectCarRequestState extends ConsumerState<SelectCarRequest> {
           isThreeLine: true,
           subtitle: Text(car.model ?? ""),
           onChanged: (Car? currentCar) async {
+            showDialog(
+                context: context,
+                builder: (BuildContext context) =>
+                    ProgressDialog(message: "holdConfirmCar".tr()));
             bool isInConflict = await isCarInConflict(currentCar!.noChassis!);
             if (isInConflict) {
               ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                 content: Text("conflictExits".tr()),
               ));
+              Navigator.pop(context);
               return;
             }
-
             bool isAvailable = await doesExistInRequest(currentCar.noChassis!);
             if (!isAvailable) {
               ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                 content: Text("carAlreadyInUse".tr()),
               ));
+              Navigator.pop(context);
               return;
             }
-
-            print("Current User ${car.noPlate}");
+            // print("Current User ${car.noPlate}");
             setState(() {
               selectedCar = currentCar;
             });
-            // (currentCar == null)
-            //     ? ref.watch(rsaProvider.notifier).assignCar(null)
-            //     : ref.watch(rsaProvider.notifier).assignCar(currentCar!);
+            Navigator.pop(context);
           },
-          // selected: selectedCar,
-          //ref.watch(rsaProvider).car == car,
           activeColor: const Color(0xFF193566),
         ),
       );
+      selectCarRadioItems.add(Container(
+        height: 10,
+      ));
     }
     // return widgets;
   }
 
   chooseCarDialog() {
+    //deprecated
+    List<Widget> carsRadioButtons = getCarsRadio();
     showDialog(
         context: context,
         builder: (BuildContext context) => AlertDialog(
@@ -134,8 +144,12 @@ class _SelectCarRequestState extends ConsumerState<SelectCarRequest> {
               content: SizedBox(
                 height: 200,
                 width: 300,
-                child: SingleChildScrollView(
-                    child: Column(children: getCarsRadio())),
+                child: ListView.separated(
+                    itemBuilder: ((context, index) => carsRadioButtons[index]),
+                    separatorBuilder: (BuildContext context, int index) {
+                      return const Divider(height: 5);
+                    },
+                    itemCount: carsRadioButtons.length),
               ),
               actions: [
                 FloatingActionButton(

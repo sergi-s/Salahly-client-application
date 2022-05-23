@@ -24,7 +24,7 @@
   "confirm_or_edit_data": "Confirm or edit data",
   "problem_description": "Problem description",
   "mechanic": "Mechanic",
-  "provider": "Provider",
+  "provider": "Tow Provider",
   "enter_your_problem": "Enter Your Problem",
   "describe_your_problem": "Describe Your Problem",
   "my_car_is_broke_and_doesnt_work": "My car is broke and doesn't work",
@@ -108,7 +108,7 @@
   "goToHomePage": "Go to Home page",
   "keepWaiting": "Keep waiting",
   "MechanicsRejected": "Mechanics rejected request",
-  "ProvidersRejected": "Providers rejected request",
+  "ProvidersRejected": "Tow Providers rejected request",
   "MechanicsRejectedDescription": "All found Mechanics rejected your request, try again later or keep waiting",
   "ProvidersRejectedDescription": "All found Providers rejected your request, try again later or keep waiting",
   "rsaConfirmation": "Are you sure you want to request roadside assistance at ",
@@ -210,5 +210,7 @@
   "carAlreadyInSystem": "This Car is already in the system",
   "requestConflict": "Request Conflict",
   "requestAlreadyPut": "You already submited a conflict",
-  "min": "min"
+  "min": "min",
+  "review": "Review",
+  "holdConfirmCar": "Confirming Car, please wait"
 }

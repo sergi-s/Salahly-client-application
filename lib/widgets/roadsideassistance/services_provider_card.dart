@@ -41,6 +41,7 @@ class ServicesProviderWiget extends StatelessWidget {
     this.serviceProviderPhoneNumber,
     this.serviceProviderRating,
     this.serviceProviderAddress,
+    this.avatar,
   }) : super(key: key) {
     foundType = serviceProviderType == "Mechanic"
         ? "found_Mechanic"
@@ -51,7 +52,8 @@ class ServicesProviderWiget extends StatelessWidget {
       serviceProviderName,
       serviceProviderEmail,
       serviceProviderPhoneNumber,
-      serviceProviderAddress;
+      serviceProviderAddress,
+      avatar;
   bool? serviceProviderIsCenter;
   double? serviceProviderRating;
 
@@ -65,7 +67,7 @@ class ServicesProviderWiget extends StatelessWidget {
           children: [
             SizedBox(height: MediaQuery.of(context).size.height * 0.04),
             CircleAvatar(
-              backgroundImage: Image.network(
+              backgroundImage: Image.network(avatar ??
                       "https://www.biography.com/.image/ar_1:1%2Cc_fill%2Ccs_srgb%2Cfl_progressive%2Cq_auto:good%2Cw_1200/MTY3MDUxMjkzMjI1OTIwMTcz/brad-pitt-attends-the-premiere-of-20th-century-foxs--square.jpg")
                   .image,
               radius: 35,

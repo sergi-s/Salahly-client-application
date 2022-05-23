@@ -211,5 +211,7 @@
   "carAlreadyInSystem": "هذه السياره في النظام بالفعل",
   "requestConflict": "طلب الطعن",
   "requestAlreadyPut": "انت طلبت بالفعل",
-  "min": "دقيقه"
+  "min": "دقيقه",
+  "review": "قيم",
+  "holdConfirmCar": "جاري التحقق من السياره, فضلا انتظر"
 }

@@ -8,6 +8,7 @@ import 'package:slahly/main.dart';
 import 'package:slahly/utils/constants.dart';
 
 allCars(ref) async {
+  ref.watch(userProvider.notifier).clearCars();
   print("GET ALL CARS");
   DatabaseReference carsUsers = dbRef.child("users_cars");
   DatabaseReference cars = dbRef.child("cars");

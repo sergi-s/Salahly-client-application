@@ -4,12 +4,12 @@ import 'package:flutter/services.dart';
 import 'package:slahly/classes/firebase/roadsideassistance/roadsideassistance.dart';
 import 'package:slahly/widgets/global_widgets/custom_row.dart';
 
-import '../../widgets/dialogues/rating.dart';
+import 'package:slahly/widgets/dialogues/rating.dart';
 
 class Accordion extends StatefulWidget {
   RSA? rsa;
 
-  Accordion({this.rsa});
+  Accordion({Key? key, this.rsa}) : super(key: key);
 
   @override
   _AccordionState createState() => _AccordionState();
@@ -37,7 +37,7 @@ class _AccordionState extends State<Accordion> {
                 rateServiceProvider(
                     widget.rsa!.towProvider!, widget.rsa!, context);
               },
-              child: const Text("Review Tow Provider")),
+              child: Text('${"review".tr()} ${"provider".tr()}')),
         ),
       );
     } else {
@@ -58,7 +58,7 @@ class _AccordionState extends State<Accordion> {
                 rateServiceProvider(
                     widget.rsa!.mechanic!, widget.rsa!, context);
               },
-              child: const Text("Review Mechanic")),
+              child: Text('${"review".tr()} ${"mechanic".tr()}')),
         ),
       );
     }
@@ -83,12 +83,6 @@ class _AccordionState extends State<Accordion> {
                   style: const TextStyle(
                       fontWeight: FontWeight.bold, fontSize: 20),
                 ),
-                // widget.rsa!.state == RSAStates.done
-                //     ? const Icon(
-                //         Icons.check,
-                //         color: Colors.green,
-                //       )
-                //     : const Icon(Icons.access_time, color: Colors.grey),
               ],
             ),
             trailing: IconButton(

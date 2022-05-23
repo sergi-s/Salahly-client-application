@@ -447,6 +447,9 @@ class _WSAScreenState extends ConsumerState<WSAScreen> {
             ref
                 .watch(rsaProvider.notifier)
                 .addAcceptedNearbyProvider(dataSnapShotProvider.key.toString());
+            ref
+                .watch(rsaProvider.notifier)
+                .getEstimatedTime(dataSnapShotProvider.key.toString());
           }
         });
         if (flagAllRejected && flagFindYet) {

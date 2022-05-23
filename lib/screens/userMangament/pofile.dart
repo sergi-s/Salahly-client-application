@@ -8,9 +8,12 @@ import 'package:go_router/go_router.dart';
 import 'package:slahly/classes/firebase/firebase.dart';
 import 'package:slahly/classes/provider/user_data.dart';
 import 'package:slahly/main.dart';
-import 'package:slahly/screens/login_signup/check_login.dart';
 import 'package:slahly/screens/userMangament/editProfile.dart';
 import 'package:slahly/utils/firebase/get_user_data.dart';
+import 'package:slahly/screens/login_signup/signupscreen.dart';
+
+import '../../classes/provider/app_data.dart';
+import '../../classes/provider/rsadata.dart';
 
 class Profile extends ConsumerStatefulWidget {
   static const String routeName = "/profile";
@@ -289,9 +292,12 @@ class _ProfileState extends ConsumerState<Profile> {
                 )),
             ElevatedButton(
                 onPressed: () async {
+                  ref.watch(rsaProvider.notifier).cancelRequest();
+                  ref.watch(salahlyClientProvider.notifier).deAssignRequest();
                   FirebaseCustom().logout();
                   Navigator.pop(context);
-                  context.go(CheckLogin.routeName);
+
+                  context.go(LoginSignupScreen.routeName);
                 },
                 child: const Text("confirm").tr(),
                 style: ElevatedButton.styleFrom(
