@@ -11,6 +11,7 @@ class RSA {
   CustomLocation? _location; // lazm yt2sm le long w lat
   String? _rsaID;
   Report? _report;
+  String? _semiReport;
   Car? _car;
 
   ///
@@ -49,17 +50,17 @@ class RSA {
     CustomLocation? location,
     String? rsaID,
     Client? user,
-    DateTime? estimatedTime,
-    CustomLocation? dropOffLocation,
-    List<Mechanic>? acceptedNearbyMechanics,
-    Map<String, Mechanic>? newNearbyMechanics,
-    List<TowProvider>? acceptedNearbyProviders,
-    Map<String, TowProvider>? newNearbyProviders,
-    Car? car,
-    RequestType? requestType,
-    DateTime? createdAt,
-    DateTime? updatedAt,
-  }) {
+      DateTime? estimatedTime,
+      CustomLocation? dropOffLocation,
+      List<Mechanic>? acceptedNearbyMechanics,
+      Map<String, Mechanic>? newNearbyMechanics,
+      List<TowProvider>? acceptedNearbyProviders,
+      Map<String, TowProvider>? newNearbyProviders,
+      Car? car,
+      RequestType? requestType,
+      DateTime? createdAt,
+      DateTime? updatedAt,
+      String? semiReport}) {
     _report = report ?? _report;
     _mechanic = mechanic ?? _mechanic;
     _towProvider = towProvider ?? _towProvider;
@@ -85,6 +86,8 @@ class RSA {
 
     _createdAt = createdAt ?? _createdAt;
     _updatedAt = updatedAt ?? _updatedAt;
+
+    _semiReport = semiReport ?? _semiReport;
   }
 
   RSA copyWith({
@@ -108,6 +111,7 @@ class RSA {
     RequestType? requestType,
     DateTime? createdAt,
     DateTime? updatedAt,
+    String? semiReport,
   }) =>
       RSA(
         report: report ?? _report,
@@ -122,17 +126,17 @@ class RSA {
         user: user ?? _user,
         estimatedTime: estimatedTime ?? _estimatedTime,
         dropOffLocation: dropOffLocation ?? _dropOffLocation,
-        acceptedNearbyMechanics:
-            acceptedNearbyMechanics ?? _acceptedNearbyMechanics,
-        newNearbyMechanics: newNearbyMechanics ?? _newNearbyMechanics,
-        acceptedNearbyProviders:
-            acceptedNearbyProviders ?? _acceptedNearbyProviders,
-        newNearbyProviders: newNearbyProviders ?? _newNearbyProviders,
-        car: car ?? _car,
-        requestType: requestType ?? _requestType,
-        createdAt: createdAt ?? _createdAt,
-        updatedAt: updatedAt ?? _updatedAt,
-      );
+          acceptedNearbyMechanics:
+              acceptedNearbyMechanics ?? _acceptedNearbyMechanics,
+          newNearbyMechanics: newNearbyMechanics ?? _newNearbyMechanics,
+          acceptedNearbyProviders:
+              acceptedNearbyProviders ?? _acceptedNearbyProviders,
+          newNearbyProviders: newNearbyProviders ?? _newNearbyProviders,
+          car: car ?? _car,
+          requestType: requestType ?? _requestType,
+          createdAt: createdAt ?? _createdAt,
+          updatedAt: updatedAt ?? _updatedAt,
+          semiReport: semiReport ?? _semiReport);
 
   //Getters
   CustomLocation? get location => _location;
@@ -172,6 +176,8 @@ class RSA {
   DateTime? get createdAt => _createdAt;
 
   DateTime? get updatedAt => _updatedAt;
+
+  String? get semiReport => _semiReport;
 
   static String stateToString(RSAStates state) {
     return (state.toString()).isNotEmpty

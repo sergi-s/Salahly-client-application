@@ -26,7 +26,7 @@ class _ProfileState extends ConsumerState<Profile> {
   @override
   void initState() {
     // fetch();
-    getUserData(ref);
+    // getUserData(ref);
     super.initState();
   }
 

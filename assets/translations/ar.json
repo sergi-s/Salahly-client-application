@@ -213,5 +213,6 @@
   "requestAlreadyPut": "انت طلبت بالفعل",
   "min": "دقيقه",
   "review": "قيم",
-  "holdConfirmCar": "جاري التحقق من السياره, فضلا انتظر"
+  "holdConfirmCar": "جاري التحقق من السياره, فضلا انتظر",
+  "initialReport": "تقرير مبدئي"
 }

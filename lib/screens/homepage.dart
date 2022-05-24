@@ -1,4 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -10,6 +12,7 @@ import 'package:slahly/screens/chatbot/chatbotscreen.dart';
 import 'package:slahly/screens/dropOff_screens/dropOff_location_screen.dart';
 import 'package:slahly/screens/roadsideassistance/roadside_assistance_map.dart';
 import 'package:slahly/screens/workshop_assistance/workshop_assistance_screen.dart';
+import 'package:slahly/utils/constants.dart';
 import 'package:slahly/utils/firebase/get_all_cars.dart';
 import 'package:slahly/utils/firebase/get_mechanic_data.dart';
 import 'package:slahly/utils/firebase/get_provider_data.dart';
@@ -32,6 +35,7 @@ class _HomePageState extends ConsumerState<HomePage> {
     Future.delayed(Duration.zero, () async {
       getUserData(ref);
       allCars(ref);
+      reviveFromCloud();
       revive();
     });
     super.initState();
@@ -73,7 +77,6 @@ class _HomePageState extends ConsumerState<HomePage> {
               title: 'wsa'.tr(),
               subtitle: 'wsaDescription'.tr(),
               image: 'assets/images/mechanic.png'),
-
           SizedBox(height: MediaQuery.of(context).size.height * 0.002),
           CardWidget(
               fun: () {
@@ -84,7 +87,8 @@ class _HomePageState extends ConsumerState<HomePage> {
               image: 'assets/images/tow-truck 2.png'),
           // ElevatedButton(
           //     onPressed: () {
-          //       print(ref.watch(userProvider).cars);
+          //       // print(ref.watch(userProvider).cars);
+          //       reviveFromCloud();
           //     },
           //     child: Text("tesst"))
         ],
@@ -127,7 +131,62 @@ class _HomePageState extends ConsumerState<HomePage> {
     ////////////////////////
   }
 
-  void reviveFromCloud() {
+  Future reviveFromCloud() async {
+    getActiveRequest(rsaRef);
+    getActiveRequest(ttaRef);
+    getActiveRequest(wsaRef);
+  }
 
+  getActiveRequest(DatabaseReference local) async {
+    String? rsaID, mechanicID, towProviderID;
+    RequestType? requestType;
+    DatabaseEvent dbEvent = await local
+        .orderByChild("userID")
+        .equalTo(FirebaseAuth.instance.currentUser!.uid)
+        .once();
+    DataSnapshot dataSnapshot = dbEvent.snapshot;
+
+    for (var element in dataSnapshot.children) {
+      RSAStates tempState =
+          RSA.stringToState(element.child("state").value.toString());
+      requestType = local == rsaRef
+          ? RequestType.RSA
+          : local == wsaRef
+              ? RequestType.WSA
+              : RequestType.TTA;
+      if (tempState != RSAStates.done || tempState != RSAStates.cancelled) {
+        rsaID = element.key;
+
+        for (var response in element.child("mechanicsResponses").children) {
+          if ((response.value == "accepted" &&
+                  requestType == RequestType.RSA) ||
+              (response.value == "chosen" && requestType != RequestType.RSA)) {
+            mechanicID = response.key.toString();
+          }
+        }
+
+        for (var response in element.child("providersResponses").children) {
+          if ((response.value == "accepted" &&
+                  requestType == RequestType.RSA) ||
+              (response.value == "chosen" && requestType != RequestType.RSA)) {
+            towProviderID = response.key.toString();
+          }
+        }
+      }
+    }
+    if (rsaID != null && requestType != null) {
+      final prefs = await SharedPreferences.getInstance();
+      prefs.setString("requestID", rsaID);
+      prefs.setString("requestType", RSA.requestTypeToString(requestType));
+      prefs.setString("appState",
+          SalahlyClient.appStateToString(AppState.requestingAssistance));
+
+      if (mechanicID != null) {
+        prefs.setString("mechanic", mechanicID);
+      }
+      if (towProviderID != null) {
+        prefs.setString("towProvider", towProviderID);
+      }
+    }
   }
 }

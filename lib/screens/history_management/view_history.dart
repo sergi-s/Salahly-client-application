@@ -31,7 +31,7 @@ class _ViewHistoryState extends ConsumerState<ViewHistory> {
     Future.delayed(Duration.zero, () async {
       //History
       ref
-          .watch(HistoryProvider.notifier)
+          .watch(historyProvider.notifier)
           .assignRequests(ref.watch(userProvider).cars);
 
       //Custom History
@@ -95,18 +95,18 @@ class _ViewHistoryState extends ConsumerState<ViewHistory> {
                       //             .state !=
                       //         RSAStates.canceled &&
                       ref
-                              .watch(HistoryProvider)[
-                                  (ref.watch(HistoryProvider).length - 1) -
+                              .watch(historyProvider)[
+                                  (ref.watch(historyProvider).length - 1) -
                                       index]
                               .state !=
                           RSAStates.done) {
                     return Container();
                   }
                   return Accordion(
-                      rsa: ref.watch(HistoryProvider)[
-                          (ref.watch(HistoryProvider).length - 1) - index]);
+                      rsa: ref.watch(historyProvider)[
+                          (ref.watch(historyProvider).length - 1) - index]);
                 },
-                itemCount: ref.watch(HistoryProvider).length,
+                itemCount: ref.watch(historyProvider).length,
                 shrinkWrap: true,
                 padding: const EdgeInsets.all(5),
                 scrollDirection: Axis.vertical,

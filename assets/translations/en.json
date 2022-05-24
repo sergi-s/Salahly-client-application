@@ -212,5 +212,6 @@
   "requestAlreadyPut": "You already submited a conflict",
   "min": "min",
   "review": "Review",
-  "holdConfirmCar": "Confirming Car, please wait"
+  "holdConfirmCar": "Confirming Car, please wait",
+  "initialReport": "Initial Report"
 }

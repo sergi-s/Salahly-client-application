@@ -312,6 +312,9 @@ class RSANotifier extends StateNotifier<RSA> {
 
   assignCar(Car car) => state = state.copyWith(car: car);
 
+  assignSemiReport(String semiReport) =>
+      state = state.copyWith(semiReport: semiReport);
+
   Future _requestRSA() async {
     needTowProvider = true;
     String userID = FirebaseAuth.instance.currentUser!.uid;

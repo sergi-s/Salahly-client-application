@@ -144,7 +144,7 @@ getRequestOfType(DatabaseReference local, List<Car> cars, WidgetRef ref) {
             id: element.key.toString(),
             requestType: requestType,
             alreadyHaveCar: car);
-        ref.watch(HistoryProvider).add(rsa);
+        ref.watch(historyProvider).add(rsa);
       }
     });
   }

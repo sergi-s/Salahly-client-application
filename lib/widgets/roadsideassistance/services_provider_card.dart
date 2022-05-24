@@ -364,39 +364,43 @@ class ServicesProviderCard extends StatelessWidget {
           //end phone number
 
           //rating
-          Row(
-            children: [
-              Text(
-                "${"Rating".tr()}:",
-                textAlign: TextAlign.justify,
-                style: const TextStyle(fontSize: 25),
-              ),
-              const SizedBox(width: 15),
-              Text(
-                serviceProviderRating.toString(),
-                textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: 20),
-              )
-            ],
-          ),
+          (serviceProviderRating != null || serviceProviderRating!.isNaN)
+              ? Row(
+                  children: [
+                    Text(
+                      "${"Rating".tr()}:",
+                      textAlign: TextAlign.justify,
+                      style: const TextStyle(fontSize: 25),
+                    ),
+                    const SizedBox(width: 15),
+                    Text(
+                      serviceProviderRating.toString(),
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(fontSize: 20),
+                    )
+                  ],
+                )
+              : Container(),
           //end rating
 
           //address
-          Row(
-            children: [
-              Text(
-                "${"Address".tr()}:",
-                textAlign: TextAlign.justify,
-                style: const TextStyle(fontSize: 25),
-              ),
-              const SizedBox(width: 15),
-              Text(
-                serviceProviderAddress ?? "address",
-                textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: 20),
-              )
-            ],
-          ),
+          (serviceProviderAddress != null)
+              ? Row(
+                  children: [
+                    Text(
+                      "${"Address".tr()}:",
+                      textAlign: TextAlign.justify,
+                      style: const TextStyle(fontSize: 25),
+                    ),
+                    const SizedBox(width: 15),
+                    Text(
+                      serviceProviderAddress!,
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(fontSize: 20),
+                    )
+                  ],
+                )
+              : Container(),
           //end address
         ],
       ),

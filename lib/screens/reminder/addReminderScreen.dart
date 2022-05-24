@@ -2,11 +2,10 @@ import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:intl/intl.dart';
 import 'package:slahly/screens/reminder/reminderScreen.dart';
 
-import '../../utils/local_notifications/notifications.dart';
-import '../../widgets/reminder/MyInputField.dart';
+import 'package:slahly/utils/local_notifications/notifications.dart';
+import 'package:slahly/widgets/reminder/MyInputField.dart';
 
 class AddReminder extends StatefulWidget {
   static const routeName = "/addreminderscreen";
@@ -114,7 +113,8 @@ class _AddReminderState extends State<AddReminder> {
             Icons.arrow_back,
             color: Colors.white,
           ),
-          onPressed: () {context.go(ReminderScreen.routeName);},
+          // onPressed: () {context.go(ReminderScreen.routeName);},
+          onPressed: () {context.push(ReminderScreen.routeName);},
         ),
         title:
         Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [

@@ -88,6 +88,7 @@ import 'package:slahly/classes/models/car.dart';
 import 'package:slahly/classes/models/client.dart';
 import 'package:slahly/classes/models/mechanic.dart';
 import 'package:slahly/classes/models/towProvider.dart';
+import 'package:slahly/classes/provider/user_data.dart';
 import 'package:slahly/utils/constants.dart';
 import 'package:slahly/utils/firebase/get_mechanic_data.dart';
 import 'package:slahly/utils/firebase/get_provider_data.dart';
@@ -95,7 +96,7 @@ import 'package:slahly/utils/firebase/get_provider_data.dart';
 import '../../main.dart';
 import '../models/location.dart';
 
-final HistoryProvider =
+final historyProvider =
     StateNotifierProvider<HistoryNotifier, List<RSA>>((ref) {
   return HistoryNotifier();
 });
@@ -184,11 +185,18 @@ class HistoryNotifier extends StateNotifier<List<RSA>> {
               .child("clients")
               .child(element.child("userID").value.toString())
               .get();
+          String? semiReport;
+
+            print("${element.child("semi_report").value} -<><><><><><><><><><>");
+          if (element.child("semi_report").value != null) {
+            semiReport = element.child("semi_report").value.toString();
+          }
 
           RSA rsa = RSA(
               user: Client(
                 name: userSnapshot.child("name").value.toString(),
                 phoneNumber: userSnapshot.child("phoneNumber").value.toString(),
+                id: element.child("userID").value.toString(),
               ),
               rsaID: element.key.toString(),
               car: car,
@@ -199,10 +207,11 @@ class HistoryNotifier extends StateNotifier<List<RSA>> {
                 longitude:
                     double.parse(element.child("longitude").value.toString()),
               ),
+              state: RSA.stringToState(element.child("state").value.toString()),
               mechanic: mechanic,
               towProvider: towProvider,
               requestType: requestType,
-              state: RSA.stringToState(element.child("state").value.toString()),
+              semiReport: semiReport,
               createdAt: createdAt,
               updatedAt: updatedAt);
 
@@ -225,5 +234,9 @@ class HistoryNotifier extends StateNotifier<List<RSA>> {
     if (!flag) {
       state = [...state, newRSA];
     }
+  }
+
+  test(WidgetRef ref) {
+    ref.watch(userProvider).cars;
   }
 }
