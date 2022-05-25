@@ -11,6 +11,8 @@ import 'package:slahly/widgets/login_signup/Input_container.dart';
 class AddCustomHistory extends ConsumerStatefulWidget {
   static const routeName = "/add_custom_history";
 
+  const AddCustomHistory({Key? key}) : super(key: key);
+
   @override
   ConsumerState<AddCustomHistory> createState() => _AddCustomHistoryState();
 }
@@ -19,14 +21,10 @@ class _AddCustomHistoryState extends ConsumerState<AddCustomHistory> {
   String? systemName, partId, partName, description;
   double? actualDistance, distance, partCost, maintenanceCost, otherCost;
   DateTime selectedTime = DateTime.now();
-  late Car? dropDownValue
-
-      // = Car(noPlate: "There is no Car", noChassis: "No cars")
-      ;
+  late Car? dropDownValue;
 
   @override
   void initState() {
-    dropDownValue = Car(noPlate: "noCar".tr(), noChassis: "noCar".tr());
     super.initState();
   }
 
@@ -54,27 +52,30 @@ class _AddCustomHistoryState extends ConsumerState<AddCustomHistory> {
                   ),
                 ),
                 Container(
-                  margin: const EdgeInsets.symmetric(vertical: 10),
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  width: MediaQuery.of(context).size.width * 0.8,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(30),
-                      color: Colors.grey[200],
-                      boxShadow: const [
-                        BoxShadow(
-                          color: Colors.blueGrey,
-                          blurRadius: 2.0,
-                          spreadRadius: 0.0,
-                          offset: Offset(3, 0),
-                        ),
-                      ]),
-                  child: CustomDropdownMenu(
-                      values: ref.watch(userProvider).cars,
-                      defaultValue: ref.watch(userProvider).cars[0],
-                      onItemSelected: (value) {
-                        dropDownValue = value;
-                      }),
-                ),
+                    margin: const EdgeInsets.symmetric(vertical: 10),
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    width: MediaQuery.of(context).size.width * 0.8,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(30),
+                        color: Colors.grey[200],
+                        boxShadow: const [
+                          BoxShadow(
+                            color: Colors.blueGrey,
+                            blurRadius: 2.0,
+                            spreadRadius: 0.0,
+                            offset: Offset(3, 0),
+                          ),
+                        ]),
+                    child: ref.watch(userProvider).cars.isNotEmpty
+                        ? CustomDropdownMenu(
+                            values: ref.watch(userProvider).cars,
+                            defaultValue: ref.watch(userProvider).cars[0],
+                            onItemSelected: (value) {
+                              dropDownValue = value;
+                            })
+                        : Container(
+                            child: Text("noCar".tr()),
+                          )),
                 SizedBox(
                   width: MediaQuery.of(context).size.width,
                   child: SingleChildScrollView(

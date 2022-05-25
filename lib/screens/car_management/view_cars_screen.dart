@@ -192,9 +192,10 @@ class _State extends ConsumerState<ViewCars> {
         .child("users_cars")
         .child(FirebaseAuth.instance.currentUser!.uid)
         .child(chasis!);
-    userCars.set(false);
+    userCars.set("false");
     ref
         .watch(userProvider.notifier)
         .removeCar(ref.watch(userProvider).cars[index]);
   }
 }
+//TODO: @Mohmaed H, when car is deleted the Owner or the car should be deleted

@@ -1,4 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import "package:flutter/material.dart";
 import 'package:slahly/classes/firebase/roadsideassistance/roadsideassistance.dart';
 import 'package:slahly/widgets/location/finalScreen.dart';
@@ -84,28 +85,51 @@ class RequestTile extends StatelessWidget {
                     ),
                   ],
                 ),
+                // const SizedBox(height: 5),
+                // Row(
+                //   children: [
+                //     Text(
+                //       "workingOn".tr() + " ",
+                //       style: const TextStyle(
+                //         fontSize: 18,
+                //       ),
+                //     ),
+                //     Text(rsa.car!.noPlate.toString(),
+                //         style: const TextStyle(
+                //             fontSize: 18,
+                //             fontWeight: FontWeight.bold,
+                //             color: Color(0xFF193566))),
+                //     const Expanded(
+                //         child: Divider(
+                //           color: Colors.transparent,
+                //       thickness: 0,
+                //     )),
+                //     Text(
+                //       rsa.car!.getCarAccess().toString(),
+                //     ).tr(),
+                //   ],
+                // ),
+
                 const SizedBox(height: 5),
                 Row(
                   children: [
+                    // Text("SASDADASDADASDASDASd"),
                     Text(
-                      "workingOn".tr() + " ",
+                      "who".tr() + " ",
                       style: const TextStyle(
                         fontSize: 18,
                       ),
                     ),
-                    Text(rsa.car!.noPlate.toString(),
+                    Text(
+                        (rsa.user != null &&
+                                rsa.user!.id ==
+                                    FirebaseAuth.instance.currentUser!.uid)
+                            ? "YOU"
+                            : rsa.user!.name!,
                         style: const TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
                             color: Color(0xFF193566))),
-                    const Expanded(
-                        child: Divider(
-                          color: Colors.transparent,
-                      thickness: 0,
-                    )),
-                    Text(
-                      rsa.car!.getCarAccess().toString(),
-                    ).tr(),
                   ],
                 ),
                 const SizedBox(height: 5),
@@ -175,9 +199,4 @@ class RequestTile extends StatelessWidget {
     );
   }
 }
-//TODO: define the user
 //TODO: get screen (view_request_full_data (fl admin)) and go to it
-
-
-//TODO: data in tile:
-//avatar,name,rating,address,date,request type
