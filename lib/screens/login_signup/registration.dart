@@ -52,7 +52,7 @@ class _RegistrationState extends State<Registration> {
   String imageUrl = "";
   String _verticalGroupValue = "";
   String? getlocation;
-  List<String> _status = ["Female", "Male"];
+  List<String> _status = ["female".tr(), "male".tr()];
   File? _image;
   String _imagePath = '';
   File? url;
