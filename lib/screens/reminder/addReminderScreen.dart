@@ -1,12 +1,12 @@
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:slahly/screens/reminder/reminderScreen.dart';
-import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:intl/intl.dart';
+import 'package:slahly/screens/reminder/reminderScreen.dart';
+
 import '../../utils/local_notifications/notifications.dart';
 import '../../widgets/reminder/MyInputField.dart';
-import 'package:slahly/main.dart';
 
 class AddReminder extends StatefulWidget {
   static final routeName = "/addreminderscreen";
@@ -18,12 +18,12 @@ class AddReminder extends StatefulWidget {
 }
 
 class _AddReminderState extends State<AddReminder> {
-
   // final TaskController _taskController = Get.put(TaskController());
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _noteController = TextEditingController();
-  DateTime? _selectedDate =DateTime.now();
+  DateTime? _selectedDate = DateTime.now();
   String _startTime = DateFormat("hh:mm a").format(DateTime.now());
+
   // int _selectedRemind = 5;
   // List<int> remindList = [0, 5, 10, 15, 20];
   String _selectedRepeat = "None";
@@ -56,6 +56,7 @@ class _AddReminderState extends State<AddReminder> {
   updateSelectRepeat(String sp) {
     _selectedRepeat = sp;
   }
+
   @override
   void initState() {
     // dateinput.text = "";
@@ -96,10 +97,7 @@ class _AddReminderState extends State<AddReminder> {
         );
       }
     });
-
-
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -114,7 +112,9 @@ class _AddReminderState extends State<AddReminder> {
             Icons.arrow_back,
             color: Colors.white,
           ),
-          onPressed: () {context.go(ReminderScreen.routeName);},
+          onPressed: () {
+            context.go(ReminderScreen.routeName);
+          },
         ),
         title:
             Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
@@ -141,173 +141,101 @@ class _AddReminderState extends State<AddReminder> {
             // margin: const EdgeInsets.only(bottom: 20),
             // padding: const EdgeInsets.only(left: 25, right: 25),
             width: size.width * 0.88,
-            child:
-                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              MyInputField(
-                title: "Title",
-                hint: "Enter your title",
-                fn: updateTitle,
-              ),
-              MyInputField(
-                title: "Note",
-                hint: "Enter your note",
-                fn: updateNote,
-              ),
-              MyInputField(
-                fn:(){},
-                title: "Date",
-                hint: DateFormat.yMd().format(_selectedDate!),
-                widget: IconButton(
-                  onPressed: () {
-                    _getDateFromUser();
-                  },
-                  icon: const Icon(
-                    Icons.calendar_today_outlined,
-                    color: Colors.grey,
-                  ),
-                ),
-              ),
-              Row(
-                children: [
-                  Expanded(
-                    child: MyInputField(
-                      fn: (){},
-                      title: 'Start Time',
-                      hint: "${selectedTime.hour}:${selectedTime.minute}",
-                      widget: IconButton(
-                        onPressed: () {
-                          _selectTime(context);
-                        },
-                        icon: const Icon(
-                          Icons.access_time_rounded,
-                          color: Colors.grey,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Column(mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    // crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(
+                        height: 20,
+                      ),
+                      MyInputField(
+                        title: "Title",
+                        hint: "Enter your title",
+                        fn: updateTitle,
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      MyInputField(
+                        title: "Note",
+                        hint: "Enter your note",
+                        fn: updateNote,
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      MyInputField(
+                        fn: () {},
+                        title: "Date",
+                        hint: DateFormat.yMd().format(_selectedDate!),
+                        widget: IconButton(
+                          onPressed: () {
+                            _getDateFromUser();
+                          },
+                          icon: const Icon(
+                            Icons.calendar_today_outlined,
+                            color: Colors.grey,
+                          ),
                         ),
                       ),
-                    ),
-                  ),
-                  // const SizedBox(
-                  //   width: 15,
-                  // ),
-                  // Expanded(
-                  //     child: MyInputField(
-                  //       fn:updateEndTime,
-                  //   title: 'End Time',
-                  //   hint: _endTime,
-                  //   widget: IconButton(
-                  //     onPressed: () {
-                  //       _getTimeFromUser(isStartTime: false);
-                  //     },
-                  //     icon: const Icon(
-                  //       Icons.access_time_rounded,
-                  //       color: Colors.grey,
-                  //     ),
-                  //   ),
-                  // ))
-                ],
-              ),
-              // //Remind field
-              // MyInputField(
-              //   fn: updateReminder,
-              //   title: "Remind",
-              //   hint: "$_selectedRemind minutes early",
-              //   widget: DropdownButton(
-              //     icon: const Icon(
-              //       Icons.keyboard_arrow_down,
-              //       color: Colors.grey,
-              //     ),
-              //     onChanged: (String? newValue) {
-              //       setState(() {
-              //         _selectedRemind = int.parse(newValue!);
-              //       });
-              //     },
-              //     underline: Container(
-              //       height: 0,
-              //     ),
-              //     elevation: 4,
-              //     iconSize: 32,
-              //     items: remindList.map<DropdownMenuItem<String>>((int value) {
-              //       return DropdownMenuItem<String>(
-              //         child: Text(value.toString()),
-              //         value: value.toString(),
-              //       );
-              //     }).toList(),
-              //   ),
-              // ),
-              // //Repeat field
-              MyInputField(
-                fn: updateSelectRepeat,
-                title: "Repeat",
-                hint: _selectedRepeat,
-                widget: DropdownButton(
-                  icon: const Icon(
-                    Icons.keyboard_arrow_down,
-                    color: Colors.grey,
-                  ),
-                  onChanged: (String? newValue) {
-                    setState(() {
-                      _selectedRepeat = newValue!;
-                    });
-                  },
-                  underline: Container(
-                    height: 0,
-                  ),
-                  elevation: 4,
-                  iconSize: 32,
-                  items:
-                      repeatList.map<DropdownMenuItem<String>>((String value) {
-                    return DropdownMenuItem<String>(
-                      child: Text(value.toString()),
-                      value: value,
-                    );
-                  }).toList(),
-                ),
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              Row(
-                // crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  // Container(
-                  //   height: 50,
-                  //   child: RaisedButton(
-                  //     splashColor: Colors.white.withAlpha(30),
-                  //     color: Color(0xFF193566),
-                  //     shape: RoundedRectangleBorder(
-                  //         borderRadius: BorderRadius.circular(12)),
-                  //     onPressed: () {
-                  //       Navigator.of(context).pop();
-                  //     },
-                  //     child: Text(
-                  //       "Cancel Task",
-                  //       style: TextStyle(color: Colors.white),
-                  //     ),
-                  //   ),
-                  // ),
-                  Container(
-                    // width: 95,
-                    height: 50,
-                    child: RaisedButton(
-                      splashColor: Colors.white.withAlpha(40),
-                      color: Color(0xFF193566),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
+                      SizedBox(
+                        height: 25,
                       ),
-                      onPressed: () {
-                        _validateData();
-                      },
-                      child: Text(
-                        "Create Task",
-                        style: TextStyle(color: Colors.white),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: MyInputField(
+                              fn: () {},
+                              title: 'Start Time',
+                              hint:
+                                  "${selectedTime.hour}:${selectedTime.minute}",
+                              widget: IconButton(
+                                onPressed: () {
+                                  _selectTime(context);
+                                },
+                                icon: const Icon(
+                                  Icons.access_time_rounded,
+                                  color: Colors.grey,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
-                    ),
-                  ),
-                  // Mybutton(label: "Cancel Task", onTap: () =>   Navigator.of(context).pop()),
-                  //  Mybutton(label: "Create Task", onTap: () => _validateData())
-                ],
-              )
-            ]),
+                      SizedBox(
+                        height: 50,
+                      ),
+                      Row(
+                        // crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Container(
+                            // width: 95,
+                            height: 50,
+                            child: RaisedButton(
+                              splashColor: Colors.white.withAlpha(40),
+                              color: Color(0xFF193566),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              onPressed: () {
+                                _validateData();
+                              },
+                              child: Text(
+                                "Create Task".tr(),
+                                style: TextStyle(color: Colors.white),
+                              ),
+                            ),
+                          ),
+                          // Mybutton(label: "Cancel Task", onTap: () =>   Navigator.of(context).pop()),
+                          //  Mybutton(label: "Create Task", onTap: () => _validateData())
+                        ],
+                      )
+                    ]),
+              ],
+            ),
           ),
         ),
       ),
@@ -323,7 +251,8 @@ class _AddReminderState extends State<AddReminder> {
     if (_pickerDate != null) {
       setState(() {
         _selectedDate = _pickerDate;
-        print("Selected Date:HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH ${_selectedDate.toString()}");
+        print(
+            "Selected Date:HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH ${_selectedDate.toString()}");
       });
     }
   }
@@ -355,7 +284,6 @@ class _AddReminderState extends State<AddReminder> {
     } else if (isStartTime == false) {
       setState(() {
         print("CCCCCCCC");
-
       });
     }
   }
@@ -371,11 +299,11 @@ class _AddReminderState extends State<AddReminder> {
 
   _validateData() {
     if (title == null || title == "") {
-      print(title + note + _selectedRepeat  + _startTime);
+      print(title + note + _selectedRepeat + _startTime);
 
       ScaffoldMessenger.of(context).showSnackBar(
           // SnackBar(content: Text('please_add_fields'.tr())));
-          const SnackBar(content: Text('Please Add Fields')));
+          SnackBar(content: Text('Please Add Fields'.tr())));
 
       print("wsl ll end");
     } else {
@@ -386,42 +314,45 @@ class _AddReminderState extends State<AddReminder> {
       showDialog<String>(
         context: context,
         builder: (BuildContext context) => AlertDialog(
-          title: const Text(
-            'Confirmation',
-            style: TextStyle(
+          title: Text(
+            'Confirmation'.tr(),
+            style: const TextStyle(
               color: Color(0xFF193566),
             ),
           ),
-          content: const Text('Are you sure you Want To Save Data'),
+          content: const Text('Are you sure you Want To Save Data').tr(),
           actions: <Widget>[
             RaisedButton(
               color: Colors.blueGrey[300],
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12)),
               onPressed: () => Navigator.pop(context, 'Cancel'),
-              child: const Text('Cancel', style: TextStyle(
-                color: Colors.white,
-              ),),
+              child: Text(
+                'Cancel'.tr(),
+                style: const TextStyle(
+                  color: Colors.white,
+                ),
+              ),
             ),
             RaisedButton(
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12)),
               color: Color(0xFF193566),
-              onPressed: (){
+              onPressed: () {
                 NotificationDateAndTime nwt = NotificationDateAndTime(
                     year: _selectedDate!.year,
                     month: _selectedDate!.month,
                     day: _selectedDate!.day,
-                    timeOfDay:selectedTime);
+                    timeOfDay: selectedTime);
                 addReminder(
-                    title: "Salhlay",
+                    title: "Salhlay".tr(),
                     body: title,
                     notificationSchedule: nwt);
                 Navigator.pop(context);
               },
-              child: const Text(
-                'OK',
-                style: TextStyle(
+              child: Text(
+                'OK'.tr(),
+                style: const TextStyle(
                   color: Colors.white,
                 ),
               ),
@@ -433,4 +364,3 @@ class _AddReminderState extends State<AddReminder> {
     ;
   }
 }
-
