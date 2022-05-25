@@ -42,6 +42,7 @@ class RequestTile extends StatelessWidget {
                 ),
                 const Expanded(
                   child: Divider(
+                    color: Colors.transparent,
                     thickness: 0,
                   ),
                 ),
@@ -99,6 +100,7 @@ class RequestTile extends StatelessWidget {
                             color: Color(0xFF193566))),
                     const Expanded(
                         child: Divider(
+                          color: Colors.transparent,
                       thickness: 0,
                     )),
                     Text(
@@ -142,7 +144,6 @@ class RequestTile extends StatelessWidget {
                         ],
                       ),
                 const SizedBox(height: 5),
-                const SizedBox(height: 5),
                 (rsa.semiReport != null)
                     ? Row(
                         children: [
@@ -165,6 +166,7 @@ class RequestTile extends StatelessWidget {
                         ],
                       )
                     : Container(),
+                const SizedBox(height: 5),
               ]),
             ),
           ),
@@ -173,3 +175,9 @@ class RequestTile extends StatelessWidget {
     );
   }
 }
+//TODO: define the user
+//TODO: get screen (view_request_full_data (fl admin)) and go to it
+
+
+//TODO: data in tile:
+//avatar,name,rating,address,date,request type

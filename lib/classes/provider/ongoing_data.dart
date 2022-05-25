@@ -123,7 +123,6 @@ class HistoryNotifier extends StateNotifier<List<RSA>> {
           .once()
           .then((event) async {
         DataSnapshot rsaDataSnapShot = event.snapshot;
-        print("SHIT ${rsaDataSnapShot}");
 
         for (var element in rsaDataSnapShot.children) {
           late RequestType requestType;
@@ -131,6 +130,7 @@ class HistoryNotifier extends StateNotifier<List<RSA>> {
           if (local == wsaRef) requestType = RequestType.WSA;
           if (local == ttaRef) requestType = RequestType.TTA;
 
+        print("SHIT ${element.child("state").value} ${requestType}");
           print(element.key.toString());
           print(requestType.toString());
           print(element.child("createdAt").value.toString());

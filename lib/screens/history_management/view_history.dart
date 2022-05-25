@@ -19,7 +19,7 @@ class ViewHistory extends ConsumerStatefulWidget {
   @override
   ConsumerState<ViewHistory> createState() => _ViewHistoryState();
 }
-
+//TODO: make the background color backgroundColor: const Color(0xFFd1d9e6), for both history and custom history
 class _ViewHistoryState extends ConsumerState<ViewHistory> {
   final db = Localstore.instance;
 
