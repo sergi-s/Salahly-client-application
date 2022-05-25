@@ -2,26 +2,26 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:sliding_up_panel/sliding_up_panel.dart';
-
-import 'package:slahly/widgets/location/mapWidget.dart';
-import 'package:slahly/widgets/dialogues/request_confirmation_dialogue.dart';
-import 'package:slahly/widgets/roadsideassistance/select_car_request.dart';
-
-import 'package:slahly/screens/roadsideassistance/searching_mechanic_provider_screen.dart';
-
 import 'package:slahly/classes/firebase/roadsideassistance/roadsideassistance.dart';
 import 'package:slahly/classes/provider/app_data.dart';
 import 'package:slahly/classes/provider/rsadata.dart';
+import 'package:slahly/screens/roadsideassistance/searching_mechanic_provider_screen.dart';
+import 'package:slahly/widgets/dialogues/request_confirmation_dialogue.dart';
+import 'package:slahly/widgets/global_widgets/app_bar.dart';
+import 'package:slahly/widgets/location/mapWidget.dart';
+import 'package:slahly/widgets/roadsideassistance/select_car_request.dart';
+import 'package:sliding_up_panel/sliding_up_panel.dart';
 
-class MyLocationScreen extends ConsumerStatefulWidget {
+class RoadSideAssistanceScreen extends ConsumerStatefulWidget {
   static const String routeName = "/locationComponent";
 
   @override
-  _MyLocationScreenState createState() => _MyLocationScreenState();
+  _RoadSideAssistanceScreenState createState() =>
+      _RoadSideAssistanceScreenState();
 }
 
-class _MyLocationScreenState extends ConsumerState<MyLocationScreen> {
+class _RoadSideAssistanceScreenState
+    extends ConsumerState<RoadSideAssistanceScreen> {
   GlobalKey<MapWidgetState> myMapWidgetState = GlobalKey();
 
   @override
@@ -37,6 +37,7 @@ class _MyLocationScreenState extends ConsumerState<MyLocationScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        appBar: salahlyAppBar(),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
         body: Stack(
           children: [
@@ -86,6 +87,19 @@ class _MyLocationScreenState extends ConsumerState<MyLocationScreen> {
             SelectCarRequest(
               pc: _pcCarSlider,
               onTap: () {
+                if (ref.watch(salahlyClientProvider).requestType != null) {
+                  if (ref.watch(salahlyClientProvider).requestType ==
+                      RequestType.RSA) {
+                    context.push(SearchingMechanicProviderScreen.routeName,
+                        extra: myMapWidgetState.currentState!.currentCustomLoc);
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      content: Text("onGoingRequest".tr()),
+                    ));
+                  }
+                  return;
+                }
+
                 if (ref.watch(rsaProvider).car == null) {
                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                     content: Text("plzSpecCar".tr()),

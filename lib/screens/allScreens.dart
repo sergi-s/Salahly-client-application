@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:slahly/screens/workshop_assistance//workshop_assistance_screen.dart';
-import 'package:slahly/screens/myLocation/mylocationscreen.dart';
+import 'package:slahly/screens/roadsideassistance/roadside_assistance_map.dart';
 import 'package:slahly/screens/roadsideassistance/choosemechanic.dart';
 import 'package:slahly/screens/roadsideassistance/searching_mechanic_provider_screen.dart';
 import 'package:slahly/screens/splashScreen/splashscreen.dart';
@@ -35,7 +35,7 @@ class AllScreens extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  btn(MyLocationScreen.routeName, context),
+                  btn(RoadSideAssistanceScreen.routeName, context),
                   btn(TestScreen_.routeName, context),
                   btn(ChooseMechanicScreen.routeName, context),
                   btn(Arrival.routeName, context),

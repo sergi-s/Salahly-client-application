@@ -4,12 +4,10 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
-import 'package:slahly/classes/models/client.dart';
 import 'package:slahly/classes/provider/user_data.dart';
 import 'package:slahly/main.dart';
 import 'package:slahly/utils/firebase/get_all_cars.dart';
 import 'package:slahly/widgets/global_widgets/app_bar.dart';
-import 'package:slahly/widgets/global_widgets/app_drawer.dart';
 
 class ViewCars extends ConsumerStatefulWidget {
   static const routeName = "/viewcars";
@@ -34,7 +32,7 @@ class _State extends ConsumerState<ViewCars> {
     return Scaffold(
         backgroundColor: const Color(0xFFd1d9e6),
         appBar: salahlyAppBar(title: "View Cars"),
-        drawer: salahlyDrawer(context),
+        // drawer: salahlyDrawer(context),
         body: CustomPaint(
           child: Container(
             width: MediaQuery.of(context).size.width,
@@ -98,7 +96,7 @@ class _State extends ConsumerState<ViewCars> {
                                     Row(
                                       children: [
                                         Text(
-                                          "Plate_Number".tr(),
+                                          "${'Plate_Number'.tr()}: ",
                                           style: const TextStyle(
                                               fontSize: 18,
                                               fontWeight: FontWeight.bold,
@@ -119,7 +117,7 @@ class _State extends ConsumerState<ViewCars> {
                                     Row(
                                       children: [
                                         Text(
-                                          "Chassis_Number".tr(),
+                                          "${'Chassis_Number'.tr()}: ",
                                           style: const TextStyle(
                                               fontSize: 18,
                                               fontWeight: FontWeight.bold,
@@ -130,22 +128,29 @@ class _State extends ConsumerState<ViewCars> {
                                                 .watch(userProvider)
                                                 .cars[index]
                                                 .noChassis
-                                                .toString()
                                                 .toString(),
                                             style: const TextStyle(
                                                 fontSize: 18,
                                                 fontWeight: FontWeight.bold)),
                                       ],
                                     ),
-                                    Row(
-                                      children: [
-                                        Text("Color".tr(),
-                                            style: const TextStyle(
-                                                color: Colors.black,
-                                                fontSize: 19,
-                                                fontWeight: FontWeight.bold)),
-                                      ],
-                                    ),
+                                    //TODO ADD COLOR HERE
+                                    (ref
+                                                .watch(userProvider)
+                                                .cars[index]
+                                                .color !=
+                                            null)
+                                        ? Container()
+                                        : Row(
+                                            children: [
+                                              Text("Color".tr(),
+                                                  style: const TextStyle(
+                                                      color: Colors.black,
+                                                      fontSize: 19,
+                                                      fontWeight:
+                                                          FontWeight.bold)),
+                                            ],
+                                          ),
                                   ]),
                                 ),
                               ),

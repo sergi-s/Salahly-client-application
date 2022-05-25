@@ -11,6 +11,8 @@ dynamic getGoogleMapsAPI() {
 DatabaseReference wsaRef = FirebaseDatabase.instance.ref().child("wsa");
 DatabaseReference rsaRef = FirebaseDatabase.instance.ref().child("rsa");
 DatabaseReference ttaRef = FirebaseDatabase.instance.ref().child("tta");
+DatabaseReference conflictRef = FirebaseDatabase.instance.ref("cars_conflict");
+
 const googleMapsAPI = "AIzaSyCuDZsh0WAgOreWhre_G2PlPJ61yLfGVc4";
 
 // geoCoding Key

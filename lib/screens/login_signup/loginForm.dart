@@ -58,11 +58,12 @@ class _LoginFormState extends State<LoginForm> {
             style: GoogleFonts.raleway(
               fontWeight: FontWeight.bold,
               fontSize: 24,
+              color:  Color(0xFF193566)
             ),
           ),
           const SizedBox(height: 40),
           Image.asset(
-            'assets/images/logo ta5arog coloredsalahli.png',
+            'assets/images/logodark.png',
             width: 300,
           ),
           //SvgPicture.assets('assets/images/icon.svg'),
@@ -74,35 +75,75 @@ class _LoginFormState extends State<LoginForm> {
             fn: updateEmail,
           ),
           RounedPasswordInput(hint: 'password'.tr(), function: updatePassword),
-          const SizedBox(height: 10),
-          RoundedButton(
-            title: 'login'.tr(),
-            onPressedFunction: () async {
-              if (!Validator.emailValidator(email)) {
-                return ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                        content: Text('Invalid Email!! Please try again')));
-              }
-              // if (!Validator.passValidator(password)) {
-              //   return ScaffoldMessenger.of(context).showSnackBar(
-              //       const SnackBar(
-              //           content: Text('Invalid Password!! Please try again')));
-              // }
-              bool check = await fb.login(email, password);
-              // bool check = await fb.login("mohamed@h.moh", "123456");
-              // bool check = await fb.login("sergi@client.sergi", "1234567");
-              if (check) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('Login_successful'.tr())));
-                const SnackBar(content: Text('Login successful'));
-                // context.go(TestUserCAR.routeName);
-                context.go(HomePage.routeName);
-              } else {
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                    content: Text('Account_invalid_please_try_again'.tr())));
-              }
-            },
-          )
+          // const SizedBox(height: 10),
+          // RoundedButton(
+          //   title: 'login'.tr(),
+          //   onPressedFunction: () async {
+          //     if (!Validator.emailValidator(email)) {
+          //       return ScaffoldMessenger.of(context).showSnackBar(
+          //           const SnackBar(
+          //               content: Text('Invalid Email!! Please try again')));
+          //     }
+          //     // if (!Validator.passValidator(password)) {
+          //     //   return ScaffoldMessenger.of(context).showSnackBar(
+          //     //       const SnackBar(
+          //     //           content: Text('Invalid Password!! Please try again')));
+          //     // }
+          //     bool check = await fb.login(email, password);
+          //     // bool check = await fb.login("mohamed@h.moh", "123456");
+          //     // bool check = await fb.login("sergi@client.sergi", "1234567");
+          //     if (check) {
+          //       ScaffoldMessenger.of(context).showSnackBar(
+          //           SnackBar(content: Text('Login_successful'.tr())));
+          //       const SnackBar(content: Text('Login successful'));
+          //       // context.go(TestUserCAR.routeName);
+          //       context.go(HomePage.routeName);
+          //     } else {
+          //       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          //           content: Text('Account_invalid_please_try_again'.tr())));
+          //     }
+          //   },
+          // ),
+          SizedBox(height: 40),
+          SizedBox(
+            width:MediaQuery.of(context).size.width * 0.4,
+            height: 40,
+            child: RaisedButton(
+              color: Color(0xFF193566),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+              onPressed: () async{
+                if (!Validator.emailValidator(email)) {
+                   ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                          content: Text('Invalid Email!! Please try again')));
+                }
+                // if (!Validator.passValidator(password)) {
+                //   return ScaffoldMessenger.of(context).showSnackBar(
+                //       const SnackBar(
+                //           content: Text('Invalid Password!! Please try again')));
+                // }
+                bool check = await fb.login(email, password);
+                // bool check = await fb.login("mohamed@h.moh", "123456");
+                // bool check = await fb.login("sergi@client.sergi", "1234567");
+                if (check) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('Login_successful'.tr())));
+                  const SnackBar(content: Text('Login successful'));
+                  // context.go(TestUserCAR.routeName);
+                  context.go(HomePage.routeName);
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      content: Text('Account_invalid_please_try_again'.tr())));
+                }
+              },
+              child: Text(
+                "Login".tr(),
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
+          ),
         ],
       ),
     );

@@ -2,7 +2,6 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
 import 'package:slahly/classes/models/mechanic.dart';
 import 'package:slahly/classes/models/towProvider.dart';
 
@@ -42,6 +41,7 @@ class ServicesProviderWiget extends StatelessWidget {
     this.serviceProviderPhoneNumber,
     this.serviceProviderRating,
     this.serviceProviderAddress,
+    this.avatar,
   }) : super(key: key) {
     foundType = serviceProviderType == "Mechanic"
         ? "found_Mechanic"
@@ -52,7 +52,8 @@ class ServicesProviderWiget extends StatelessWidget {
       serviceProviderName,
       serviceProviderEmail,
       serviceProviderPhoneNumber,
-      serviceProviderAddress;
+      serviceProviderAddress,
+      avatar;
   bool? serviceProviderIsCenter;
   double? serviceProviderRating;
 
@@ -66,7 +67,7 @@ class ServicesProviderWiget extends StatelessWidget {
           children: [
             SizedBox(height: MediaQuery.of(context).size.height * 0.04),
             CircleAvatar(
-              backgroundImage: Image.network(
+              backgroundImage: Image.network(avatar ??
                       "https://www.biography.com/.image/ar_1:1%2Cc_fill%2Ccs_srgb%2Cfl_progressive%2Cq_auto:good%2Cw_1200/MTY3MDUxMjkzMjI1OTIwMTcz/brad-pitt-attends-the-premiere-of-20th-century-foxs--square.jpg")
                   .image,
               radius: 35,
@@ -249,16 +250,17 @@ class ServicesProviderWiget extends StatelessWidget {
 class ServicesProviderCard extends StatelessWidget {
   late String foundType;
 
-  ServicesProviderCard({
-    Key? key,
-    this.serviceProviderType,
-    this.serviceProviderName,
-    this.serviceProviderEmail,
-    this.serviceProviderIsCenter,
-    this.serviceProviderPhoneNumber,
-    this.serviceProviderRating,
-    this.serviceProviderAddress,
-  }) : super(key: key) {
+  ServicesProviderCard(
+      {Key? key,
+      this.serviceProviderType,
+      this.serviceProviderName,
+      this.serviceProviderEmail,
+      this.serviceProviderIsCenter,
+      this.serviceProviderPhoneNumber,
+      this.serviceProviderRating,
+      this.serviceProviderAddress,
+      this.avatar})
+      : super(key: key) {
     foundType = serviceProviderType == "Mechanic"
         ? "found_Mechanic"
         : "found_tow_provider";
@@ -268,7 +270,8 @@ class ServicesProviderCard extends StatelessWidget {
       serviceProviderName,
       serviceProviderEmail,
       serviceProviderPhoneNumber,
-      serviceProviderAddress;
+      serviceProviderAddress,
+      avatar;
   bool? serviceProviderIsCenter;
   double? serviceProviderRating;
 
@@ -303,7 +306,7 @@ class ServicesProviderCard extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           CircleAvatar(
-            backgroundImage: Image.network(
+            backgroundImage: Image.network(avatar ??
                     "https://www.biography.com/.image/ar_1:1%2Cc_fill%2Ccs_srgb%2Cfl_progressive%2Cq_auto:good%2Cw_1200/MTY3MDUxMjkzMjI1OTIwMTcz/brad-pitt-attends-the-premiere-of-20th-century-foxs--square.jpg")
                 .image,
             radius: 25,
@@ -324,41 +327,6 @@ class ServicesProviderCard extends StatelessWidget {
               )
             ],
           ),
-          //email
-          // Row(
-          //   children: [
-          //     Text(
-          //       "${"Email".tr()}:",
-          //       textAlign: TextAlign.justify,
-          //       style: const TextStyle(fontSize: 20),
-          //     ),
-          //     const SizedBox(width: 15),
-          //     Text(
-          //       serviceProviderEmail,
-          //       textAlign: TextAlign.center,
-          //       style: const TextStyle(fontSize: 15),
-          //       overflow: TextOverflow.ellipsis,
-          //     )
-          //   ],
-          // ),
-          //end email
-          // Row(
-          //   children: [
-          //     Text(
-          //       "${"Phone".tr()}:",
-          //       textAlign: TextAlign.justify,
-          //       style: const TextStyle(fontSize: 20),
-          //     ),
-          //     const SizedBox(width: 15),
-          //     Text(
-          //       serviceProviderPhoneNumber,
-          //       textAlign: TextAlign.center,
-          //       style: const TextStyle(fontSize: 15),
-          //       overflow: TextOverflow.ellipsis,
-          //     )
-          //   ],
-          // )
-          //phone number
           Row(
             children: [
               Text(
@@ -396,39 +364,43 @@ class ServicesProviderCard extends StatelessWidget {
           //end phone number
 
           //rating
-          Row(
-            children: [
-              Text(
-                "${"Rating".tr()}:",
-                textAlign: TextAlign.justify,
-                style: const TextStyle(fontSize: 25),
-              ),
-              const SizedBox(width: 15),
-              Text(
-                serviceProviderRating.toString(),
-                textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: 20),
-              )
-            ],
-          ),
+          (serviceProviderRating != null || serviceProviderRating!.isNaN)
+              ? Row(
+                  children: [
+                    Text(
+                      "${"Rating".tr()}:",
+                      textAlign: TextAlign.justify,
+                      style: const TextStyle(fontSize: 25),
+                    ),
+                    const SizedBox(width: 15),
+                    Text(
+                      serviceProviderRating.toString(),
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(fontSize: 20),
+                    )
+                  ],
+                )
+              : Container(),
           //end rating
 
           //address
-          Row(
-            children: [
-              Text(
-                "${"Address".tr()}:",
-                textAlign: TextAlign.justify,
-                style: const TextStyle(fontSize: 25),
-              ),
-              const SizedBox(width: 15),
-              Text(
-                serviceProviderAddress ?? "address",
-                textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: 20),
-              )
-            ],
-          ),
+          (serviceProviderAddress != null)
+              ? Row(
+                  children: [
+                    Text(
+                      "${"Address".tr()}:",
+                      textAlign: TextAlign.justify,
+                      style: const TextStyle(fontSize: 25),
+                    ),
+                    const SizedBox(width: 15),
+                    Text(
+                      serviceProviderAddress!,
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(fontSize: 20),
+                    )
+                  ],
+                )
+              : Container(),
           //end address
         ],
       ),
@@ -459,11 +431,6 @@ class ServicesProviderCard extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              // Image.asset(
-              //   'assets/images/Checkmark.png',
-              //   fit: BoxFit.contain,
-              //   height: 33,
-              // ),
               const Icon(
                 Icons.check_circle,
                 color: Colors.green,
@@ -491,6 +458,7 @@ Widget mapMechanicToWidget(Mechanic mec) {
     serviceProviderPhoneNumber: mec.phoneNumber,
     serviceProviderRating: mec.rating,
     serviceProviderAddress: mec.address,
+    avatar: mec.avatar,
   );
 }
 
@@ -503,5 +471,6 @@ Widget mapTowProviderToWidget(TowProvider prov) {
     serviceProviderPhoneNumber: prov.phoneNumber,
     serviceProviderRating: prov.rating,
     serviceProviderAddress: prov.address,
+    avatar: prov.avatar,
   );
 }

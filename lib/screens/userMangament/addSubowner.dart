@@ -1,19 +1,16 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:firebase_database/firebase_database.dart';
 import 'package:slahly/main.dart';
-import 'package:firebase_core/firebase_core.dart';
-
-import '../../classes/provider/user_data.dart';
 
 class AddSubowner extends ConsumerStatefulWidget {
-  static final routeName = "/addSubowner";
+  static const routeName = "/addSubowner";
 
   @override
   _State createState() => _State();
@@ -39,7 +36,7 @@ class _State extends ConsumerState<AddSubowner> {
   List chasis = [];
   String? sub;
   String? selected;
-  Map<String, String> map = new Map();
+  Map<String, String> map = Map();
 
   DatabaseReference user = dbRef.child("users");
   late String dropdownvalue = "Choose Car";
@@ -64,7 +61,7 @@ class _State extends ConsumerState<AddSubowner> {
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: Text('Back'.tr()))
+              child: Text('back'.tr()))
         ],
       ),
     );
@@ -117,7 +114,7 @@ class _State extends ConsumerState<AddSubowner> {
                     child: TextFormField(
                       controller: getUserController,
                       decoration: InputDecoration(
-                        labelText: "Enter_Subowner_Email".tr(),
+                        labelText: "enter_subowner_email".tr(),
                         filled: true,
                         errorText:
                             email != getUserController.text ? "invalid" : null,
@@ -130,23 +127,24 @@ class _State extends ConsumerState<AddSubowner> {
                       getuser();
                     },
                     tooltip: 'search',
-                    child: Icon(Icons.search),
+                    child: const Icon(Icons.search),
                   ),
                 ]),
                 const SizedBox(height: 30),
                 Row(
                   children: [
                     Text('Choose_Car'.tr(),
-                        style: TextStyle(fontSize: 25, color: Colors.black)),
-                    SizedBox(width: 20),
+                        style:
+                            const TextStyle(fontSize: 25, color: Colors.black)),
+                    const SizedBox(width: 20),
                     DropdownButton<dynamic>(
                       value: dropdownvalue,
-                      icon: Icon(Icons.keyboard_arrow_down),
+                      icon: const Icon(Icons.keyboard_arrow_down),
                       items: models.map((dynamic items) {
                         return DropdownMenuItem(
                             value: items,
                             child: Text(items,
-                                style: TextStyle(
+                                style: const TextStyle(
                                     fontSize: 15, color: Colors.black)));
                       }).toList(),
                       onChanged: (dynamic? value) {
@@ -158,17 +156,20 @@ class _State extends ConsumerState<AddSubowner> {
                     ),
                   ],
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 Row(
                   children: [
-                    CircleAvatar(
-                      radius: 30.0,
-                      backgroundImage: NetworkImage(avatar ?? "sad"),
-                      backgroundColor: Colors.transparent,
-                    ),
+                    (avatar == null)
+                        ? Container()
+                        : CircleAvatar(
+                            radius: 30.0,
+                            backgroundImage: NetworkImage(avatar ??
+                                "https://cdn.icon-icons.com/icons2/1378/PNG/512/avatardefault_92824.png"),
+                            backgroundColor: Colors.transparent,
+                          ),
                     const SizedBox(width: 20),
                     Text(email!,
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 16,
                           overflow: TextOverflow.ellipsis,
                         ))
@@ -200,7 +201,7 @@ class _State extends ConsumerState<AddSubowner> {
                 showAlertbox(context);
               },
               child: const Icon(Icons.add),
-              backgroundColor: Color(0xFF193566),
+              backgroundColor: const Color(0xFF193566),
             ),
           ),
         ],
@@ -274,6 +275,7 @@ class _State extends ConsumerState<AddSubowner> {
               .child(subId!)
               .set(true);
           usersCars.child(selected).set("true");
+          context.pop();
         } else {
           print("add car");
         }

@@ -31,7 +31,7 @@ class _RounedPasswordInputState extends State<RounedPasswordInput> {
         decoration: InputDecoration(
           icon: Icon(
             Icons.lock,
-            color: Colors.blue,
+            color: Color(0xFF193566),
           ),
           hintText: widget.hint,
           border: InputBorder.none,

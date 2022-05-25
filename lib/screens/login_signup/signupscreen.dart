@@ -98,7 +98,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen>
             // Registration
             AnimatedOpacity(
               opacity: isLogin ? 0.0 : 1.0,
-              duration: animationDuration * 2,
+              duration: animationDuration * 1.8,
               child: Visibility(
                 visible: !isLogin,
                 child: Align(
@@ -125,7 +125,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen>
               topLeft: Radius.circular(100),
               topRight: Radius.circular(100),
             ),
-            color: Colors.blue[800],
+            color: Color(0xFF193566),
           ),
           alignment: Alignment.center,
           child: GestureDetector(

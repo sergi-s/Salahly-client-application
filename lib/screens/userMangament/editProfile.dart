@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -8,7 +9,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:path/path.dart';
 
 import '../../classes/provider/user_data.dart';
 import '../../main.dart';
@@ -35,15 +35,17 @@ class _State extends ConsumerState<EditProfile> {
   String? emaily;
   String? passwordy;
 
+  String pleaseHold = "${'pleaseHold'.tr()}...";
+
   @override
   Widget build(BuildContext context) {
-    String? avatary = ref.watch(userProvider).avatar??"";
+    String? avatary = ref.watch(userProvider).avatar ?? "";
     File? stateimage = File(avatary);
     return Scaffold(
       backgroundColor: const Color(0xFFd1d9e6),
       body: CustomPaint(
         child: Container(
-          padding: EdgeInsets.only(left: 16, top: 25, right: 16),
+          padding: const EdgeInsets.only(left: 16, top: 25, right: 16),
           child: GestureDetector(
             onTap: () {
               FocusScope.of(context).unfocus();
@@ -53,17 +55,15 @@ class _State extends ConsumerState<EditProfile> {
                 Padding(
                   padding: EdgeInsets.only(
                       left: MediaQuery.of(context).size.width * 0.3),
-                  child: Text(
-                    "Edit Profile",
+                  child: const Text(
+                    "editProfile",
                     style: TextStyle(
                         fontSize: 30,
                         fontWeight: FontWeight.w500,
                         color: Colors.white),
-                  ),
+                  ).tr(),
                 ),
-                SizedBox(
-                  height: 15,
-                ),
+                const SizedBox(height: 15),
                 Center(
                   child: SingleChildScrollView(
                     child: Stack(
@@ -79,7 +79,7 @@ class _State extends ConsumerState<EditProfile> {
                                     spreadRadius: 2,
                                     blurRadius: 10,
                                     color: Colors.black.withOpacity(0.1),
-                                    offset: Offset(0, 10))
+                                    offset: const Offset(0, 10))
                               ],
                               shape: BoxShape.circle,
                               // image: DecorationImage(
@@ -109,29 +109,29 @@ class _State extends ConsumerState<EditProfile> {
                                   color: Colors.green),
                               child: GestureDetector(
                                 onTap: () {
-                                  final snackBar =
-                                      SnackBar(content: Text('Image uploaded'));
+                                  final snackBar = SnackBar(
+                                      content:
+                                          const Text('imageUploaded').tr());
 
                                   try {
                                     uploadImage(context);
                                     ScaffoldMessenger.of(context)
                                         .showMaterialBanner(MaterialBanner(
-                                      content: const Text(
-                                          'Image updated Successfully'),
+                                      content: const Text('imageUploaded').tr(),
                                       actions: [
                                         TextButton(
                                             onPressed: () {
                                               ScaffoldMessenger.of(context)
                                                   .hideCurrentMaterialBanner();
                                             },
-                                            child: const Text('Dismiss')),
+                                            child: const Text('dismiss').tr()),
                                       ],
                                     ));
                                     // ScaffoldMessenger.of(context)
                                     //     .showSnackBar(snackBar);
                                   } catch (e) {}
                                 },
-                                child: Icon(
+                                child: const Icon(
                                   Icons.edit,
                                   color: Colors.white,
                                 ),
@@ -141,9 +141,7 @@ class _State extends ConsumerState<EditProfile> {
                     ),
                   ),
                 ),
-                SizedBox(
-                  height: 25,
-                ),
+                const SizedBox(height: 25),
                 TextField(
                   controller: nameController,
                   decoration: InputDecoration(
@@ -151,23 +149,21 @@ class _State extends ConsumerState<EditProfile> {
                         Icons.person,
                         color: Colors.grey[500],
                       ),
-                      border: OutlineInputBorder(
+                      border: const OutlineInputBorder(
                         // width: 0.0 produces a thin "hairline" border
                         borderRadius: BorderRadius.all(Radius.circular(90.0)),
                         borderSide: BorderSide.none,
                       ),
-                      hintStyle: TextStyle(
+                      hintStyle: const TextStyle(
                           color: Colors.black, fontFamily: "WorkSansLight"),
                       filled: true,
                       enabled: true,
-                      labelText: "Name",
+                      labelText: "Name".tr(),
                       fillColor: Colors.white70,
-                      hintText: ref.watch(userProvider).name ?? "wait",
+                      hintText: ref.watch(userProvider).name ?? pleaseHold,
                       floatingLabelBehavior: FloatingLabelBehavior.always),
                 ),
-                SizedBox(
-                  height: 20,
-                ),
+                const SizedBox(height: 20),
                 TextField(
                   controller: emailyController,
                   decoration: InputDecoration(
@@ -175,154 +171,21 @@ class _State extends ConsumerState<EditProfile> {
                         Icons.email,
                         color: Colors.grey[500],
                       ),
-                      border: OutlineInputBorder(
+                      border: const OutlineInputBorder(
                         // width: 0.0 produces a thin "hairline" border
                         borderRadius: BorderRadius.all(Radius.circular(90.0)),
                         borderSide: BorderSide.none,
                       ),
-                      hintStyle: TextStyle(
+                      hintStyle: const TextStyle(
                           color: Colors.black, fontFamily: "WorkSansLight"),
                       filled: true,
                       enabled: true,
-                      labelText: "Email",
+                      labelText: "email".tr(),
                       fillColor: Colors.white70,
-                      hintText: ref.watch(userProvider).email ?? "wait",
+                      hintText: ref.watch(userProvider).email ?? pleaseHold,
                       floatingLabelBehavior: FloatingLabelBehavior.always),
                 ),
-                SizedBox(
-                  height: 20,
-                ),
-                // GestureDetector(
-                //   onTap: () {
-                //     showDialog(
-                //         context: context,
-                //         builder: (BuildContext context) {
-                //           return Form(
-                //             child: AlertDialog(
-                //               backgroundColor: Color(0xFFd1d9e6),
-                //               content: Text("Password Update"),
-                //               title: Text("Warning"),
-                //               actions: [
-                //                 TextFormField(
-                //                   validator: (validator) {
-                //                     if (validator!.isEmpty) return 'Empty';
-                //                     return null;
-                //                   },
-                //                   obscureText: true,
-                //                   controller: passwordController,
-                //                   decoration: InputDecoration(
-                //                       prefixIcon: Icon(
-                //                         Icons.password,
-                //                         color: Colors.grey[500],
-                //                       ),
-                //                       border: OutlineInputBorder(
-                //                         // width: 0.0 produces a thin "hairline" border
-                //                         borderRadius: BorderRadius.all(
-                //                             Radius.circular(90.0)),
-                //                         borderSide: BorderSide.none,
-                //                       ),
-                //                       hintStyle: TextStyle(
-                //                           color: Colors.black,
-                //                           fontFamily: "WorkSansLight"),
-                //                       filled: true,
-                //                       enabled: true,
-                //                       labelText: "password",
-                //                       fillColor: Colors.white70,
-                //                       floatingLabelBehavior:
-                //                           FloatingLabelBehavior.always),
-                //                 ),
-                //                 SizedBox(
-                //                   height: 16,
-                //                 ),
-                //                 TextFormField(
-                //                   controller: confirmPassController,
-                //                   validator: (validator) {
-                //                     if (validator!.isEmpty) return 'Empty';
-                //                     if (validator != passwordController.text)
-                //                       return 'The passwords do not match';
-                //                     return null;
-                //                   },
-                //                   decoration: InputDecoration(
-                //                       prefixIcon: Icon(
-                //                         Icons.password,
-                //                         color: Colors.grey[500],
-                //                       ),
-                //                       border: OutlineInputBorder(
-                //                         // width: 0.0 produces a thin "hairline" border
-                //                         borderRadius: BorderRadius.all(
-                //                             Radius.circular(90.0)),
-                //                         borderSide: BorderSide.none,
-                //                       ),
-                //                       hintStyle: TextStyle(
-                //                           color: Colors.black,
-                //                           fontFamily: "WorkSansLight"),
-                //                       filled: true,
-                //                       enabled: true,
-                //                       labelText: "Confirm password",
-                //                       fillColor: Colors.white70,
-                //                       floatingLabelBehavior:
-                //                           FloatingLabelBehavior.always),
-                //                 ),
-                //                 Row(
-                //                   children: [
-                //                     TextButton(
-                //                         onPressed: () {
-                //                           Navigator.of(context).pop();
-                //                         },
-                //                         child: Text("Cancel")),
-                //                     SizedBox(width: 150),
-                //                     TextButton(
-                //                         onPressed: () {
-                //                           final snackBar = SnackBar(
-                //                               content: Text('profile updated'));
-                //                           final snackBar2 = SnackBar(
-                //                               content:
-                //                                   Text('invalid password'));
-                //                           if (passwordController.text ==
-                //                                   confirmPassController.text &&
-                //                               passwordController.text.length >=
-                //                                   6) {
-                //                             updateAuth();
-                //                             Navigator.of(context).pop();
-                //                             ScaffoldMessenger.of(context)
-                //                                 .showSnackBar(snackBar);
-                //                           } else {
-                //                             ScaffoldMessenger.of(context)
-                //                                 .showSnackBar(snackBar2);
-                //                           }
-                //                         },
-                //                         child: Text("Confirm")),
-                //                   ],
-                //                 ),
-                //               ],
-                //             ),
-                //           );
-                //         });
-                //   },
-                //   child: TextField(
-                //     controller: passwordController,
-                //     decoration: InputDecoration(
-                //         prefixIcon: Icon(
-                //           Icons.password,
-                //           color: Colors.grey[500],
-                //         ),
-                //         border: OutlineInputBorder(
-                //           // width: 0.0 produces a thin "hairline" border
-                //           borderRadius: BorderRadius.all(Radius.circular(90.0)),
-                //           borderSide: BorderSide.none,
-                //         ),
-                //         hintStyle: TextStyle(
-                //             color: Colors.black, fontFamily: "WorkSansLight"),
-                //         filled: true,
-                //         enabled: false,
-                //         labelText: "password",
-                //         fillColor: Colors.white70,
-                //         floatingLabelBehavior: FloatingLabelBehavior.always),
-                //   ),
-                // ),
-                // SizedBox(
-                //   height: 20,
-                // ),
+                const SizedBox(height: 20),
                 TextField(
                   controller: phoneController,
                   decoration: InputDecoration(
@@ -330,23 +193,22 @@ class _State extends ConsumerState<EditProfile> {
                         Icons.phone,
                         color: Colors.grey[500],
                       ),
-                      border: OutlineInputBorder(
+                      border: const OutlineInputBorder(
                         // width: 0.0 produces a thin "hairline" border
                         borderRadius: BorderRadius.all(Radius.circular(90.0)),
                         borderSide: BorderSide.none,
                       ),
-                      hintStyle: TextStyle(
+                      hintStyle: const TextStyle(
                           color: Colors.black, fontFamily: "WorkSansLight"),
                       filled: true,
                       enabled: true,
-                      labelText: "Phone",
+                      labelText: "Phone".tr(),
                       fillColor: Colors.white70,
-                      hintText: ref.watch(userProvider).phoneNumber ?? "wait",
+                      hintText:
+                          ref.watch(userProvider).phoneNumber ?? pleaseHold,
                       floatingLabelBehavior: FloatingLabelBehavior.always),
                 ),
-                SizedBox(
-                  height: 20,
-                ),
+                const SizedBox(height: 20),
                 TextField(
                   controller: addressController,
                   decoration: InputDecoration(
@@ -354,18 +216,18 @@ class _State extends ConsumerState<EditProfile> {
                         Icons.location_on,
                         color: Colors.grey[500],
                       ),
-                      border: OutlineInputBorder(
+                      border: const OutlineInputBorder(
                         // width: 0.0 produces a thin "hairline" border
                         borderRadius: BorderRadius.all(Radius.circular(90.0)),
                         borderSide: BorderSide.none,
                       ),
-                      hintStyle: TextStyle(
+                      hintStyle: const TextStyle(
                           color: Colors.black, fontFamily: "WorkSansLight"),
                       filled: true,
                       fillColor: Colors.white70,
                       enabled: true,
-                      labelText: "Address",
-                      hintText: ref.watch(userProvider).address ?? "wait",
+                      labelText: "Address".tr(),
+                      hintText: ref.watch(userProvider).address ?? pleaseHold,
                       floatingLabelBehavior: FloatingLabelBehavior.always),
                 ),
                 Row(
@@ -376,18 +238,18 @@ class _State extends ConsumerState<EditProfile> {
                       onPressed: () {
                         context.pop();
                       },
-                      padding: EdgeInsets.symmetric(horizontal: 50),
+                      padding: const EdgeInsets.symmetric(horizontal: 50),
                       highlightElevation: 2,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(20),
                       ),
-                      child: Text(
+                      child: const Text(
                         "Cancel",
                         style: TextStyle(
                             fontSize: 14,
                             letterSpacing: 2.2,
                             color: Colors.black),
-                      ),
+                      ).tr(),
                     ),
                     RaisedButton(
                       onPressed: () {
@@ -395,47 +257,47 @@ class _State extends ConsumerState<EditProfile> {
                             context: context,
                             builder: (BuildContext context) {
                               return AlertDialog(
-                                content: Text(
-                                    "are you sure u want to update profile?"),
-                                title: Text("Warning"),
+                                content:
+                                    const Text("confirmProfileUpdate").tr(),
+                                title: const Text("Warning").tr(),
                                 actions: [
                                   TextButton(
                                       onPressed: () {
                                         Navigator.of(context).pop();
                                       },
-                                      child: Text("Cancel")),
+                                      child: const Text("Cancel").tr()),
                                   TextButton(
                                       onPressed: () {
                                         final snackBar = SnackBar(
-                                            content: Text('profile updated'));
+                                            content:
+                                                const Text('profileUpdated')
+                                                    .tr());
                                         updateProfile(context);
                                         updateAuth();
                                         Navigator.of(context).pop();
                                         ScaffoldMessenger.of(context)
                                             .showSnackBar(snackBar);
                                       },
-                                      child: Text("Confirm")),
+                                      child: const Text("Confirm").tr()),
                                 ],
                               );
                             });
                       },
-                      color: Color(0xFF193566),
-                      padding: EdgeInsets.symmetric(horizontal: 50),
+                      color: const Color(0xFF193566),
+                      padding: const EdgeInsets.symmetric(horizontal: 50),
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(20)),
-                      child: Text(
-                        "Save",
+                      child: const Text(
+                        "save",
                         style: TextStyle(
                             fontSize: 14,
                             letterSpacing: 2.2,
                             color: Colors.white),
-                      ),
+                      ).tr(),
                     )
                   ],
                 ),
-                SizedBox(
-                  height: 20,
-                ),
+                const SizedBox(height: 20),
                 Column(
                   children: [
                     TextFormField(
@@ -450,23 +312,21 @@ class _State extends ConsumerState<EditProfile> {
                             Icons.password,
                             color: Colors.grey[500],
                           ),
-                          border: OutlineInputBorder(
+                          border: const OutlineInputBorder(
                             // width: 0.0 produces a thin "hairline" border
                             borderRadius:
                                 BorderRadius.all(Radius.circular(20.0)),
                             borderSide: BorderSide.none,
                           ),
-                          hintStyle: TextStyle(
+                          hintStyle: const TextStyle(
                               color: Colors.black, fontFamily: "WorkSansLight"),
                           filled: true,
                           fillColor: Colors.white70,
                           enabled: true,
-                          labelText: "password",
+                          labelText: "password".tr(),
                           floatingLabelBehavior: FloatingLabelBehavior.always),
                     ),
-                    SizedBox(
-                      height: 20,
-                    ),
+                    const SizedBox(height: 20),
                     TextFormField(
                       controller: confirmPassController,
                       validator: (validator) {
@@ -480,44 +340,46 @@ class _State extends ConsumerState<EditProfile> {
                             Icons.password,
                             color: Colors.grey[500],
                           ),
-                          border: OutlineInputBorder(
+                          border: const OutlineInputBorder(
                             // width: 0.0 produces a thin "hairline" border
                             borderRadius:
                                 BorderRadius.all(Radius.circular(20.0)),
                             borderSide: BorderSide.none,
                           ),
-                          hintStyle: TextStyle(
+                          hintStyle: const TextStyle(
                               color: Colors.black, fontFamily: "WorkSansLight"),
                           filled: true,
                           fillColor: Colors.white70,
                           enabled: true,
-                          labelText: "confirm password",
+                          labelText: "confirm_password".tr(),
                           floatingLabelBehavior: FloatingLabelBehavior.always),
                     ),
-                    SizedBox(
-                      height: 20,
-                    ),
+                    const SizedBox(height: 20),
                     RaisedButton(
                       onPressed: () {
                         showDialog(
                             context: context,
                             builder: (BuildContext context) {
                               return AlertDialog(
-                                content: Text(
-                                    "are you sure u want to update password?"),
-                                title: Text("Warning"),
+                                content:
+                                    const Text("confirmPasswordChange").tr(),
+                                title: const Text("Warning").tr(),
                                 actions: [
                                   TextButton(
                                       onPressed: () {
                                         Navigator.of(context).pop();
                                       },
-                                      child: Text("Cancel")),
+                                      child: const Text("Cancel").tr()),
                                   TextButton(
                                       onPressed: () {
                                         final snackBar = SnackBar(
-                                            content: Text('Password updated'));
+                                            content:
+                                                const Text('passwordUpdated')
+                                                    .tr());
                                         final snackBar2 = SnackBar(
-                                            content: Text('invalid password'));
+                                            content:
+                                                const Text('invalidPassword')
+                                                    .tr());
                                         if (passwordController.text ==
                                                 confirmPassController.text &&
                                             passwordController.text.length >=
@@ -531,22 +393,22 @@ class _State extends ConsumerState<EditProfile> {
                                               .showSnackBar(snackBar2);
                                         }
                                       },
-                                      child: Text("Confirm")),
+                                      child: const Text("Confirm").tr()),
                                 ],
                               );
                             });
                       },
-                      color: Color(0xFF193566),
-                      padding: EdgeInsets.symmetric(horizontal: 50),
+                      color: const Color(0xFF193566),
+                      padding: const EdgeInsets.symmetric(horizontal: 50),
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(20)),
-                      child: Text(
-                        "update password",
+                      child: const Text(
+                        "updatePassword",
                         style: TextStyle(
                             fontSize: 14,
                             letterSpacing: 2.2,
                             color: Colors.white),
-                      ),
+                      ).tr(),
                     )
                   ],
                 ),
@@ -622,31 +484,12 @@ class _State extends ConsumerState<EditProfile> {
   Future<String> uploadImage(BuildContext context) async {
     final snackBar = SnackBar(content: Text('Are you talkin\' to me?'));
 
-    // String filepath = basename(file.path);
-    //add image into fireStorage
-    // final storage = await FirebaseStorage.instance.ref()
-    //   ..child("users").child("profile_picture").child(
-    //       FirebaseAuth.instance.currentUser!.uid +
-    //           "_" +
-    //           basename(_image!.path));
-    // print("storage");
-    // dynamic store = await storage.root;
-    // print(store.toString());
     TaskSnapshot taskSnapshot = await FirebaseStorage.instance
         .ref()
         .child("users")
         .child("profile_picture")
         .child(FirebaseAuth.instance.currentUser!.uid)
         .putFile(_image!);
-    // TaskSnapshot snapshot = await FirebaseStorage.instance
-    //     .ref()
-    //     .child("users")
-    //     .child("profile_picture")
-    //     .child(FirebaseAuth.instance.currentUser!.uid +
-    //         "_" +
-    //         basename(_image!.path))
-    //     .writeToFile(_image!);
-
     //get image for current user from fireStorage
     dynamic url = await taskSnapshot.ref.getDownloadURL();
 

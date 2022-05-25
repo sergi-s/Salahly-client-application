@@ -13,20 +13,37 @@ Future getMechanicData(String id) async {
   //   Mechanic me = Mechanic(name: value.value, email: "");
   // });
 
-  DataSnapshot ds =
-      await dbRef.child("users").child(id).get();
+  DataSnapshot ds = await dbRef.child("users").child(id).get();
 
   // print(">>>>>>>${ds.value}");
   // print("saddddddde");
+  String avatar =
+      "https://cdn.icon-icons.com/icons2/1378/PNG/512/avatardefault_92824.png";
+  if ((ds.child("avatar").value) != null) {
+    avatar = (ds.child("avatar").value).toString();
+  }
+
+  double? rating;
+  if (ds.child("rating").value != null) {
+    double count =
+        toDouble((ds.child("rating").child("count").value).toString());
+    if (count == 0) count = 1;
+    rating =
+        toDouble((ds.child("rating").child("sum").value).toString()) / count;
+  }
+
+  String address = "address";
+  if ((ds.child("address").value) != null) {
+    address = (ds.child("address").value).toString();
+  }
   return Mechanic(
       isCenter: false,
-      avatar:
-          "https://www.tenforums.com/geek/gars/images/2/types/thumb_15951118880user.png",
+      avatar: avatar,
       phoneNumber: (ds.child("phoneNumber").value).toString(),
       id: id,
       name: (ds.child("name").value).toString(),
       type: Type.mechanic,
       email: (ds.child("email").value).toString(),
-      rating: toDouble((ds.child("rating").value).toString()),
-      address: "address");
+      rating: rating,
+      address: address);
 }
