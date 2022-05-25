@@ -47,59 +47,59 @@ class _HomePageState extends ConsumerState<HomePage> {
       backgroundColor: const Color(0xFFd1d9e6),
       appBar: salahlyAppBar(),
       drawer: salahlyDrawer(context),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Text(
-            "welcome".tr(),
-            textScaleFactor: 1.4,
-            style: const TextStyle(
-                fontSize: 23,
-                letterSpacing: 1,
-                fontWeight: FontWeight.w500,
-                color: Color(0xff193566)),
-          ).tr(),
-          SizedBox(height: MediaQuery.of(context).size.height * 0.01),
-          CardWidget(
-              fun: () {
-                context.push(RoadSideAssistanceScreen.routeName);
-              },
-              title: 'rsa'.tr(),
-              subtitle: 'rsaDescription'.tr(),
-              image: 'assets/images/car job.png'),
-
-          SizedBox(height: MediaQuery.of(context).size.height * 0.002),
-          CardWidget(
-              fun: () {
-                context.push(WSAScreen.routeName);
-              },
-              title: 'wsa'.tr(),
-              subtitle: 'wsaDescription'.tr(),
-              image: 'assets/images/mechanic.png'),
-          SizedBox(height: MediaQuery.of(context).size.height * 0.002),
-          CardWidget(
-              fun: () {
-                context.push(DropOffLocationScreen.routeName);
-              },
-              title: 'tta'.tr(),
-              subtitle: 'ttaDescription'.tr(),
-              image: 'assets/images/tow-truck 2.png'),
-          // ElevatedButton(
-          //     onPressed: () {
-          //       // print(ref.watch(userProvider).cars);
-          //       reviveFromCloud();
-          //     },
-          //     child: Text("tesst"))
-        ],
+      body: SingleChildScrollView(
+        child: Container(
+          height: MediaQuery.of(context).size.height * 0.8,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Text(
+                "welcome".tr(),
+                textScaleFactor: 1.4,
+                style: const TextStyle(
+                    fontSize: 23,
+                    letterSpacing: 1,
+                    fontWeight: FontWeight.w500,
+                    color: Color(0xff193566)),
+              ).tr(),
+              // SizedBox(height: MediaQuery.of(context).size.height * 0.01),
+              CardWidget(
+                  fun: () {
+                    context.push(RoadSideAssistanceScreen.routeName);
+                  },
+                  title: 'rsa'.tr(),
+                  subtitle: 'rsaDescription'.tr(),
+                  image: 'assets/images/emergency-call.png'),
+              CardWidget(
+                  fun: () {
+                    context.push(WSAScreen.routeName);
+                  },
+                  title: 'wsa'.tr(),
+                  subtitle: 'wsaDescription'.tr(),
+                  image: 'assets/images/mechanic.png'),
+              CardWidget(
+                  fun: () {
+                    context.push(DropOffLocationScreen.routeName);
+                  },
+                  title: 'tta'.tr(),
+                  subtitle: 'ttaDescription'.tr(),
+                  image: 'assets/images/Tow.png'),
+            ],
+          ),
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         isExtended: true,
         onPressed: () {
           context.push(ChatBotScreen.routeName);
         },
-        backgroundColor: const Color(0xff193566),
-        child: Image.asset('assets/images/bot2.png'),
+        backgroundColor: Colors.indigo,
+        child: CircleAvatar(
+          backgroundImage: AssetImage('assets/images/chatbot.png'),
+          backgroundColor: Color(0xff193566),
+          radius: 25,
+        ),
+        // Image.asset('assets/images/chatbot.png'),
       ),
     );
   }

@@ -101,16 +101,16 @@ class FirebaseCustom extends Authentication {
       return false;
     }
     final uid = user.uid;
-    Map userDataMap = {
+    Map<String ,dynamic> userDataMap = {
       "name": client.name,
       "email": client.email,
-      // "birthday": client.birthDay,
-      // "sex": client.sex,
+      "birthday": client.birthDay.toString(),
+      "gender": client.gender.toString(),
       // "avatar": client.avatar,
       "address": client.address,
       "phoneNumber": client.phoneNumber,
     };
-    usersRef.child("clients").child(uid).set(userDataMap);
+    usersRef.child("clients").child(uid).update(userDataMap);
     return true;
   }
 

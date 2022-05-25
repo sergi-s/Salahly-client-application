@@ -21,12 +21,13 @@ class CardWidget extends StatelessWidget {
         height: MediaQuery.of(context).size.height * 0.16,
         child: Card(
           semanticContainer: true,
-          // margin: const EdgeInsets.symmetric(vertical: 25, horizontal: 25),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(15.0),
           ),
           elevation: 10,
           color: Color(0xFFFAF9F6),
+
+          // margin: const EdgeInsets.symmetric(vertical: 15, horizontal: 25),
           child: InkWell(
             splashColor: Colors.blue.withAlpha(30),
             onTap: () {

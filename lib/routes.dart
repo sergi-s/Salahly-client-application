@@ -4,7 +4,6 @@ import 'package:slahly/screens/Describeproblem.dart';
 import 'package:slahly/screens/DropOff_screens/dropOff_search_screen.dart';
 import 'package:slahly/screens/allScreens.dart';
 import 'package:slahly/screens/car_management/addCars.dart';
-import 'package:slahly/screens/car_management/add_car_screen.dart';
 import 'package:slahly/screens/car_management/view_cars_screen.dart';
 import 'package:slahly/screens/chatbot/chatbotscreen.dart';
 import 'package:slahly/screens/dropOff_screens/dropOff_location_screen.dart';
@@ -31,6 +30,7 @@ import 'package:slahly/screens/splashScreen/splashscreen.dart';
 import 'package:slahly/screens/switchLanguage.dart';
 import 'package:slahly/screens/test_screens/test_user_SM.dart';
 import 'package:slahly/screens/test_screens/testscreen_foula.dart';
+import 'package:slahly/screens/testscreenyoyo.dart';
 import 'package:slahly/screens/userMangament/addSubowner.dart';
 import 'package:slahly/screens/userMangament/choose_car.dart';
 import 'package:slahly/screens/userMangament/editProfile.dart';
@@ -53,17 +53,17 @@ class Routing {
           GoRoute(
             //TESTING
             path: TestScreen_nearbymechanics_and_create_rsa.routeName,
-        builder: (context, state) =>
-            TestScreen_nearbymechanics_and_create_rsa(), //TestScreenRSASMTest(),
-      ),
-      GoRoute(
-        path: CheckLogin.routeName,
-        builder: (context, state) => const CheckLogin(),
-      ),
-      GoRoute(
-        path: LoginSignupScreen.routeName,
-        builder: (context, state) => LoginSignupScreen(),
-      ),
+            builder: (context, state) =>
+                TestScreen_nearbymechanics_and_create_rsa(), //TestScreenRSASMTest(),
+          ),
+          GoRoute(
+            path: CheckLogin.routeName,
+            builder: (context, state) => const CheckLogin(),
+          ),
+          GoRoute(
+            path: LoginSignupScreen.routeName,
+            builder: (context, state) => LoginSignupScreen(),
+          ),
       GoRoute(
         path: ManageSubowner.routeName,
         builder: (context, state) =>
@@ -120,32 +120,34 @@ class Routing {
       GoRoute(
         path: DescCarProblem.routeName,
         builder: (context, state) => DescCarProblem(),
-      ),
-      GoRoute(
-        path: WaitArrvial.routeName,
-        builder: (context, state) => WaitArrvial(),
-      ),
-      GoRoute(
-        path: TryScreen.routeName,
-        builder: (context, state) => TryScreen(),
-      ),
-      GoRoute(
-          path: Registration.routeName,
-          builder: (context, state) {
-            return Registration(emailObj: state.extra! as String);
-          }),
-      GoRoute(
-        path: ViewCars.routeName,
-        builder: (context, state) => ViewCars(),
-      ),
-      // GoRoute(
-      //   path: AddCars.routeName,
-      //   builder: (context, state) => AddCars(),
-      // ),
-      GoRoute(
-        path: SwitchLanguageScreen.routeName,
-        builder: (context, state) => SwitchLanguageScreen(),
-      ),
+          ),
+          GoRoute(
+            path: WaitArrvial.routeName,
+            builder: (context, state) => WaitArrvial(),
+          ),
+          GoRoute(
+            path: TryScreen.routeName,
+            builder: (context, state) => TryScreen(),
+          ),
+          GoRoute(
+              path: Registration.routeName,
+              builder: (context, state) {
+                return Registration(
+                  emailobj: state.extra! as String,
+                );
+              }),
+          GoRoute(
+            path: ViewCars.routeName,
+            builder: (context, state) => ViewCars(),
+          ),
+          // GoRoute(
+          //   path: AddCars.routeName,
+          //   builder: (context, state) => AddCars(),
+          // ),
+          GoRoute(
+            path: SwitchLanguageScreen.routeName,
+            builder: (context, state) => SwitchLanguageScreen(),
+          ),
       GoRoute(
         path: AllScreens.routeName,
         builder: (context, state) => AllScreens(),
@@ -212,16 +214,16 @@ class Routing {
             currentLocation: state.extra as CustomLocation,
             destinationLocation: state.extra as CustomLocation),
       ),
-      GoRoute(
-        path: RequestFinalScreen.routeName,
-        builder: (context, state) => RequestFinalScreen(),
-      ),
-      GoRoute(
-        path: AddCar.routeName,
-        builder: (context, state) => AddCar(),
-      ),
-      GoRoute(
-        path: OngoingRequests.routeName,
+          GoRoute(
+            path: RequestFinalScreen.routeName,
+            builder: (context, state) => RequestFinalScreen(),
+          ),
+          GoRoute(
+            path: AddCar.routeName,
+            builder: (context, state) => AddCar(),
+          ),
+          GoRoute(
+            path: OngoingRequests.routeName,
             builder: (context, state) => OngoingRequests(),
           ),
           GoRoute(
@@ -237,6 +239,10 @@ class Routing {
             builder: (context, state) =>
                 RequestFullDataScreen(rsa: state.extra as RSA),
           ),
+          GoRoute(
+            path: TestScreenAya.routeName,
+            builder: (context, state) => TestScreenAya(),
+          ),
         ],
-  );
+      );
 }

@@ -23,6 +23,10 @@
     </activity>
     <!-- Don't delete the meta-data below.
              This is used by the Flutter tool to generate GeneratedPluginRegistrant.java -->
+    <activity
+        android:name="com.yalantis.ucrop.UCropActivity"
+        android:screenOrientation="portrait"
+        android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
     <meta-data android:name="flutterEmbedding" android:value="2"/>
     <meta-data android:name="com.google.android.geo.API_KEY" android:value="AIzaSyCuDZsh0WAgOreWhre_G2PlPJ61yLfGVc4"/>
   </application>

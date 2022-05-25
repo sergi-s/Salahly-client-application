@@ -79,9 +79,15 @@ dependencies:
   shared_preferences: ^2.0.13
   bubble: ^1.2.1
   rating_dialog: ^2.0.0
-  dropdown_button2: ^1.4.0
   localstore: ^1.2.3
-
+  image_cropper: ^2.0.2
+  path_provider: ^2.0.10
+  flutter_image_compress: ^1.1.0
+  flutter_rating_bar: ^4.0.0
+  expandable_text: 2.3.0
+  dropdown_formfield: ^0.1.4
+  dropdown_button2: ^1.4.0
+  group_radio_button: ^1.2.0
 
 dev_dependencies:
   flutter_test:

@@ -3,7 +3,6 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:slahly/screens/reminder/reminderScreen.dart';
-
 import 'package:slahly/utils/local_notifications/notifications.dart';
 import 'package:slahly/widgets/reminder/MyInputField.dart';
 
@@ -17,11 +16,10 @@ class AddReminder extends StatefulWidget {
 }
 
 class _AddReminderState extends State<AddReminder> {
-
   // final TaskController _taskController = Get.put(TaskController());
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _noteController = TextEditingController();
-  DateTime? _selectedDate =DateTime.now();
+  DateTime? _selectedDate = DateTime.now();
   String _startTime = DateFormat("hh:mm a").format(DateTime.now());
 
   // int _selectedRemind = 5;
@@ -99,7 +97,6 @@ class _AddReminderState extends State<AddReminder> {
     });
   }
 
-
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -113,8 +110,9 @@ class _AddReminderState extends State<AddReminder> {
             Icons.arrow_back,
             color: Colors.white,
           ),
-          // onPressed: () {context.go(ReminderScreen.routeName);},
-          onPressed: () {context.push(ReminderScreen.routeName);},
+          onPressed: () {
+            context.go(ReminderScreen.routeName);
+          },
         ),
         title:
         Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
@@ -257,7 +255,8 @@ class _AddReminderState extends State<AddReminder> {
     if (_pickerDate != null) {
       setState(() {
         _selectedDate = _pickerDate;
-        print("Selected Date:HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH ${_selectedDate.toString()}");
+        print(
+            "Selected Date:HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH ${_selectedDate.toString()}");
       });
     }
   }
@@ -308,6 +307,7 @@ class _AddReminderState extends State<AddReminder> {
 
       ScaffoldMessenger.of(context).showSnackBar(
           // SnackBar(content: Text('please_add_fields'.tr())));
+
           SnackBar(content: const Text('pleaseAddField').tr()));
 
       print("wsl ll end");
@@ -332,9 +332,9 @@ class _AddReminderState extends State<AddReminder> {
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12)),
               onPressed: () => Navigator.pop(context, 'Cancel'.tr()),
-              child: const Text(
-                'Cancel',
-                style: TextStyle(
+              child: Text(
+                'Cancel'.tr(),
+                style: const TextStyle(
                   color: Colors.white,
                 ),
               ).tr(),
@@ -350,12 +350,14 @@ class _AddReminderState extends State<AddReminder> {
                     day: _selectedDate!.day,
                     timeOfDay: selectedTime);
                 addReminder(
-                    title: "Salhlay", body: title, notificationSchedule: nwt);
+                    title: "Salhlay".tr(),
+                    body: title,
+                    notificationSchedule: nwt);
                 Navigator.pop(context);
               },
-              child: const Text(
-                'ok',
-                style: TextStyle(
+              child: Text(
+                'OK'.tr(),
+                style: const TextStyle(
                   color: Colors.white,
                 ),
               ).tr(),
@@ -366,4 +368,3 @@ class _AddReminderState extends State<AddReminder> {
     }
   }
 }
-
