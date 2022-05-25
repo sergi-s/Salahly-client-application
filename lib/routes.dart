@@ -49,7 +49,7 @@ import 'package:slahly/screens/rating/rating.dart';
 class Routing {
   get router => GoRouter(
 
-    initialLocation: RatingScreen.routeName,
+    initialLocation: AddCustomHistory.routeName,
     // initialLocation: RequestFinalScreen.routeName,
     routes: <GoRoute>[
       GoRoute(
