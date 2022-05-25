@@ -5,9 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:slahly/classes/firebase/roadsideassistance/roadsideassistance.dart';
 import 'package:slahly/classes/provider/app_data.dart';
-import 'package:slahly/classes/provider/ongoing_data.dart';
 import 'package:slahly/classes/provider/rsadata.dart';
-import 'package:slahly/classes/provider/user_data.dart';
 import 'package:slahly/screens/chatbot/chatbotscreen.dart';
 import 'package:slahly/screens/dropOff_screens/dropOff_location_screen.dart';
 import 'package:slahly/screens/myLocation/mylocationscreen.dart';
@@ -45,51 +43,62 @@ class _HomePageState extends ConsumerState<HomePage> {
     // allCars(ref); //TODO refactor and uncomment
     //TODO: get all users data and put it in state management
     return Scaffold(
+      backgroundColor: const Color(0xFFd1d9e6),
       appBar: salahlyAppBar(),
       drawer: salahlyDrawer(context),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Text(
-            "welcome".tr(),
-            textScaleFactor: 1.4,
-            style: const TextStyle(
-                fontWeight: FontWeight.bold, color: Color(0xff193566)),
-          ).tr(),
-          CardWidget(
-              fun: () {
-                context.push(MyLocationScreen.routeName);
-              },
-              title: 'Roadside assistant',
-              subtitle:
-                  'Lorem ipsum dolor sit consectetur adipiscing sed do eiusmod tempor ',
-              image: 'assets/images/tow-truck 2.png'),
-          CardWidget(
-              fun: () {
-                context.push(WSAScreen.routeName);
-              },
-              title: 'Workshop assistant',
-              subtitle:
-                  'Lorem ipsum dolor sit consectetur adipiscing sed do eiusmod tempor',
-              image: 'assets/images/mechanic.png'),
-          CardWidget(
-              fun: () {
-                context.push(DropOffLocationScreen.routeName);
-              },
-              title: 'Tow Truck assistant',
-              subtitle:
-                  'Lorem ipsum dolor sit consectetur adipiscing sed do eiusmod tempor',
-              image: 'assets/images/mechanic.png'),
-        ],
+      body: SingleChildScrollView(
+        child: Container(
+          height: MediaQuery.of(context).size.height * 0.8,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Text(
+                "welcome".tr(),
+                textScaleFactor: 1.4,
+                style: const TextStyle(
+                    fontSize: 23,
+                    letterSpacing: 1,
+                    fontWeight: FontWeight.w500,
+                    color: Color(0xff193566)),
+              ).tr(),
+              // SizedBox(height: MediaQuery.of(context).size.height * 0.01),
+              CardWidget(
+                  fun: () {
+                    context.push(MyLocationScreen.routeName);
+                  },
+                  title: 'Roadside assistant',
+                  subtitle:
+                      'Lorem ipsum dolor sit consectetur adipiscing sed do eiusmod tempor ',
+                  image: 'assets/images/emergency-call.png'),
+              CardWidget(
+                  fun: () {
+                    context.push(WSAScreen.routeName);
+                  },
+                  title: 'Workshop assistant',
+                  subtitle:
+                      'Lorem ipsum dolor sit consectetur adipiscing sed do eiusmod tempor',
+                  image: 'assets/images/mechanic.png'),
+              CardWidget(
+                  fun: () {
+                    context.push(DropOffLocationScreen.routeName);
+                  },
+                  title: 'Tow Truck assistant',
+                  subtitle:
+                      'Lorem ipsum dolor sit consectetur adipiscing sed do eiusmod tempor',
+                  image: 'assets/images/Tow.png'),
+            ],
+          ),
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         isExtended: true,
         onPressed: () {
           context.push(ChatBotScreen.routeName);
         },
-        backgroundColor: const Color(0xff193566),
-        child: Image.asset('assets/images/bot2.png'),
+        backgroundColor: Colors.indigo,
+        child: CircleAvatar(backgroundImage:AssetImage('assets/images/chatbot.png'),
+        backgroundColor:Color(0xff193566),radius:25, ),
+        // Image.asset('assets/images/chatbot.png'),
       ),
     );
   }

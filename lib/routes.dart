@@ -6,6 +6,7 @@ import 'package:slahly/screens/car_management/addCars.dart';
 import 'package:slahly/screens/chatbot/chatbotscreen.dart';
 import 'package:slahly/screens/history_management/ongoing_requests.dart';
 import 'package:slahly/screens/test_screens/sergiTestScreen.dart';
+import 'package:slahly/screens/testscreenyoyo.dart';
 import 'package:slahly/screens/userMangament/editProfile.dart';
 import 'package:slahly/screens/userMangament/pofile.dart';
 import 'package:slahly/screens/reminder/addReminderScreen.dart';
@@ -49,7 +50,7 @@ import 'package:slahly/screens/rating/rating.dart';
 class Routing {
   get router => GoRouter(
 
-    initialLocation: RatingScreen.routeName,
+    initialLocation: TestScreenAya.routeName,
     // initialLocation: RequestFinalScreen.routeName,
     routes: <GoRoute>[
       GoRoute(
@@ -134,7 +135,7 @@ class Routing {
       GoRoute(
           path: Registration.routeName,
           builder: (context, state) {
-            return Registration(emailObj: state.extra! as String);
+            return Registration(emailobj:state.extra! as String,);
           }),
       GoRoute(
         path: ViewCars.routeName,
@@ -230,7 +231,10 @@ class Routing {
         path: RatingScreen.routeName,
         builder: (context, state) => RatingScreen(),
       ),
-
+      GoRoute(
+        path: TestScreenAya.routeName,
+        builder: (context, state) => TestScreenAya(),
+      ),
     ],
   );
 }

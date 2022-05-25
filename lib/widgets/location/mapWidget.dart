@@ -26,7 +26,7 @@ class MapWidgetState extends State<MapWidget> {
   // late Position currentPos;
   late LatLng currentPos;
   late CustomLocation currentCustomLoc;
-
+  static CustomLocation? location;
   Geolocator geoLocator = Geolocator();
 
   //initial Camera position
