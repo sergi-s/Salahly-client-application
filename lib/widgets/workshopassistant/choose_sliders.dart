@@ -51,7 +51,14 @@ class _WSASliderState extends ConsumerState<WSASlider> {
           return Stack(alignment: Alignment.center, children: [
             ref.watch(rsaProvider).mechanic == null
                 ? ref.watch(rsaProvider).acceptedNearbyMechanics!.isEmpty
-                    ? HoldPlease(who: "mechanic")
+                    // ? HoldPlease(who: "mechanic")
+                    ? SearchingWidget(
+                        who: "mechanic",
+                        size: ref
+                            .watch(rsaProvider)
+                            .newNearbyMechanics!
+                            .values.length,
+                      )
                     : ListView.separated(
                         itemCount: ref
                             .watch(rsaProvider)
@@ -75,9 +82,13 @@ class _WSASliderState extends ConsumerState<WSASlider> {
         return Stack(alignment: Alignment.center, children: [
           ref.watch(rsaProvider).towProvider == null
               ? ref.watch(rsaProvider).acceptedNearbyProviders!.isEmpty
-                  ? HoldPlease(
+                  // ? HoldPlease(who: "provider")
+                  ? SearchingWidget(
                       who: "provider",
-                    )
+                      size: ref
+                          .watch(rsaProvider)
+                          .acceptedNearbyProviders!
+                          .length)
                   : ListView.separated(
                       itemCount: ref
                           .watch(rsaProvider)
@@ -194,6 +205,11 @@ class _WSASliderState extends ConsumerState<WSASlider> {
             ref.watch(rsaProvider).acceptedNearbyProviders![index], false);
       },
       child: ChooseTile(
+        estimatedTime: ref
+            .watch(rsaProvider)
+            .acceptedNearbyProviders![index]
+            .estimatedTime
+            .toString(),
         email: ref
             .watch(rsaProvider)
             .acceptedNearbyProviders![index]
@@ -221,7 +237,7 @@ class _WSASliderState extends ConsumerState<WSASlider> {
             .toString(),
         type: ref.watch(rsaProvider).acceptedNearbyProviders![index].type!,
         isCenter:
-            ref.watch(rsaProvider).acceptedNearbyProviders![index].isCenter,
+        ref.watch(rsaProvider).acceptedNearbyProviders![index].isCenter,
         rating: ref.watch(rsaProvider).acceptedNearbyProviders![index].rating,
       ),
     );
@@ -411,6 +427,7 @@ class ChooseTowProviderSlider extends ConsumerWidget {
                 type: towProviders[index].type!,
                 isCenter: towProviders[index].isCenter,
                 rating: towProviders[index].rating,
+                estimatedTime: towProviders[index].estimatedTime,
               ),
             );
           },
@@ -437,7 +454,7 @@ class SearchingWidget extends StatelessWidget {
       alignment: Alignment.center,
       color: const Color(0xFFd1d9e6),
       child: Text(
-        "weFound".tr() + " $size, " + who!,
+        "weFound".tr() + " $size, ${who!.tr()}",
         style: const TextStyle(fontSize: 20),
       ),
     );

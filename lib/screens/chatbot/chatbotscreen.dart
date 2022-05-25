@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:bubble/bubble.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:slahly/utils/constants.dart';
 import 'package:slahly/widgets/global_widgets/app_bar.dart';
 
@@ -11,29 +14,7 @@ class ChatBotScreen extends StatefulWidget {
 }
 
 class _ChatBotScreenState extends State<ChatBotScreen> {
-  ChatBot chatBot = ChatBot(
-    Question(
-      q: "Do you want help",
-      an: [
-        Answer(
-          answer: "Yes",
-          q: Question(q: "is your car broken", an: [
-            Answer(
-              answer: "Yes",
-              q: Question(q: "can you still drive it", an: [
-                Answer(answer: "NO", fn: () {}),
-                Answer(
-                    answer: "YES",
-                    fn: () {
-                      print("Recomend WSA");
-                    })
-              ]),
-            ),
-          ]),
-        )
-      ],
-    ),
-  );
+  late ChatBot chatBot = ChatBot(Question(q: "Please Hold", an: []));
 
   final messageInsert = TextEditingController();
   List<Map> messages = [];
@@ -41,34 +22,23 @@ class _ChatBotScreenState extends State<ChatBotScreen> {
 
   @override
   void initState() {
-    chatBot.printAllNodesWithAnswers(chatBot.rootQ);
+    // chatBot.printAllNodesWithAnswers(chatBot.rootQ);
 
     // widget.chatBot.printAnswers();
-    chatBot.setDefault(() {
-      messages = [];
-      chatBot.rootQ = Question(
-        q: "Do you want help",
-        an: [
-          Answer(
-            answer: "Yes",
-            q: Question(q: "is your car broken", an: [
-              Answer(
-                answer: "Yes",
-                q: Question(q: "can you still drive it", an: [
-                  Answer(answer: "NO", fn: () {}),
-                  Answer(
-                      answer: "YES",
-                      fn: () {
-                        print("Recomend WSA");
-                      })
-                ]),
-              ),
-            ]),
-          )
-        ],
-      );
+    Future.delayed(Duration.zero, () async {
+      chatBot = await ChatBot.getChatBot();
+      chatBot.setDefault(() async {
+        messages = [];
+        while (chatBot.stack.isNotEmpty) {
+          chatBot.rollback();
+        }
+      });
+      myMessage(chatBot.rootQ.question, 0);
     });
-    myMessage(chatBot.rootQ.question, 0);
+
+    // chatBot.readJson();
+    // print(chatBot.items);
+
     super.initState();
   }
 
@@ -183,12 +153,48 @@ class _ChatBotScreenState extends State<ChatBotScreen> {
     );
   }
 }
-
+//TODO efsl da 3an el UI
 class ChatBot {
   List<Question> stack = [];
   bool terminate = false;
   late Question rootQ;
   Function? defaultBehaviour;
+
+  static Map? items;
+
+  static Future<void> readJson() async {
+    final String response =
+        await rootBundle.loadString('assets/chatbot/chatbot.json');
+    final data = await json.decode(response);
+    items = data;
+    print(items);
+  }
+
+  static int depth = 0;
+
+  static Question? buildTree(Map? item) {
+    // print("hello world depth${depth} -> ${item}");
+    depth++;
+    if (item != null) {
+      Map data = item;
+      List<Answer> answers = [];
+      // print("hello world ${data["an"]}");
+      for (Map answer in data["an"]) {
+        // print("howa da el ob ${answer["Answer"]["Question"]}");
+        answers.add(Answer(
+            answer: answer["Answer"]["answer"],
+            q: buildTree(answer["Answer"]["Question"])));
+      }
+      return Question(q: data["q"], an: answers);
+    } else {
+      return null;
+    }
+  }
+
+  static Future<ChatBot> getChatBot() async {
+    await readJson();
+    return ChatBot(buildTree(items!["Question"]!)!);
+  }
 
   setDefault(Function? def) {
     defaultBehaviour = def;
@@ -275,7 +281,7 @@ class Answer {
     this.fn = fn;
   }
 }
-
+//TODO: use the function inside the chatbot
 void chatBotActionConfirmation(context, {required Function fn}) {
   showDialog(
     context: context,

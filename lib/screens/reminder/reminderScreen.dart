@@ -4,9 +4,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:slahly/screens/reminder/addReminderScreen.dart';
+import 'package:slahly/widgets/global_widgets/app_bar.dart';
+import 'package:slahly/classes/models/reminder.dart';
 
 class ReminderScreen extends StatefulWidget {
-  static final routeName = "/reminderscreen";
+  static const routeName = "/reminderscreen";
 
   ReminderScreen({
     Key? key,
@@ -26,7 +28,7 @@ class _ReminderScreenState extends State<ReminderScreen> {
       AwesomeNotifications().createdStream.listen((notification) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Notification Created '),
+            content: const Text('notificationCreated').tr(),
           ),
         );
         start();
@@ -55,8 +57,9 @@ class _ReminderScreenState extends State<ReminderScreen> {
         reminder.add(Reminder(
             title: element.content!.body!,
             // date: "Hello"));
-        date: element.content!.createdDate ?? DateTime.now().add(Duration(days: 1)).toString()));
-              //  DateTime.now().toString()));
+            date: element.content!.createdDate ??
+                DateTime.now().add(const Duration(days: 1)).toString()));
+        //  DateTime.now().toString()));
       } else {
         print("element not valid ");
       }
@@ -91,48 +94,48 @@ class _ReminderScreenState extends State<ReminderScreen> {
                 context: context,
                 builder: (BuildContext context) => AlertDialog(
                   title: const Text(
-                    'Confirmation',
+                    'confirm',
                     style: TextStyle(
                       color: Color(0xFF193566),
                     ),
-                  ),
+                  ).tr(),
                   content: const Text(''),
                   actions: <Widget>[
                     TextButton.icon(
                       style: TextButton.styleFrom(
-                        textStyle: TextStyle(color: Colors.white),
+                        textStyle: const TextStyle(color: Colors.white),
                         backgroundColor: Colors.blueGrey[300],
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12),
                         ),
                       ),
-                      onPressed: () => {Navigator.pop(context, 'Delete')},
-                      icon: Icon(
+                      onPressed: () => {Navigator.pop(context, 'delete'.tr())},
+                      icon: const Icon(
                         Icons.delete_outline_outlined,
                         color: Colors.white,
                       ),
-                      label: Text('Delete',
+                      label: const Text('delete',
                           style: TextStyle(
                             color: Colors.white,
-                          )),
+                          )).tr(),
                     ),
                     TextButton.icon(
                       style: TextButton.styleFrom(
-                        textStyle: TextStyle(color: Colors.white),
-                        backgroundColor: Color(0xFF193566),
+                        textStyle: const TextStyle(color: Colors.white),
+                        backgroundColor: const Color(0xFF193566),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12),
                         ),
                       ),
-                      onPressed: () => {Navigator.pop(context, 'Okay')},
-                      icon: Icon(
+                      onPressed: () => {Navigator.pop(context, 'ok'.tr())},
+                      icon: const Icon(
                         Icons.done,
                         color: Colors.white,
                       ),
-                      label: Text('Okay',
+                      label: const Text('ok',
                           style: TextStyle(
                             color: Colors.white,
-                          )),
+                          )).tr(),
                     ),
                   ],
                 ),
@@ -143,17 +146,17 @@ class _ReminderScreenState extends State<ReminderScreen> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
                 ListTile(
-                  leading: Icon(CupertinoIcons.alarm,
+                  leading: const Icon(CupertinoIcons.alarm,
                       color: Color(0xFF193566), size: 40),
                   title: Text(title,
                           textScaleFactor: 1.4,
-                          style: TextStyle(
+                      style: const TextStyle(
                               color: Color(0xff193566),
                               fontWeight: FontWeight.bold))
                       .tr(),
                   subtitle: Text(date,
                           textScaleFactor: 1.1,
-                          style: TextStyle(color: Colors.black54))
+                          style: const TextStyle(color: Colors.black54))
                       .tr(),
                 )
               ],
@@ -169,35 +172,7 @@ class _ReminderScreenState extends State<ReminderScreen> {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: const Color(0xFFd1d9e6),
-      appBar: AppBar(
-        elevation: 0.0,
-        backgroundColor: const Color(0xFF193566),
-        leading: IconButton(
-          icon: Icon(
-            Icons.arrow_back,
-            color: Colors.white,
-          ),
-          onPressed: () {},
-        ),
-        title:
-            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-          Text(""),
-          Text(
-            "Reminder",
-            style: TextStyle(
-              fontSize: 25,
-              letterSpacing: 1.5,
-              color: Colors.white,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-          Image.asset(
-            'assets/images/logo white.png',
-            fit: BoxFit.contain,
-            height: 32,
-          ),
-        ]),
-      ),
+      appBar: salahlyAppBar(title: "reminder".tr()),
       body: SingleChildScrollView(
         child: Center(
           child: Column(
@@ -206,11 +181,11 @@ class _ReminderScreenState extends State<ReminderScreen> {
           }).toList()),
         ),
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
+      // floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
       floatingActionButton: FloatingActionButton(
         isExtended: true,
-        child: Icon(Icons.add),
-        backgroundColor: Color(0xFF193566),
+        child: const Icon(Icons.add),
+        backgroundColor: const Color(0xFF193566),
         onPressed: () {
           context.push(AddReminder.routeName);
           print("after add");
@@ -218,7 +193,6 @@ class _ReminderScreenState extends State<ReminderScreen> {
         },
       ),
     );
-    ;
   }
 }
 
@@ -236,14 +210,4 @@ class HeaderCurvedContainer extends CustomPainter {
 
   @override
   bool shouldRepaint(CustomPainter oldDelegate) => false;
-}
-
-class Reminder {
-  final String title;
-  final String date;
-
-  Reminder({
-    required this.title,
-    required this.date,
-  });
 }

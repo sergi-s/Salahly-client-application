@@ -58,9 +58,7 @@ class _State extends ConsumerState<Choose_car> {
 
   @override
   Widget build(BuildContext context) {
-    final Client carstate = ref.watch(userProvider);
-    final userNotifier = ref.watch(userProvider.notifier);
-    Size size = MediaQuery.of(context).size;
+    final Client carState = ref.watch(userProvider);
     return Scaffold(
         backgroundColor: const Color(0xFFd1d9e6),
         appBar: AppBar(
@@ -78,8 +76,8 @@ class _State extends ConsumerState<Choose_car> {
           child: Container(
               width: MediaQuery.of(context).size.width,
               height: MediaQuery.of(context).size.height,
-              decoration: BoxDecoration(
-                color: const Color(0xFFd1d9e6),
+              decoration: const BoxDecoration(
+                color: Color(0xFFd1d9e6),
               ), // red as border color
               child: SafeArea(
                 child: RefreshIndicator(
@@ -91,14 +89,14 @@ class _State extends ConsumerState<Choose_car> {
                   child: ListView.builder(
                     itemCount: ref.watch(userProvider).cars.length,
                     itemBuilder: (context, index) {
-                      if (carstate.cars[index].carAccess != CarAccess.sub) {
+                      if (carState.cars[index].carAccess != CarAccess.sub) {
                         return Card(
                           elevation: 6,
                           margin: EdgeInsets.all(10),
                           child: Container(
                             decoration: BoxDecoration(
-                              boxShadow: [
-                                new BoxShadow(
+                              boxShadow: const [
+                                BoxShadow(
                                   blurRadius: 10.0,
                                 ),
                               ],
@@ -109,7 +107,7 @@ class _State extends ConsumerState<Choose_car> {
                               child: GestureDetector(
                                 onTap: () {
                                   context.push(ManageSubowner.routeName,
-                                      extra: carstate.cars[index].noChassis
+                                      extra: carState.cars[index].noChassis
                                           .toString());
 
                                   print('welcome'.tr());
@@ -117,18 +115,19 @@ class _State extends ConsumerState<Choose_car> {
                                 child: ListTile(
                                   leading: CircleAvatar(
                                     radius: 30,
-                                    backgroundColor: carstate.cars[index].color,
+                                    backgroundColor: carState.cars[index].color,
                                     // ref
                                     //     .watch(userProvider)
                                     //     .cars[index]
                                     //     .color as Color
-                                    child: Icon(Icons.directions_car_filled,
+                                    child: const Icon(
+                                        Icons.directions_car_filled,
                                         size: 40),
                                   ),
                                   title: Row(
                                     children: [
                                       Text(
-                                          carstate.cars[index].model.toString(),
+                                          carState.cars[index].model.toString(),
                                           style: const TextStyle(
                                               fontSize: 25,
                                               fontWeight: FontWeight.bold)),
@@ -147,14 +146,16 @@ class _State extends ConsumerState<Choose_car> {
                                             print("huuu");
                                             final snackBar = SnackBar(
                                                 content:
-                                                    Text('Car_removed'.tr()));
+                                                    const Text('Car_removed')
+                                                        .tr());
                                             showDialog(
                                                 context: context,
                                                 builder:
                                                     (BuildContext context) {
                                                   return AlertDialog(
-                                                    content: Text(
-                                                        "are you sure u want to delete car"),
+                                                    content: const Text(
+                                                            "carDeleteConfirmation")
+                                                        .tr(),
                                                     title: Text("Warning".tr()),
                                                     actions: [
                                                       TextButton(
@@ -182,7 +183,7 @@ class _State extends ConsumerState<Choose_car> {
                                                   );
                                                 });
                                           },
-                                          child: CircleAvatar(
+                                          child: const CircleAvatar(
                                             backgroundColor: Colors.black,
                                             radius: 15,
                                             child: Icon(
@@ -201,16 +202,16 @@ class _State extends ConsumerState<Choose_car> {
                                       Row(
                                         children: [
                                           Text(
-                                            "Plate_Number".tr(),
-                                            style: TextStyle(
+                                            "${'Plate_Number'.tr()}: ",
+                                            style: const TextStyle(
                                                 fontSize: 18,
                                                 fontWeight: FontWeight.bold,
                                                 color: Colors.black),
                                           ),
                                           Text(
-                                            carstate.cars[index].noPlate
+                                            carState.cars[index].noPlate
                                                 .toString(),
-                                            style: TextStyle(
+                                            style: const TextStyle(
                                                 fontSize: 18,
                                                 fontWeight: FontWeight.bold),
                                           ),
@@ -219,16 +220,16 @@ class _State extends ConsumerState<Choose_car> {
                                       Row(
                                         children: [
                                           Text(
-                                            "Chassis_Number".tr(),
-                                            style: TextStyle(
+                                            "${'Chassis_Number'.tr()}: ",
+                                            style: const TextStyle(
                                                 fontSize: 18,
                                                 fontWeight: FontWeight.bold,
                                                 color: Colors.black),
                                           ),
                                           Text(
-                                              carstate.cars[index].noChassis
+                                              carState.cars[index].noChassis
                                                   .toString(),
-                                              style: TextStyle(
+                                              style: const TextStyle(
                                                   fontSize: 18,
                                                   fontWeight: FontWeight.bold)),
                                         ],
@@ -265,13 +266,11 @@ class _State extends ConsumerState<Choose_car> {
   }
 
   Color hexToColor(String code) {
-    return new Color(int.parse(code.substring(1, 7), radix: 16) + 0xFF000000);
+    return Color(int.parse(code.substring(1, 7), radix: 16) + 0xFF000000);
   }
 
   deleteCar(index) async {
     String? chasis = ref.watch(userProvider).cars[index].noChassis;
-    final userNotifier = ref.watch(userProvider.notifier);
-    final Client carstate = ref.watch(userProvider);
 
     //TODO check if this user is the owner of this car
     //authorization

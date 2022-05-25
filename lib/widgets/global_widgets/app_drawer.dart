@@ -1,18 +1,18 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/cupertino.dart';
 import "package:flutter/material.dart";
 import 'package:go_router/go_router.dart';
 import 'package:slahly/screens/car_management/addCars.dart';
+import 'package:slahly/screens/car_management/view_cars_screen.dart';
 import 'package:slahly/screens/history_management/ongoing_requests.dart';
 import 'package:slahly/screens/history_management/view_history.dart';
 import 'package:slahly/screens/homepage.dart';
 import 'package:slahly/screens/reminder/reminderScreen.dart';
 import 'package:slahly/screens/switchLanguage.dart';
 import 'package:slahly/screens/userMangament/choose_car.dart';
-import 'package:slahly/screens/userMangament/manageSubowner.dart';
 import 'package:slahly/screens/userMangament/transferOwner.dart';
 
-import '../../screens/car_management/view_cars_screen.dart';
-import '../../screens/userMangament/addSubowner.dart';
+import '../../screens/test_screens/testscreen_foula.dart';
 
 Widget salahlyDrawer(BuildContext context) {
   return Drawer(
@@ -28,6 +28,7 @@ Widget salahlyDrawer(BuildContext context) {
               color: Colors.transparent),
           child: Text(''),
         ),
+
         // ListTile(
         //   title: Text('Test Sergi'),
         //   onTap: () {
@@ -35,9 +36,16 @@ Widget salahlyDrawer(BuildContext context) {
         //   },
         // ),
         ListTile(
+          title: Text("Test APP state"),
+          onTap: () {
+            Navigator.pop(context);
+            context.push(TestScreen_nearbymechanics_and_create_rsa.routeName);
+          },
+        ),
+        ListTile(
           title: Text(
             'home'.tr(),
-            style: TextStyle(fontWeight: FontWeight.bold),
+            style: const TextStyle(fontWeight: FontWeight.bold),
           ).tr(),
           onTap: () {
             Navigator.pop(context);
@@ -45,51 +53,87 @@ Widget salahlyDrawer(BuildContext context) {
             context.push(HomePage.routeName);
           },
         ),
-        ListTile(
-          title: const Text('myCars').tr(),
-          onTap: () {
-            Navigator.pop(context);
-            context.push(ViewCars.routeName);
-          },
-        ),
-        ListTile(
-          title: const Text('Manage Sub Owners').tr(),
-          onTap: () {
-            Navigator.pop(context);
-            context.push(Choose_car.routeName);
-          },
-        ),
-        // ListTile(
-        //   title: const Text('Add sub owners').tr(),
-        //   onTap: () {
-        //     Navigator.pop(context);
-        //     context.push(AddSubowner.routeName);
-        //   },
-        // ),
-        ListTile(
-          title: Text(
-            "add_car_screen".tr(),
-            style: TextStyle(fontWeight: FontWeight.bold),
+        Container(
+          color: Colors.grey[200],
+          child: ListTile(
+            title: const Text(
+              "Car",
+              style: TextStyle(color: Colors.grey),
+            ).tr(),
           ),
-          onTap: () {
-            Navigator.pop(context);
-            context.push(Addcar.routeName);
-          },
         ),
-        ListTile(
-          title: const Text('transfer_ownership').tr(),
-          onTap: () {
-            Navigator.pop(context);
-            context.push(TransferOwner.routeName);
-          },
+        Padding(
+          padding: const EdgeInsets.only(left: 15.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              ListTile(
+                title: const Text('myCars').tr(),
+                onTap: () {
+                  Navigator.pop(context);
+                  context.push(ViewCars.routeName);
+                },
+              ),
+              ListTile(
+                title: Text(
+                  "add_car_screen".tr(),
+                  style: const TextStyle(fontWeight: FontWeight.bold),
+                ),
+                onTap: () {
+                  Navigator.pop(context);
+                  context.push(AddCar.routeName);
+                },
+              ),
+              ListTile(
+                title: const Text('Manage_Ownership').tr(),
+                onTap: () {
+                  Navigator.pop(context);
+                  context.push(Choose_car.routeName);
+                },
+              ),
+              ListTile(
+                title: const Text('transfer_ownership').tr(),
+                onTap: () {
+                  Navigator.pop(context);
+                  context.push(TransferOwner.routeName);
+                },
+              ),
+            ],
+          ),
         ),
-        // ListTile(
-        //   title: const Text('updateProfile').tr(),
-        //   onTap: () {
-        //     Navigator.pop(context);
-        //     context.push(EditProfile.routeName);
-        //   },
-        // ),
+
+        Container(
+          color: Colors.grey[200],
+          child: ListTile(
+            title: const Text(
+              "requests",
+              style: TextStyle(color: Colors.grey),
+            ).tr(),
+          ),
+        ),
+
+        Padding(
+          padding: const EdgeInsets.only(left: 15.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              ListTile(
+                title: const Text('history').tr(),
+                onTap: () {
+                  Navigator.pop(context);
+                  context.push(ViewHistory.routeName);
+                },
+              ),
+              ListTile(
+                title: const Text('viewOngoing').tr(),
+                onTap: () {
+                  Navigator.pop(context);
+                  context.push(OngoingRequests.routeName);
+                },
+              ),
+            ],
+          ),
+        ),
 
         ListTile(
           title: const Text('reminder').tr(),
@@ -99,31 +143,10 @@ Widget salahlyDrawer(BuildContext context) {
           },
         ),
         ListTile(
-          title: const Text('history').tr(),
-          onTap: () {
-            Navigator.pop(context);
-            context.push(ViewHistory.routeName);
-          },
-        ),
-        // ListTile(
-        //   title: Text("Test APP state"),
-        //   onTap: () {
-        //     Navigator.pop(context);
-        //     context.push(TestScreen_nearbymechanics_and_create_rsa.routeName);
-        //   },
-        // ),
-        ListTile(
           title: const Text('settings').tr(),
           onTap: () {
             Navigator.pop(context);
             context.push(SwitchLanguageScreen.routeName);
-          },
-        ),
-        ListTile(
-          title: const Text('viewOngoing').tr(),
-          onTap: () {
-            Navigator.pop(context);
-            context.push(OngoingRequests.routeName);
           },
         ),
       ],

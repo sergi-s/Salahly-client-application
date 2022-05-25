@@ -18,11 +18,11 @@ class _TestSergiState extends ConsumerState<TestSergi> {
     Future.delayed(Duration.zero, () {
       print("ya rab bgad ${ref.watch(userProvider).cars}");
       ref
-          .watch(HistoryProvider.notifier)
+          .watch(historyProvider.notifier)
           .assignRequests(ref.watch(userProvider).cars);
 
       // print("ya rab bgad ${ref.watch(HistoryProvider).requests}");
-      print("ya rab bgad ${ref.watch(HistoryProvider)}");
+      print("ya rab bgad ${ref.watch(historyProvider)}");
     });
     super.initState();
   }
