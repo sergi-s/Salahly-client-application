@@ -24,6 +24,7 @@ class _State extends ConsumerState<EditProfile> {
   final TextEditingController addressController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController confirmPassController = TextEditingController();
+  final TextEditingController oldPassController = TextEditingController();
 
   final TextEditingController emailyController = TextEditingController();
   final TextEditingController phoneController = TextEditingController();
@@ -115,20 +116,20 @@ class _State extends ConsumerState<EditProfile> {
 
                                   try {
                                     uploadImage(context);
-                                    ScaffoldMessenger.of(context)
-                                        .showMaterialBanner(MaterialBanner(
-                                      content: const Text('imageUploaded').tr(),
-                                      actions: [
-                                        TextButton(
-                                            onPressed: () {
-                                              ScaffoldMessenger.of(context)
-                                                  .hideCurrentMaterialBanner();
-                                            },
-                                            child: const Text('dismiss').tr()),
-                                      ],
-                                    ));
                                     // ScaffoldMessenger.of(context)
-                                    //     .showSnackBar(snackBar);
+                                    //     .showMaterialBanner(MaterialBanner(
+                                    //   content: const Text('imageUploaded').tr(),
+                                    //   actions: [
+                                    //     TextButton(
+                                    //         onPressed: () {
+                                    //           ScaffoldMessenger.of(context)
+                                    //               .hideCurrentMaterialBanner();
+                                    //         },
+                                    //         child: const Text('dismiss').tr()),
+                                    //   ],
+                                    // ));
+                                    ScaffoldMessenger.of(context)
+                                        .showSnackBar(snackBar);
                                   } catch (e) {}
                                 },
                                 child: const Icon(
@@ -257,28 +258,60 @@ class _State extends ConsumerState<EditProfile> {
                             context: context,
                             builder: (BuildContext context) {
                               return AlertDialog(
+                                backgroundColor: Color(0xFFd1d9e6),
                                 content:
                                     const Text("confirmProfileUpdate").tr(),
                                 title: const Text("Warning").tr(),
                                 actions: [
-                                  TextButton(
-                                      onPressed: () {
-                                        Navigator.of(context).pop();
-                                      },
-                                      child: const Text("Cancel").tr()),
-                                  TextButton(
-                                      onPressed: () {
-                                        final snackBar = SnackBar(
-                                            content:
-                                                const Text('profileUpdated')
-                                                    .tr());
-                                        updateProfile(context);
-                                        updateAuth();
-                                        Navigator.of(context).pop();
-                                        ScaffoldMessenger.of(context)
-                                            .showSnackBar(snackBar);
-                                      },
-                                      child: const Text("Confirm").tr()),
+                                  TextFormField(
+                                    obscureText: true,
+                                    controller: oldPassController,
+                                    decoration: InputDecoration(
+                                        prefixIcon: Icon(
+                                          Icons.password,
+                                          color: Colors.grey[800],
+                                        ),
+                                        border: const OutlineInputBorder(
+                                          // width: 0.0 produces a thin "hairline" border
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(20.0)),
+                                          borderSide: BorderSide.none,
+                                        ),
+                                        hintStyle: const TextStyle(
+                                            color: Colors.black,
+                                            fontFamily: "WorkSansLight"),
+                                        filled: true,
+                                        fillColor: Colors.white70,
+                                        enabled: true,
+                                        labelText: "confirm_password".tr(),
+                                        floatingLabelBehavior:
+                                            FloatingLabelBehavior.always),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Row(
+                                      children: [
+                                        TextButton(
+                                            onPressed: () {
+                                              Navigator.of(context).pop();
+                                            },
+                                            child: const Text("Cancel").tr()),
+                                        TextButton(
+                                            onPressed: () {
+                                              final snackBar = SnackBar(
+                                                  content: const Text(
+                                                          'profileUpdated')
+                                                      .tr());
+                                              updateProfile(context);
+                                              updateAuth();
+                                              Navigator.of(context).pop();
+                                              ScaffoldMessenger.of(context)
+                                                  .showSnackBar(snackBar);
+                                            },
+                                            child: const Text("Confirm").tr()),
+                                      ],
+                                    ),
+                                  ),
                                 ],
                               );
                             });
@@ -443,6 +476,10 @@ class _State extends ConsumerState<EditProfile> {
     // nameController.text.isNotEmpty
     //     ? firebaseUser?.updateDisplayName(nameController.text)
     //     : null;
+
+    firebaseUser!.reauthenticateWithCredential(EmailAuthProvider.credential(
+        email: firebaseUser.email!, password: oldPassController.text));
+
     print("b4");
     if (await firebaseUser != null) {
       firebaseUser?.updateEmail(emailyController.text);
