@@ -1,0 +1,72 @@
+{
+  "Question": {
+    "q": "Do you want Help?",
+    "an": [
+      {
+        "Answer": {
+          "answer": "YES",
+          "Question": {
+            "q": "Is your car broken?",
+            "an": [
+              {
+                "Answer": {
+                  "answer": "YES",
+                  "Question": {
+                    "q": "Are you currently on the road",
+                    "an": [
+                      {
+                        "Answer": {
+                          "answer": "YES",
+                          "Question": {
+                            "q": "We recommend ordering the urgent roadside assistant",
+                            "an": [
+                              {
+                                "Answer": {
+                                  "answer": "OK"
+                                }
+                              }
+                            ]
+                          }
+                        }
+                      },
+                      {
+                        "Answer": {
+                          "answer": "No",
+                          "Question": {
+                            "q": "We recommend ordering the workshop assistance",
+                            "an": [
+                              {
+                                "Answer": {
+                                  "answer": "OK"
+                                }
+                              }
+                            ]
+                          }
+                        }
+                      }
+                    ]
+                  }
+                }
+              },
+              {
+                "Answer": {
+                  "answer": "NO",
+                  "Question": {
+                    "q": "So Why did you call me?",
+                    "an": [
+                      {
+                        "Answer": {
+                          "answer": "Cause I am annoying"
+                        }
+                      }
+                    ]
+                  }
+                }
+              }
+            ]
+          }
+        }
+      }
+    ]
+  }
+}

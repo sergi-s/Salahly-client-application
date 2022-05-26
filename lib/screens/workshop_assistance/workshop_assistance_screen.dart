@@ -11,7 +11,7 @@ import 'package:slahly/classes/provider/rsadata.dart';
 import 'package:slahly/utils/constants.dart';
 import 'package:slahly/utils/firebase/get_mechanic_data.dart';
 import 'package:slahly/utils/firebase/get_provider_data.dart';
-import 'package:slahly/widgets/WSA/choose_sliders.dart';
+import 'package:slahly/widgets/workshopassistant/choose_sliders.dart';
 import 'package:slahly/widgets/dialogues/all_rejected.dart';
 import 'package:slahly/widgets/dialogues/confirm_cancellation.dart';
 import 'package:slahly/widgets/dialogues/none_found.dart';
@@ -213,7 +213,7 @@ class _WSAScreenState extends ConsumerState<WSAScreen> {
             left: MediaQuery.of(context).size.width * 0.85,
             right: 0,
             bottom:
-                MediaQuery.of(context).size.height * (didRequest ? 0 : 0.35),
+                MediaQuery.of(context).size.height * (didRequest ? 0 : 0.4),
             child: ElevatedButton(
               onPressed: () => myMapWidgetState.currentState?.locatePosition(),
               child: const Icon(
@@ -303,7 +303,7 @@ class _WSAScreenState extends ConsumerState<WSAScreen> {
         .watch(rsaProvider.notifier)
         .atLeastOne(needMechanic: true, needProvider: needProvider);
 
-    if (!foundAny && ref.watch(rsaProvider).state != RSAStates.canceled) {
+    if (!foundAny && ref.watch(rsaProvider).state != RSAStates.cancelled) {
       !ref.watch(rsaProvider.notifier).atLeastOneProvider
           ? noneFound(context, who: false)
           : null;
@@ -447,6 +447,9 @@ class _WSAScreenState extends ConsumerState<WSAScreen> {
             ref
                 .watch(rsaProvider.notifier)
                 .addAcceptedNearbyProvider(dataSnapShotProvider.key.toString());
+            ref
+                .watch(rsaProvider.notifier)
+                .getEstimatedTime(dataSnapShotProvider.key.toString());
           }
         });
         if (flagAllRejected && flagFindYet) {

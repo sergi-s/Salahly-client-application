@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:slahly/widgets/login_signup/Input_container.dart';
+
+import 'Input_container.dart';
+
 
 class RounedInput extends StatefulWidget {
   RounedInput({
@@ -26,13 +28,14 @@ class _RounedInputState extends State<RounedInput> {
       child: TextField(
         onChanged: (value) {
           widget.fn(value);
+          _textEditingController.text = value;
         },
-        controller: _textEditingController,
-        cursorColor: Colors.blue,
+        // controller: _textEditingController,
+        cursorColor: Colors.blue[900],
         decoration: InputDecoration(
           icon: Icon(
             widget.icon,
-            color: Colors.blue,
+            color: Color(0xFF193566),
           ),
           hintText: widget.hint,
           border: InputBorder.none,

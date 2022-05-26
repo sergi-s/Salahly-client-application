@@ -1,7 +1,6 @@
 // ignore_for_file: avoid_renaming_method_parameters
 
-import 'dart:io';
-
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
@@ -9,8 +8,6 @@ import 'package:flutter/material.dart';
 import 'package:overlay_support/overlay_support.dart';
 import 'package:slahly/abstract_classes/authentication.dart';
 import 'package:slahly/classes/models/client.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:slahly/main.dart';
 import 'package:slahly/utils/constants.dart';
 
@@ -34,6 +31,16 @@ class FirebaseCustom extends Authentication {
       return false;
     }
     return false;
+  }
+
+  logout()async{
+    await FirebaseDatabase.instance
+        .ref()
+        .child("FCMTokens")
+        .child(FirebaseAuth.instance.currentUser!.uid)
+        .remove();
+
+    await FirebaseAuth.instance.signOut();
   }
 
   _registerFCMToken(String id) async {
@@ -94,16 +101,16 @@ class FirebaseCustom extends Authentication {
       return false;
     }
     final uid = user.uid;
-    Map userDataMap = {
+    Map<String ,dynamic> userDataMap = {
       "name": client.name,
       "email": client.email,
-      // "birthday": client.birthDay,
-      // "sex": client.sex,
+      "birthday": client.birthDay.toString(),
+      "gender": client.gender.toString(),
       // "avatar": client.avatar,
       "address": client.address,
       "phoneNumber": client.phoneNumber,
     };
-    usersRef.child("clients").child(uid).set(userDataMap);
+    usersRef.child("clients").child(uid).update(userDataMap);
     return true;
   }
 

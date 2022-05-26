@@ -64,7 +64,7 @@ class _SignUpFormState extends State<SignUpForm> {
           //   ),
           // ),
           const SizedBox(height: 40),
-          Image.asset('assets/images/logo ta5arog 2.png'),
+          Image.asset('assets/images/logo ta5arog 2.png',width:300),
           //SvgPicture.assets('assets/images/icon.svg'),
           const SizedBox(height: 40),
           // RounedInput(
@@ -86,34 +86,74 @@ class _SignUpFormState extends State<SignUpForm> {
             function: updateConfirmPassword,
           ),
           //RounedInput(icon: Icons.phone, hint: 'phone_number'.tr(), fn:updatePhonenumber,),
-          const SizedBox(height: 10),
-          RoundedButton(
-            title: 'sign_up'.tr(),
-            onPressedFunction: () async {
-              if (!Validator.emailValidator(email)) {
-                return ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                    content: Text('Invalid_Email_Please_try_again'.tr())));
-              }
-              // if (!Validator.passValidator(password)) {
-              //   return ScaffoldMessenger.of(context).showSnackBar(
-              //       const SnackBar(
-              //           content: Text('Invalid Password!! Please try again')));
-              // }
-              if (confirmPassword != password) {
-                return ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                    content:
-                        Text('Invalid_Confirmation_Please_try_again'.tr())));
-              }
-              bool check = await fb.signup(email, password);
-              if (check) {
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                    content: Text('Account_is_Created_Sucessfully'.tr())));
-              } else {
-                return ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('Account_is_Already_Used'.tr())));
-              }
-              context.go(Registration.routeName, extra: email);
-            },
+          // const SizedBox(height: 10),
+          // RoundedButton(
+          //   title: 'sign_up'.tr(),
+          //   onPressedFunction: () async {
+          //     if (!Validator.emailValidator(email)) {
+          //       return ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          //           content: Text('Invalid_Email_Please_try_again'.tr())));
+          //     }
+          //     // if (!Validator.passValidator(password)) {
+          //     //   return ScaffoldMessenger.of(context).showSnackBar(
+          //     //       const SnackBar(
+          //     //           content: Text('Invalid Password!! Please try again')));
+          //     // }
+          //     if (confirmPassword != password) {
+          //       return ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          //           content:
+          //               Text('Invalid_Confirmation_Please_try_again'.tr())));
+          //     }
+          //     bool check = await fb.signup(email, password);
+          //     if (check) {
+          //       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          //           content: Text('Account_is_Created_Sucessfully'.tr())));
+          //     } else {
+          //       return ScaffoldMessenger.of(context).showSnackBar(
+          //           SnackBar(content: Text('Account_is_Already_Used'.tr())));
+          //     }
+          //     context.go(Registration.routeName, extra: email);
+          //   },
+          // ),
+          SizedBox(height: 20),
+          SizedBox(
+            width: MediaQuery.of(context).size.width * 0.4,
+            height: 40,
+            child: RaisedButton(
+              color: Colors.grey[200],
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+              onPressed: ()async {
+                if (!Validator.emailValidator(email)) {
+                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      content: Text('Invalid_Email_Please_try_again'.tr())));
+                }
+                // if (!Validator.passValidator(password)) {
+                //   return ScaffoldMessenger.of(context).showSnackBar(
+                //       const SnackBar(
+                //           content: Text('Invalid Password!! Please try again')));
+                // }
+                if (confirmPassword != password) {
+                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      content:
+                      Text('Invalid_Confirmation_Please_try_again'.tr())));
+                }
+                bool check = await fb.signup(email, password);
+                if (check) {
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      content: Text('Account_is_Created_Sucessfully'.tr())));
+                } else {
+                   ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('Account_is_Already_Used'.tr())));
+                }
+                context.go(Registration.routeName, extra: email);
+              },
+              child: Text(
+                "Sign Up".tr(),
+                style: TextStyle(color: Color(0xFF193566)),
+              ),
+            ),
           ),
         ],
       ),

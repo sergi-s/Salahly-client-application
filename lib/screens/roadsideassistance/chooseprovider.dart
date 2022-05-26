@@ -18,14 +18,13 @@ import '../../widgets/dialogues/confirm_cancellation.dart';
 class ChooseProviderScreen extends ConsumerStatefulWidget {
   static const String routeName = "/chooseproviderscreen";
 
-  ChooseProviderScreen({Key? key}) : super(key: key);
+  const ChooseProviderScreen({Key? key}) : super(key: key);
 
   @override
   _ChooseProviderScreenState createState() => _ChooseProviderScreenState();
 }
 
 class _ChooseProviderScreenState extends ConsumerState<ChooseProviderScreen> {
-  String providerH = "";
 
   late StreamSubscription _myStream;
 
@@ -94,28 +93,34 @@ class _ChooseProviderScreenState extends ConsumerState<ChooseProviderScreen> {
                                 extra: true);
                           },
                           child: ChooseTile(
-                              email: ref
-                                  .watch(rsaProvider)
-                                  .acceptedNearbyProviders![index]
-                                  .email
-                                  .toString(),
-                              avatar: ref
-                                  .watch(rsaProvider)
-                                  .acceptedNearbyProviders![index]
-                                  .avatar
-                                  .toString(),
-                              phone: ref
-                                  .watch(rsaProvider)
-                                  .acceptedNearbyProviders![index]
-                                  .phoneNumber
-                                  .toString(),
-                              name: ref
-                                  .watch(rsaProvider)
-                                  .acceptedNearbyProviders![index]
-                                  .name
-                                  .toString(),
-                              type: Type.provider,
-                              isCenter: false),
+                            email: ref
+                                .watch(rsaProvider)
+                                .acceptedNearbyProviders![index]
+                                .email
+                                .toString(),
+                            avatar: ref
+                                .watch(rsaProvider)
+                                .acceptedNearbyProviders![index]
+                                .avatar
+                                .toString(),
+                            phone: ref
+                                .watch(rsaProvider)
+                                .acceptedNearbyProviders![index]
+                                .phoneNumber
+                                .toString(),
+                            name: ref
+                                .watch(rsaProvider)
+                                .acceptedNearbyProviders![index]
+                                .name
+                                .toString(),
+                            type: Type.provider,
+                            isCenter: false,
+                            estimatedTime: ref
+                                .watch(rsaProvider)
+                                .acceptedNearbyProviders![index]
+                                .estimatedTime
+                                .toString(),
+                          ),
                         );
                       },
                       // itemCount: providers.length,
@@ -219,20 +224,9 @@ class _ChooseProviderScreenState extends ConsumerState<ChooseProviderScreen> {
 
             print(
                 "PROV::AAAAAAAAAAAAAAAAAAAAA${ref.watch(rsaProvider).newNearbyProviders}");
-            // for (var towProvider
-            //     in ref.watch(rsaProvider).newNearbyProviders!.keys) {
-            //   print(
-            //       "${towProvider} ====== ${dataSnapShotProvider.key}-> ${dataSnapShotProvider.key == towProvider}");
-            //   print("PROV::do I already have him?");
-            //   if (dataSnapShotProvider.key == towProvider) {
-            //     print(
-            //         "PROV::YESSSSSSSSSSSSS->${ref.watch(rsaProvider).newNearbyProviders![towProvider]!.name}");
-            //     ref
-            //         .watch(rsaProvider.notifier)
-            //         .addAcceptedNearbyProvider(towProvider);
-            //     // print(ref.watch(rsaProvider).);
-            //   }
-            // }
+            ref
+                .watch(rsaProvider.notifier)
+                .getEstimatedTime(dataSnapShotProvider.key.toString());
             ref
                 .watch(rsaProvider.notifier)
                 .addAcceptedNearbyProvider(dataSnapShotProvider.key.toString());

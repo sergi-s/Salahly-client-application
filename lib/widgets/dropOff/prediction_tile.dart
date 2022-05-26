@@ -22,11 +22,14 @@ class _PredictionTileState extends ConsumerState<PredictionTile> {
   Widget build(BuildContext context) {
     return TextButton(
       onPressed: () async {
-        getPlaceAddressDetails(widget.placePredictions.place_id!);
+        await getPlaceAddressDetails(widget.placePredictions.place_id!);
 
+        print("${ref.watch(rsaProvider).dropOffLocation} ->>>");
         ref.watch(rsaProvider.notifier).assignRequestTypeToTTA();
         await ref.watch(rsaProvider.notifier).requestTta();
-        ref.watch(rsaProvider.notifier).searchNearbyMechanicsAndProviders();
+        if(ref.watch(rsaProvider).newNearbyProviders!.isEmpty) {
+          ref.watch(rsaProvider.notifier).searchNearbyMechanicsAndProviders();
+        }
 
         print("before app state");
 
@@ -69,7 +72,7 @@ class _PredictionTileState extends ConsumerState<PredictionTile> {
     );
   }
 
-  void getPlaceAddressDetails(String placeId) async {
+  Future getPlaceAddressDetails(String placeId) async {
     // showDialog(
     //     context: context,
     //     builder: (BuildContext context) =>

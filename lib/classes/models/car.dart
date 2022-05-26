@@ -10,13 +10,14 @@ class Car {
 
   List<String> usersId = [];
 
-  Car(
-      {this.id,
-      this.model,
-      this.color,
-      required this.noPlate,
-      this.noChassis,
-      this.carAccess});
+  Car({
+    this.id,
+    this.model,
+    this.color,
+    required this.noPlate,
+    this.noChassis,
+    this.carAccess,
+  });
 
   addSubOwner(String userID) {
     usersId.add(userID);

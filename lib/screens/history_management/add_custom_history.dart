@@ -2,41 +2,33 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:slahly/classes/models/car.dart';
 import 'package:slahly/classes/provider/user_data.dart';
+import 'package:slahly/widgets/dialogues/customHistoryConfirmation.dart';
 import 'package:slahly/widgets/global_widgets/app_bar.dart';
+import 'package:slahly/widgets/login_signup/Input_container.dart';
 
-import '../../classes/models/car.dart';
-
-class AddCustomHistory extends StatelessWidget {
-  static final routeName = "/add_custom_history";
+class AddCustomHistory extends ConsumerStatefulWidget {
+  static const routeName = "/add_custom_history";
 
   @override
-  Widget build(BuildContext context) {
-    // TODO: implement build
-    return MaterialApp(
-      home: CustomHistory(),
-    );
-  }
+  ConsumerState<AddCustomHistory> createState() => _AddCustomHistoryState();
 }
 
-class CustomHistory extends ConsumerStatefulWidget {
-  @override
-  ConsumerState<CustomHistory> createState() => _CustomHistoryState();
-}
-
-class _CustomHistoryState extends ConsumerState<CustomHistory> {
-  String car = "Mg 6";
-
-  String date = "20/12/2022";
-
-  String location = "Sedi Gaber";
-
-  String mechanic = "This Car good el good";
-
-  String noplate = "س ق ه | 2544";
+class _AddCustomHistoryState extends ConsumerState<AddCustomHistory> {
+  String? systemName, partId, partName, description;
+  double? actualDistance, distance, partCost, maintenanceCost, otherCost;
   DateTime selectedTime = DateTime.now();
-  String dropDownValue = "Choose Car";
-  late Car selected;
+  late Car? dropDownValue
+
+      // = Car(noPlate: "There is no Car", noChassis: "No cars")
+      ;
+
+  @override
+  void initState() {
+    dropDownValue = Car(noPlate: "noCar".tr(), noChassis: "noCar".tr());
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -44,20 +36,15 @@ class _CustomHistoryState extends ConsumerState<CustomHistory> {
       appBar: salahlyAppBar(title: 'Add_History'.tr()),
       body: Padding(
         padding: const EdgeInsets.all(15),
-        child: Container(
+        child: SizedBox(
           width: MediaQuery.of(context).size.width,
           child: SingleChildScrollView(
             child: Column(
               children: [
-                // Image.asset(
-                //   'assets/images/car_management/report.png',
-                //   fit: BoxFit.contain,
-                //   height: 150,
-                // ),
-                Container(
+                SizedBox(
                   height: 100,
                   child: CupertinoDatePicker(
-                    mode: CupertinoDatePickerMode.dateAndTime,
+                    mode: CupertinoDatePickerMode.date,
                     initialDateTime: DateTime.now(),
                     onDateTimeChanged: (DateTime newDateTime) {
                       //Do Some thing
@@ -66,89 +53,249 @@ class _CustomHistoryState extends ConsumerState<CustomHistory> {
                     use24hFormat: false,
                   ),
                 ),
-                TextField(
-                  enabled: false,
-                  readOnly: true,
-                  decoration: InputDecoration(
-                    labelText: 'Car'.tr(),
-                  ),
-                  controller: TextEditingController(text: car),
-                  textInputAction: TextInputAction.newline,
-                  maxLines: null,
-                  keyboardType: TextInputType.multiline,
+                Container(
+                  margin: const EdgeInsets.symmetric(vertical: 10),
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  width: MediaQuery.of(context).size.width * 0.8,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(30),
+                      color: Colors.grey[200],
+                      boxShadow: const [
+                        BoxShadow(
+                          color: Colors.blueGrey,
+                          blurRadius: 2.0,
+                          spreadRadius: 0.0,
+                          offset: Offset(3, 0),
+                        ),
+                      ]),
+                  child: CustomDropdownMenu(
+                      values: ref.watch(userProvider).cars,
+                      defaultValue: ref.watch(userProvider).cars[0],
+                      onItemSelected: (value) {
+                        dropDownValue = value;
+                      }),
                 ),
-
-                // DropdownButton<dynamic>(
-                //   value: dropDownValue,
-                //   icon: Icon(Icons.keyboard_arrow_down),
-                //   items: ref.watch(userProvider).cars.map((dynamic items) {
-                //     return DropdownMenuItem(
-                //         value: items,
-                //         child: Text(items,
-                //             style: const TextStyle(
-                //                 fontSize: 15, color: Colors.black)));
-                //   }).toList(),
-                //   onChanged: (dynamic? value) {
-                //     setState(() {
-                //       this.dropDownValue = value!;
-                //       selected = map[this.dropdownvalue];
-                //     });
-                //   },
-                // ),
-                TextField(
-                  enabled: false,
-                  readOnly: true,
-                  decoration: InputDecoration(
-                    labelText: 'Number_Plate'.tr(),
-                  ),
-                  controller: TextEditingController(text: noplate),
-                  textInputAction: TextInputAction.newline,
-                  maxLines: null,
-                  keyboardType: TextInputType.multiline,
-                ),
-                TextField(
-                  enabled: false,
-                  readOnly: true,
-                  decoration: InputDecoration(
-                    labelText: 'Location'.tr(),
-                  ),
-                  controller: TextEditingController(text: location),
-                  textInputAction: TextInputAction.newline,
-                  maxLines: null,
-                  keyboardType: TextInputType.multiline,
-                ),
-                TextField(
-                  decoration: InputDecoration(
-                    labelText: 'Mechanic_Report',
-                  ),
-                  controller: TextEditingController(text: mechanic),
-                  textInputAction: TextInputAction.newline,
-                  maxLines: null,
-                  keyboardType: TextInputType.multiline,
-                ),
-                Row(
-                  children: [
-                    FlatButton(
-                      child: Text('Cancel'.tr()),
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
+                SizedBox(
+                  width: MediaQuery.of(context).size.width,
+                  child: SingleChildScrollView(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const SizedBox(width: 20),
+                        InputTextField(
+                            hintText: 'systemName'.tr(),
+                            fn: (String value) {
+                              systemName = value;
+                            }),
+                        InputTextField(
+                            hintText: 'partId'.tr(),
+                            fn: (String value) {
+                              partId = value;
+                            }),
+                        InputTextField(
+                          hintText: 'partName'.tr(),
+                          fn: (value) {
+                            partName = value;
+                          },
+                        ),
+                        InputTextField(
+                          hintText: 'actualDistance'.tr(),
+                          fn: (String value) {
+                            actualDistance = double.parse(value.toString());
+                          },
+                        ),
+                        InputTextField(
+                          hintText: 'distance'.tr(),
+                          fn: (String value) {
+                            distance = double.parse(value.toString());
+                          },
+                        ),
+                        InputTextField(
+                          hintText: 'partCost'.tr(),
+                          fn: (String value) {
+                            partCost = double.parse(value.toString());
+                          },
+                        ),
+                        InputTextField(
+                          hintText: 'maintenanceCost'.tr(),
+                          fn: (String value) {
+                            maintenanceCost = double.parse(value.toString());
+                          },
+                        ),
+                        InputTextField(
+                          hintText: 'otherCost'.tr(),
+                          fn: (String value) {
+                            otherCost = double.parse(value.toString());
+                          },
+                        ),
+                        BuildMultipleTextField(
+                          hintText: 'description'.tr(),
+                          fn: (String value) {
+                            description = value;
+                          },
+                        ),
+                        RaisedButton(
+                          child: Text(
+                            "submit".tr(),
+                            style: const TextStyle(color: Colors.white),
+                          ),
+                          color: const Color(0xFF193566),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12)),
+                          onPressed: () {
+                            if (systemName == "") {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                      content: Text('pleaseAddField'.tr())));
+                              SnackBar(content: Text('pleaseAddField'.tr()));
+                            } else if (dropDownValue!.model == null) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                      content: const Text("plzSpecCar").tr()));
+                              SnackBar(content: const Text('plzSpecCar').tr());
+                            } else {
+                              confirmCustomHistory(context, ref,
+                                  car: dropDownValue,
+                                  actualDistance: actualDistance,
+                                  dateTime: selectedTime,
+                                  description: description,
+                                  distance: distance,
+                                  maintenanceCost: maintenanceCost,
+                                  otherCost: otherCost,
+                                  partCost: partCost,
+                                  partId: partId,
+                                  partName: partName,
+                                  systemName: systemName);
+                            }
+                          },
+                        ),
+                        const SizedBox(
+                          height: 50,
+                        )
+                      ],
                     ),
-                    FlatButton(
-                      textColor: Colors.white,
-                      child: Text('Send'.tr()),
-                      color: Color(0xFF193566),
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                    ),
-                  ],
+                  ),
                 ),
               ],
             ),
           ),
         ),
       ),
+    );
+  }
+}
+
+class InputTextField extends StatelessWidget {
+  InputTextField({
+    Key? key,
+    required this.hintText,
+    required this.fn,
+  }) : super(key: key);
+  final String hintText;
+
+  final TextEditingController _textEditingController = TextEditingController();
+  final Function fn;
+
+  @override
+  Widget build(BuildContext context) {
+    return InputContainer(
+      child: TextField(
+        onChanged: (value) {
+          _textEditingController.text = value;
+          fn(value);
+        },
+        cursorColor: Colors.blue,
+        decoration: InputDecoration(
+          hintText: hintText,
+          border: InputBorder.none,
+        ),
+      ),
+    );
+  }
+}
+
+class BuildMultipleTextField extends StatelessWidget {
+  BuildMultipleTextField({
+    Key? key,
+    required this.hintText,
+    required this.fn,
+  }) : super(key: key);
+  final String hintText;
+
+  final TextEditingController _textEditingController = TextEditingController();
+  final Function fn;
+
+  @override
+  Widget build(BuildContext context) {
+    return InputContainer(
+      child: TextField(
+        onChanged: (value) {
+          _textEditingController.text = value;
+          fn(value);
+        },
+        cursorColor: Colors.blue,
+        decoration: InputDecoration(
+          hintText: hintText,
+          border: InputBorder.none,
+        ),
+        maxLines: 10,
+      ),
+    );
+  }
+}
+
+class CustomDropdownMenu extends StatefulWidget {
+  const CustomDropdownMenu(
+      {Key? key,
+      required this.defaultValue,
+      required this.values,
+      required this.onItemSelected})
+      : super(key: key);
+  final dynamic Function(Car? selectedValue) onItemSelected;
+  final Car defaultValue;
+  final List<Car> values;
+
+  @override
+  _CustomDropdownMenuState createState() => _CustomDropdownMenuState();
+}
+
+class _CustomDropdownMenuState extends State<CustomDropdownMenu> {
+  late Car dropdownValue;
+
+  @override
+  void initState() {
+    super.initState();
+    dropdownValue = widget.defaultValue;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+          margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+          padding: const EdgeInsets.all(5.0),
+          child: DropdownButtonHideUnderline(
+            child: DropdownButton<Car>(
+              value: dropdownValue,
+              items: widget.values.map((dropValue) {
+                return DropdownMenuItem<Car>(
+                  value: dropValue,
+                  child: Text(dropValue.noPlate),
+                );
+              }).toList(),
+              onChanged: (newDropdownValue) {
+                setState(() {
+                  dropdownValue = newDropdownValue!;
+                });
+                widget.onItemSelected(newDropdownValue);
+              },
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
