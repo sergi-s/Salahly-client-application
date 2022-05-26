@@ -282,94 +282,6 @@ class _State extends ConsumerState<AddCar> {
               ],
             ));
   }
- addCarDialog() {
-    final snackBar = SnackBar(content: Text("carAdded".tr()));
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          content: Text("are_you_sure_u_want_to_add_car".tr()),
-          title: Text("Warning".tr()),
-          actions: [
-            TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                child: Text("Cancel".tr())),
-            TextButton(
-                onPressed: () async {
-                  addCar(ref);
-                  Navigator.of(context).pop();
-                  ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                  context.push(ViewCars.routeName);
-                },
-                child: Text("confirm".tr())),
-          ],
-        );
-      },
-    );
-  }
-
-  conflictDialog(context) {
-    showDialog(
-        context: context,
-        barrierDismissible: true,
-        builder: (BuildContext context) => AlertDialog(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(dialogRadius),
-              ),
-              title: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Text("conflict").tr(),
-                ],
-              ),
-              content: const Text("carAlreadyInSystem").tr(),
-              actions: <Widget>[
-                ElevatedButton(
-                  onPressed: () async {
-                    await requestConflict();
-                    Navigator.pop(context);
-                  },
-                  child: const Text("requestConflict").tr(),
-                  style: ElevatedButton.styleFrom(
-                    primary: const Color(0xFF193566),
-                    padding: const EdgeInsets.all(10),
-                  ),
-                ),
-              ],
-            ));
-  }
-
-conflictAlreadyExitsDialog(context) {
-    showDialog(
-        context: context,
-        barrierDismissible: true,
-        builder: (BuildContext context) => AlertDialog(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(dialogRadius),
-              ),
-              title: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Text("conflict").tr(),
-                ],
-              ),
-              content: const Text("requestAlreadyPut").tr(),
-              actions: <Widget>[
-                ElevatedButton(
-                  onPressed: () async {
-                    Navigator.pop(context);
-                  },
-                  child: const Text("cancel").tr(),
-                  style: ElevatedButton.styleFrom(
-                    primary: const Color(0xFF193566),
-                    padding: const EdgeInsets.all(10),
-                  ),
-                ),
-              ],
-            ));
-  }
 
   addCarDialog() {
     final snackBar = SnackBar(content: Text("carAdded".tr()));
@@ -459,6 +371,7 @@ conflictAlreadyExitsDialog(context) {
               ],
             ));
   }
+
 
   conflictController() async {
     String newCarID = chasisController.text;
