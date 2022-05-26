@@ -56,20 +56,7 @@ class _AddCustomHistoryState extends ConsumerState<AddCustomHistory> {
                 ),
                 Container(
 
-                    margin: const EdgeInsets.symmetric(vertical: 10),
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    width: MediaQuery.of(context).size.width * 0.8,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(30),
-                        color: Colors.grey[200],
-                        boxShadow: const [
-                          BoxShadow(
-                            color: Colors.blueGrey,
-                            blurRadius: 2.0,
-                            spreadRadius: 0.0,
-                            offset: Offset(3, 0),
-                          ),
-                        ]),
+
                     child: ref.watch(userProvider).cars.isNotEmpty
                         ? CustomDropdownMenu(
                             values: ref.watch(userProvider).cars,
@@ -283,9 +270,22 @@ class _CustomDropdownMenuState extends State<CustomDropdownMenu> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Container(
-
-          margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-          padding: const EdgeInsets.all(5.0),
+          margin: const EdgeInsets.symmetric(vertical: 10),
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          width: MediaQuery.of(context).size.width * 0.8,
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(30),
+              color: Colors.grey[200],
+              boxShadow: const [
+                BoxShadow(
+                  color: Colors.blueGrey,
+                  blurRadius: 2.0,
+                  spreadRadius: 0.0,
+                  offset: Offset(3, 0),
+                ),
+              ]),
+          // margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+          // padding: const EdgeInsets.all(5.0),
           child: DropdownButtonHideUnderline(
             child: DropdownButton<Car>(
               value: dropdownValue,
