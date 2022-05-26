@@ -83,15 +83,17 @@ class _State extends ConsumerState<ViewCars> {
                                 ),
                                 title: Row(
                                   children: [
-                                    Text(
-                                        ref
-                                            .watch(userProvider)
-                                            .cars[index]
-                                            .model
-                                            .toString(),
-                                        style: const TextStyle(
-                                            fontSize: 25,
-                                            fontWeight: FontWeight.bold)),
+                                    Flexible(
+                                      child: Text(
+                                          ref
+                                              .watch(userProvider)
+                                              .cars[index]
+                                              .model
+                                              .toString(),
+                                          style: const TextStyle(
+                                              fontSize: 25,
+                                              fontWeight: FontWeight.bold)),
+                                    ),
                                     Padding(
                                       padding: EdgeInsets.only(
                                           top: MediaQuery.of(context)
@@ -166,15 +168,17 @@ class _State extends ConsumerState<ViewCars> {
                                               fontWeight: FontWeight.bold,
                                               color: Colors.black),
                                         ),
-                                        Text(
-                                          ref
-                                              .watch(userProvider)
-                                              .cars[index]
-                                              .noPlate
-                                              .toString(),
-                                          style: const TextStyle(
-                                              fontSize: 18,
-                                              fontWeight: FontWeight.bold),
+                                        Flexible(
+                                          child: Text(
+                                            ref
+                                                .watch(userProvider)
+                                                .cars[index]
+                                                .noPlate
+                                                .toString(),
+                                            style: const TextStyle(
+                                                fontSize: 18,
+                                                fontWeight: FontWeight.bold),
+                                          ),
                                         ),
                                       ],
                                     ),
@@ -187,15 +191,17 @@ class _State extends ConsumerState<ViewCars> {
                                               fontWeight: FontWeight.bold,
                                               color: Colors.black),
                                         ),
-                                        Text(
-                                            ref
-                                                .watch(userProvider)
-                                                .cars[index]
-                                                .noChassis
-                                                .toString(),
-                                            style: const TextStyle(
-                                                fontSize: 18,
-                                                fontWeight: FontWeight.bold)),
+                                        Flexible(
+                                            child: Text(
+                                                ref
+                                                    .watch(userProvider)
+                                                    .cars[index]
+                                                    .noChassis
+                                                    .toString(),
+                                                style: const TextStyle(
+                                                    fontSize: 18,
+                                                    fontWeight:
+                                                        FontWeight.bold))),
                                       ],
                                     ),
                                     //TODO ADD COLOR HERE

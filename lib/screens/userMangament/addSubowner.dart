@@ -110,7 +110,7 @@ class _State extends ConsumerState<AddSubowner> {
                 const SizedBox(height: 20),
                 Row(children: [
                   Container(
-                    width: 250,
+                    width: MediaQuery.of(context).size.width * 0.6,
                     child: TextFormField(
                       controller: getUserController,
                       decoration: InputDecoration(

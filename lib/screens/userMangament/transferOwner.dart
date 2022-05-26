@@ -111,7 +111,7 @@ class _State extends ConsumerState<TransferOwner> {
               ),
               Row(children: [
                 Container(
-                  width: 250,
+                  width: MediaQuery.of(context).size.width * 0.6,
                   child: TextFormField(
                     controller: getUserController,
                     decoration: InputDecoration(

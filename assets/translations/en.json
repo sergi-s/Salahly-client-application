@@ -116,6 +116,7 @@
   "at": "at",
   "needTowTruck": "Do you need a Tow Truck?",
   "weFound": "We found",
+  "enter_new_owner_email": "enter new owner email",
   "mechanicAndWaitingForResponse": "Mechanics, and waiting for their response",
   "providerAndWaitingForResponse": "Providers, and waiting for their response",
   "didNotFindProvider": "Sorry! Did not find a Tow Provider",

@@ -42,6 +42,7 @@ class _State extends ConsumerState<AddCar> {
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;
     return Scaffold(
+        resizeToAvoidBottomInset: false,
         appBar: salahlyAppBar(title: "Add_Car".tr()),
         backgroundColor: const Color(0xFFd1d9e6),
         body: CustomPaint(
@@ -203,12 +204,9 @@ class _State extends ConsumerState<AddCar> {
                 buildColorPicker(),
                 Row(
                   children: [
-                    TextButton(
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                        child: Text("Cancel".tr())),
-                    const SizedBox(width: 20),
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width * 0.28,
+                    ),
                     TextButton(
                         onPressed: () {
                           Navigator.of(context).pop();
