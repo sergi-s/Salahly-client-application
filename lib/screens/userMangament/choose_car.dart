@@ -126,11 +126,14 @@ class _State extends ConsumerState<Choose_car> {
                                   ),
                                   title: Row(
                                     children: [
-                                      Text(
-                                          carState.cars[index].model.toString(),
-                                          style: const TextStyle(
-                                              fontSize: 25,
-                                              fontWeight: FontWeight.bold)),
+                                      Flexible(
+                                          child: Text(
+                                              carState.cars[index].model
+                                                  .toString(),
+                                              style: const TextStyle(
+                                                  fontSize: 25,
+                                                  fontWeight:
+                                                      FontWeight.bold))),
                                       Padding(
                                         padding: EdgeInsets.only(
                                             top: MediaQuery.of(context)
@@ -208,12 +211,14 @@ class _State extends ConsumerState<Choose_car> {
                                                 fontWeight: FontWeight.bold,
                                                 color: Colors.black),
                                           ),
-                                          Text(
-                                            carState.cars[index].noPlate
-                                                .toString(),
-                                            style: const TextStyle(
-                                                fontSize: 18,
-                                                fontWeight: FontWeight.bold),
+                                          Flexible(
+                                            child: Text(
+                                              carState.cars[index].noPlate
+                                                  .toString(),
+                                              style: const TextStyle(
+                                                  fontSize: 18,
+                                                  fontWeight: FontWeight.bold),
+                                            ),
                                           ),
                                         ],
                                       ),
@@ -226,12 +231,15 @@ class _State extends ConsumerState<Choose_car> {
                                                 fontWeight: FontWeight.bold,
                                                 color: Colors.black),
                                           ),
-                                          Text(
-                                              carState.cars[index].noChassis
-                                                  .toString(),
-                                              style: const TextStyle(
-                                                  fontSize: 18,
-                                                  fontWeight: FontWeight.bold)),
+                                          Flexible(
+                                            child: Text(
+                                                carState.cars[index].noChassis
+                                                    .toString(),
+                                                style: const TextStyle(
+                                                    fontSize: 18,
+                                                    fontWeight:
+                                                        FontWeight.bold)),
+                                          ),
                                         ],
                                       ),
                                       // Row(
