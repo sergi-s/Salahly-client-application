@@ -149,7 +149,7 @@
   "confirmSignOut": "Are you sure you want to sign out?",
   "receivedNotification": "Received a notification, rsaID: ",
   "rsaDescription": "For urgent the roadside automobile requests",
-  "wsaDescription": "For reservation at a mechanic,where you need a tow truck or not",
+  "wsaDescription": "For reservation at a mechanic, where you need a tow truck or not",
   "ttaDescription": "For towing your car to wherever you want",
   "manageSubOwner": "Manage Sub-owners",
   "carDeleteConfirmation": "are you sure u want to delete car",
@@ -213,5 +213,7 @@
   "min": "min",
   "review": "Review",
   "holdConfirmCar": "Confirming Car, please wait",
-  "initialReport": "Initial Report"
+  "initialReport": "Initial Report",
+  "youAreAlreadyTheUser": "You Are Already TheUser",
+  "who": "Requester"
 }

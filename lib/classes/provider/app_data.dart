@@ -56,7 +56,6 @@ class SalahlyClient {
 
   @override
   String toString() {
-    // TODO: implement toString
     String strAppState =
         (_appState != null) ? appStateToString(_appState!) : "no app state";
     String strRequestType = (_requestType != null)

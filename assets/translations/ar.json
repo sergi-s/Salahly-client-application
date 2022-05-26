@@ -214,5 +214,7 @@
   "min": "دقيقه",
   "review": "قيم",
   "holdConfirmCar": "جاري التحقق من السياره, فضلا انتظر",
-  "initialReport": "تقرير مبدئي"
+  "initialReport": "تقرير مبدئي",
+  "youAreAlreadyTheUser": "انت بالفعل مالك السياره",
+  "who": "الطالب"
 }

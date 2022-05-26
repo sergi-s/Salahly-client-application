@@ -144,7 +144,8 @@ class _State extends ConsumerState<TransferOwner> {
               Row(
                 children: [
                   Text('Choose_Car'.tr(),
-                      style: TextStyle(fontSize: 25, color: Colors.black)),
+                      style:
+                          const TextStyle(fontSize: 25, color: Colors.black)),
                   SizedBox(width: 20),
                   DropdownButton<dynamic>(
                     value: dropdownvalue,
@@ -165,7 +166,7 @@ class _State extends ConsumerState<TransferOwner> {
                   ),
                 ],
               ),
-              SizedBox(
+              const SizedBox(
                 height: 15,
               ),
               Row(
@@ -175,11 +176,11 @@ class _State extends ConsumerState<TransferOwner> {
                     backgroundImage: NetworkImage(avatar ?? "sad"),
                     backgroundColor: Colors.transparent,
                   ),
-                  SizedBox(width: 20),
+                  const SizedBox(width: 20),
                   Text(email!, style: TextStyle(fontSize: 25))
                 ],
               ),
-              SizedBox(
+              const SizedBox(
                 height: 70,
               ),
               Visibility(

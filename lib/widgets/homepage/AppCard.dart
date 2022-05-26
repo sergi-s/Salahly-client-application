@@ -19,13 +19,16 @@ class CardWidget extends StatelessWidget {
       child: Container(
         width: MediaQuery.of(context).size.width * 0.88,
         height: MediaQuery.of(context).size.height * 0.18,
+
         child: Card(
           semanticContainer: true,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(15.0),
           ),
           elevation: 10,
+
           color:Colors.grey[200],
+
 
           // margin: const EdgeInsets.symmetric(vertical: 15, horizontal: 25),
           child: InkWell(
@@ -45,7 +48,9 @@ class CardWidget extends StatelessWidget {
                     title: Text(
                       title,
                       textScaleFactor: 1.5,
+
                       style: TextStyle(color: Colors.indigo[800],fontSize:15),
+
                     ),
                     subtitle: Text(
                       subtitle,

@@ -48,7 +48,7 @@ import 'screens/roadsideassistance/arrival.dart';
 
 class Routing {
   get router => GoRouter(
-        initialLocation: TestScreenAya.routeName,
+        initialLocation: LoginSignupScreen.routeName,
         // initialLocation: RequestFinalScreen.routeName,
         routes: <GoRoute>[
           GoRoute(
@@ -65,63 +65,62 @@ class Routing {
             path: LoginSignupScreen.routeName,
             builder: (context, state) => LoginSignupScreen(),
           ),
-
-      GoRoute(
-        path: ManageSubowner.routeName,
-        builder: (context, state) =>
-            ManageSubowner(chasis: state.extra! as String),
-      ),
-      GoRoute(
-        path: TransferOwner.routeName,
-        builder: (context, state) => TransferOwner(),
-      ),
-      GoRoute(
-        path: AddSubowner.routeName,
-        builder: (context, state) => AddSubowner(),
-      ),
-      GoRoute(
-        path: RoadSideAssistanceScreen.routeName,
-        builder: (context, state) => RoadSideAssistanceScreen(),
-      ),
-      GoRoute(
-        path: SplashScreen.routeName,
-        builder: (context, state) => SplashScreen(),
-      ),
-      GoRoute(
-        path: HomeScreen.routeName,
-        builder: (context, state) => HomeScreen(),
-      ),
-      GoRoute(
-        path: HomePage.routeName,
-        builder: (context, state) => HomePage(),
-      ),
-      GoRoute(
-        path: ChooseProviderScreen.routeName,
-        builder: (context, state) => ChooseProviderScreen(),
-      ),
-      GoRoute(
-        path: ChooseMechanicScreen.routeName,
-        builder: (context, state) => ChooseMechanicScreen(),
-      ),
-      GoRoute(
-        path: SearchingMechanicProviderScreen.routeName,
-        builder: (context, state) => SearchingMechanicProviderScreen(
-            userLocation: state.extra! as CustomLocation),
-        // userLocation: CustomLocation(latitude: 1, longitude: 2)),
-        // builder: (context, state) => SearchingMechanicProvider(userLocation: state.extra! as CustomLocation),
-      ),
-      GoRoute(
-        //TESTING
-        path: FirebaseEmulatorScreen.routeName,
-        builder: (context, state) => FirebaseEmulatorScreen(),
-      ),
-      GoRoute(
-        path: RSAConfirmationScreen.routeName,
-        builder: (context, state) => RSAConfirmationScreen(),
-      ),
-      GoRoute(
-        path: DescCarProblem.routeName,
-        builder: (context, state) => DescCarProblem(),
+          GoRoute(
+            path: ManageSubowner.routeName,
+            builder: (context, state) =>
+                ManageSubowner(chasis: state.extra! as String),
+          ),
+          GoRoute(
+            path: TransferOwner.routeName,
+            builder: (context, state) => TransferOwner(),
+          ),
+          GoRoute(
+            path: AddSubowner.routeName,
+            builder: (context, state) => AddSubowner(),
+          ),
+          GoRoute(
+            path: RoadSideAssistanceScreen.routeName,
+            builder: (context, state) => RoadSideAssistanceScreen(),
+          ),
+          GoRoute(
+            path: SplashScreen.routeName,
+            builder: (context, state) => SplashScreen(),
+          ),
+          GoRoute(
+            path: HomeScreen.routeName,
+            builder: (context, state) => HomeScreen(),
+          ),
+          GoRoute(
+            path: HomePage.routeName,
+            builder: (context, state) => HomePage(),
+          ),
+          GoRoute(
+            path: ChooseProviderScreen.routeName,
+            builder: (context, state) => ChooseProviderScreen(),
+          ),
+          GoRoute(
+            path: ChooseMechanicScreen.routeName,
+            builder: (context, state) => ChooseMechanicScreen(),
+          ),
+          GoRoute(
+            path: SearchingMechanicProviderScreen.routeName,
+            builder: (context, state) => SearchingMechanicProviderScreen(
+                userLocation: state.extra! as CustomLocation),
+            // userLocation: CustomLocation(latitude: 1, longitude: 2)),
+            // builder: (context, state) => SearchingMechanicProvider(userLocation: state.extra! as CustomLocation),
+          ),
+          GoRoute(
+            //TESTING
+            path: FirebaseEmulatorScreen.routeName,
+            builder: (context, state) => FirebaseEmulatorScreen(),
+          ),
+          GoRoute(
+            path: RSAConfirmationScreen.routeName,
+            builder: (context, state) => RSAConfirmationScreen(),
+          ),
+          GoRoute(
+            path: DescCarProblem.routeName,
+            builder: (context, state) => DescCarProblem(),
           ),
           GoRoute(
             path: WaitArrvial.routeName,

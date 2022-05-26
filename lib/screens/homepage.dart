@@ -21,6 +21,7 @@ import 'package:slahly/widgets/global_widgets/app_bar.dart';
 import 'package:slahly/widgets/global_widgets/app_drawer.dart';
 import 'package:slahly/widgets/homepage/AppCard.dart';
 
+
 class HomePage extends ConsumerStatefulWidget {
   const HomePage({Key? key}) : super(key: key);
   static const routeName = "/";
@@ -84,6 +85,16 @@ class _HomePageState extends ConsumerState<HomePage> {
                   title: 'tta'.tr(),
                   subtitle: 'ttaDescription'.tr(),
                   image: 'assets/images/Tow.png'),
+
+              // ElevatedButton(
+              //     onPressed: () {
+              //       print(ref.watch(userProvider).cars);
+              //       // print(ref.watch(userProvider).cars);
+              //       reviveFromCloud();
+              //       revive();
+              //     },
+              //     child: Text("tesst"))
+
             ],
           ),
         ),
@@ -93,6 +104,7 @@ class _HomePageState extends ConsumerState<HomePage> {
         onPressed: () {
           context.push(ChatBotScreen.routeName);
         },
+
         backgroundColor: Colors.indigo[600],
         child: CircleAvatar(
           backgroundImage: AssetImage('assets/images/chatbot.png'),
@@ -149,14 +161,19 @@ class _HomePageState extends ConsumerState<HomePage> {
     for (var element in dataSnapshot.children) {
       RSAStates tempState =
           RSA.stringToState(element.child("state").value.toString());
+
+      print(
+          "${element.child("state").value.toString()} vs $tempState vs ${RSAStates.cancelled}");
       requestType = local == rsaRef
           ? RequestType.RSA
           : local == wsaRef
               ? RequestType.WSA
               : RequestType.TTA;
-      if (tempState != RSAStates.done || tempState != RSAStates.cancelled) {
-        rsaID = element.key;
 
+      print("from cloud${tempState}, ");
+      if (tempState != RSAStates.done && tempState != RSAStates.cancelled) {
+        rsaID = element.key;
+        print("id: $rsaID state $tempState ");
         for (var response in element.child("mechanicsResponses").children) {
           if ((response.value == "accepted" &&
                   requestType == RequestType.RSA) ||
