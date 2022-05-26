@@ -1,3 +1,4 @@
+import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -21,6 +22,7 @@ class _AddCustomHistoryState extends ConsumerState<AddCustomHistory> {
   String? systemName, partId, partName, description;
   double? actualDistance, distance, partCost, maintenanceCost, otherCost;
   DateTime selectedTime = DateTime.now();
+
   late Car? dropDownValue;
 
   @override
@@ -31,6 +33,7 @@ class _AddCustomHistoryState extends ConsumerState<AddCustomHistory> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color(0xFFd1d9e6),
       appBar: salahlyAppBar(title: 'Add_History'.tr()),
       body: Padding(
         padding: const EdgeInsets.all(15),
@@ -52,6 +55,7 @@ class _AddCustomHistoryState extends ConsumerState<AddCustomHistory> {
                   ),
                 ),
                 Container(
+
                     margin: const EdgeInsets.symmetric(vertical: 10),
                     padding: const EdgeInsets.symmetric(horizontal: 20),
                     width: MediaQuery.of(context).size.width * 0.8,
@@ -76,6 +80,7 @@ class _AddCustomHistoryState extends ConsumerState<AddCustomHistory> {
                         : Container(
                             child: Text("noCar".tr()),
                           )),
+
                 SizedBox(
                   width: MediaQuery.of(context).size.width,
                   child: SingleChildScrollView(
@@ -235,7 +240,9 @@ class BuildMultipleTextField extends StatelessWidget {
           _textEditingController.text = value;
           fn(value);
         },
+
         cursorColor: Colors.blue,
+
         decoration: InputDecoration(
           hintText: hintText,
           border: InputBorder.none,
@@ -276,6 +283,7 @@ class _CustomDropdownMenuState extends State<CustomDropdownMenu> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Container(
+
           margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
           padding: const EdgeInsets.all(5.0),
           child: DropdownButtonHideUnderline(

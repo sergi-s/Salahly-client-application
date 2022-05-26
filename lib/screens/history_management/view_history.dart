@@ -21,7 +21,6 @@ class ViewHistory extends ConsumerStatefulWidget {
   @override
   ConsumerState<ViewHistory> createState() => _ViewHistoryState();
 }
-
 //TODO: make the background color backgroundColor: const Color(0xFFd1d9e6), for both history and custom history
 class _ViewHistoryState extends ConsumerState<ViewHistory> {
   final db = Localstore.instance;
@@ -86,10 +85,12 @@ class _ViewHistoryState extends ConsumerState<ViewHistory> {
           ),
         ),
         body: TabBarView(
+
           children: [
             Builder(builder: (context) {
               return ListView.builder(
                 itemBuilder: (BuildContext context, index) {
+
                   if (ref
                           .watch(historyProvider)[
                               (ref.watch(historyProvider).length - 1) - index]
@@ -107,6 +108,7 @@ class _ViewHistoryState extends ConsumerState<ViewHistory> {
                         rsa: ref.watch(historyProvider)[
                             (ref.watch(historyProvider).length - 1) - index]),
                   );
+
                 },
                 itemCount: ref.watch(historyProvider).length,
                 shrinkWrap: true,
@@ -116,6 +118,9 @@ class _ViewHistoryState extends ConsumerState<ViewHistory> {
             }),
             Builder(builder: (context) {
               return Scaffold(
+
+                backgroundColor: const Color(0xFFd1d9e6),
+
                 body: ListView.builder(
                     itemCount: _items.length,
                     shrinkWrap: true,
@@ -158,7 +163,8 @@ class _ViewHistoryState extends ConsumerState<ViewHistory> {
                   style: ElevatedButton.styleFrom(
                     shape: const CircleBorder(),
                     primary: const Color(0xFF193566),
-                    padding: const EdgeInsets.all(10),
+                    padding: const EdgeInsets.all(15),elevation: 5,
+
                   ),
                 ),
               );

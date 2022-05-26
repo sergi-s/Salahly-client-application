@@ -81,17 +81,20 @@ class _AccordionState extends State<Accordion> {
           ListTile(
               title: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+
                 children: [
                   Text(
                     widget.rsa!.car!.noPlate,
                     style: const TextStyle(
                         fontWeight: FontWeight.bold, fontSize: 20),
                   ),
+
                   Text(
                     RSA.stateToString(widget.rsa!.state!),
                     style: const TextStyle(
                         fontWeight: FontWeight.bold, fontSize: 20),
                   ),
+
                 ],
               ),
               trailing: IconButton(
@@ -165,8 +168,10 @@ class _AccordionState extends State<Accordion> {
                                     ),
                                   ),
                                   Padding(
+
                               padding: const EdgeInsets.all(12.0),
                               child: Text(
+
                                       DateFormat('yyyy-MM-dd – kk:mm')
                                           .format(widget.rsa!.createdAt!),
                                       style: const TextStyle(
@@ -177,6 +182,7 @@ class _AccordionState extends State<Accordion> {
                                 ],
                               ),
                         const SizedBox(height: 5),
+
                         (widget.rsa!.mechanic != null)
                             ? Row(
                                 mainAxisAlignment:
@@ -209,6 +215,10 @@ class _AccordionState extends State<Accordion> {
     );
   }
 }
+
+//TODO: 1- refactor codeak
+//TODO: 2.0- add car name if possible
+
 //TODO: 2.1- DATA in history: request type, car(name??numberPlate), date
 //TODO: 2.2- add a icon
 //TODO: text style in same color as the app bar

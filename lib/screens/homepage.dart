@@ -85,6 +85,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                   title: 'tta'.tr(),
                   subtitle: 'ttaDescription'.tr(),
                   image: 'assets/images/Tow.png'),
+
               // ElevatedButton(
               //     onPressed: () {
               //       print(ref.watch(userProvider).cars);
@@ -93,6 +94,7 @@ class _HomePageState extends ConsumerState<HomePage> {
               //       revive();
               //     },
               //     child: Text("tesst"))
+
             ],
           ),
         ),
@@ -102,7 +104,8 @@ class _HomePageState extends ConsumerState<HomePage> {
         onPressed: () {
           context.push(ChatBotScreen.routeName);
         },
-        backgroundColor: Colors.indigo,
+
+        backgroundColor: Colors.indigo[600],
         child: CircleAvatar(
           backgroundImage: AssetImage('assets/images/chatbot.png'),
           backgroundColor: Color(0xff193566),
@@ -158,6 +161,7 @@ class _HomePageState extends ConsumerState<HomePage> {
     for (var element in dataSnapshot.children) {
       RSAStates tempState =
           RSA.stringToState(element.child("state").value.toString());
+
       print(
           "${element.child("state").value.toString()} vs $tempState vs ${RSAStates.cancelled}");
       requestType = local == rsaRef
@@ -165,6 +169,7 @@ class _HomePageState extends ConsumerState<HomePage> {
           : local == wsaRef
               ? RequestType.WSA
               : RequestType.TTA;
+
       print("from cloud${tempState}, ");
       if (tempState != RSAStates.done && tempState != RSAStates.cancelled) {
         rsaID = element.key;

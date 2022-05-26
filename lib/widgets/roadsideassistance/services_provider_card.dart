@@ -398,6 +398,7 @@ class ServicesProviderCard extends StatelessWidget {
                       style: const TextStyle(fontSize: 25),
                     ),
                     const SizedBox(width: 15),
+
                     Flexible(
                       flex: 5,
                       child: Text(

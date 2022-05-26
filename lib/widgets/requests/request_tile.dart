@@ -85,6 +85,7 @@ class RequestTile extends StatelessWidget {
                     ),
                   ],
                 ),
+
                 // const SizedBox(height: 5),
                 // Row(
                 //   children: [
@@ -116,20 +117,24 @@ class RequestTile extends StatelessWidget {
                     // Text("SASDADASDADASDASDASd"),
                     Text(
                       "who".tr() + " ",
+
                       style: const TextStyle(
                         fontSize: 18,
                       ),
                     ),
+
                     Text(
                         (rsa.user != null &&
                                 rsa.user!.id ==
                                     FirebaseAuth.instance.currentUser!.uid)
                             ? "YOU"
                             : rsa.user!.name!,
+
                         style: const TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
                             color: Color(0xFF193566))),
+
                   ],
                 ),
                 const SizedBox(height: 5),
@@ -199,4 +204,6 @@ class RequestTile extends StatelessWidget {
     );
   }
 }
+
 //TODO: get screen (view_request_full_data (fl admin)) and go to it
+

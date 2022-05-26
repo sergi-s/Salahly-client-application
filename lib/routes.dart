@@ -1,3 +1,4 @@
+
 import 'package:go_router/go_router.dart';
 import 'package:slahly/classes/models/location.dart';
 import 'package:slahly/screens/Describeproblem.dart';
@@ -148,72 +149,72 @@ class Routing {
             path: SwitchLanguageScreen.routeName,
             builder: (context, state) => SwitchLanguageScreen(),
           ),
-          GoRoute(
-            path: AllScreens.routeName,
-            builder: (context, state) => AllScreens(),
-          ),
-          GoRoute(
-            path: DropOffLocationScreen.routeName,
-            builder: (context, state) => DropOffLocationScreen(),
-          ),
-          GoRoute(
-            path: DropOffSearchScreen.routeName,
-            builder: (context, state) {
-              return DropOffSearchScreen(
-                  pikUpLocation: state.extra as CustomLocation);
-            },
-          ),
-          GoRoute(
-            path: TestUserSM.routeName,
-            builder: (context, state) => TestUserSM(),
-          ),
-          GoRoute(
-            path: AddCustomHistory.routeName,
-            builder: (context, state) => AddCustomHistory(),
-          ),
-          GoRoute(
-            path: ViewHistory.routeName,
-            builder: (context, state) => ViewHistory(),
-          ),
-          GoRoute(
-            path: Choose_car.routeName,
-            builder: (context, state) => Choose_car(),
-          ),
-          GoRoute(
-            path: Arrival.routeName,
-            // builder: (context, state) => Select(state.extra as bool),
-            builder: (context, state) => Arrival(type: state.extra as bool),
-          ),
-          GoRoute(
-            path: WSAScreen.routeName,
-            builder: (context, state) => WSAScreen(),
-          ),
-          GoRoute(
-            path: TestUserCAR.routeName,
-            builder: (context, state) => TestUserCAR(),
-          ),
-          GoRoute(
-            path: EditProfile.routeName,
-            builder: (context, state) => EditProfile(),
-          ),
-          GoRoute(
-            path: Profile.routeName,
-            builder: (context, state) => Profile(),
-          ),
-          GoRoute(
-            path: ReminderScreen.routeName,
-            builder: (context, state) => ReminderScreen(),
-          ),
-          GoRoute(
-            path: AddReminder.routeName,
-            builder: (context, state) => AddReminder(),
-          ),
-          GoRoute(
-            path: DirectionMap.routeName,
-            builder: (context, state) => DirectionMap(
-                currentLocation: state.extra as CustomLocation,
-                destinationLocation: state.extra as CustomLocation),
-          ),
+      GoRoute(
+        path: AllScreens.routeName,
+        builder: (context, state) => AllScreens(),
+      ),
+      GoRoute(
+        path: DropOffLocationScreen.routeName,
+        builder: (context, state) => DropOffLocationScreen(),
+      ),
+      GoRoute(
+        path: DropOffSearchScreen.routeName,
+        builder: (context, state) {
+          return DropOffSearchScreen(
+              pikUpLocation: state.extra as CustomLocation);
+        },
+      ),
+      GoRoute(
+        path: TestUserSM.routeName,
+        builder: (context, state) => TestUserSM(),
+      ),
+      GoRoute(
+        path: AddCustomHistory.routeName,
+        builder: (context, state) => AddCustomHistory(),
+      ),
+      GoRoute(
+        path: ViewHistory.routeName,
+        builder: (context, state) => ViewHistory(),
+      ),
+      GoRoute(
+        path: Choose_car.routeName,
+        builder: (context, state) => Choose_car(),
+      ),
+      GoRoute(
+        path: Arrival.routeName,
+        // builder: (context, state) => Select(state.extra as bool),
+        builder: (context, state) => Arrival(type: state.extra as bool),
+      ),
+      GoRoute(
+        path: WSAScreen.routeName,
+        builder: (context, state) => WSAScreen(),
+      ),
+      GoRoute(
+        path: TestUserCAR.routeName,
+        builder: (context, state) => TestUserCAR(),
+      ),
+      GoRoute(
+        path: EditProfile.routeName,
+        builder: (context, state) => EditProfile(),
+      ),
+      GoRoute(
+        path: Profile.routeName,
+        builder: (context, state) => Profile(),
+      ),
+      GoRoute(
+        path: ReminderScreen.routeName,
+        builder: (context, state) => ReminderScreen(),
+      ),
+      GoRoute(
+        path: AddReminder.routeName,
+        builder: (context, state) => AddReminder(),
+      ),
+      GoRoute(
+        path: DirectionMap.routeName,
+        builder: (context, state) => DirectionMap(
+            currentLocation: state.extra as CustomLocation,
+            destinationLocation: state.extra as CustomLocation),
+      ),
           GoRoute(
             path: RequestFinalScreen.routeName,
             builder: (context, state) => RequestFinalScreen(),

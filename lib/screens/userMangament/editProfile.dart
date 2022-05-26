@@ -258,11 +258,14 @@ class _State extends ConsumerState<EditProfile> {
                             context: context,
                             builder: (BuildContext context) {
                               return AlertDialog(
+
                                 backgroundColor: Color(0xFFd1d9e6),
+
                                 content:
                                     const Text("confirmProfileUpdate").tr(),
                                 title: const Text("Warning").tr(),
                                 actions: [
+
                                   TextFormField(
                                     obscureText: true,
                                     controller: oldPassController,
