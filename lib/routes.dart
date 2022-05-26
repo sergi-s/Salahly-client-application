@@ -129,10 +129,6 @@ class Routing {
                 ManageSubowner(chasis: state.extra! as String),
           ),
           GoRoute(
-            path: TransferOwner.routeName,
-            builder: (context, state) => TransferOwner(),
-          ),
-          GoRoute(
             path: AddSubowner.routeName,
             builder: (context, state) => AddSubowner(),
           ),
@@ -147,10 +143,6 @@ class Routing {
           GoRoute(
             path: HomeScreen.routeName,
             builder: (context, state) => HomeScreen(),
-          ),
-          GoRoute(
-            path: HomePage.routeName,
-            builder: (context, state) => HomePage(),
           ),
           GoRoute(
             path: ChooseProviderScreen.routeName,

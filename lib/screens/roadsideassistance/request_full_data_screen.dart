@@ -66,58 +66,58 @@ class _RequestFullDataScreenState extends State<RequestFullDataScreen> {
               ),
               (rsa.user != null)
                   ? ListTile(
-                      leading: const Padding(
-                          padding: EdgeInsets.only(right: 10.0),
-                          child: Icon(CupertinoIcons.profile_circled,
-                              color: Color(0xff97a7c3), size: 40)),
-                      title: Padding(
-                        padding: const EdgeInsets.only(
-                            top: 10.0, bottom: 6.0, right: 8.0),
-                        child: Text(rsa.user!.name ?? "client_name".tr(),
-                            textScaleFactor: 1.1,
-                            style: const TextStyle(
-                                color: Color(0xff193566),
-                                fontWeight: FontWeight.bold)),
-                      ),
-                    )
+                leading: const Padding(
+                    padding: EdgeInsets.only(right: 10.0),
+                    child: Icon(CupertinoIcons.profile_circled,
+                        color: Color(0xff97a7c3), size: 40)),
+                title: Padding(
+                  padding: const EdgeInsets.only(
+                      top: 10.0, bottom: 6.0, right: 8.0),
+                  child: Text(rsa.user!.name ?? "client_name".tr(),
+                      textScaleFactor: 1.1,
+                      style: const TextStyle(
+                          color: Color(0xff193566),
+                          fontWeight: FontWeight.bold)),
+                ),
+              )
                   : Container(),
               (rsa.car != null)
                   ? ListTile(
-                      leading: const Padding(
-                          padding: EdgeInsets.only(
-                              top: 10.0, bottom: 15.0, right: 10.0),
-                          child: Icon(CupertinoIcons.car_detailed,
-                              color: Color(0xff97a7c3), size: 39)),
-                      title: Padding(
-                        padding: const EdgeInsets.only(top: 6.0, bottom: 6.0),
-                        child: Text(rsa.car!.model ?? 'Car Type',
-                                textScaleFactor: 1.1,
-                                style: const TextStyle(
-                                    color: Color(0xff193566),
-                                    fontWeight: FontWeight.bold),
-                                textAlign: TextAlign.left)
-                            .tr(),
-                      ),
-                    )
+                leading: const Padding(
+                    padding: EdgeInsets.only(
+                        top: 10.0, bottom: 15.0, right: 10.0),
+                    child: Icon(CupertinoIcons.car_detailed,
+                        color: Color(0xff97a7c3), size: 39)),
+                title: Padding(
+                  padding: const EdgeInsets.only(top: 6.0, bottom: 6.0),
+                  child: Text(rsa.car!.model ?? 'Car Type',
+                      textScaleFactor: 1.1,
+                      style: const TextStyle(
+                          color: Color(0xff193566),
+                          fontWeight: FontWeight.bold),
+                      textAlign: TextAlign.left)
+                      .tr(),
+                ),
+              )
                   : Container(),
               (rsa.car != null)
                   ? ListTile(
-                      leading: const Padding(
-                          padding: EdgeInsets.only(
-                              top: 6.0, bottom: 6.0, right: 8.0),
-                          child: Icon(Icons.power_input_outlined,
-                              color: Color(0xff97a7c3), size: 40)),
-                      title: Padding(
-                        padding: const EdgeInsets.only(top: 6.0, bottom: 6.0),
-                        child: Text(rsa.car!.noPlate ?? 'Car Number',
-                                textScaleFactor: 1.1,
-                                style: const TextStyle(
-                                    color: Color(0xff193566),
-                                    fontWeight: FontWeight.bold),
-                                textAlign: TextAlign.left)
-                            .tr(),
-                      ),
-                    )
+                leading: const Padding(
+                    padding: EdgeInsets.only(
+                        top: 6.0, bottom: 6.0, right: 8.0),
+                    child: Icon(Icons.power_input_outlined,
+                        color: Color(0xff97a7c3), size: 40)),
+                title: Padding(
+                  padding: const EdgeInsets.only(top: 6.0, bottom: 6.0),
+                  child: Text(rsa.car!.noPlate ?? 'Car Number',
+                      textScaleFactor: 1.1,
+                      style: const TextStyle(
+                          color: Color(0xff193566),
+                          fontWeight: FontWeight.bold),
+                      textAlign: TextAlign.left)
+                      .tr(),
+                ),
+              )
                   : Container(),
               // SizedBox(height:MediaQuery.of(context).size.height*0.02),
               SizedBox(
@@ -146,25 +146,20 @@ class _RequestFullDataScreenState extends State<RequestFullDataScreen> {
       appBar: salahlyAppBar(title: 'requests'.tr()),
       body: SingleChildScrollView(
         child: SizedBox(
-          height: size.height,
-          width: double.infinity,
-          child: Stack(
-            children: [
-              Positioned(
-                child: Flex(
-                  direction: Axis.horizontal,
-                  children: [
-                    Expanded(
-                      child: Column(
-                        children: [
-                          personDetailCard(rsa),
-                        ],
-                      ),
-                    ),
-                  ],
+          // height: size.height,
+          // width: double.infinity,
+          child: SingleChildScrollView(
+            child: Stack( 
+              children: [
+                Positioned(
+                  child: Column(
+                    children: [
+                      personDetailCard(rsa),
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
@@ -342,13 +337,13 @@ class _RequestFullDataScreenState extends State<RequestFullDataScreen> {
                   child: Text('${"review".tr()} ${rsa.towProvider!.type}')),
             )
           : Container(),
-      SizedBox(
-        width: MediaQuery.of(context).size.width * 0.6,
-        child: const Divider(
-          thickness: 2,
-          color: Color(0xFF193566),
-        ),
-      ),
+      // SizedBox(
+      //   width: MediaQuery.of(context).size.width * 0.6,
+      //   child: const Divider(
+      //     thickness: 2,
+      //     color: Color(0xFF193566),
+      //   ),
+      // ),
     ]);
   }
 }

@@ -141,16 +141,19 @@ class _AddReminderState extends State<AddReminder> {
             width: size.width * 0.88,
             child:
             Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              const SizedBox(height: 20),
               MyInputField(
                 title: "title".tr(),
                 hint: "enterTitle".tr(),
                 fn: updateTitle,
               ),
+              const SizedBox(height: 20),
               MyInputField(
                 title: "note".tr(),
                 hint: "enterNote".tr(),
                 fn: updateNote,
               ),
+              const SizedBox(height: 20),
               MyInputField(
                 fn: () {},
                 title: "Date".tr(),
@@ -165,6 +168,7 @@ class _AddReminderState extends State<AddReminder> {
                   ),
                 ),
               ),
+              const SizedBox(height: 25),
               Row(
                 children: [
                   Expanded(
@@ -186,35 +190,8 @@ class _AddReminderState extends State<AddReminder> {
                 ],
               ),
               // //Repeat field
-              MyInputField(
-                fn: updateSelectRepeat,
-                title: "repeat".tr(),
-                hint: _selectedRepeat.tr(),
-                widget: DropdownButton(
-                  icon: const Icon(
-                    Icons.keyboard_arrow_down,
-                    color: Colors.grey,
-                  ),
-                  onChanged: (String? newValue) {
-                    setState(() {
-                      _selectedRepeat = newValue!;
-                    });
-                  },
-                  underline: Container(
-                    height: 0,
-                  ),
-                  elevation: 4,
-                  iconSize: 32,
-                  items:
-                      repeatList.map<DropdownMenuItem<String>>((String value) {
-                    return DropdownMenuItem<String>(
-                      child: Text(value).tr(),
-                      value: value,
-                    );
-                  }).toList(),
-                ),
-              ),
-              const SizedBox(height: 20),
+
+              const SizedBox(height: 50),
               Row(
                 // crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
