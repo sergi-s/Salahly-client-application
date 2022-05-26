@@ -19,7 +19,7 @@ class ViewCars extends ConsumerStatefulWidget {
 class _State extends ConsumerState<ViewCars> {
   @override
   void initState() {
-    Future.delayed(Duration.zero,(){
+    Future.delayed(Duration.zero, () {
       print("caaaaaaaaarss${ref.watch(userProvider).cars}");
     });
     // allCars(ref);
@@ -70,26 +70,90 @@ class _State extends ConsumerState<ViewCars> {
                                 print('welcome'.tr());
                               },
                               child: ListTile(
-                                leading: GestureDetector(
-                                  onTap: () {
-                                    print("hiiii");
-
-                                    deleteCarAllUsers(index);
-                                  },
-                                  child: const CircleAvatar(
-                                    radius: 30,
-                                    child: Icon(Icons.delete, size: 40),
-                                  ),
+                                leading: CircleAvatar(
+                                  radius: 30,
+                                  backgroundColor:
+                                      ref.watch(userProvider).cars[index].color,
+                                  // ref
+                                  //     .watch(userProvider)
+                                  //     .cars[index]
+                                  //     .color as Color
+                                  child: const Icon(Icons.directions_car_filled,
+                                      size: 40),
                                 ),
-                                title: Text(
-                                    ref
-                                        .watch(userProvider)
-                                        .cars[index]
-                                        .model
-                                        .toString(),
-                                    style: const TextStyle(
-                                        fontSize: 25,
-                                        fontWeight: FontWeight.bold)),
+                                title: Row(
+                                  children: [
+                                    Text(
+                                        ref
+                                            .watch(userProvider)
+                                            .cars[index]
+                                            .model
+                                            .toString(),
+                                        style: const TextStyle(
+                                            fontSize: 25,
+                                            fontWeight: FontWeight.bold)),
+                                    Padding(
+                                      padding: EdgeInsets.only(
+                                          top: MediaQuery.of(context)
+                                                  .size
+                                                  .height *
+                                              0.01,
+                                          right: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.01),
+                                      child: GestureDetector(
+                                        onTap: () {
+                                          print("huuu");
+                                          final snackBar = SnackBar(
+                                              content: const Text('Car_removed')
+                                                  .tr());
+                                          showDialog(
+                                              context: context,
+                                              builder: (BuildContext context) {
+                                                return AlertDialog(
+                                                  content: const Text(
+                                                          "carDeleteConfirmation")
+                                                      .tr(),
+                                                  title: Text("Warning".tr()),
+                                                  actions: [
+                                                    TextButton(
+                                                        onPressed: () {
+                                                          Navigator.of(context)
+                                                              .pop();
+                                                        },
+                                                        child: Text(
+                                                            "Cancel".tr())),
+                                                    TextButton(
+                                                        onPressed: () {
+                                                          deleteCarAllUsers(
+                                                              index);
+                                                          Navigator.of(context)
+                                                              .pop();
+                                                          ScaffoldMessenger.of(
+                                                                  context)
+                                                              .showSnackBar(
+                                                                  snackBar);
+                                                        },
+                                                        child: Text(
+                                                            "Confirm".tr())),
+                                                  ],
+                                                );
+                                              });
+                                        },
+                                        child: const CircleAvatar(
+                                          backgroundColor: Colors.black,
+                                          radius: 15,
+                                          child: Icon(
+                                            Icons.delete,
+                                            size: 20,
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
                                 subtitle: Padding(
                                   padding: const EdgeInsets.all(0),
                                   child: Column(children: [
@@ -192,9 +256,10 @@ class _State extends ConsumerState<ViewCars> {
         .child("users_cars")
         .child(FirebaseAuth.instance.currentUser!.uid)
         .child(chasis!);
-    userCars.set(false);
+    userCars.set("false");
     ref
         .watch(userProvider.notifier)
         .removeCar(ref.watch(userProvider).cars[index]);
   }
 }
+//TODO: @Mohmaed H, when car is deleted the Owner or the car should be deleted

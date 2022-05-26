@@ -1,3 +1,4 @@
+import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -11,6 +12,8 @@ import 'package:slahly/widgets/login_signup/Input_container.dart';
 class AddCustomHistory extends ConsumerStatefulWidget {
   static const routeName = "/add_custom_history";
 
+  const AddCustomHistory({Key? key}) : super(key: key);
+
   @override
   ConsumerState<AddCustomHistory> createState() => _AddCustomHistoryState();
 }
@@ -19,20 +22,18 @@ class _AddCustomHistoryState extends ConsumerState<AddCustomHistory> {
   String? systemName, partId, partName, description;
   double? actualDistance, distance, partCost, maintenanceCost, otherCost;
   DateTime selectedTime = DateTime.now();
-  late Car? dropDownValue
 
-      // = Car(noPlate: "There is no Car", noChassis: "No cars")
-      ;
+  late Car? dropDownValue;
 
   @override
   void initState() {
-    dropDownValue = Car(noPlate: "noCar".tr(), noChassis: "noCar".tr());
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color(0xFFd1d9e6),
       appBar: salahlyAppBar(title: 'Add_History'.tr()),
       body: Padding(
         padding: const EdgeInsets.all(15),
@@ -54,27 +55,32 @@ class _AddCustomHistoryState extends ConsumerState<AddCustomHistory> {
                   ),
                 ),
                 Container(
-                  margin: const EdgeInsets.symmetric(vertical: 10),
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  width: MediaQuery.of(context).size.width * 0.8,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(30),
-                      color: Colors.grey[200],
-                      boxShadow: const [
-                        BoxShadow(
-                          color: Colors.blueGrey,
-                          blurRadius: 2.0,
-                          spreadRadius: 0.0,
-                          offset: Offset(3, 0),
-                        ),
-                      ]),
-                  child: CustomDropdownMenu(
-                      values: ref.watch(userProvider).cars,
-                      defaultValue: ref.watch(userProvider).cars[0],
-                      onItemSelected: (value) {
-                        dropDownValue = value;
-                      }),
-                ),
+
+                    margin: const EdgeInsets.symmetric(vertical: 10),
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    width: MediaQuery.of(context).size.width * 0.8,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(30),
+                        color: Colors.grey[200],
+                        boxShadow: const [
+                          BoxShadow(
+                            color: Colors.blueGrey,
+                            blurRadius: 2.0,
+                            spreadRadius: 0.0,
+                            offset: Offset(3, 0),
+                          ),
+                        ]),
+                    child: ref.watch(userProvider).cars.isNotEmpty
+                        ? CustomDropdownMenu(
+                            values: ref.watch(userProvider).cars,
+                            defaultValue: ref.watch(userProvider).cars[0],
+                            onItemSelected: (value) {
+                              dropDownValue = value;
+                            })
+                        : Container(
+                            child: Text("noCar".tr()),
+                          )),
+
                 SizedBox(
                   width: MediaQuery.of(context).size.width,
                   child: SingleChildScrollView(
@@ -234,7 +240,9 @@ class BuildMultipleTextField extends StatelessWidget {
           _textEditingController.text = value;
           fn(value);
         },
+
         cursorColor: Colors.blue,
+
         decoration: InputDecoration(
           hintText: hintText,
           border: InputBorder.none,
@@ -275,6 +283,7 @@ class _CustomDropdownMenuState extends State<CustomDropdownMenu> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Container(
+
           margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
           padding: const EdgeInsets.all(5.0),
           child: DropdownButtonHideUnderline(

@@ -11,6 +11,8 @@ import 'package:slahly/classes/provider/user_data.dart';
 import 'package:slahly/screens/history_management/accordion.dart';
 import 'package:slahly/screens/history_management/add_custom_history.dart';
 
+import '../roadsideassistance/request_full_data_screen.dart';
+
 class ViewHistory extends ConsumerStatefulWidget {
   static const routeName = "/viewhistory";
 
@@ -83,28 +85,30 @@ class _ViewHistoryState extends ConsumerState<ViewHistory> {
           ),
         ),
         body: TabBarView(
+
           children: [
             Builder(builder: (context) {
               return ListView.builder(
                 itemBuilder: (BuildContext context, index) {
-                  if (
-                      // ref
-                      //             .watch(HistoryProvider)[
-                      //                 (ref.watch(HistoryProvider).length - 1) -
-                      //                     index]
-                      //             .state !=
-                      //         RSAStates.canceled &&
-                      ref
-                              .watch(historyProvider)[
-                                  (ref.watch(historyProvider).length - 1) -
-                                      index]
-                              .state !=
-                          RSAStates.done) {
+
+                  if (ref
+                          .watch(historyProvider)[
+                              (ref.watch(historyProvider).length - 1) - index]
+                          .state !=
+                      RSAStates.done) {
                     return Container();
                   }
-                  return Accordion(
-                      rsa: ref.watch(historyProvider)[
-                          (ref.watch(historyProvider).length - 1) - index]);
+                  return GestureDetector(
+                    onTap: () {
+                      context.push(RequestFullDataScreen.routeName,
+                          extra: ref.watch(historyProvider)[
+                              (ref.watch(historyProvider).length - 1) - index]);
+                    },
+                    child: Accordion(
+                        rsa: ref.watch(historyProvider)[
+                            (ref.watch(historyProvider).length - 1) - index]),
+                  );
+
                 },
                 itemCount: ref.watch(historyProvider).length,
                 shrinkWrap: true,
@@ -114,6 +118,9 @@ class _ViewHistoryState extends ConsumerState<ViewHistory> {
             }),
             Builder(builder: (context) {
               return Scaffold(
+
+                backgroundColor: const Color(0xFFd1d9e6),
+
                 body: ListView.builder(
                     itemCount: _items.length,
                     shrinkWrap: true,
@@ -156,7 +163,8 @@ class _ViewHistoryState extends ConsumerState<ViewHistory> {
                   style: ElevatedButton.styleFrom(
                     shape: const CircleBorder(),
                     primary: const Color(0xFF193566),
-                    padding: const EdgeInsets.all(10),
+                    padding: const EdgeInsets.all(15),elevation: 5,
+
                   ),
                 ),
               );

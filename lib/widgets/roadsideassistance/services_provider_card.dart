@@ -282,11 +282,16 @@ class ServicesProviderCard extends StatelessWidget {
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(30),
               ),
-              title: Row(
+            title: Row(
                 children: [
                   Text(serviceProviderType!),
                   Icon((serviceProviderIsCenter ?? false) ? Icons.badge : null),
-                  SizedBox(width: MediaQuery.of(context).size.height * 0.1),
+                  // SizedBox(width: MediaQuery.of(context).size.height * 0.1),
+                  const Expanded(
+                    child: Divider(
+                      color: Colors.transparent,
+                    ),
+                  ),
                   IconButton(
                       icon: const Icon(Icons.close),
                       onPressed: () {
@@ -311,7 +316,7 @@ class ServicesProviderCard extends StatelessWidget {
                 .image,
             radius: 25,
           ),
-          SizedBox(height: 15),
+          const SizedBox(height: 15),
           Row(
             children: [
               Text(
@@ -393,10 +398,14 @@ class ServicesProviderCard extends StatelessWidget {
                       style: const TextStyle(fontSize: 25),
                     ),
                     const SizedBox(width: 15),
-                    Text(
-                      serviceProviderAddress!,
-                      textAlign: TextAlign.center,
-                      style: const TextStyle(fontSize: 20),
+
+                    Flexible(
+                      flex: 5,
+                      child: Text(
+                        serviceProviderAddress!,
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(fontSize: 20),
+                      ),
                     )
                   ],
                 )

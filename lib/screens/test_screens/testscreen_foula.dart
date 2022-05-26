@@ -72,6 +72,7 @@ class TestScreen_nearbymechanics_and_create_rsa extends ConsumerWidget {
 
                 print("${ref.watch(salahlyClientProvider).requestType}\n"
                     "${ref.watch(salahlyClientProvider).requestID}\n"
+                    "${ref.watch(rsaProvider).rsaID}\n"
                     "${ref.watch(salahlyClientProvider).appState}\n"
                     "provider: ${prefs.getString("towProvider")}\n"
                     "mechanic: ${prefs.getString("mechanic")}");

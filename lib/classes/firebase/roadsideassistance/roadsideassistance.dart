@@ -50,17 +50,17 @@ class RSA {
     CustomLocation? location,
     String? rsaID,
     Client? user,
-      DateTime? estimatedTime,
-      CustomLocation? dropOffLocation,
-      List<Mechanic>? acceptedNearbyMechanics,
-      Map<String, Mechanic>? newNearbyMechanics,
-      List<TowProvider>? acceptedNearbyProviders,
-      Map<String, TowProvider>? newNearbyProviders,
-      Car? car,
-      RequestType? requestType,
-      DateTime? createdAt,
-      DateTime? updatedAt,
-      String? semiReport}) {
+    DateTime? estimatedTime,
+    CustomLocation? dropOffLocation,
+    List<Mechanic>? acceptedNearbyMechanics,
+    Map<String, Mechanic>? newNearbyMechanics,
+    List<TowProvider>? acceptedNearbyProviders,
+    Map<String, TowProvider>? newNearbyProviders,
+    Car? car,
+    RequestType? requestType,
+    DateTime? createdAt,
+    DateTime? updatedAt,
+    String? semiReport}) {
     _report = report ?? _report;
     _mechanic = mechanic ?? _mechanic;
     _towProvider = towProvider ?? _towProvider;
@@ -238,7 +238,6 @@ class RSA {
   my-location-incomplete
   nearby_locations
   nearby_locations+create_RSA
-
  */
 enum RequestType { RSA, WSA, TTA}
 

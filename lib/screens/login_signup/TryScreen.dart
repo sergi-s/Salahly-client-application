@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:slahly/screens/login_signup/registration.dart';
-import 'package:slahly/widgets/login_signup/Birthday_Input.dart';
+
 
 
 

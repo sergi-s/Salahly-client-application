@@ -49,150 +49,138 @@ class _State extends ConsumerState<AddCar> {
             onTap: () {
               FocusScope.of(context).unfocus();
             },
-            child: SingleChildScrollView(
-              child: SizedBox(
-                width: MediaQuery.of(context).size.width,
-                height: MediaQuery.of(context).size.height,
-                child: Padding(
-                  padding: EdgeInsets.only(
-                      top: screenSize.height * 0.1,
-                      right: screenSize.width * 0.05,
-                      left: screenSize.width * 0.05),
-                  child: Column(
-                    children: [
-                      Text(
-                        "Add_Car".tr(),
-                        style: const TextStyle(
-                            fontSize: 30,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white),
-                      ),
-                      const SizedBox(
-                        height: 40,
-                      ),
-                      TextFormField(
-                        controller: carModelController,
-                        decoration: InputDecoration(
-                          prefixIcon: Icon(
-                            Icons.drive_eta_rounded,
-                            color: Colors.grey[500],
-                          ),
-                          border: const OutlineInputBorder(
-                            // width: 0.0 produces a thin "hairline" border
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(90.0)),
-                            borderSide: BorderSide.none,
-                          ),
-                          hintStyle: const TextStyle(
-                              color: Colors.black, fontFamily: "WorkSansLight"),
-                          filled: true,
-                          label: Text("Car_Model".tr(),
-                              style: const TextStyle(
-                                  fontSize: 20, color: Colors.black)),
-                          fillColor: Colors.white70,
-                          hintText: "enterCarModel".tr(),
+            child: SizedBox(
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height,
+              child: Padding(
+                padding: EdgeInsets.only(
+                    top: screenSize.height * 0.1,
+                    right: screenSize.width * 0.05,
+                    left: screenSize.width * 0.05),
+                child: Column(
+                  children: [
+                    const SizedBox(
+                      height: 40,
+                    ),
+                    TextFormField(
+                      controller: carModelController,
+                      decoration: InputDecoration(
+                        prefixIcon: Icon(
+                          Icons.drive_eta_rounded,
+                          color: Colors.grey[500],
                         ),
-                      ),
-                      const SizedBox(
-                        height: 30,
-                      ),
-                      TextFormField(
-                        controller: chasisController,
-                        decoration: InputDecoration(
-                          prefixIcon: Icon(
-                            Icons.add_circle_outlined,
-                            color: Colors.grey[500],
-                          ),
-                          border: const OutlineInputBorder(
-                            // width: 0.0 produces a thin "hairline" border
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(90.0)),
-                            borderSide: BorderSide.none,
-                          ),
-                          hintStyle: const TextStyle(
-                              color: Colors.black, fontFamily: "WorkSansLight"),
-                          filled: true,
-                          label: Text("Chassis_Number".tr(),
-                              style: const TextStyle(
-                                  fontSize: 20, color: Colors.black)),
-                          fillColor: Colors.white70,
-                          hintText: "enterCarChassisNo".tr(),
+                        border: const OutlineInputBorder(
+                          // width: 0.0 produces a thin "hairline" border
+                          borderRadius: BorderRadius.all(Radius.circular(90.0)),
+                          borderSide: BorderSide.none,
                         ),
+                        hintStyle: const TextStyle(
+                            color: Colors.black, fontFamily: "WorkSansLight"),
+                        filled: true,
+                        label: Text("Car_Model".tr(),
+                            style: const TextStyle(
+                                fontSize: 20, color: Colors.black)),
+                        fillColor: Colors.white70,
+                        hintText: "enterCarModel".tr(),
                       ),
-                      const SizedBox(height: 30),
-                      TextFormField(
-                        controller: plateController,
-                        decoration: InputDecoration(
-                          prefixIcon: Icon(
-                            Icons.add_circle_outlined,
-                            color: Colors.grey[500],
-                          ),
-                          border: const OutlineInputBorder(
-                            // width: 0.0 produces a thin "hairline" border
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(90.0)),
-                            borderSide: BorderSide.none,
-                          ),
-                          hintStyle: const TextStyle(
-                              color: Colors.black, fontFamily: "WorkSansLight"),
-                          filled: true,
-                          label: Text("Plate_Number".tr(),
-                              style: const TextStyle(
-                                  fontSize: 20, color: Colors.black)),
-                          fillColor: Colors.white70,
-                          hintText: "enterCarNoPlate".tr(),
+                    ),
+                    const SizedBox(
+                      height: 30,
+                    ),
+                    TextFormField(
+                      controller: chasisController,
+                      decoration: InputDecoration(
+                        prefixIcon: Icon(
+                          Icons.add_circle_outlined,
+                          color: Colors.grey[500],
                         ),
+                        border: const OutlineInputBorder(
+                          // width: 0.0 produces a thin "hairline" border
+                          borderRadius: BorderRadius.all(Radius.circular(90.0)),
+                          borderSide: BorderSide.none,
+                        ),
+                        hintStyle: const TextStyle(
+                            color: Colors.black, fontFamily: "WorkSansLight"),
+                        filled: true,
+                        label: Text("Chassis_Number".tr(),
+                            style: const TextStyle(
+                                fontSize: 20, color: Colors.black)),
+                        fillColor: Colors.white70,
+                        hintText: "enterCarChassisNo".tr(),
                       ),
-                      const SizedBox(height: 20),
-                      Row(
-                        children: [
-                          Text("Color_Picker".tr(),
-                              style: const TextStyle(
-                                  fontSize: 22, fontWeight: FontWeight.bold)),
-                          const SizedBox(
-                            width: 45,
-                          ),
-                          GestureDetector(
-                            onTap: () {
-                              pickColor(context);
-                            },
-                            child: Container(
-                              decoration: BoxDecoration(
-                                  shape: BoxShape.circle, color: pickerColor),
-                              width: 50,
-                              height: 50,
-                            ),
-                          ),
-                        ],
+                    ),
+                    const SizedBox(height: 30),
+                    TextFormField(
+                      controller: plateController,
+                      decoration: InputDecoration(
+                        prefixIcon: Icon(
+                          Icons.add_circle_outlined,
+                          color: Colors.grey[500],
+                        ),
+                        border: const OutlineInputBorder(
+                          // width: 0.0 produces a thin "hairline" border
+                          borderRadius: BorderRadius.all(Radius.circular(90.0)),
+                          borderSide: BorderSide.none,
+                        ),
+                        hintStyle: const TextStyle(
+                            color: Colors.black, fontFamily: "WorkSansLight"),
+                        filled: true,
+                        label: Text("Plate_Number".tr(),
+                            style: const TextStyle(
+                                fontSize: 20, color: Colors.black)),
+                        fillColor: Colors.white70,
+                        hintText: "enterCarNoPlate".tr(),
                       ),
-                      FlatButton(
-                        textColor: Colors.white,
-                        child: const Text('Add_Car').tr(),
-                        color: const Color(0xFF193566),
-                        onPressed: () async {
-                          ///////////////
-                          print("YAYAYAAYAYAY");
-                          print(plateController.text.isEmpty);
-                          print(carModelController.text.isEmpty);
-                          print(chasisController.text.isEmpty);
-                          print(pickerColor.toString());
+                    ),
+                    const SizedBox(height: 20),
+                    Row(
+                      children: [
+                        Text("Color_Picker".tr(),
+                            style: const TextStyle(
+                                fontSize: 22, fontWeight: FontWeight.bold)),
+                        const SizedBox(
+                          width: 45,
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            pickColor(context);
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                                shape: BoxShape.circle, color: pickerColor),
+                            width: 50,
+                            height: 50,
+                          ),
+                        ),
+                      ],
+                    ),
+                    FlatButton(
+                      textColor: Colors.white,
+                      child: const Text('Add_Car').tr(),
+                      color: const Color(0xFF193566),
+                      onPressed: () async {
+                        ///////////////
+                        print("YAYAYAAYAYAY");
+                        print(plateController.text.isEmpty);
+                        print(carModelController.text.isEmpty);
+                        print(chasisController.text.isEmpty);
+                        print(pickerColor.toString());
 
-                          if (plateController.text.isEmpty ||
-                              carModelController.text.isEmpty ||
-                              chasisController.text.isEmpty) {
-                            noData(context);
-                            return;
-                          }
-                          conflictController();
-                        },
-                      ),
-                    ],
-                  ),
+                        if (plateController.text.isEmpty ||
+                            carModelController.text.isEmpty ||
+                            chasisController.text.isEmpty) {
+                          noData(context);
+                          return;
+                        }
+                        conflictController();
+                      },
+                    ),
+                  ],
+
                 ),
               ),
             ),
           ),
-          painter: HeaderCurvedContainer(),
         ));
   }
 
@@ -264,6 +252,7 @@ class _State extends ConsumerState<AddCar> {
             ));
   }
 
+
   youAreAlreadyTheUserDialog(context) {
     showDialog(
         context: context,
@@ -275,7 +264,7 @@ class _State extends ConsumerState<AddCar> {
               title: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Text("youAreAlreadyTheUser").tr(),
+                  const Text("").tr(),
                 ],
               ),
               content: const Text("youAreAlreadyTheUser").tr(),
@@ -382,6 +371,7 @@ class _State extends ConsumerState<AddCar> {
               ],
             ));
   }
+
 
   conflictController() async {
     String newCarID = chasisController.text;
