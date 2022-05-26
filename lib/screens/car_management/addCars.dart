@@ -275,7 +275,7 @@ class _State extends ConsumerState<AddCar> {
               title: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Text("youAreAlreadyTheUser").tr(),
+                  const Text("").tr(),
                 ],
               ),
               content: const Text("youAreAlreadyTheUser").tr(),

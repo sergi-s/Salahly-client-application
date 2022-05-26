@@ -1,4 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:slahly/classes/firebase/roadsideassistance/roadsideassistance.dart';
@@ -79,9 +80,15 @@ class _AccordionState extends State<Accordion> {
         child: Column(children: [
           ListTile(
               title: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   Text(
                     widget.rsa!.car!.noPlate,
+                    style: const TextStyle(
+                        fontWeight: FontWeight.bold, fontSize: 20),
+                  ),
+                  Text(
+                    RSA.stateToString(widget.rsa!.state!),
                     style: const TextStyle(
                         fontWeight: FontWeight.bold, fontSize: 20),
                   ),
@@ -107,40 +114,46 @@ class _AccordionState extends State<Accordion> {
                             content: RSA
                                 .requestTypeToString(widget.rsa!.requestType!)
                                 .tr()),
-                        Row(
-                          children: [
-                            widget.rsa!.mechanic!.phoneNumber != null
-                                ? ElevatedButton.icon(
-                                    onPressed: () {
-                                      Clipboard.setData(ClipboardData(
-                                          text: widget
-                                              .rsa!.mechanic!.phoneNumber));
-                                    },
-                                    label: Text(
-                                      widget.rsa!.mechanic!.phoneNumber!,
-                                      style: const TextStyle(
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 20),
-                                    ),
-                                    style: ElevatedButton.styleFrom(
-                                      primary: const Color(0xFFff193566)
-                                          .withOpacity(0),
-                                      elevation: 0,
-                                      animationDuration: Duration.zero,
-                                    ),
-                                    icon: const Icon(
-                                      Icons.car_repair,
-                                      color: Colors.black,
-                                      size: 25,
-                                    ),
-                                  )
-                                : Container(),
-                          ],
-                        ),
+                        (widget.rsa!.mechanic != null)
+                            ? Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  widget.rsa!.mechanic!.phoneNumber != null
+                                      ? ElevatedButton.icon(
+                                          onPressed: () {
+                                            Clipboard.setData(ClipboardData(
+                                                text: widget.rsa!.mechanic!
+                                                    .phoneNumber));
+                                          },
+                                          label: Text(
+                                            widget.rsa!.mechanic!.phoneNumber!,
+                                            style: const TextStyle(
+                                                color: Colors.black,
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 20),
+                                          ),
+                                          style: ElevatedButton.styleFrom(
+                                            primary: const Color(0xFFff193566)
+                                                .withOpacity(0),
+                                            elevation: 0,
+                                            animationDuration: Duration.zero,
+                                          ),
+                                          icon: const Icon(
+                                            Icons.car_repair,
+                                            color: Colors.black,
+                                            size: 25,
+                                          ),
+                                        )
+                                      : Container(),
+                                ],
+                              )
+                            : Container(),
                         widget.rsa!.createdAt == null
                             ? Container()
                             : Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
                                 children: [
                                   const Padding(
                                     padding: EdgeInsets.all(12.0),
@@ -152,8 +165,8 @@ class _AccordionState extends State<Accordion> {
                                     ),
                                   ),
                                   Padding(
-                                    padding: const EdgeInsets.all(12.0),
-                                    child: Text(
+                              padding: const EdgeInsets.all(12.0),
+                              child: Text(
                                       DateFormat('yyyy-MM-dd – kk:mm')
                                           .format(widget.rsa!.createdAt!),
                                       style: const TextStyle(
@@ -164,20 +177,26 @@ class _AccordionState extends State<Accordion> {
                                 ],
                               ),
                         const SizedBox(height: 5),
-                        Row(
-                          children: [
-                            Flexible(
-                              child: Text(
-                                widget.rsa!.mechanic!.address ?? "address",
-                                overflow: TextOverflow.ellipsis,
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.bold, fontSize: 16),
-                              ),
-                            ),
+                        (widget.rsa!.mechanic != null)
+                            ? Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  Flexible(
+                                    child: Text(
+                                      widget.rsa!.mechanic!.address ??
+                                          "address",
+                                      overflow: TextOverflow.ellipsis,
+                                      style: const TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 16),
+                                    ),
+                                  ),
 
-                            // SizedBox(height: 20),
-                          ],
-                        ),
+                                  // SizedBox(height: 20),
+                                ],
+                              )
+                            : Container(),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: reviewList,
@@ -190,8 +209,6 @@ class _AccordionState extends State<Accordion> {
     );
   }
 }
-//TODO: 1- refactor codeak
-//TODO: 2.0- add car name if possible
 //TODO: 2.1- DATA in history: request type, car(name??numberPlate), date
 //TODO: 2.2- add a icon
 //TODO: text style in same color as the app bar

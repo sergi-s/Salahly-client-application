@@ -1,9 +1,11 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:slahly/classes/firebase/roadsideassistance/roadsideassistance.dart';
 import 'package:slahly/widgets/global_widgets/app_bar.dart';
-import 'package:slahly/widgets/global_widgets/app_drawer.dart';
+
+import '../../widgets/dialogues/rating.dart';
 
 class RequestFullDataScreen extends StatefulWidget {
   RequestFullDataScreen({required this.rsa});
@@ -23,157 +25,112 @@ class _RequestFullDataScreenState extends State<RequestFullDataScreen> {
     rsa = widget.rsa;
     super.initState();
   }
-
   Widget personDetailCard(RSA rsa) {
-    final String name = rsa.user!.name ?? "Client name";
-    final String carNumber = rsa.car != null ? rsa.car!.noPlate : "Car number";
-    final String mobileNumber = rsa.user!.phoneNumber ?? "Phone number";
-    final String carModel = rsa.car != null ? rsa.car!.model! : "Car model";
-    final Color color =
-        (rsa.car != null) ? rsa.car!.color! : const Color(0xFF00FF00);
-    final String image = rsa.user!.avatar ?? "";
-    print("name = $name");
-    print("carNumber = $carNumber");
-    print("mobileNumber = $mobileNumber");
-    print("carModel = $carModel");
-    print("color = $color");
-    print("image = $image");
 
     return Container(
+      // height: MediaQuery
+      //     .of(context)
+      //     .size.height*0.6,
       alignment: Alignment.center,
-      child: Center(
-        child: Card(
-          color: Colors.grey[100],
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20),
-          ),
-          margin: const EdgeInsets.symmetric(vertical: 6, horizontal: 25),
+      child: Card(
+        color: Colors.grey[100],
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+        ),
+        margin: const EdgeInsets.symmetric(vertical: 20, horizontal: 25),
+        child: SingleChildScrollView(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              ListTile(
-                leading: Padding(
-                    padding: const EdgeInsets.only(
-                        top: 10.0, bottom: 6.0, right: 10.0),
-                    child: Icon(CupertinoIcons.profile_circled,
-                        color: Color(0xff97a7c3), size: 45)),
-                title: Padding(
-                  padding:
-                      const EdgeInsets.only(top: 10.0, bottom: 6.0, right: 8.0),
-                  child: Text(name,
-                          textScaleFactor: 1.2,
-                          style: const TextStyle(
-                              color: Color(0xff193566),
-                              fontWeight: FontWeight.bold))
-                      .tr(),
-                ),
+              SizedBox(height: MediaQuery.of(context).size.height * 0.02),
+              Text(RSA.requestTypeToString(widget.rsa.requestType!)+" "+RSA.stateToString(rsa.state),
+                  style: const TextStyle(
+                      color: Color(0xff193566),
+                      fontWeight: FontWeight.bold,
+                      fontSize: 24)),
+              SizedBox(height: MediaQuery.of(context).size.height * 0.03),
+              CircleAvatar(
+                backgroundImage: NetworkImage(
+                    (rsa.user != null && rsa.user!.avatar != null)
+                        ? rsa.user!.avatar!
+                        : ""),
+                radius: MediaQuery.of(context).size.height * 0.05,
               ),
-              ListTile(
-                leading: Padding(
-                    padding: const EdgeInsets.only(
-                        top: 6.0, bottom: 6.0, right: 8.0),
-                    child: Icon(CupertinoIcons.car_detailed,
-                        color: Color(0xff97a7c3), size: 45)),
-                title: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(top: 6.0, bottom: 6.0),
-                      child: Text(carNumber,
-                              textScaleFactor: 1.1,
-                              style: const TextStyle(
-                                  color: Color(0xff193566),
-                                  fontWeight: FontWeight.bold),
-                              textAlign: TextAlign.left)
-                          .tr(),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 6.0, bottom: 6.0),
-                      child: Text(carModel,
-                              textScaleFactor: 1.1,
-                              style: const TextStyle(
-                                  color: Color(0xff193566),
-                                  fontWeight: FontWeight.bold),
-                              textAlign: TextAlign.left)
-                          .tr(),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 6.0, bottom: 6.0),
-                      child: Text("",
-                              textScaleFactor: 1.1,
-                              style: const TextStyle(
-                                  color: Color(0xff193566),
-                                  fontWeight: FontWeight.bold),
-                              textAlign: TextAlign.left)
-                          .tr(),
-                    ),
-                  ],
-                ),
+              Text(
+                "client".tr(),
+                style: const TextStyle(
+                    color: Color(0xff193566),
+                    fontWeight: FontWeight.bold,
+                    fontSize: 15),
               ),
-              ListTile(
-                leading: Padding(
-                    padding: const EdgeInsets.only(
-                        top: 10.0, bottom: 6.0, right: 10.0),
-                    child: Icon(CupertinoIcons.device_phone_portrait,
-                        color: Color(0xff97a7c3), size: 45)),
-                title: Padding(
-                  padding: const EdgeInsets.only(top: 6.0, bottom: 6.0),
-                  child: Text(mobileNumber,
-                          textScaleFactor: 1.1,
-                          style: const TextStyle(
-                              color: Color(0xff193566),
-                              fontWeight: FontWeight.bold),
-                          textAlign: TextAlign.left)
-                      .tr(),
-                ),
-              ),
-              // ListTile(
-              //   leading:Padding(
-              //       padding: const EdgeInsets.only(top:10.0,bottom: 15.0,right: 10.0),
-              //       child: Icon(CupertinoIcons.plus_rectangle_on_rectangle,color:Color(0xff97a7c3),size: 40)),
-              //   title: Padding(
-              //     padding: const EdgeInsets.only(top:6.0,bottom: 6.0),
-              //     child:Text(subscriptionLevel,textScaleFactor: 1.1, style: const TextStyle(color: Color(0xff193566), fontWeight: FontWeight.bold),textAlign: TextAlign.left).tr(),),
-              // ),
-              ListTile(
-                leading: const Padding(
-                    padding:
-                        EdgeInsets.only(top: 10.0, bottom: 15.0, right: 10.0),
-                    child: Icon(CupertinoIcons.location,
-                        color: Color(0xff97a7c3), size: 45)),
-                title: Padding(
-                  padding: const EdgeInsets.only(top: 6.0, bottom: 6.0),
-                  child: Text(
-                          (rsa.location!.name == null)
-                              ? ""
-                              : rsa.location!.name!,
-                          textScaleFactor: 1.1,
-                          style: const TextStyle(
-                              color: Color(0xff193566),
-                              fontWeight: FontWeight.bold),
-                          textAlign: TextAlign.left)
-                      .tr(),
-                ),
-              ),
-              ListTile(
-                leading: const Padding(
-                    padding:
-                        EdgeInsets.only(top: 10.0, bottom: 15.0, right: 10.0),
-                    child: Icon(CupertinoIcons.car_fill,
-                        color: Color(0xff97a7c3), size: 45)),
-                title: Padding(
-                  padding: EdgeInsets.only(top: 6.0, bottom: 6.0),
-                  child: const Text('Client Requested RSA',
-                          textScaleFactor: 1.1,
-                          style: TextStyle(
-                              color: Color(0xff193566),
-                              fontWeight: FontWeight.bold),
-                          textAlign: TextAlign.left)
-                      .tr(),
-                ),
-              ),
+              (rsa.user != null)
+                  ? ListTile(
+                      leading: const Padding(
+                          padding: EdgeInsets.only(right: 10.0),
+                          child: Icon(CupertinoIcons.profile_circled,
+                              color: Color(0xff97a7c3), size: 40)),
+                      title: Padding(
+                        padding: const EdgeInsets.only(
+                            top: 10.0, bottom: 6.0, right: 8.0),
+                        child: Text(rsa.user!.name ?? "client_name".tr(),
+                            textScaleFactor: 1.1,
+                            style: const TextStyle(
+                                color: Color(0xff193566),
+                                fontWeight: FontWeight.bold)),
+                      ),
+                    )
+                  : Container(),
+              (rsa.car != null)
+                  ? ListTile(
+                      leading: const Padding(
+                          padding: EdgeInsets.only(
+                              top: 10.0, bottom: 15.0, right: 10.0),
+                          child: Icon(CupertinoIcons.car_detailed,
+                              color: Color(0xff97a7c3), size: 39)),
+                      title: Padding(
+                        padding: const EdgeInsets.only(top: 6.0, bottom: 6.0),
+                        child: Text(rsa.car!.model ?? 'Car Type',
+                                textScaleFactor: 1.1,
+                                style: const TextStyle(
+                                    color: Color(0xff193566),
+                                    fontWeight: FontWeight.bold),
+                                textAlign: TextAlign.left)
+                            .tr(),
+                      ),
+                    )
+                  : Container(),
+              (rsa.car != null)
+                  ? ListTile(
+                      leading: const Padding(
+                          padding: EdgeInsets.only(
+                              top: 6.0, bottom: 6.0, right: 8.0),
+                          child: Icon(Icons.power_input_outlined,
+                              color: Color(0xff97a7c3), size: 40)),
+                      title: Padding(
+                        padding: const EdgeInsets.only(top: 6.0, bottom: 6.0),
+                        child: Text(rsa.car!.noPlate ?? 'Car Number',
+                                textScaleFactor: 1.1,
+                                style: const TextStyle(
+                                    color: Color(0xff193566),
+                                    fontWeight: FontWeight.bold),
+                                textAlign: TextAlign.left)
+                            .tr(),
+                      ),
+                    )
+                  : Container(),
+              // SizedBox(height:MediaQuery.of(context).size.height*0.02),
+              SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.6,
+                  child: const Divider(
+                    thickness: 2,
+                    color: Color(0xFF193566),
+                  )),
+              SizedBox(height: MediaQuery.of(context).size.height * 0.02),
+              (rsa.mechanic != null) ? mechanicData() : Container(),
+              (rsa.semiReport != null) ? Text(rsa.semiReport!) : Container(),
+              (rsa.towProvider != null) ? towProviderData() : Container(),
+              SizedBox(height: MediaQuery.of(context).size.height * 0.02),
             ],
           ),
         ),
@@ -186,39 +143,212 @@ class _RequestFullDataScreenState extends State<RequestFullDataScreen> {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: const Color(0xFFd1d9e6),
-      appBar: salahlyAppBar(),
-      drawer: salahlyDrawer(context),
-      body: SizedBox(
-        height: size.height,
-        width: double.infinity,
-        child: Stack(
-          children: [
-            Positioned(
-              top: 35,
-              left: 25,
-              right: 25,
-              child: Column(children: [personDetailCard(rsa)]),
-            ),
-            // Positioned(
-            //   bottom: 50,
-            //   left: 80,
-            //   right: 80,
-            //   child: FloatingActionButton.extended(
-            //       onPressed: () {
-            //         context.pushNamed("ReportScreen", params: {
-            //           "requestType": RSA
-            //               .requestTypeToString(rsa.requestType!)
-            //               .toLowerCase(),
-            //           "rsaId": rsa.rsaID!
-            //         });
-            //       },
-            //       label: const Text('Rsa Report'),
-            //       backgroundColor: const Color(0xff193566),
-            //       icon: const Icon(Icons.fact_check_rounded)),
-            // ),
-          ],
+      appBar: salahlyAppBar(title: 'requests'.tr()),
+      body: SingleChildScrollView(
+        child: SizedBox(
+          height: size.height,
+          width: double.infinity,
+          child: Stack(
+            children: [
+              Positioned(
+                child: Flex(
+                  direction: Axis.horizontal,
+                  children: [
+                    Expanded(
+                      child: Column(
+                        children: [
+                          personDetailCard(rsa),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
+  }
+
+  Column mechanicData() {
+    return Column(children: [
+      (rsa.mechanic!.avatar != null)
+          ? CircleAvatar(
+              backgroundImage: NetworkImage(rsa.mechanic!.avatar!),
+              radius: MediaQuery.of(context).size.height * 0.05,
+            )
+          : CircleAvatar(
+              backgroundImage: const AssetImage("assets/images/mechanic.png"),
+              radius: MediaQuery.of(context).size.height * 0.05,
+            ),
+      Text(
+        "mechanic".tr(),
+        style: const TextStyle(
+            color: Color(0xff193566),
+            fontWeight: FontWeight.bold,
+            fontSize: 15),
+      ),
+      Row(
+        children: [
+          SizedBox(width: MediaQuery.of(context).size.width * 0.7),
+          Text(
+            (rsa.mechanic!.rating != null)
+                ? rsa.mechanic!.rating.toString()
+                : "1",
+            style: const TextStyle(fontSize: 18, color: Color(0xFFA38A00)),
+          ),
+        ],
+      ),
+      ListTile(
+        leading: const Padding(
+            padding: EdgeInsets.only(right: 10.0),
+            child: Icon(CupertinoIcons.profile_circled,
+                color: Color(0xff97a7c3), size: 40)),
+        title: Padding(
+          padding: const EdgeInsets.only(top: 10.0, bottom: 6.0, right: 8.0),
+          child: Text(
+              (rsa.mechanic!.name != null)
+                  ? rsa.mechanic!.name!
+                  : ("Name".tr()),
+              textScaleFactor: 1.1,
+              style: const TextStyle(
+                  color: Color(0xff193566), fontWeight: FontWeight.bold)),
+        ),
+      ),
+      ListTile(
+        leading: const Padding(
+            padding: EdgeInsets.only(top: 10.0, bottom: 15.0, right: 10.0),
+            child: Icon(Icons.business_rounded,
+                color: Color(0xff97a7c3), size: 43)),
+        title: Padding(
+          padding: const EdgeInsets.only(top: 6.0, bottom: 6.0),
+          child: Text(
+                  (rsa.mechanic!.address != null)
+                      ? rsa.mechanic!.address!
+                      : (rsa.mechanic!.loc!.address != null)
+                          ? (rsa.mechanic!.loc!.address!)
+                          : "address".tr(),
+                  textScaleFactor: 1.1,
+                  style: const TextStyle(
+                      color: Color(0xff193566), fontWeight: FontWeight.bold),
+                  textAlign: TextAlign.left)
+              .tr(),
+        ),
+      ),
+
+      ///-------------------------------------------
+      (rsa.user != null &&
+              rsa.user!.id == FirebaseAuth.instance.currentUser!.uid)
+          ? Center(
+              child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    primary: const Color(0xFF193566),
+                  ),
+                  onPressed: () {
+                    print(rsa.rsaID);
+                    // _showRatingDialog(widget.rsa!.towProvider!);
+
+                    rateServiceProvider(rsa.mechanic!, rsa, context);
+                  },
+                  child: Text('${"review".tr()} ${"provider".tr()}')),
+            )
+          : Container(),
+
+      Container(
+        width: MediaQuery.of(context).size.width * 0.6,
+        child: const Divider(
+          thickness: 2,
+          color: Color(0xFF193566),
+        ),
+      ),
+    ]);
+  }
+
+  Column towProviderData() {
+    return Column(children: [
+      (rsa.towProvider!.avatar != null)
+          ? CircleAvatar(
+              backgroundImage: NetworkImage(rsa.towProvider!.avatar!),
+              radius: MediaQuery.of(context).size.height * 0.05,
+            )
+          : CircleAvatar(
+              backgroundImage: const AssetImage("assets/images/Tow.png"),
+              radius: MediaQuery.of(context).size.height * 0.05,
+            ),
+      Text(
+        "provider".tr(),
+        style: const TextStyle(
+            color: Color(0xff193566),
+            fontWeight: FontWeight.bold,
+            fontSize: 15),
+      ),
+      Row(
+        children: [
+          SizedBox(width: MediaQuery.of(context).size.width * 0.7),
+          Text(
+            (rsa.towProvider!.rating != null)
+                ? rsa.towProvider!.rating.toString()
+                : "1",
+            style: const TextStyle(fontSize: 18, color: Color(0xFFA38A00)),
+          ),
+        ],
+      ),
+      ListTile(
+        leading: const Padding(
+            padding: EdgeInsets.only(right: 10.0),
+            child: Icon(CupertinoIcons.profile_circled,
+                color: Color(0xff97a7c3), size: 40)),
+        title: Padding(
+          padding: const EdgeInsets.only(top: 10.0, bottom: 6.0, right: 8.0),
+          child: Text(
+              (rsa.towProvider!.name != null)
+                  ? rsa.towProvider!.name!
+                  : ("Name".tr()),
+              textScaleFactor: 1.1,
+              style: const TextStyle(
+                  color: Color(0xff193566), fontWeight: FontWeight.bold)),
+        ),
+      ),
+      ListTile(
+        leading: const Padding(
+            padding: EdgeInsets.only(top: 10.0, bottom: 15.0, right: 10.0),
+            child: Icon(Icons.business_rounded,
+                color: Color(0xff97a7c3), size: 43)),
+        title: Padding(
+          padding: const EdgeInsets.only(top: 6.0, bottom: 6.0),
+          child: Text(
+                  (rsa.towProvider!.address != null)
+                      ? rsa.towProvider!.address!
+                      : "address".tr(),
+                  textScaleFactor: 1.1,
+                  style: const TextStyle(
+                      color: Color(0xff193566), fontWeight: FontWeight.bold),
+                  textAlign: TextAlign.left)
+              .tr(),
+        ),
+      ),
+      (rsa.user != null &&
+              rsa.user!.id == FirebaseAuth.instance.currentUser!.uid)
+          ? Center(
+              child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    primary: const Color(0xFF193566),
+                  ),
+                  onPressed: () {
+                    print(rsa.rsaID);
+                    rateServiceProvider(rsa.towProvider!, rsa, context);
+                  },
+                  child: Text('${"review".tr()} ${rsa.towProvider!.type}')),
+            )
+          : Container(),
+      SizedBox(
+        width: MediaQuery.of(context).size.width * 0.6,
+        child: const Divider(
+          thickness: 2,
+          color: Color(0xFF193566),
+        ),
+      ),
+    ]);
   }
 }

@@ -50,17 +50,17 @@ class RSA {
     CustomLocation? location,
     String? rsaID,
     Client? user,
-      DateTime? estimatedTime,
-      CustomLocation? dropOffLocation,
-      List<Mechanic>? acceptedNearbyMechanics,
-      Map<String, Mechanic>? newNearbyMechanics,
-      List<TowProvider>? acceptedNearbyProviders,
-      Map<String, TowProvider>? newNearbyProviders,
-      Car? car,
-      RequestType? requestType,
-      DateTime? createdAt,
-      DateTime? updatedAt,
-      String? semiReport}) {
+    DateTime? estimatedTime,
+    CustomLocation? dropOffLocation,
+    List<Mechanic>? acceptedNearbyMechanics,
+    Map<String, Mechanic>? newNearbyMechanics,
+    List<TowProvider>? acceptedNearbyProviders,
+    Map<String, TowProvider>? newNearbyProviders,
+    Car? car,
+    RequestType? requestType,
+    DateTime? createdAt,
+    DateTime? updatedAt,
+    String? semiReport}) {
     _report = report ?? _report;
     _mechanic = mechanic ?? _mechanic;
     _towProvider = towProvider ?? _towProvider;
@@ -114,23 +114,23 @@ class RSA {
     String? semiReport,
   }) =>
       RSA(
-        report: report ?? _report,
-        mechanic: mechanic ?? _mechanic,
-        towProvider: provider ?? _towProvider,
-        state: state ?? _state,
-        problemDescription: problemDescription ?? _problemDescription,
-        nearbyMechanics: nearbyMechanics ?? _nearbyMechanics,
-        nearbyProviders: nearbyProviders ?? _nearbyProviders,
-        location: location ?? _location,
-        rsaID: rsaID ?? _rsaID,
-        user: user ?? _user,
-        estimatedTime: estimatedTime ?? _estimatedTime,
-        dropOffLocation: dropOffLocation ?? _dropOffLocation,
+          report: report ?? _report,
+          mechanic: mechanic ?? _mechanic,
+          towProvider: provider ?? _towProvider,
+          state: state ?? _state,
+          problemDescription: problemDescription ?? _problemDescription,
+          nearbyMechanics: nearbyMechanics ?? _nearbyMechanics,
+          nearbyProviders: nearbyProviders ?? _nearbyProviders,
+          location: location ?? _location,
+          rsaID: rsaID ?? _rsaID,
+          user: user ?? _user,
+          estimatedTime: estimatedTime ?? _estimatedTime,
+          dropOffLocation: dropOffLocation ?? _dropOffLocation,
           acceptedNearbyMechanics:
-              acceptedNearbyMechanics ?? _acceptedNearbyMechanics,
+          acceptedNearbyMechanics ?? _acceptedNearbyMechanics,
           newNearbyMechanics: newNearbyMechanics ?? _newNearbyMechanics,
           acceptedNearbyProviders:
-              acceptedNearbyProviders ?? _acceptedNearbyProviders,
+          acceptedNearbyProviders ?? _acceptedNearbyProviders,
           newNearbyProviders: newNearbyProviders ?? _newNearbyProviders,
           car: car ?? _car,
           requestType: requestType ?? _requestType,
@@ -238,7 +238,6 @@ class RSA {
   my-location-incomplete
   nearby_locations
   nearby_locations+create_RSA
-
  */
 enum RequestType { RSA, WSA, TTA}
 

@@ -11,6 +11,8 @@ import 'package:slahly/classes/provider/user_data.dart';
 import 'package:slahly/screens/history_management/accordion.dart';
 import 'package:slahly/screens/history_management/add_custom_history.dart';
 
+import '../roadsideassistance/request_full_data_screen.dart';
+
 class ViewHistory extends ConsumerStatefulWidget {
   static const routeName = "/viewhistory";
 
@@ -19,6 +21,7 @@ class ViewHistory extends ConsumerStatefulWidget {
   @override
   ConsumerState<ViewHistory> createState() => _ViewHistoryState();
 }
+
 //TODO: make the background color backgroundColor: const Color(0xFFd1d9e6), for both history and custom history
 class _ViewHistoryState extends ConsumerState<ViewHistory> {
   final db = Localstore.instance;
@@ -87,24 +90,23 @@ class _ViewHistoryState extends ConsumerState<ViewHistory> {
             Builder(builder: (context) {
               return ListView.builder(
                 itemBuilder: (BuildContext context, index) {
-                  if (
-                      // ref
-                      //             .watch(HistoryProvider)[
-                      //                 (ref.watch(HistoryProvider).length - 1) -
-                      //                     index]
-                      //             .state !=
-                      //         RSAStates.canceled &&
-                      ref
-                              .watch(historyProvider)[
-                                  (ref.watch(historyProvider).length - 1) -
-                                      index]
-                              .state !=
-                          RSAStates.done) {
+                  if (ref
+                          .watch(historyProvider)[
+                              (ref.watch(historyProvider).length - 1) - index]
+                          .state !=
+                      RSAStates.done) {
                     return Container();
                   }
-                  return Accordion(
-                      rsa: ref.watch(historyProvider)[
-                          (ref.watch(historyProvider).length - 1) - index]);
+                  return GestureDetector(
+                    onTap: () {
+                      context.push(RequestFullDataScreen.routeName,
+                          extra: ref.watch(historyProvider)[
+                              (ref.watch(historyProvider).length - 1) - index]);
+                    },
+                    child: Accordion(
+                        rsa: ref.watch(historyProvider)[
+                            (ref.watch(historyProvider).length - 1) - index]),
+                  );
                 },
                 itemCount: ref.watch(historyProvider).length,
                 shrinkWrap: true,
