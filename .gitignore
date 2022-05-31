@@ -44,3 +44,6 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+
+/functions/salahny-6bfea-firebase-adminsdk-h27mh-9c1e802abc.json
