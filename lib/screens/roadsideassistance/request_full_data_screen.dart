@@ -3,9 +3,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:slahly/classes/firebase/roadsideassistance/roadsideassistance.dart';
+import 'package:slahly/widgets/dialogues/rating.dart';
 import 'package:slahly/widgets/global_widgets/app_bar.dart';
-
-import '../../widgets/dialogues/rating.dart';
 
 class RequestFullDataScreen extends StatefulWidget {
   RequestFullDataScreen({required this.rsa});
@@ -44,7 +43,9 @@ class _RequestFullDataScreenState extends State<RequestFullDataScreen> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               SizedBox(height: MediaQuery.of(context).size.height * 0.02),
-              Text(RSA.requestTypeToString(widget.rsa.requestType!)+" "+RSA.stateToString(rsa.state),
+              Text(RSA.requestTypeToString(widget.rsa.requestType!) +" "+((rsa.user!.id == FirebaseAuth.instance.currentUser!.uid)
+                          ? "you".tr()
+                          : ""),
                   style: const TextStyle(
                       color: Color(0xff193566),
                       fontWeight: FontWeight.bold,
@@ -73,7 +74,7 @@ class _RequestFullDataScreenState extends State<RequestFullDataScreen> {
                 title: Padding(
                   padding: const EdgeInsets.only(
                       top: 10.0, bottom: 6.0, right: 8.0),
-                  child: Text(rsa.user!.name ?? "client_name".tr(),
+                  child: Text((rsa.user!.name ?? "client_name".tr()) + " ",
                       textScaleFactor: 1.1,
                       style: const TextStyle(
                           color: Color(0xff193566),
@@ -130,7 +131,7 @@ class _RequestFullDataScreenState extends State<RequestFullDataScreen> {
               (rsa.mechanic != null) ? mechanicData() : Container(),
               (rsa.semiReport != null) ? Text(rsa.semiReport!) : Container(),
               (rsa.towProvider != null) ? towProviderData() : Container(),
-              SizedBox(height: MediaQuery.of(context).size.height * 0.02),
+              SizedBox(height: MediaQuery.of(context).size.height * 0.1),
             ],
           ),
         ),
@@ -246,7 +247,7 @@ class _RequestFullDataScreenState extends State<RequestFullDataScreen> {
 
                     rateServiceProvider(rsa.mechanic!, rsa, context);
                   },
-                  child: Text('${"review".tr()} ${"provider".tr()}')),
+                  child: Text('${"review".tr()} ${"mechanic".tr()}')),
             )
           : Container(),
 
@@ -334,16 +335,16 @@ class _RequestFullDataScreenState extends State<RequestFullDataScreen> {
                     print(rsa.rsaID);
                     rateServiceProvider(rsa.towProvider!, rsa, context);
                   },
-                  child: Text('${"review".tr()} ${rsa.towProvider!.type}')),
+                  child: Text('${"review".tr()} ${"provider".tr()}')),
             )
           : Container(),
-      // SizedBox(
-      //   width: MediaQuery.of(context).size.width * 0.6,
-      //   child: const Divider(
-      //     thickness: 2,
-      //     color: Color(0xFF193566),
-      //   ),
-      // ),
+      Container(
+        width: MediaQuery.of(context).size.width * 0.6,
+        child: const Divider(
+          thickness: 2,
+          color: Color(0xFF193566),
+        ),
+      ),
     ]);
   }
 }

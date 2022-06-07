@@ -127,7 +127,7 @@ class RequestTile extends StatelessWidget {
                         (rsa.user != null &&
                                 rsa.user!.id ==
                                     FirebaseAuth.instance.currentUser!.uid)
-                            ? "YOU"
+                            ? "you".tr()
                             : rsa.user!.name!,
 
                         style: const TextStyle(

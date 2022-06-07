@@ -216,5 +216,6 @@
   "holdConfirmCar": "Confirming Car, please wait",
   "initialReport": "Initial Report",
   "youAreAlreadyTheUser": "You Are Already TheUser",
-  "who": "Requester"
+  "who": "Requester",
+  "you": "YOu"
 }
