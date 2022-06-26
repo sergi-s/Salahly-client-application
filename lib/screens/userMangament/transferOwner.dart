@@ -78,34 +78,54 @@ class _State extends ConsumerState<TransferOwner> {
       resizeToAvoidBottomInset: false,
       backgroundColor: const Color(0xFFd1d9e6),
       appBar: AppBar(
-        elevation: 0,
-        bottomOpacity: 0.0,
+        elevation: 0.0,
         backgroundColor: const Color(0xFF193566),
-        // title: Center(
-        //   child: Text('Manage Ownership',
-        //       style: TextStyle(fontSize: 30, color: Colors.black)),
-        // ),
-        title: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: const []),
+        leading: IconButton(
+          icon: const Icon(
+            Icons.arrow_back,
+            color: Colors.white,
+          ),
+          onPressed: () {
+            context.pop();
+          },
+        ),
+        title:
+            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+          Text(""),
+          Text(
+            "transfer_ownership".tr(),
+            style: const TextStyle(
+              fontSize: 22,
+              letterSpacing: 1,
+              color: Colors.white,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+          Image.asset(
+            'assets/images/logo white.png',
+            fit: BoxFit.contain,
+            height: 30,
+          ),
+        ]),
       ),
       body: CustomPaint(
         child: Container(
           width: MediaQuery.of(context).size.width,
           height: MediaQuery.of(context).size.height,
-          padding: const EdgeInsets.only(left: 40, right: 40),
+          padding:
+              EdgeInsets.only(left: MediaQuery.of(context).size.width * 0.15),
           child: Form(
             child: Column(children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Text(
-                    "transfer_ownership".tr(),
-                    style: TextStyle(fontSize: 30, color: Colors.white),
-                    textAlign: TextAlign.center,
-                  ),
-                ],
-              ),
+              // Row(
+              //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              //   children: [
+              //     Text(
+              //       "transfer_ownership".tr(),
+              //       style: TextStyle(fontSize: 30, color: Colors.white),
+              //       textAlign: TextAlign.center,
+              //     ),
+              //   ],
+              // ),
               SizedBox(
                 height: 120,
               ),
@@ -228,7 +248,6 @@ class _State extends ConsumerState<TransferOwner> {
             ]),
           ),
         ),
-        painter: HeaderCurvedContainer(),
       ),
     );
   }

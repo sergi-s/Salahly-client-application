@@ -62,15 +62,35 @@ class _State extends ConsumerState<Choose_car> {
     return Scaffold(
         backgroundColor: const Color(0xFFd1d9e6),
         appBar: AppBar(
-          automaticallyImplyLeading: true,
           elevation: 0.0,
           backgroundColor: const Color(0xFF193566),
-          title: Padding(
-            padding: const EdgeInsets.only(right: 40),
-            child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [Text("Choose_Car".tr())]),
+          leading: IconButton(
+            icon: const Icon(
+              Icons.arrow_back,
+              color: Colors.white,
+            ),
+            onPressed: () {
+              context.pop();
+            },
           ),
+          title:
+              Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+            Text(""),
+            Text(
+              "Choose_Car".tr(),
+              style: const TextStyle(
+                fontSize: 22,
+                letterSpacing: 1,
+                color: Colors.white,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            Image.asset(
+              'assets/images/logo white.png',
+              fit: BoxFit.contain,
+              height: 30,
+            ),
+          ]),
         ),
         body: CustomPaint(
           child: Container(
@@ -91,17 +111,18 @@ class _State extends ConsumerState<Choose_car> {
                     itemBuilder: (context, index) {
                       if (carState.cars[index].carAccess != CarAccess.sub) {
                         return Card(
-                          elevation: 6,
-                          margin: EdgeInsets.all(10),
+                          elevation: 5,
+                          margin: const EdgeInsets.all(10),
                           child: Container(
+                            height: MediaQuery.of(context).size.height * 0.15,
                             decoration: BoxDecoration(
                               boxShadow: const [
                                 BoxShadow(
-                                  blurRadius: 10.0,
+                                  blurRadius: 2,
                                 ),
                               ],
                               borderRadius: BorderRadius.circular(8.0),
-                              color: const Color(0xFFd1d9e6),
+                              color: Colors.white,
                             ),
                             child: SingleChildScrollView(
                               child: GestureDetector(
@@ -122,86 +143,155 @@ class _State extends ConsumerState<Choose_car> {
                                     //     .color as Color
                                     child: const Icon(
                                         Icons.directions_car_filled,
-                                        size: 40),
+                                        size: 30),
                                   ),
-                                  title: Row(
-                                    children: [
-                                      Flexible(
-                                          child: Text(
-                                              carState.cars[index].model
-                                                  .toString(),
-                                              style: const TextStyle(
-                                                  fontSize: 25,
-                                                  fontWeight:
-                                                      FontWeight.bold))),
-                                      Padding(
-                                        padding: EdgeInsets.only(
-                                            top: MediaQuery.of(context)
-                                                    .size
-                                                    .height *
-                                                0.01,
-                                            right: MediaQuery.of(context)
-                                                    .size
-                                                    .width *
-                                                0.01),
-                                        child: GestureDetector(
-                                          onTap: () {
-                                            print("huuu");
-                                            final snackBar = SnackBar(
-                                                content:
-                                                    const Text('Car_removed')
-                                                        .tr());
-                                            showDialog(
-                                                context: context,
-                                                builder:
-                                                    (BuildContext context) {
-                                                  return AlertDialog(
-                                                    content: const Text(
-                                                            "carDeleteConfirmation")
-                                                        .tr(),
-                                                    title: Text("Warning".tr()),
-                                                    actions: [
-                                                      TextButton(
-                                                          onPressed: () {
-                                                            Navigator.of(
-                                                                    context)
-                                                                .pop();
-                                                          },
-                                                          child: Text(
-                                                              "Cancel".tr())),
-                                                      TextButton(
-                                                          onPressed: () {
-                                                            deleteCar(index);
-                                                            Navigator.of(
-                                                                    context)
-                                                                .pop();
-                                                            ScaffoldMessenger
-                                                                    .of(context)
-                                                                .showSnackBar(
-                                                                    snackBar);
-                                                          },
-                                                          child: Text(
-                                                              "Confirm".tr())),
-                                                    ],
-                                                  );
-                                                });
-                                          },
-                                          child: const CircleAvatar(
-                                            backgroundColor: Colors.black,
-                                            radius: 15,
-                                            child: Icon(
-                                              Icons.delete,
-                                              size: 20,
-                                              color: Colors.white,
-                                            ),
-                                          ),
+                                  trailing: GestureDetector(
+                                    onTap: () {
+                                      print("huuu");
+                                      final snackBar = SnackBar(
+                                          content:
+                                              const Text('Car_removed').tr());
+                                      showDialog(
+                                          context: context,
+                                          builder: (BuildContext context) {
+                                            return AlertDialog(
+                                              content: const Text(
+                                                      "carDeleteConfirmation")
+                                                  .tr(),
+                                              title: Text("Warning".tr()),
+                                              actions: [
+                                                TextButton(
+                                                    onPressed: () {
+                                                      Navigator.of(context)
+                                                          .pop();
+                                                    },
+                                                    child: Text("Cancel".tr())),
+                                                TextButton(
+                                                    onPressed: () {
+                                                      deleteCar(index);
+                                                      Navigator.of(context)
+                                                          .pop();
+                                                      ScaffoldMessenger.of(
+                                                              context)
+                                                          .showSnackBar(
+                                                              snackBar);
+                                                    },
+                                                    child:
+                                                        Text("Confirm".tr())),
+                                              ],
+                                            );
+                                          });
+                                    },
+                                    child: Padding(
+                                      padding: EdgeInsets.only(
+                                          top: MediaQuery.of(context)
+                                                  .size
+                                                  .height *
+                                              0.015),
+                                      child: const CircleAvatar(
+                                        backgroundColor: Color(0xFF193566),
+                                        radius: 20,
+                                        child: Icon(
+                                          Icons.delete,
+                                          size: 20,
+                                          color: Colors.white,
                                         ),
                                       ),
-                                    ],
+                                    ),
+                                  ),
+                                  title: Padding(
+                                    padding: EdgeInsets.only(
+                                        left:
+                                            MediaQuery.of(context).size.width *
+                                                0.05,
+                                        top:
+                                            MediaQuery.of(context).size.height *
+                                                0.01),
+                                    child: Row(
+                                      children: [
+                                        Flexible(
+                                            child: Text(
+                                                carState.cars[index].model
+                                                    .toString(),
+                                                style: const TextStyle(
+                                                    fontSize: 22,
+                                                    fontWeight:
+                                                        FontWeight.bold))),
+                                        Padding(
+                                          padding: EdgeInsets.only(
+                                              top: MediaQuery.of(context)
+                                                      .size
+                                                      .height *
+                                                  0.01,
+                                              right: MediaQuery.of(context)
+                                                      .size
+                                                      .width *
+                                                  0.01),
+                                          // child: GestureDetector(
+                                          //   onTap: () {
+                                          //     print("huuu");
+                                          //     final snackBar = SnackBar(
+                                          //         content:
+                                          //             const Text('Car_removed')
+                                          //                 .tr());
+                                          //     showDialog(
+                                          //         context: context,
+                                          //         builder:
+                                          //             (BuildContext context) {
+                                          //           return AlertDialog(
+                                          //             content: const Text(
+                                          //                     "carDeleteConfirmation")
+                                          //                 .tr(),
+                                          //             title: Text("Warning".tr()),
+                                          //             actions: [
+                                          //               TextButton(
+                                          //                   onPressed: () {
+                                          //                     Navigator.of(
+                                          //                             context)
+                                          //                         .pop();
+                                          //                   },
+                                          //                   child: Text(
+                                          //                       "Cancel".tr())),
+                                          //               TextButton(
+                                          //                   onPressed: () {
+                                          //                     deleteCar(index);
+                                          //                     Navigator.of(
+                                          //                             context)
+                                          //                         .pop();
+                                          //                     ScaffoldMessenger
+                                          //                             .of(context)
+                                          //                         .showSnackBar(
+                                          //                             snackBar);
+                                          //                   },
+                                          //                   child: Text(
+                                          //                       "Confirm".tr())),
+                                          //             ],
+                                          //           );
+                                          //         });
+                                          //   },
+                                          //   child: const CircleAvatar(
+                                          //     backgroundColor: Colors.black,
+                                          //     radius: 15,
+                                          //     child: Icon(
+                                          //       Icons.delete,
+                                          //       size: 20,
+                                          //       color: Colors.white,
+                                          //     ),
+                                          //   ),
+                                          // ),
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                   subtitle: Padding(
-                                    padding: const EdgeInsets.all(0),
+                                    padding: EdgeInsets.only(
+                                        left:
+                                            MediaQuery.of(context).size.width *
+                                                0.05),
                                     child: Column(children: [
+                                      const SizedBox(
+                                        height: 10,
+                                      ),
                                       Row(
                                         children: [
                                           Text(
@@ -210,6 +300,9 @@ class _State extends ConsumerState<Choose_car> {
                                                 fontSize: 18,
                                                 fontWeight: FontWeight.bold,
                                                 color: Colors.black),
+                                          ),
+                                          const SizedBox(
+                                            height: 10,
                                           ),
                                           Flexible(
                                             child: Text(
@@ -221,6 +314,9 @@ class _State extends ConsumerState<Choose_car> {
                                             ),
                                           ),
                                         ],
+                                      ),
+                                      const SizedBox(
+                                        height: 10,
                                       ),
                                       Row(
                                         children: [

@@ -31,15 +31,14 @@ class _State extends ConsumerState<ManageSubowner> {
     return SingleChildScrollView(
         child: Column(children: [
       Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-        Text(
-          "manageSubOwner".tr(),
-          style: const TextStyle(fontSize: 35, color: Colors.white),
-          textAlign: TextAlign.center,
-        ),
+        // Text(
+        //   "manageSubOwner".tr(),
+        //   style: const TextStyle(fontSize: 35, color: Colors.white),
+        //   textAlign: TextAlign.center,
+        // ),
       ]),
-      const SizedBox(height: 150),
       ListView.builder(
-          padding: const EdgeInsets.all(17),
+          padding: const EdgeInsets.all(0),
           shrinkWrap: true,
           itemCount: subowners.length,
           itemBuilder: (BuildContext context, index) {
@@ -66,8 +65,13 @@ class _State extends ConsumerState<ManageSubowner> {
         },
         background: deleteBgItem(),
         child: Container(
-          // height: 100,
+          height: MediaQuery.of(context).size.height * 0.15,
           child: Card(
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(
+                Radius.circular(20.0),
+              ),
+            ),
             child: ListTile(
               leading: CircleAvatar(
                 radius: 30,
@@ -76,18 +80,39 @@ class _State extends ConsumerState<ManageSubowner> {
                 ),
                 backgroundColor: Colors.blue,
               ),
-              title: Text(subowners[index].name.toString(),
-                  style: const TextStyle(
-                      fontSize: 20,
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold)),
+              title: Row(
+                children: [
+                  const Icon(
+                    Icons.face,
+                    color: Color(0xFF193566),
+                  ),
+                  const SizedBox(
+                    width: 10,
+                  ),
+                  Text(subowners[index].name.toString(),
+                      style: TextStyle(
+                          fontSize: 20,
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold)),
+                ],
+              ),
               subtitle: Column(
                 children: [
+                  SizedBox(
+                    height: 10,
+                  ),
                   Row(
                     children: [
+                      const Icon(
+                        Icons.email,
+                        color: Color(0xFF193566),
+                      ),
+                      const SizedBox(
+                        width: 10,
+                      ),
                       Flexible(
                         child: Text(subowners[index].email.toString(),
-                            style: const TextStyle(
+                            style: TextStyle(
                                 overflow: TextOverflow.ellipsis,
                                 fontSize: 17,
                                 color: Colors.black)),
@@ -101,15 +126,25 @@ class _State extends ConsumerState<ManageSubowner> {
                       //   ),
                     ],
                   ),
+                  const SizedBox(
+                    height: 10,
+                  ),
                   Row(
                     children: [
+                      const Icon(
+                        Icons.location_on,
+                        color: Color(0xFF193566),
+                      ),
+                      SizedBox(
+                        width: 10,
+                      ),
                       Flexible(
                         child: Text(subowners[index].address.toString(),
                             maxLines: 1,
                             softWrap: false,
                             overflow: TextOverflow.fade,
                             style: const TextStyle(
-                                fontSize: 17, color: Colors.black)),
+                                fontSize: 18, color: Colors.black)),
                       ),
                     ],
                   )
@@ -179,16 +214,35 @@ class _State extends ConsumerState<ManageSubowner> {
     return Scaffold(
       backgroundColor: const Color(0xFFd1d9e6),
       appBar: AppBar(
-        elevation: 0,
-        bottomOpacity: 0.0,
+        elevation: 0.0,
         backgroundColor: const Color(0xFF193566),
-        // title: Center(
-        //   child: Text('Manage Ownership',
-        //       style: TextStyle(fontSize: 30, color: Colors.black)),
-        // ),
-        title: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: const []),
+        leading: IconButton(
+          icon: const Icon(
+            Icons.arrow_back,
+            color: Colors.white,
+          ),
+          onPressed: () {
+            context.pop();
+          },
+        ),
+        title:
+            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+          Text(""),
+          Text(
+            "Subowners".tr(),
+            style: const TextStyle(
+              fontSize: 22,
+              letterSpacing: 1,
+              color: Colors.white,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+          Image.asset(
+            'assets/images/logo white.png',
+            fit: BoxFit.contain,
+            height: 30,
+          ),
+        ]),
       ),
       body: CustomPaint(
         child: Container(
@@ -196,7 +250,6 @@ class _State extends ConsumerState<ManageSubowner> {
           height: MediaQuery.of(context).size.height,
           child: showList(),
         ),
-        painter: HeaderCurvedContainer(),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {

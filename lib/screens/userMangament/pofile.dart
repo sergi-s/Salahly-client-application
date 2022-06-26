@@ -52,7 +52,33 @@ class _ProfileState extends ConsumerState<Profile> {
       appBar: AppBar(
         elevation: 0.0,
         backgroundColor: const Color(0xFF193566),
-        title: Row(mainAxisAlignment: MainAxisAlignment.end, children: []),
+        leading: IconButton(
+          icon: const Icon(
+            Icons.arrow_back,
+            color: Colors.white,
+          ),
+          onPressed: () {
+            context.pop();
+          },
+        ),
+        title:
+            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+          Text(""),
+          Text(
+            "Profile".tr(),
+            style: const TextStyle(
+              fontSize: 22,
+              letterSpacing: 1,
+              color: Colors.white,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+          Image.asset(
+            'assets/images/logo white.png',
+            fit: BoxFit.contain,
+            height: 30,
+          ),
+        ]),
       ),
       body: CustomPaint(
         child: Container(
@@ -60,6 +86,9 @@ class _ProfileState extends ConsumerState<Profile> {
           height: MediaQuery.of(context).size.height,
           child: ListView(
             children: [
+              SizedBox(
+                height: 10,
+              ),
               GestureDetector(
                 child: Center(
                   child: Container(
@@ -88,182 +117,208 @@ class _ProfileState extends ConsumerState<Profile> {
               Center(
                 child: Text(
                   ref.watch(userProvider).name ?? pleaseHold,
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 34),
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 34,
+                      color: Color(0xFF193566)),
                 ),
               ),
               const SizedBox(height: 5),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
+              Card(
+                elevation: 7,
+                color: Color(0xFFd1d9e6),
                 child: Column(
                   children: [
                     Padding(
-                      padding: EdgeInsets.only(right: screenSize.width * 0.8),
-                      child: const Text("Name").tr(),
-                    ),
-                    TextFormField(
-                      decoration: InputDecoration(
-                          prefixIcon: Icon(
-                            Icons.person,
-                            color: Colors.grey[500],
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        children: [
+                          Padding(
+                            padding:
+                                EdgeInsets.only(right: screenSize.width * 0.8),
+                            child: const Text("Name").tr(),
                           ),
-                          border: const OutlineInputBorder(
-                            // width: 0.0 produces a thin "hairline" border
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(90.0)),
-                            borderSide: BorderSide.none,
+                          TextFormField(
+                            decoration: InputDecoration(
+                                prefixIcon: Icon(
+                                  Icons.person,
+                                  color: Colors.grey[500],
+                                ),
+                                border: const OutlineInputBorder(
+                                  // width: 0.0 produces a thin "hairline" border
+                                  // borderRadius:
+                                  //     BorderRadius.all(Radius.circular(90.0)),
+                                  borderSide: BorderSide.none,
+                                ),
+                                hintStyle: const TextStyle(
+                                    color: Colors.black,
+                                    fontFamily: "WorkSansLight"),
+                                filled: true,
+                                enabled: false,
+                                label: Text(
+                                    ref.watch(userProvider).name ?? pleaseHold,
+                                    style: const TextStyle(
+                                        fontSize: 20,
+                                        color: Color(0xFF193566))),
+                                fillColor: Colors.white70,
+                                hintText:
+                                    ref.watch(userProvider).name ?? pleaseHold),
                           ),
-                          hintStyle: const TextStyle(
-                              color: Colors.black, fontFamily: "WorkSansLight"),
-                          filled: true,
-                          enabled: false,
-                          label: Text(
-                              ref.watch(userProvider).name ?? pleaseHold,
-                              style: const TextStyle(
-                                  fontSize: 20, color: Colors.black)),
-                          fillColor: Colors.white70,
-                          hintText: ref.watch(userProvider).name ?? pleaseHold),
-                    ),
-                  ],
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.only(right: screenSize.width * 0.7),
-                      child: const Text("email").tr(),
-                    ),
-                    TextFormField(
-                      decoration: InputDecoration(
-                          prefixIcon: Icon(
-                            Icons.email,
-                            color: Colors.grey[500],
-                          ),
-                          border: const OutlineInputBorder(
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(90.0)),
-                            borderSide: BorderSide.none,
-                          ),
-                          hintStyle: const TextStyle(
-                              color: Colors.black, fontFamily: "WorkSansLight"),
-                          filled: true,
-                          enabled: false,
-                          label: Text(
-                              ref.watch(userProvider).email ?? pleaseHold,
-                              style: const TextStyle(
-                                  fontSize: 20, color: Colors.black)),
-                          fillColor: Colors.white70,
-                          hintText:
-                              ref.watch(userProvider).email ?? pleaseHold),
-                    ),
-                  ],
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.only(right: screenSize.width * 0.8),
-                      child: const Text("Address").tr(),
-                    ),
-                    TextFormField(
-                      decoration: InputDecoration(
-                          prefixIcon: Icon(
-                            Icons.place,
-                            color: Colors.grey[500],
-                          ),
-                          border: const OutlineInputBorder(
-                            // width: 0.0 produces a thin "hairline" border
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(90.0)),
-                            borderSide: BorderSide.none,
-                          ),
-                          hintStyle: const TextStyle(
-                              color: Colors.black, fontFamily: "WorkSansLight"),
-                          filled: true,
-                          enabled: false,
-                          label: Text(
-                              ref.watch(userProvider).address ?? pleaseHold,
-                              style: const TextStyle(
-                                  fontSize: 20, color: Colors.black)),
-                          fillColor: Colors.white70,
-                          hintText:
-                              ref.watch(userProvider).address ?? pleaseHold),
-                    ),
-                  ],
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.only(right: screenSize.width * 0.8),
-                      child: const Text("Phone").tr(),
-                    ),
-                    TextFormField(
-                      decoration: InputDecoration(
-                          prefixIcon: Icon(
-                            Icons.phone,
-                            color: Colors.grey[500],
-                          ),
-                          border: const OutlineInputBorder(
-                            // width: 0.0 produces a thin "hairline" border
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(90.0)),
-                            borderSide: BorderSide.none,
-                          ),
-                          hintStyle: const TextStyle(
-                              color: Colors.black, fontFamily: "WorkSansLight"),
-                          filled: true,
-                          enabled: false,
-                          label: Text(
-                              ref.watch(userProvider).phoneNumber ?? pleaseHold,
-                              style: const TextStyle(
-                                  fontSize: 20, color: Colors.black)),
-                          fillColor: Colors.white70,
-                          hintText: ref.watch(userProvider).phoneNumber ??
-                              pleaseHold),
-                    ),
-                    const SizedBox(height: 10),
-                    SizedBox(
-                      width: 200,
-                      child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            primary: const Color(0xFF193566),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                          ),
-                          onPressed: () {
-                            context.push(EditProfile.routeName);
-                          },
-                          child: const Text("editProfile").tr()),
-                    ),
-                    SizedBox(
-                      width: 200,
-                      child: ElevatedButton(
-                        onPressed: () async {
-                          signOutConfirmation(context);
-                        },
-                        style: ElevatedButton.styleFrom(
-                          primary: const Color(0xFF193566),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                        ),
-                        child: const Text("signOut").tr(),
+                        ],
                       ),
-                    )
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        children: [
+                          Padding(
+                            padding:
+                                EdgeInsets.only(right: screenSize.width * 0.7),
+                            child: const Text("email").tr(),
+                          ),
+                          TextFormField(
+                            decoration: InputDecoration(
+                                prefixIcon: Icon(
+                                  Icons.email,
+                                  color: Colors.grey[500],
+                                ),
+                                border: const OutlineInputBorder(
+                                  // borderRadius:
+                                  //     BorderRadius.all(Radius.circular(90.0)),
+                                  borderSide: BorderSide.none,
+                                ),
+                                hintStyle: const TextStyle(
+                                    color: Color(0xFF193566),
+                                    fontFamily: "WorkSansLight"),
+                                filled: true,
+                                enabled: false,
+                                label: Text(
+                                    ref.watch(userProvider).email ?? pleaseHold,
+                                    style: const TextStyle(
+                                        fontSize: 20,
+                                        color: Color(0xFF193566))),
+                                fillColor: Colors.white70,
+                                hintText: ref.watch(userProvider).email ??
+                                    pleaseHold),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        children: [
+                          Padding(
+                            padding:
+                                EdgeInsets.only(right: screenSize.width * 0.8),
+                            child: const Text("Address").tr(),
+                          ),
+                          TextFormField(
+                            decoration: InputDecoration(
+                                prefixIcon: Icon(
+                                  Icons.place,
+                                  color: Colors.grey[500],
+                                ),
+                                border: const OutlineInputBorder(
+                                  // width: 0.0 produces a thin "hairline" border
+                                  // borderRadius:
+                                  //     BorderRadius.all(Radius.circular(90.0)),
+                                  borderSide: BorderSide.none,
+                                ),
+                                hintStyle: const TextStyle(
+                                    color: Colors.black,
+                                    fontFamily: "WorkSansLight"),
+                                filled: true,
+                                enabled: false,
+                                label: Text(
+                                    ref.watch(userProvider).address ??
+                                        pleaseHold,
+                                    style: const TextStyle(
+                                        fontSize: 20,
+                                        color: Color(0xFF193566))),
+                                fillColor: Colors.white70,
+                                hintText: ref.watch(userProvider).address ??
+                                    pleaseHold),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        children: [
+                          Padding(
+                            padding:
+                                EdgeInsets.only(right: screenSize.width * 0.8),
+                            child: const Text("Phone").tr(),
+                          ),
+                          TextFormField(
+                            decoration: InputDecoration(
+                                prefixIcon: Icon(
+                                  Icons.phone,
+                                  color: Colors.grey[500],
+                                ),
+                                border: const OutlineInputBorder(
+                                  // width: 0.0 produces a thin "hairline" border
+                                  // borderRadius:
+                                  //     BorderRadius.all(Radius.circular(90.0)),
+                                  borderSide: BorderSide.none,
+                                ),
+                                hintStyle: const TextStyle(
+                                    color: Colors.black,
+                                    fontFamily: "WorkSansLight"),
+                                filled: true,
+                                enabled: false,
+                                label: Text(
+                                    ref.watch(userProvider).phoneNumber ??
+                                        pleaseHold,
+                                    style: const TextStyle(
+                                        fontSize: 20,
+                                        color: Color(0xFF193566))),
+                                fillColor: Colors.white70,
+                                hintText: ref.watch(userProvider).phoneNumber ??
+                                    pleaseHold),
+                          ),
+                          const SizedBox(height: 10),
+                          SizedBox(
+                            width: 200,
+                            child: ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  primary: const Color(0xFF193566),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(20),
+                                  ),
+                                ),
+                                onPressed: () {
+                                  context.push(EditProfile.routeName);
+                                },
+                                child: const Text("editProfile").tr()),
+                          ),
+                          SizedBox(
+                            width: 200,
+                            child: ElevatedButton(
+                              onPressed: () async {
+                                signOutConfirmation(context);
+                              },
+                              style: ElevatedButton.styleFrom(
+                                primary: const Color(0xFF193566),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                              ),
+                              child: const Text("signOut").tr(),
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
                   ],
                 ),
               ),
             ],
           ),
         ),
-        painter: HeaderCurvedContainer(),
+        // painter: HeaderCurvedContainer(),
       ),
     );
   }

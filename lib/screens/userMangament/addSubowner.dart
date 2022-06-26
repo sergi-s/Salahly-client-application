@@ -83,26 +83,53 @@ class _State extends ConsumerState<AddSubowner> {
       appBar: AppBar(
         elevation: 0.0,
         backgroundColor: const Color(0xFF193566),
-        title: Row(mainAxisAlignment: MainAxisAlignment.center, children: []),
+        leading: IconButton(
+          icon: const Icon(
+            Icons.arrow_back,
+            color: Colors.white,
+          ),
+          onPressed: () {
+            context.pop();
+          },
+        ),
+        title:
+            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+          Text(""),
+          Text(
+            "Add_Subowner".tr(),
+            style: const TextStyle(
+              fontSize: 22,
+              letterSpacing: 1,
+              color: Colors.white,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+          Image.asset(
+            'assets/images/logo white.png',
+            fit: BoxFit.contain,
+            height: 30,
+          ),
+        ]),
       ),
       body: CustomPaint(
         child: Container(
           width: MediaQuery.of(context).size.width,
           height: MediaQuery.of(context).size.height,
-          padding: const EdgeInsets.only(left: 40, right: 40),
+          padding:
+              EdgeInsets.only(left: MediaQuery.of(context).size.width * 0.12),
           child: Form(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Text(
-                        "Add_Subowner".tr(),
-                        style: TextStyle(fontSize: 40, color: Colors.white),
-                        textAlign: TextAlign.center,
-                      ),
-                    ]),
+                // Row(
+                //     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                //     children: [
+                //       Text(
+                //         "Add_Subowner".tr(),
+                //         style: TextStyle(fontSize: 40, color: Colors.white),
+                //         textAlign: TextAlign.center,
+                //       ),
+                //     ]),
                 const SizedBox(
                   height: 100,
                 ),
@@ -179,7 +206,7 @@ class _State extends ConsumerState<AddSubowner> {
             ),
           ),
         ),
-        painter: HeaderCurvedContainer(),
+        // painter: HeaderCurvedContainer(),
       ),
       floatingActionButton: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
