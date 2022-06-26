@@ -48,10 +48,7 @@ import 'screens/roadsideassistance/arrival.dart';
 
 class Routing {
   get router => GoRouter(
-
-
-//         initialLocation: TestScreenFoulaNearbyLocations.routeName,
-    
+        // initialLocation: TestScreenFoulaNearbyLocations.routeName,
         initialLocation: CheckLogin.routeName,
 
         routes: <GoRoute>[
