@@ -72,7 +72,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                   title: 'rsa'.tr(),
                   subtitle: 'rsaDescription'.tr(),
                   image: 'assets/images/emergency-call.png'),
-              SizedBox(height: MediaQuery.of(context).size.height * 0.056),
+              SizedBox(height: MediaQuery.of(context).size.height * 0.052),
               CardWidget(
                   fun: () {
                     context.push(WSAScreen.routeName);
@@ -80,7 +80,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                   title: 'wsa'.tr(),
                   subtitle: 'wsaDescription'.tr(),
                   image: 'assets/images/mechanic.png'),
-              SizedBox(height: MediaQuery.of(context).size.height * 0.056),
+              SizedBox(height: MediaQuery.of(context).size.height * 0.052),
               CardWidget(
                   fun: () {
                     context.push(DropOffLocationScreen.routeName);
