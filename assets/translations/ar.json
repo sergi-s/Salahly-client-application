@@ -217,5 +217,6 @@
   "holdConfirmCar": "جاري التحقق من السياره, فضلا انتظر",
   "initialReport": "تقرير مبدئي",
   "youAreAlreadyTheUser": "انت بالفعل مالك السياره",
-  "who": "الطالب"
+  "who": "الطالب",
+  "you": "انت"
 }

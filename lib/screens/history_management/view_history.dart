@@ -10,8 +10,7 @@ import 'package:slahly/classes/provider/ongoing_data.dart';
 import 'package:slahly/classes/provider/user_data.dart';
 import 'package:slahly/screens/history_management/accordion.dart';
 import 'package:slahly/screens/history_management/add_custom_history.dart';
-
-import '../roadsideassistance/request_full_data_screen.dart';
+import 'package:slahly/screens/roadsideassistance/request_full_data_screen.dart';
 
 class ViewHistory extends ConsumerStatefulWidget {
   static const routeName = "/viewhistory";
@@ -104,9 +103,12 @@ class _ViewHistoryState extends ConsumerState<ViewHistory> {
                           extra: ref.watch(historyProvider)[
                               (ref.watch(historyProvider).length - 1) - index]);
                     },
-                    child: Accordion(
-                        rsa: ref.watch(historyProvider)[
-                            (ref.watch(historyProvider).length - 1) - index]),
+                    child: DefaultTextStyle(
+                      style: const TextStyle(color: Color(0xFF193566)),
+                      child: Accordion(
+                          rsa: ref.watch(historyProvider)[
+                              (ref.watch(historyProvider).length - 1) - index]),
+                    ),
                   );
 
                 },

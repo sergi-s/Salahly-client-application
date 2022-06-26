@@ -1,5 +1,4 @@
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:slahly/classes/firebase/roadsideassistance/roadsideassistance.dart';
@@ -89,11 +88,11 @@ class _AccordionState extends State<Accordion> {
                         fontWeight: FontWeight.bold, fontSize: 20),
                   ),
 
-                  Text(
-                    RSA.stateToString(widget.rsa!.state!),
-                    style: const TextStyle(
-                        fontWeight: FontWeight.bold, fontSize: 20),
-                  ),
+                  // Text(
+                  //   RSA.stateToString(widget.rsa!.state!),
+                  //   style: const TextStyle(
+                  //       fontWeight: FontWeight.bold, fontSize: 20),
+                  // ),
 
                 ],
               ),

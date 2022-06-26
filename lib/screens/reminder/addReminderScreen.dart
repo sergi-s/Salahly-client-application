@@ -111,7 +111,7 @@ class _AddReminderState extends State<AddReminder> {
             color: Colors.white,
           ),
           onPressed: () {
-            context.go(ReminderScreen.routeName);
+            context.push(ReminderScreen.routeName);
           },
         ),
         title:
