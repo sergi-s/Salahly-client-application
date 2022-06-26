@@ -24,6 +24,7 @@ import 'package:slahly/widgets/login_signup/text_input.dart';
 
 import '../../abstract_classes/user.dart';
 import '../../classes/models/client.dart';
+import '../../utils/validation.dart';
 import '../homescreen.dart';
 import 'map.dart';
 
@@ -114,6 +115,9 @@ class _RegistrationState extends State<Registration> {
       ScaffoldMessenger.of(context)
           .showSnackBar(const SnackBar(content: Text(' Sucessfull ')));
       context.go(HomePage.routeName);
+    } else if (!Validator.phoneValidator(phonenumber)) {
+      return ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('PhoneNumber incorrect!!')));
     } else {
       return ScaffoldMessenger.of(context)
           .showSnackBar(const SnackBar(content: Text('Failed to Register!!')));
@@ -408,8 +412,8 @@ class _RegistrationState extends State<Registration> {
         await _picker.pickImage(source: source, imageQuality: 50);
     print("Test  2");
     if (pickedFile == null) {
-       print("Test  3");
-       return;
+      print("Test  3");
+      return;
     }
     print("Test  4");
     var file = await ImageCropper().cropImage(

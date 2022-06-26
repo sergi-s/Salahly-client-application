@@ -28,6 +28,7 @@ import 'package:slahly/screens/roadsideassistance/rsaconfirmationScreen.dart';
 import 'package:slahly/screens/roadsideassistance/searching_mechanic_provider_screen.dart';
 import 'package:slahly/screens/splashScreen/splashscreen.dart';
 import 'package:slahly/screens/switchLanguage.dart';
+import 'package:slahly/screens/test_screens/test_screen_foula_nearbylocations.dart';
 import 'package:slahly/screens/test_screens/test_user_SM.dart';
 import 'package:slahly/screens/test_screens/testscreen_foula.dart';
 import 'package:slahly/screens/testscreenyoyo.dart';
@@ -47,6 +48,12 @@ import 'screens/roadsideassistance/arrival.dart';
 
 class Routing {
   get router => GoRouter(
+
+
+//         initialLocation: TestScreenFoulaNearbyLocations.routeName,
+    
+        initialLocation: CheckLogin.routeName,
+
         routes: <GoRoute>[
           GoRoute(
             //TESTING
@@ -240,6 +247,10 @@ class Routing {
           GoRoute(
             path: TestScreenAya.routeName,
             builder: (context, state) => TestScreenAya(),
+          ),
+          GoRoute(
+            path: TestScreenFoulaNearbyLocations.routeName,
+            builder: (context, state) => TestScreenFoulaNearbyLocations(),
           ),
         ],
       );
