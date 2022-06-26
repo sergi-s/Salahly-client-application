@@ -1,5 +1,4 @@
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/cupertino.dart';
 import "package:flutter/material.dart";
 import 'package:go_router/go_router.dart';
 import 'package:slahly/screens/car_management/addCars.dart';
@@ -12,7 +11,7 @@ import 'package:slahly/screens/switchLanguage.dart';
 import 'package:slahly/screens/userMangament/choose_car.dart';
 import 'package:slahly/screens/userMangament/transferOwner.dart';
 
-import '../../screens/test_screens/testscreen_foula.dart';
+import 'package:slahly/screens/test_screens/testscreen_foula.dart';
 
 Widget salahlyDrawer(BuildContext context) {
   return Drawer(
