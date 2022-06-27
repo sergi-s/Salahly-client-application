@@ -65,178 +65,167 @@ class _State extends ConsumerState<ViewCars> {
                             borderRadius: BorderRadius.circular(8.0),
                             color: Colors.white,
                           ),
-                          child: SingleChildScrollView(
-                            child: GestureDetector(
-                              onTap: () {
-                                print('welcome'.tr());
-                              },
-                              child: ListTile(
-                                trailing: GestureDetector(
-                                  onTap: () {
-                                    print("huuu");
-                                    final snackBar = SnackBar(
-                                        content:
-                                            const Text('Car_removed').tr());
-                                    showDialog(
-                                        context: context,
-                                        builder: (BuildContext context) {
-                                          return AlertDialog(
-                                            content: const Text(
-                                                    "carDeleteConfirmation")
-                                                .tr(),
-                                            title: Text("Warning".tr()),
-                                            actions: [
-                                              TextButton(
-                                                  onPressed: () {
-                                                    Navigator.of(context).pop();
-                                                  },
-                                                  child: Text("Cancel".tr())),
-                                              TextButton(
-                                                  onPressed: () {
-                                                    deleteCarAllUsers(index);
-                                                    Navigator.of(context).pop();
-                                                    ScaffoldMessenger.of(
-                                                            context)
-                                                        .showSnackBar(snackBar);
-                                                  },
-                                                  child: Text("Confirm".tr())),
-                                            ],
-                                          );
-                                        });
-                                  },
-                                  child: Padding(
-                                    padding: EdgeInsets.only(
-                                        top:
-                                            MediaQuery.of(context).size.height *
-                                                0.015),
-                                    child: const CircleAvatar(
-                                      backgroundColor: Color(0xFF193566),
-                                      radius: 20,
-                                      child: Icon(
-                                        Icons.delete,
-                                        size: 20,
-                                        color: Colors.white,
-                                      ),
+                          child: GestureDetector(
+                            onTap: () {
+                              print('welcome'.tr());
+                            },
+                            child: ListTile(
+                              trailing: GestureDetector(
+                                onTap: () {
+                                  print("huuu");
+                                  final snackBar = SnackBar(
+                                      content: const Text('Car_removed').tr());
+                                  showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return AlertDialog(
+                                          content: const Text(
+                                                  "carDeleteConfirmation")
+                                              .tr(),
+                                          title: Text("Warning".tr()),
+                                          actions: [
+                                            TextButton(
+                                                onPressed: () {
+                                                  Navigator.of(context).pop();
+                                                },
+                                                child: Text("Cancel".tr())),
+                                            TextButton(
+                                                onPressed: () {
+                                                  deleteCarAllUsers(index);
+                                                  Navigator.of(context).pop();
+                                                  ScaffoldMessenger.of(context)
+                                                      .showSnackBar(snackBar);
+                                                },
+                                                child: Text("Confirm".tr())),
+                                          ],
+                                        );
+                                      });
+                                },
+                                child: Padding(
+                                  padding: EdgeInsets.only(
+                                      top: MediaQuery.of(context).size.height *
+                                          0.015),
+                                  child: const CircleAvatar(
+                                    backgroundColor: Color(0xFF193566),
+                                    radius: 20,
+                                    child: Icon(
+                                      Icons.delete,
+                                      size: 20,
+                                      color: Colors.white,
                                     ),
                                   ),
                                 ),
-                                leading: Column(
+                              ),
+                              leading: Column(
+                                children: [
+                                  CircleAvatar(
+                                    radius: MediaQuery.of(context).size.width *
+                                        0.07,
+                                    backgroundColor: ref
+                                        .watch(userProvider)
+                                        .cars[index]
+                                        .color,
+                                    // ref
+                                    //     .watch(userProvider)
+                                    //     .cars[index]
+                                    //     .color as Color
+                                    child: const Icon(
+                                        Icons.directions_car_filled,
+                                        size: 25),
+                                  ),
+                                ],
+                              ),
+                              title: Padding(
+                                padding: EdgeInsets.only(
+                                    left: MediaQuery.of(context).size.width *
+                                        0.05,
+                                    top: MediaQuery.of(context).size.height *
+                                        0.01),
+                                child: Row(
                                   children: [
-                                    CircleAvatar(
-                                      radius:
-                                          MediaQuery.of(context).size.width *
-                                              0.07,
-                                      backgroundColor: ref
-                                          .watch(userProvider)
-                                          .cars[index]
-                                          .color,
-                                      // ref
-                                      //     .watch(userProvider)
-                                      //     .cars[index]
-                                      //     .color as Color
-                                      child: const Icon(
-                                          Icons.directions_car_filled,
-                                          size: 25),
+                                    Flexible(
+                                      child: Text(
+                                          ref
+                                              .watch(userProvider)
+                                              .cars[index]
+                                              .model
+                                              .toString(),
+                                          style: const TextStyle(
+                                              fontSize: 22,
+                                              fontWeight: FontWeight.bold)),
                                     ),
                                   ],
                                 ),
-                                title: Padding(
-                                  padding: EdgeInsets.only(
-                                      left: MediaQuery.of(context).size.width *
-                                          0.05,
-                                      top: MediaQuery.of(context).size.height *
-                                          0.01),
-                                  child: Row(
+                              ),
+                              subtitle: Padding(
+                                padding: EdgeInsets.only(
+                                    left: MediaQuery.of(context).size.width *
+                                        0.05),
+                                child: Column(children: [
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  Row(
                                     children: [
+                                      Text(
+                                        "${'Plate_Number'.tr()}: ",
+                                        style: const TextStyle(
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.black),
+                                      ),
                                       Flexible(
                                         child: Text(
-                                            ref
-                                                .watch(userProvider)
-                                                .cars[index]
-                                                .model
-                                                .toString(),
-                                            style: const TextStyle(
-                                                fontSize: 22,
-                                                fontWeight: FontWeight.bold)),
+                                          ref
+                                              .watch(userProvider)
+                                              .cars[index]
+                                              .noPlate
+                                              .toString(),
+                                          style: const TextStyle(
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.bold),
+                                        ),
                                       ),
                                     ],
                                   ),
-                                ),
-                                subtitle: Padding(
-                                  padding: EdgeInsets.only(
-                                      left: MediaQuery.of(context).size.width *
-                                          0.05),
-                                  child: Column(children: [
-                                    const SizedBox(
-                                      height: 10,
-                                    ),
-                                    Row(
-                                      children: [
-                                        Text(
-                                          "${'Plate_Number'.tr()}: ",
-                                          style: const TextStyle(
-                                              fontSize: 18,
-                                              fontWeight: FontWeight.bold,
-                                              color: Colors.black),
-                                        ),
-                                        Flexible(
+                                  const SizedBox(height: 10),
+                                  Row(
+                                    children: [
+                                      Text(
+                                        "${'Chassis_Number'.tr()}: ",
+                                        style: const TextStyle(
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.black),
+                                      ),
+                                      Flexible(
                                           child: Text(
-                                            ref
-                                                .watch(userProvider)
-                                                .cars[index]
-                                                .noPlate
-                                                .toString(),
-                                            style: const TextStyle(
-                                                fontSize: 18,
-                                                fontWeight: FontWeight.bold),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    SizedBox(
-                                      height: 10,
-                                    ),
-                                    Row(
-                                      children: [
-                                        Text(
-                                          "${'Chassis_Number'.tr()}: ",
-                                          style: const TextStyle(
-                                              fontSize: 18,
-                                              fontWeight: FontWeight.bold,
-                                              color: Colors.black),
-                                        ),
-                                        Flexible(
-                                            child: Text(
-                                                ref
-                                                    .watch(userProvider)
-                                                    .cars[index]
-                                                    .noChassis
-                                                    .toString(),
+                                              ref
+                                                  .watch(userProvider)
+                                                  .cars[index]
+                                                  .noChassis
+                                                  .toString(),
+                                              style: const TextStyle(
+                                                  fontSize: 18,
+                                                  fontWeight:
+                                                      FontWeight.bold))),
+                                    ],
+                                  ),
+                                  //TODO ADD COLOR HERE
+                                  (ref.watch(userProvider).cars[index].color !=
+                                          null)
+                                      ? Container()
+                                      : Row(
+                                          children: [
+                                            Text("Color".tr(),
                                                 style: const TextStyle(
-                                                    fontSize: 18,
+                                                    color: Colors.black,
+                                                    fontSize: 19,
                                                     fontWeight:
-                                                        FontWeight.bold))),
-                                      ],
-                                    ),
-                                    //TODO ADD COLOR HERE
-                                    (ref
-                                                .watch(userProvider)
-                                                .cars[index]
-                                                .color !=
-                                            null)
-                                        ? Container()
-                                        : Row(
-                                            children: [
-                                              Text("Color".tr(),
-                                                  style: const TextStyle(
-                                                      color: Colors.black,
-                                                      fontSize: 19,
-                                                      fontWeight:
-                                                          FontWeight.bold)),
-                                            ],
-                                          ),
-                                  ]),
-                                ),
+                                                        FontWeight.bold)),
+                                          ],
+                                        ),
+                                ]),
                               ),
                             ),
                           ),
@@ -248,26 +237,6 @@ class _State extends ConsumerState<ViewCars> {
           ),
         ));
   }
-
-  // deleteCar(index) async {
-  //   String? chasis = ref.watch(userProvider).cars[index].noChassis;
-  //   final userNotifier = ref.watch(userProvider.notifier);
-  //   final Client carstate = ref.watch(userProvider);
-  //
-  //   //TODO check if this user is the owner of this car
-  //   //authorization
-  //   DatabaseReference cars = dbRef.child("cars").child(chasis!);
-  //   DatabaseReference userCars = dbRef
-  //       .child("users_cars")
-  //       .child(FirebaseAuth.instance.currentUser!.uid)
-  //       .child(chasis);
-  //   userCars.set(false);
-  //   ref
-  //       .watch(userProvider.notifier)
-  //       .removeCar(ref.watch(userProvider).cars[index]);
-  //   // userNotifier.removeCar(carstate.cars);
-  //   cars.remove();
-  // }
 
   deleteCarAllUsers(index) async {
     String? chasis = ref.watch(userProvider).cars[index].noChassis;
@@ -282,4 +251,3 @@ class _State extends ConsumerState<ViewCars> {
         .removeCar(ref.watch(userProvider).cars[index]);
   }
 }
-//TODO: @Mohmaed H, when car is deleted the Owner or the car should be deleted

@@ -260,7 +260,7 @@ stt38c5j0s
               value.loc = CustomLocation(
                   latitude: map['latitude'], longitude: map['longitude']);
               if (value is Mechanic) {
-                // rsaNotifier.onFindNewMechanic(value);
+                rsaNotifier.onFindNewMechanic(value);
 
                 nearbyMechanics.add(value);
                 rsaNotifier.assignNearbyMechanics(nearbyMechanics);

@@ -14,6 +14,7 @@ Widget mapMechanicToFullWidget(Mechanic mec) {
     serviceProviderPhoneNumber: mec.phoneNumber,
     serviceProviderRating: mec.rating,
     serviceProviderAddress: mec.address,
+    avatar: mec.avatar,
   );
 }
 
@@ -26,6 +27,7 @@ Widget mapTowProviderToFullWidget(TowProvider prov) {
     serviceProviderPhoneNumber: prov.phoneNumber,
     serviceProviderRating: prov.rating,
     serviceProviderAddress: prov.address,
+    avatar: prov.avatar,
   );
 }
 
@@ -67,9 +69,8 @@ class ServicesProviderWiget extends StatelessWidget {
           children: [
             SizedBox(height: MediaQuery.of(context).size.height * 0.04),
             CircleAvatar(
-              backgroundImage: Image.network(avatar ??
-                      "https://www.biography.com/.image/ar_1:1%2Cc_fill%2Ccs_srgb%2Cfl_progressive%2Cq_auto:good%2Cw_1200/MTY3MDUxMjkzMjI1OTIwMTcz/brad-pitt-attends-the-premiere-of-20th-century-foxs--square.jpg")
-                  .image,
+              backgroundImage: NetworkImage(avatar ??
+                      "https://cdn.icon-icons.com/icons2/1378/PNG/512/avatardefault_92824.png"),
               radius: 35,
             ),
             Container(
@@ -305,14 +306,14 @@ class ServicesProviderCard extends StatelessWidget {
 
   Widget getContent() {
     return SizedBox(
-      height: 200,
+      height: 250,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           CircleAvatar(
             backgroundImage: Image.network(avatar ??
-                    "https://www.biography.com/.image/ar_1:1%2Cc_fill%2Ccs_srgb%2Cfl_progressive%2Cq_auto:good%2Cw_1200/MTY3MDUxMjkzMjI1OTIwMTcz/brad-pitt-attends-the-premiere-of-20th-century-foxs--square.jpg")
+                    "https://cdn.icon-icons.com/icons2/1378/PNG/512/avatardefault_92824.png")
                 .image,
             radius: 25,
           ),
