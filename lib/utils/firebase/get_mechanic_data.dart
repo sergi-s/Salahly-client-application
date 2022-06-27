@@ -23,7 +23,7 @@ Future getMechanicData(String id) async {
     avatar = (ds.child("avatar").value).toString();
   }
 
-  double? rating;
+  double? rating = 1;
   if (ds.child("rating").value != null) {
     double count =
         toDouble((ds.child("rating").child("count").value).toString());

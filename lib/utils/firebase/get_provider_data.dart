@@ -7,14 +7,17 @@ import 'package:string_validator/string_validator.dart';
 Future getProviderData(String id, {String? rsaID}) async {
   // FirebaseEmulatorScreen().readmsg();
   DataSnapshot ds = await dbRef.child("users").child(id).get();
-
+String name = "name";
+if(ds.child("name").value!=null){
+  name = (ds.child("name").value).toString();
+}
   String avatar =
       "https://cdn.icon-icons.com/icons2/1378/PNG/512/avatardefault_92824.png";
   if ((ds.child("avatar").value) != null) {
     avatar = (ds.child("avatar").value).toString();
   }
 
-  double? rating;
+  double rating = 1;
   if (ds.child("rating").value != null) {
     double count =
         toDouble((ds.child("rating").child("count").value).toString());
@@ -43,7 +46,7 @@ Future getProviderData(String id, {String? rsaID}) async {
       phoneNumber: (ds.child("phoneNumber").value).toString(),
       id: id,
       type: Type.provider,
-      name: (ds.child("name").value).toString(),
+      name: name,
       email: (ds.child("email").value).toString(),
       rating: rating,
       address: address,
