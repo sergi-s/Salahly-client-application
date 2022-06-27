@@ -284,7 +284,8 @@ class _SearchingMechanicProviderScreenState
 
     ref.watch(rsaProvider.notifier).assignUserLocation(widget.userLocation!);
     await rsaNotifier.requestRSA();
-    await rsaNotifier.searchNearbyMechanicsAndProviders();
+    // await rsaNotifier.searchNearbyMechanicsAndProviders();
+    await rsaNotifier.searchNearbyMechanicsAndProvidersSergi(rsaNotifier);
     ref.watch(salahlyClientProvider.notifier).assignRequest(
         ref.watch(rsaProvider).requestType!, ref.watch(rsaProvider).rsaID!);
     _getRsaDataStream();
