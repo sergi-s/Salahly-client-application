@@ -47,6 +47,7 @@ import 'screens/roadsideassistance/arrival.dart';
 
 class Routing {
   get router => GoRouter(
+        initialLocation: LoginSignupScreen.routeName,
         routes: <GoRoute>[
           GoRoute(
             //TESTING

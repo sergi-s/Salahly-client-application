@@ -218,7 +218,6 @@ class _State extends ConsumerState<ViewCars> {
                                                         FontWeight.bold))),
                                       ],
                                     ),
-                                    //TODO ADD COLOR HERE
                                     (ref
                                                 .watch(userProvider)
                                                 .cars[index]
