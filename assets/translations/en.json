@@ -217,5 +217,7 @@
   "initialReport": "Initial Report",
   "youAreAlreadyTheUser": "You Are Already TheUser",
   "who": "Requester",
-  "you": "YOu"
+  "you": "You",
+  "owned_cars_management": "Owned cars management",
+  "transferConfirmation": "Are you sure u want to confirm ownership transfer?"
 }

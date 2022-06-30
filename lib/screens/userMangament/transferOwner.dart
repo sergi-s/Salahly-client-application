@@ -1,18 +1,14 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:slahly/classes/models/client.dart';
-import 'package:slahly/screens/car_management/add_car_screen.dart';
-import '../../classes/models/car.dart';
-import '../../classes/provider/user_data.dart';
-import '../../main.dart';
+import 'package:slahly/classes/provider/user_data.dart';
+import 'package:slahly/main.dart';
 
 class TransferOwner extends ConsumerStatefulWidget {
-  static final routeName = "/transferOwner";
+  static const routeName = "/transferOwner";
 
   @override
   _State createState() => _State();
@@ -39,15 +35,14 @@ class _State extends ConsumerState<TransferOwner> {
 
   DatabaseReference user = dbRef.child("users");
   String dropdownvalue = 'Choose car';
-  var items = ['lada', 'bmw', 'ferari', 'btngan'];
 
   Future showAlertbox(context) {
     return showDialog(
       context: context,
       barrierDismissible: false,
       builder: (context) => AlertDialog(
-        title: Text('Result'.tr()),
-        content: Text('are you sure u want to+ confirm ownership transfer'),
+        title: const Text('Result').tr(),
+        content: const Text('transferConfirmation').tr(),
         actions: [
           ElevatedButton(
               onPressed: () {
@@ -71,9 +66,6 @@ class _State extends ConsumerState<TransferOwner> {
   Widget build(
     BuildContext context,
   ) {
-    final Client carstate = ref.watch(userProvider);
-
-    final userNotifier = ref.watch(userProvider.notifier);
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: const Color(0xFFd1d9e6),
@@ -191,11 +183,13 @@ class _State extends ConsumerState<TransferOwner> {
               ),
               Row(
                 children: [
-                  CircleAvatar(
-                    radius: 30.0,
-                    backgroundImage: NetworkImage(avatar ?? "sad"),
-                    backgroundColor: Colors.transparent,
-                  ),
+                  (avatar != null)
+                      ? CircleAvatar(
+                          radius: 30.0,
+                          backgroundImage: NetworkImage(avatar!),
+                          backgroundColor: Colors.transparent,
+                        )
+                      : Container(),
                   const SizedBox(width: 20),
                   Text(email!, style: TextStyle(fontSize: 25))
                 ],
@@ -209,42 +203,29 @@ class _State extends ConsumerState<TransferOwner> {
                     width: 300,
                     child: Center(
                       child: TextButton(
-                          child: Text("Confirm_Transfer".tr(),
-                              style:
-                                  // <<<<<<< HEAD
-                                  TextStyle(fontSize: 15, color: Colors.white)),
+                          child: const Text("Confirm_Transfer",
+                                  style:
+                                      // <<<<<<< HEAD
+                                      TextStyle(
+                                          fontSize: 15, color: Colors.white))
+                              .tr(),
                           // >>>>>>> 931e111d966e6532a25d6451b6fa85ee81a45bd7
                           style: ButtonStyle(
-                              padding: MaterialStateProperty.all<EdgeInsets>(
-                                  EdgeInsets.all(15)),
-                              foregroundColor: MaterialStateProperty.all<Color>(
-                                  Color(0xFF193566)),
-                              backgroundColor: MaterialStateProperty.all<Color>(
-                                  Color(0xFF193566)),
-                              shape: MaterialStateProperty.all(
-                                  RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(18.0),
-                                      side: BorderSide(
-                                          color: Color(0xFF193566))))),
+                            padding: MaterialStateProperty.all<EdgeInsets>(
+                                EdgeInsets.all(15)),
+                            foregroundColor: MaterialStateProperty.all<Color>(
+                                Color(0xFF193566)),
+                            backgroundColor: MaterialStateProperty.all<Color>(
+                                Color(0xFF193566)),
+                            shape: MaterialStateProperty.all(
+                                RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(18.0),
+                                    side:
+                                        BorderSide(color: Color(0xFF193566)))),
+                          ),
                           onPressed: () => showAlertbox(context)),
                     )),
               ),
-              // ElevatedButton(
-              //     onPressed: () {
-              //       // cardata();
-              //       getuser();
-              //     },
-              //     child: Text("dataa")),
-              // ElevatedButton(
-              //     onPressed: () {
-              //       context.push(AddCars.routeName);
-              //     },
-              //     child: Text("goooo")),
-              // ElevatedButton(
-              //     onPressed: () {
-              //       transferOwner(selected);
-              //     },
-              //     child: Text("transfer"))
             ]),
           ),
         ),
@@ -275,8 +256,6 @@ class _State extends ConsumerState<TransferOwner> {
 
           dropdownvalue = models[0].toString();
         });
-        print(models);
-        print(map);
       });
     });
   }
@@ -297,9 +276,6 @@ class _State extends ConsumerState<TransferOwner> {
             .removeCar(ref.watch(userProvider).cars[i]);
       }
     }
-    // ref
-    //     .watch(userProvider.notifier)
-    //     .removeCar(ref.watch(userProvider).cars[index]);
   }
 
   getuser() async {
@@ -328,13 +304,7 @@ class _State extends ConsumerState<TransferOwner> {
           found = true;
         });
       }
-      print(subId);
-      print(avatar);
-      print(email);
-
-      // user.child("cars").orderByChild("model").equalTo(dropdownvalue).;
     });
-    print(items);
   }
 }
 

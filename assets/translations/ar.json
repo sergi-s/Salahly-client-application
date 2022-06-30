@@ -218,5 +218,7 @@
   "initialReport": "تقرير مبدئي",
   "youAreAlreadyTheUser": "انت بالفعل مالك السياره",
   "who": "الطالب",
-  "you": "انت"
+  "you": "انت",
+  "Owned_cars_management": "إدارة السيارات المملوكة",
+  "transferConfirmation": "هل أنت متأكد أنك تريد تأكيد نقل الملكية؟"
 }

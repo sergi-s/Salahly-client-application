@@ -13,7 +13,7 @@ if(ds.child("name").value!=null){
 }
   String avatar =
       "https://cdn.icon-icons.com/icons2/1378/PNG/512/avatardefault_92824.png";
-  if ((ds.child("avatar").value) != null) {
+  if ((ds.child("avatar").value) != null && (ds.child("avatar").value) != '') {
     avatar = (ds.child("avatar").value).toString();
   }
 
@@ -25,15 +25,15 @@ if(ds.child("name").value!=null){
     rating =
         toDouble((ds.child("rating").child("sum").value).toString()) / count;
   }
-  String address = "address";
+  String address = "address_";
   if ((ds.child("address").value) != null) {
-    avatar = (ds.child("address").value).toString();
+    address = (ds.child("address").value).toString();
   }
   String? estimatedTime;
   print("estimatedTime");
   if(rsaID!=null){
   DataSnapshot tp =
-        await dbRef.child("providersRequests").child(id).child(rsaID!).get();
+        await dbRef.child("providersRequests").child(id).child(rsaID).get();
     if (tp.value != null) {
       estimatedTime = tp.child("estimatedTime").value.toString();
       print(tp.value);

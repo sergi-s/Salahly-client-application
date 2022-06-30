@@ -1,16 +1,9 @@
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_geofire/flutter_geofire.dart';
-import 'package:go_router/go_router.dart';
-import 'package:http/http.dart' as http;
 import 'package:slahly/classes/firebase/nearbylocations.dart';
-import 'package:slahly/classes/firebase/roadsideassistance/roadsideassistance.dart';
 import 'package:slahly/classes/models/location.dart';
 import 'package:slahly/classes/models/mechanic.dart';
 import 'package:slahly/classes/models/towProvider.dart';
-import 'package:slahly/main.dart';
 
 class HomeScreen extends StatefulWidget {
   static final routeName = "/homescreen";

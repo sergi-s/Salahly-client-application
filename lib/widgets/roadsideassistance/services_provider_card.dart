@@ -61,6 +61,9 @@ class ServicesProviderWiget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print("asdasdasdasdas");
+    print(avatar);
+    print(serviceProviderAddress);
     return DefaultTextStyle(
       style: const TextStyle(fontSize: 20, color: Color(0xFF193566)),
       child: Column(
@@ -69,8 +72,10 @@ class ServicesProviderWiget extends StatelessWidget {
           children: [
             SizedBox(height: MediaQuery.of(context).size.height * 0.04),
             CircleAvatar(
-              backgroundImage: NetworkImage(avatar ??
-                      "https://cdn.icon-icons.com/icons2/1378/PNG/512/avatardefault_92824.png"),
+              backgroundImage: NetworkImage((avatar != "")
+                  ? avatar ??
+                      "https://cdn.icon-icons.com/icons2/1378/PNG/512/avatardefault_92824.png"
+                  : "https://cdn.icon-icons.com/icons2/1378/PNG/512/avatardefault_92824.png"),
               radius: 35,
             ),
             Container(
