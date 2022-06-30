@@ -13,9 +13,11 @@ import '../../classes/models/car.dart';
 
 class AddSubowner extends ConsumerStatefulWidget {
   static const routeName = "/addSubowner";
-
+  String? chasis;
   @override
   _State createState() => _State();
+
+  AddSubowner({this.chasis});
 }
 
 class _State extends ConsumerState<AddSubowner> {
@@ -53,7 +55,7 @@ class _State extends ConsumerState<AddSubowner> {
         actions: [
           ElevatedButton(
               onPressed: () {
-                addSubowner(selected);
+                addSubowner(widget.chasis);
                 Navigator.pop(context, true);
 
                 // ShowSnackbar(context, info, index);
@@ -132,11 +134,10 @@ class _State extends ConsumerState<AddSubowner> {
                 //         textAlign: TextAlign.center,
                 //       ),
                 //     ]),
-                const SizedBox(
-                  height: 100,
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.1,
                 ),
-                const SizedBox(width: 50),
-                const SizedBox(height: 20),
+
                 Row(children: [
                   Container(
                     width: MediaQuery.of(context).size.width * 0.6,
@@ -160,32 +161,32 @@ class _State extends ConsumerState<AddSubowner> {
                     child: const Icon(Icons.search),
                   ),
                 ]),
-                const SizedBox(height: 30),
-                Row(
-                  children: [
-                    Text('Choose_Car'.tr(),
-                        style:
-                            const TextStyle(fontSize: 25, color: Colors.black)),
-                    const SizedBox(width: 20),
-                    DropdownButton<dynamic>(
-                      value: dropdownvalue,
-                      icon: const Icon(Icons.keyboard_arrow_down),
-                      items: models.map((dynamic items) {
-                        return DropdownMenuItem(
-                            value: items,
-                            child: Text(items,
-                                style: const TextStyle(
-                                    fontSize: 15, color: Colors.black)));
-                      }).toList(),
-                      onChanged: (dynamic? value) {
-                        setState(() {
-                          this.dropdownvalue = value!;
-                          selected = map[this.dropdownvalue];
-                        });
-                      },
-                    ),
-                  ],
-                ),
+                // const SizedBox(height: 30),
+                // Row(
+                //   children: [
+                //     Text('Choose_Car'.tr(),
+                //         style:
+                //             const TextStyle(fontSize: 25, color: Colors.black)),
+                //     const SizedBox(width: 20),
+                //     // DropdownButton<dynamic>(
+                //     //   value: dropdownvalue,
+                //     //   icon: const Icon(Icons.keyboard_arrow_down),
+                //     //   items: models.map((dynamic items) {
+                //     //     return DropdownMenuItem(
+                //     //         value: items,
+                //     //         child: Text(items,
+                //     //             style: const TextStyle(
+                //     //                 fontSize: 15, color: Colors.black)));
+                //     //   }).toList(),
+                //     //   onChanged: (dynamic? value) {
+                //     //     setState(() {
+                //     //       this.dropdownvalue = value!;
+                //     //       selected = map[this.dropdownvalue];
+                //     //     });
+                //     //   },
+                //     // ),
+                //   ],
+                // ),
                 const SizedBox(height: 20),
                 Row(
                   children: [
@@ -326,9 +327,9 @@ class _State extends ConsumerState<AddSubowner> {
   //   });
   // }
 
-  addSubowner(selected) async {
-    print("selected ${selected}");
-    DatabaseReference carsUsers = dbRef.child("cars_users").child(selected);
+  addSubowner(chasis) async {
+    print("selected ${widget.chasis}");
+    DatabaseReference carsUsers = dbRef.child("cars_users").child(chasis);
     DatabaseReference cars = dbRef.child("cars");
     DatabaseReference usersCars = dbRef.child("users_cars").child(subId!);
 
@@ -350,7 +351,7 @@ class _State extends ConsumerState<AddSubowner> {
               .child(FirebaseAuth.instance.currentUser!.uid)
               .child(subId!)
               .set(true);
-          usersCars.child(selected).set("true");
+          usersCars.child(chasis).set("true");
           context.pop();
         } else {
           print("add car");

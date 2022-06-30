@@ -21,6 +21,7 @@ class ManageSubowner extends ConsumerStatefulWidget {
 class _State extends ConsumerState<ManageSubowner> {
   @override
   void initState() {
+    // subowners.clear();
     showSubowner(widget.chasis);
     super.initState();
   }
@@ -261,7 +262,7 @@ class _State extends ConsumerState<ManageSubowner> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          context.push(AddSubowner.routeName);
+          context.push(AddSubowner.routeName, extra: widget.chasis);
         },
         child: const Icon(Icons.add),
         backgroundColor: Color(0xFF193566),
@@ -291,6 +292,8 @@ class _State extends ConsumerState<ManageSubowner> {
 
   showSubowner(chasis) async {
     subowners = [];
+    subowners.clear();
+
     DatabaseReference carsUsers = dbRef.child("cars_users").child(chasis);
     DatabaseReference users = dbRef.child("users").child("clients");
 
