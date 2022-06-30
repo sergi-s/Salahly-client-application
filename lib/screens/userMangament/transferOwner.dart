@@ -202,8 +202,8 @@ class _State extends ConsumerState<TransferOwner> {
                       ))
                 ],
               ),
-              const SizedBox(
-                height: 70,
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.17,
               ),
               Visibility(
                 visible: found,

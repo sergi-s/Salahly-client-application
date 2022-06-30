@@ -94,7 +94,8 @@ class Routing {
           ),
           GoRoute(
             path: AddSubowner.routeName,
-            builder: (context, state) => AddSubowner(),
+            builder: (context, state) =>
+                AddSubowner(chasis: state.extra! as String),
           ),
           GoRoute(
             path: SplashScreen.routeName,
