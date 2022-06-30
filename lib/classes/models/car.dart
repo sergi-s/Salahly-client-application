@@ -1,20 +1,23 @@
+import 'dart:ui';
+
 class Car {
   String? id;
   String? model;
-  String? color;
+  Color? color;
   String noPlate;
   String? noChassis;
   CarAccess? carAccess;
 
   List<String> usersId = [];
 
-  Car(
-      {this.id,
-      this.model,
-      this.color,
-      required this.noPlate,
-      this.noChassis,
-      this.carAccess});
+  Car({
+    this.id,
+    this.model,
+    this.color,
+    required this.noPlate,
+    this.noChassis,
+    this.carAccess,
+  });
 
   addSubOwner(String userID) {
     usersId.add(userID);
@@ -38,7 +41,7 @@ class Car {
 
   @override
   String toString() {
-    return "$model $noPlate";
+    return "model:$model\tnoPlate:$noPlate\tnoChassis:$noChassis";
   }
 }
 

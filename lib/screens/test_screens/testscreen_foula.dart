@@ -1,20 +1,20 @@
 import 'dart:async';
-import 'dart:convert';
-import 'dart:io';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:overlay_support/overlay_support.dart';
+import 'package:go_router/go_router.dart';
+import 'package:localstore/localstore.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:slahly/classes/firebase/nearbylocations.dart';
 import 'package:slahly/classes/firebase/roadsideassistance/roadsideassistance.dart';
 import 'package:slahly/classes/models/location.dart';
 import 'package:slahly/classes/models/mechanic.dart';
 import 'package:slahly/classes/models/towProvider.dart';
+import 'package:slahly/classes/provider/app_data.dart';
 import 'package:slahly/classes/provider/rsadata.dart';
-import 'package:go_router/go_router.dart';
 import 'package:slahly/main.dart';
 import 'package:slahly/screens/roadsideassistance/rsaconfirmationScreen.dart';
 import 'package:slahly/screens/roadsideassistance/searching_mechanic_provider_screen.dart';
@@ -53,6 +53,47 @@ class TestScreen_nearbymechanics_and_create_rsa extends ConsumerWidget {
           child: Column(
         children: [
           ElevatedButton(
+              onPressed: () async {
+                final _db = Localstore.instance;
+                final id = Localstore.instance.collection('test').doc().id;
+                final now = DateTime.now();
+                _db
+                    .collection('test')
+                    .doc(id)
+                    .set({'title': 'Todo t_itle', 'done': false});
+                final data = await _db.collection('test').get();
+                print(data);
+              },
+              child: const Text("test DB localStore")),
+          ElevatedButton(
+              onPressed: () async {
+                ref.watch(salahlyClientProvider.notifier).getSavedData();
+                final prefs = await SharedPreferences.getInstance();
+
+                print("${ref.watch(salahlyClientProvider).requestType}\n"
+                    "${ref.watch(salahlyClientProvider).requestID}\n"
+                    "${ref.watch(rsaProvider).rsaID}\n"
+                    "${ref.watch(salahlyClientProvider).appState}\n"
+                    "provider: ${prefs.getString("towProvider")}\n"
+                    "mechanic: ${prefs.getString("mechanic")}");
+
+                print("sad");
+              },
+              child: const Text("See App state")),
+          ElevatedButton(
+            onPressed: () {
+              ref.watch(rsaProvider.notifier).cancelRequest();
+              ref.watch(salahlyClientProvider.notifier).deAssignRequest();
+            },
+            child: Text("cancel request"),
+          ),
+          ElevatedButton(
+              onPressed: () {
+                ref.watch(rsaProvider.notifier).cancelRequest();
+                ref.watch(salahlyClientProvider.notifier).deAssignRequest();
+              },
+              child: const Text("Clear RSA")),
+          ElevatedButton(
             onPressed: () async {
               FirebaseAuth.instance.signOut();
               context.go(LoginSignupScreen.routeName);
@@ -84,7 +125,9 @@ class TestScreen_nearbymechanics_and_create_rsa extends ConsumerWidget {
             onPressed: () async {
               ref
                   .watch(rsaProvider.notifier)
-                  .searchNearbyMechanicsAndProviders();
+                  .searchNearbyMechanicsAndProvidersSergi(
+                      ref.watch(rsaProvider.notifier));
+              // .searchNearbyMechanicsAndProviders();
             },
             child: Text("Get mechanics and providers"),
           ),

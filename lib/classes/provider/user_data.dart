@@ -1,9 +1,8 @@
 import "package:flutter_riverpod/flutter_riverpod.dart";
 import 'package:slahly/abstract_classes/user.dart';
-import "package:slahly/classes/models/client.dart";
-
-import 'package:slahly/classes/models/location.dart';
 import 'package:slahly/classes/models/car.dart';
+import "package:slahly/classes/models/client.dart";
+import 'package:slahly/classes/models/location.dart';
 
 final StateNotifierProvider<ClientNotifier, Client> userProvider =
     StateNotifierProvider<ClientNotifier, Client>((ref) => ClientNotifier());
@@ -27,7 +26,17 @@ class ClientNotifier extends StateNotifier<Client> {
 
   assignAddress(String address) => state = state.copyWith(address: address);
 
-  assignCar(Car car) => state = state.copyWith(cars: [...state.cars, car]);
+  assignCar(Car car) {
+    bool flag = true;
+    for (int i = 0; i < state.cars.length; i++) {
+      if (state.cars[i].noChassis == car.noChassis) {
+        flag = false;
+      }
+    }
+    if (flag) {
+      state = state.copyWith(cars: [...state.cars, car]);
+    }
+  }
 
   removeCar(Car car) {
     // state = state.copyWith(cars: [
@@ -36,6 +45,10 @@ class ClientNotifier extends StateNotifier<Client> {
     // ]);
     state.cars.remove(car);
     state = state.copyWith(cars: state.cars);
+  }
+
+  clearCars() {
+    state = state.copyWith(cars: []);
   }
 
   assignAvatar(String avatarInf) {

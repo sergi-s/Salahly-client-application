@@ -1,28 +1,54 @@
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+import 'package:slahly/classes/provider/user_data.dart';
+import 'package:slahly/main.dart';
 
-class TransferOwner extends StatefulWidget {
-  static final routeName = "/transferOwner";
+import '../../classes/models/car.dart';
+
+class TransferOwner extends ConsumerStatefulWidget {
+  static const routeName = "/transferOwner";
 
   @override
-  State<TransferOwner> createState() => _TransferOwnerState();
+  _State createState() => _State();
 }
 
-class _TransferOwnerState extends State<TransferOwner> {
-  String dropdownvalue = 'bmw';
-  var items = ['lada', 'bmw', 'ferari', 'btngan'];
+class _State extends ConsumerState<TransferOwner> {
+  @override
+  void initState() {
+    cardata();
+    super.initState();
+  }
+
+  final TextEditingController getUserController = TextEditingController();
+
+  String? email = "";
+  String? subId;
+  String? avatar;
+  List models = [];
+  List chasis = [];
+  String? sub;
+  bool found = false;
+  String? selected;
+  Map<String, String> map = new Map();
+
+  DatabaseReference user = dbRef.child("users");
+  String dropDownValue = 'Choose car';
 
   Future showAlertbox(context) {
     return showDialog(
       context: context,
       barrierDismissible: false,
       builder: (context) => AlertDialog(
-        title: Text('Result'.tr()),
-        content: Text('are you sure u want to+ confirm ownership transfer'),
+        title: const Text('Result').tr(),
+        content: const Text('transferConfirmation').tr(),
         actions: [
           ElevatedButton(
               onPressed: () {
+                transferOwner(selected);
                 Navigator.pop(context, true);
 
                 // ShowSnackbar(context, info, index);
@@ -44,112 +70,246 @@ class _TransferOwnerState extends State<TransferOwner> {
       resizeToAvoidBottomInset: false,
       backgroundColor: const Color(0xFFd1d9e6),
       appBar: AppBar(
-        elevation: 0,
-        bottomOpacity: 0.0,
+        elevation: 0.0,
         backgroundColor: const Color(0xFF193566),
-        // title: Center(
-        //   child: Text('Manage Ownership',
-        //       style: TextStyle(fontSize: 30, color: Colors.black)),
-        // ),
-        title: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: const []),
+        leading: IconButton(
+          icon: const Icon(
+            Icons.arrow_back,
+            color: Colors.white,
+          ),
+          onPressed: () {
+            context.pop();
+          },
+        ),
+        title:
+            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+          Text(""),
+          Text(
+            "transfer_ownership".tr(),
+            style: const TextStyle(
+              fontSize: 22,
+              letterSpacing: 1,
+              color: Colors.white,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+          Image.asset(
+            'assets/images/logo white.png',
+            fit: BoxFit.contain,
+            height: 30,
+          ),
+        ]),
       ),
       body: CustomPaint(
         child: Container(
           width: MediaQuery.of(context).size.width,
           height: MediaQuery.of(context).size.height,
-          padding: const EdgeInsets.only(left: 40, right: 40),
+          padding:
+              EdgeInsets.only(left: MediaQuery.of(context).size.width * 0.15),
           child: Form(
             child: Column(children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Text(
-                    "Transfer Ownership".tr(),
-                    style: TextStyle(fontSize: 35, color: Colors.white),
-                    textAlign: TextAlign.center,
+              // Row(
+              //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              //   children: [
+              //     Text(
+              //       "transfer_ownership".tr(),
+              //       style: TextStyle(fontSize: 30, color: Colors.white),
+              //       textAlign: TextAlign.center,
+              //     ),
+              //   ],
+              // ),
+              const SizedBox(height: 120),
+              Row(children: [
+                Container(
+                  width: MediaQuery.of(context).size.width * 0.6,
+                  child: TextFormField(
+                    controller: getUserController,
+                    decoration: InputDecoration(
+                      labelText: "enter_new_owner_email".tr(),
+                      filled: true,
+                      errorText:
+                          email != getUserController.text ? "invalid" : null,
+                      fillColor: const Color(0xFFd1d9e6).withOpacity(0.1),
+                    ),
                   ),
-                ],
-              ),
-              SizedBox(
-                height: 120,
-              ),
-              TextFormField(
-                decoration:
-                    InputDecoration(labelText: "Enter New Ownership email"),
-              ),
-              SizedBox(
-                height: 50,
-              ),
+                ),
+                FloatingActionButton(
+                  backgroundColor: Color(0xFF193566),
+                  onPressed: () {
+                    getuser();
+                  },
+                  tooltip: 'search',
+                  child: const Icon(Icons.search),
+                ),
+              ]),
+
+              const SizedBox(height: 50),
               Row(
                 children: [
-                  Text('Choose_Car'.tr(),
-                      style: TextStyle(fontSize: 25, color: Colors.black)),
-                  SizedBox(width: 20),
-                  DropdownButton(
-                    value: dropdownvalue,
-                    icon: Icon(Icons.keyboard_arrow_down),
-                    items: items.map((String items) {
+                  const Text('Choose_Car',
+                          style: TextStyle(fontSize: 25, color: Colors.black))
+                      .tr(),
+                  const SizedBox(width: 20),
+                  DropdownButton<dynamic>(
+                    value: dropDownValue,
+                    icon: const Icon(Icons.keyboard_arrow_down),
+                    items: models.map((dynamic items) {
                       return DropdownMenuItem(
                           value: items,
                           child: Text(items,
-                              style: TextStyle(
-                                  fontSize: 20, color: Colors.black)));
+                              style: const TextStyle(
+                                  fontSize: 15, color: Colors.black)));
                     }).toList(),
-                    onChanged: (String? value) {
+                    onChanged: (dynamic? value) {
                       setState(() {
-                        this.dropdownvalue = value!;
+                        dropDownValue = value!;
+                        selected = map[dropDownValue];
                       });
                     },
                   ),
                 ],
               ),
-              SizedBox(
-                height: 30,
-              ),
+              const SizedBox(height: 15),
               Row(
                 children: [
-                  CircleAvatar(
-                    radius: 30.0,
-                    backgroundImage: NetworkImage(""),
-                    backgroundColor: Colors.blue,
-                  ),
-                  SizedBox(width: 50),
-                  Text("Aya Adel", style: TextStyle(fontSize: 25))
+                  (avatar != null)
+                      ? CircleAvatar(
+                          radius: 30.0,
+                          backgroundImage: NetworkImage(avatar!),
+                          backgroundColor: Colors.transparent,
+                        )
+                      : Container(),
+                  const SizedBox(width: 20),
+                  Text(
+                    email!,
+                    style: const TextStyle(
+                      fontSize: 16,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  )
                 ],
               ),
-              SizedBox(
-                height: 70,
-              ),
-              Container(
-                  width: 300,
-                  child: Center(
-                    child: TextButton(
-                        child: Text("Confirm_Transfer".tr(),
-                            style:
-                                // <<<<<<< HEAD
-                                TextStyle(fontSize: 15, color: Colors.white)),
-                        // >>>>>>> 931e111d966e6532a25d6451b6fa85ee81a45bd7
-                        style: ButtonStyle(
+              const SizedBox(height: 70),
+              Visibility(
+                visible: found,
+                child: Container(
+                    width: 300,
+                    child: Center(
+                      child: TextButton(
+                          child: const Text("Confirm_Transfer",
+                                  style: TextStyle(
+                                      fontSize: 15, color: Colors.white))
+                              .tr(),
+                          style: ButtonStyle(
                             padding: MaterialStateProperty.all<EdgeInsets>(
-                                EdgeInsets.all(15)),
+                                const EdgeInsets.all(15)),
                             foregroundColor: MaterialStateProperty.all<Color>(
-                                Color(0xFF193566)),
+                                const Color(0xFF193566)),
                             backgroundColor: MaterialStateProperty.all<Color>(
-                                Color(0xFF193566)),
+                                const Color(0xFF193566)),
                             shape: MaterialStateProperty.all(
                                 RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(18.0),
-                                    side: BorderSide(color: Colors.blue)))),
-                        onPressed: () => showAlertbox(context)),
-                  )),
+                                    side: const BorderSide(
+                                        color: Color(0xFF193566)))),
+                          ),
+                          onPressed: () => showAlertbox(context)),
+                    )),
+              ),
             ]),
           ),
         ),
-        painter: HeaderCurvedContainer(),
       ),
     );
+  }
+
+  cardata() async {
+    DatabaseReference cars = dbRef.child("cars");
+    DatabaseReference carsUsers = dbRef.child("users_cars");
+
+    carsUsers
+        .child(FirebaseAuth.instance.currentUser!.uid)
+        .orderByValue()
+        .equalTo("true")
+        .once()
+        .then((event) {
+      final dataSnapshot = event.snapshot;
+      print("carssss${dataSnapshot.value.toString()}");
+      for (var element in dataSnapshot.children) {
+        print(element.key.toString());
+        cars.child(element.key.toString()).once().then((value) {
+          final carsSnapshot = value.snapshot;
+          print(carsSnapshot.value.toString());
+          // print(
+          //     "colooooooooooooor ${carsSnapshot.child("color").value.toString()}");
+          // color = carsSnapshot.child("color").value.toString();
+          // color = color.toString().substring(6);
+          // color = color.toString().substring(0, color.toString().length - 1);
+          // print("ahooooooooooooooooooooooo${color}");
+          CarAccess carAccess = CarAccess.sub;
+          if (carsSnapshot.child("owner").value.toString() ==
+              FirebaseAuth.instance.currentUser!.uid) {
+            carAccess = CarAccess.owner;
+            setState(() {
+              models.add(carsSnapshot.child("model").value.toString());
+              chasis.add(carsSnapshot.key);
+              for (var i = 0; i < models.length; i++) {
+                map[models[i]] = chasis[i];
+              }
+              dropDownValue = models[0].toString();
+            });
+          }
+          // dropDownValue = models[0].toString();
+        });
+      }
+    });
+  }
+
+  transferOwner(selected) {
+    DatabaseReference cars = dbRef.child("cars");
+    DatabaseReference carsUsers = dbRef.child("cars_users");
+    DatabaseReference Userscar = dbRef.child("users_cars");
+    cars.child(selected).update({"owner": subId});
+    carsUsers.child(selected).remove();
+    Userscar.child(FirebaseAuth.instance.currentUser!.uid)
+        .update({selected: "false"});
+    Userscar.child(subId!).child(selected).set("true");
+    for (int i = 0; i < ref.watch(userProvider).cars.length; i++) {
+      if (ref.watch(userProvider).cars[i].noChassis == selected) {
+        ref
+            .watch(userProvider.notifier)
+            .removeCar(ref.watch(userProvider).cars[i]);
+      }
+    }
+  }
+
+  getuser() async {
+    user
+        .child("clients")
+        .orderByChild("email")
+        .equalTo(getUserController.text)
+        .once()
+        .then((event) {
+      final dataSnapshot = event.snapshot;
+      print("read" + dataSnapshot.value.toString());
+      var x = dataSnapshot.value.toString();
+      x.trim();
+      var y = x.split(":");
+      String z = y[0];
+      String userId = z.replaceAll("{", "");
+      print(userId);
+
+      var data = dataSnapshot.value as Map;
+
+      if (data != null) {
+        setState(() {
+          email = data[userId]["email"];
+          avatar = data[userId]["image"];
+          subId = userId;
+          found = true;
+        });
+      }
+    });
   }
 }
 

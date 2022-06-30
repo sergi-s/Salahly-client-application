@@ -140,15 +140,12 @@ stt38c5j0s
 
         //latitude will be retrieved from map['latitude']
         //longitude will be retrieved from map['longitude']
-        print("Inside getNearbyMechanicsAndProviders::333");
         switch (callBack) {
           case Geofire.onKeyEntered:
-            print("Inside getNearbyMechanicsAndProviders::33");
             getMechanicOrProviderData(map["key"]).then((value) {
               value.loc = CustomLocation(
                   latitude: map['latitude'], longitude: map['longitude']);
               if (value is Mechanic) {
-                print("Inside getNearbyMechanicsAndProviders::3");
                 rsa.onFindNewMechanic(value);
 
                 nearbyMechanics.add(value);
@@ -156,9 +153,11 @@ stt38c5j0s
 
                 print("Added mechanic: " + value.name!);
               } else if (value is TowProvider) {
-                nearbyProviders.add(value);
                 rsa.onFindNewProvider(value);
+
+                nearbyProviders.add(value);
                 rsa.assignNearbyProviders(nearbyProviders);
+
                 print("Added provider: " + value.name!);
               } else {
                 print("Not mechanic and not provider");
@@ -236,6 +235,121 @@ stt38c5j0s
 
     // .onDone(() {print("FINISHED PROVIDERS");});
   }
+
+
+  static getNearbyMechanicsAndProvidersFoula(
+      double lat, double long, double radius, RSANotifier rsaNotifier) async {
+    List<TowProvider> nearbyProviders = [];
+    List<Mechanic> nearbyMechanics = [];
+    await _initializeGeoFireOnAvailable();
+
+    // final rsa = ref.watch();
+
+    ///TODO insert user location
+    print("Inside getNearbyMechanicsAndProviders::");
+    Geofire.queryAtLocation(lat, long, radius)?.listen((map) {
+      print("Inside getNearbyMechanicsAndProviders::2");
+      if (map != null) {
+        var callBack = map['callBack'];
+
+        //latitude will be retrieved from map['latitude']
+        //longitude will be retrieved from map['longitude']
+        switch (callBack) {
+          case Geofire.onKeyEntered:
+            getMechanicOrProviderData(map["key"]).then((value) {
+              value.loc = CustomLocation(
+                  latitude: map['latitude'], longitude: map['longitude']);
+              if (value is Mechanic) {
+                rsaNotifier.onFindNewMechanic(value);
+
+                nearbyMechanics.add(value);
+                rsaNotifier.assignNearbyMechanics(nearbyMechanics);
+
+                print("Added mechanic: " + value.name!);
+              } else if (value is TowProvider) {
+                rsaNotifier.onFindNewProvider(value);
+
+                nearbyProviders.add(value);
+                rsaNotifier.assignNearbyProviders(nearbyProviders);
+
+                print("Added provider: " + value.name!);
+              } else {
+                print("Not mechanic and not provider");
+              }
+            });
+
+            break;
+
+          case Geofire.onKeyExited:
+            print("inside onKeyExited");
+            // keysRetrieved.remove(map["key"]);
+            for (var m in nearbyProviders) {
+              print(m.id == map["key"]);
+              if (m.id == map["key"]) {
+                nearbyProviders.remove(m);
+                rsaNotifier.assignNearbyProviders(nearbyProviders);
+                print("REMOVED provider: " + m.name.toString());
+                break;
+              }
+            }
+
+            for (var m in nearbyMechanics) {
+              print("IN nearbymechnaics");
+              print(m.id == map["key"]);
+              if (m.id == map["key"]) {
+                print("near by mech if condition");
+                nearbyMechanics.remove(m);
+                rsaNotifier.assignNearbyMechanics(nearbyMechanics);
+                print("ALL NEARBY mECHS${nearbyMechanics.toString()}");
+                print("REMOVED MECHANICS: " + m.name.toString());
+                break;
+              }
+              print("end IF");
+            }
+            break;
+
+          case Geofire.onKeyMoved:
+          // ///TODO to be tested
+          // for (var m in nearbyProviders) {
+          //   if (m.id == map["key"]) {
+          //     nearbyProviders.remove(m);
+          //     getMechanicOrProviderData(map["key"]).then((value) {
+          //       value.loc = CustomLocation(
+          //           latitude: map['latitude'], longitude: map['longitude']);
+          //       nearbyProviders.add(value);
+          //       rsa.assignNearbyProviders(nearbyProviders);
+          //       print("Update provider: " + m.name.toString());
+          //     });
+          //   }
+          // }
+          // for (var m in nearbyMechanics) {
+          //   if (m.id == map["key"]) {
+          //     nearbyMechanics.remove(m);
+          //     getMechanicOrProviderData(map["key"]).then((value) {
+          //       value.loc = CustomLocation(
+          //           latitude: map['latitude'], longitude: map['longitude']);
+          //       nearbyMechanics.add(value);
+          //       rsa.assignNearbyMechanics(nearbyMechanics);
+          //       print("Added provider: " + m.name.toString());
+          //     });
+          //   }
+          // }
+            print("a7eh update");
+            break;
+
+          case Geofire.onGeoQueryReady:
+          // All Intial Data is loaded
+            print("sad");
+            print(map["result"]);
+
+            break;
+        }
+      }
+    });
+
+    // .onDone(() {print("FINISHED PROVIDERS");});
+  }
+
 
   static _getNearbyMechanics(
       double lat, double long, double radius, Ref ref) async {

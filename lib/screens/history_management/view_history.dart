@@ -1,195 +1,179 @@
+import 'dart:async';
+
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-
-import 'package:slahly/classes/models/location.dart';
-import 'package:slahly/classes/models/towProvider.dart';
-import 'package:slahly/abstract_classes/user.dart';
-
-
-
-import 'package:slahly/classes/models/road_side_assistance.dart';
-
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+import 'package:localstore/localstore.dart';
+import 'package:slahly/classes/firebase/roadsideassistance/roadsideassistance.dart';
+import 'package:slahly/classes/provider/ongoing_data.dart';
+import 'package:slahly/classes/provider/user_data.dart';
 import 'package:slahly/screens/history_management/accordion.dart';
 import 'package:slahly/screens/history_management/add_custom_history.dart';
+import 'package:slahly/screens/roadsideassistance/request_full_data_screen.dart';
 
+class ViewHistory extends ConsumerStatefulWidget {
+  static const routeName = "/viewhistory";
 
-
-
-class ViewHistory extends StatelessWidget {
-  static final routeName = "/viewhistory";
   ViewHistory({Key? key}) : super(key: key);
 
+  @override
+  ConsumerState<ViewHistory> createState() => _ViewHistoryState();
+}
+//TODO: make the background color backgroundColor: const Color(0xFFd1d9e6), for both history and custom history
+class _ViewHistoryState extends ConsumerState<ViewHistory> {
+  final db = Localstore.instance;
 
+  StreamSubscription<Map<String, dynamic>>? _subscription;
+  final _items = <String, Map>{};
 
-  List<RSA> rsaHistory=[
-  ];
+  @override
+  void initState() {
+    Future.delayed(Duration.zero, () async {
+      //History
+      ref
+          .watch(historyProvider.notifier)
+          .assignRequests(ref.watch(userProvider).cars);
+
+      //Custom History
+      final data = await db.collection('customHistory').get();
+      // print("the saved custom history $data");
+
+      _subscription = db.collection('customHistory').stream.listen((event) {
+        setState(() {
+          // print("event-=> ${event}");
+          Map item = {};
+          item['id'] = event['id'];
+          item['carNoPlate'] = event['carNoPlate'];
+          item['dateTime'] = event['dateTime'];
+          item['systemName'] = event['systemName'];
+          item['partName'] = event['partName'];
+          item['description'] = event['description'];
+          item['actualDistance'] = event['actualDistance'];
+          item['distance'] = event['distance'];
+          item['partCost'] = event['partCost'];
+          item['maintenanceCost'] = event['maintenanceCost'];
+          item['otherCost'] = event['otherCost'];
+
+          _items.putIfAbsent(item['id'], () => item);
+        });
+      });
+    });
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    if (_subscription != null) _subscription?.cancel();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-        home: DefaultTabController(
-          length: 2,
-          child: Scaffold(
-            backgroundColor: const Color(0xFFd1d9e6),
-            appBar: AppBar(
-              backgroundColor: const Color(0xFF193566),
-              bottom: const TabBar(
-                tabs: [
-                  Tab(text: "History"),
-                  Tab(text: "Custom History"),
-                ],
-              ),
-            ),
-            body: TabBarView(
-              children: [
-                Builder(
-                    builder: (context) {
-                      return Column(
-                        children: [
-                          SizedBox(height: 10),
-                          ListView.builder(
-                            itemBuilder: (BuildContext, index) {
-                              return Accordion(
-                                  providers[index].email.toString(),
-                                  providers[index].avatar.toString(),
-                                  providers[index].phoneNumber.toString(),
-                                  providers[index].name.toString(),
-                                  providers[index].loc!.address.toString(),
-                                  providers[index].type!,
-                                  false);
-                            },
-                            itemCount: providers.length,
-                            shrinkWrap: true,
-                            padding: EdgeInsets.all(5),
-                            scrollDirection: Axis.vertical,
-                          ),
-                        ],
-                      );
-                    }
-                ),
-
-
-                Builder(
-                    builder: (context) {
-                      return Column(
-                        children: [
-                          SizedBox(height: 10),
-                          ListView.builder(
-                            itemBuilder: (BuildContext, index) {
-                              return Accordion(
-                                  providers[index].email.toString(),
-                                  providers[index].avatar.toString(),
-                                  providers[index].phoneNumber.toString(),
-                                  providers[index].name.toString(),
-                                  providers[index].loc!.address.toString(),
-                                  providers[index].type!,
-                                  false);
-                            },
-                            itemCount: providers.length,
-                            shrinkWrap: true,
-                            padding: EdgeInsets.all(5),
-                            scrollDirection: Axis.vertical,
-                          ),
-                          FloatingActionButton(
-                            backgroundColor: const Color(0xFF193566),
-                            foregroundColor: Colors.white,
-                            onPressed: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(builder: (context) => AddCustomHistory()));
-                            },
-                            child: Icon(Icons.add),)
-
-                        ],
-                      );
-
-                    }
-
-                ),
-
-
-              ],
-            ),
+    return DefaultTabController(
+      length: 2,
+      child: Scaffold(
+        backgroundColor: const Color(0xFFd1d9e6),
+        appBar: AppBar(
+          backgroundColor: const Color(0xFF193566),
+          bottom: TabBar(
+            tabs: [
+              Tab(text: "history".tr()),
+              Tab(text: "customHistory".tr()),
+            ],
           ),
-        ));
+        ),
+        body: TabBarView(
+
+          children: [
+            Builder(builder: (context) {
+              return ListView.builder(
+                itemBuilder: (BuildContext context, index) {
+
+                  if (ref
+                          .watch(historyProvider)[
+                              (ref.watch(historyProvider).length - 1) - index]
+                          .state !=
+                      RSAStates.done) {
+                    return Container();
+                  }
+                  return GestureDetector(
+                    onTap: () {
+                      context.push(RequestFullDataScreen.routeName,
+                          extra: ref.watch(historyProvider)[
+                              (ref.watch(historyProvider).length - 1) - index]);
+                    },
+                    child: DefaultTextStyle(
+                      style: const TextStyle(color: Color(0xFF193566)),
+                      child: Accordion(
+                          rsa: ref.watch(historyProvider)[
+                              (ref.watch(historyProvider).length - 1) - index]),
+                    ),
+                  );
+
+                },
+                itemCount: ref.watch(historyProvider).length,
+                shrinkWrap: true,
+                padding: const EdgeInsets.all(5),
+                scrollDirection: Axis.vertical,
+              );
+            }),
+            Builder(builder: (context) {
+              return Scaffold(
+
+                backgroundColor: const Color(0xFFd1d9e6),
+
+                body: ListView.builder(
+                    itemCount: _items.length,
+                    shrinkWrap: true,
+                    padding: const EdgeInsets.all(5),
+                    scrollDirection: Axis.vertical,
+                    itemBuilder: (BuildContext context, index) {
+                      final key = _items.keys.elementAt(index);
+                      final item = _items[key]!;
+                      return CustomHistoryTile(
+                        carNoPlate: item['carNoPlate'],
+                        dateTime: DateTime.parse(item['dateTime']),
+                        systemName: item['systemName'],
+                        partId: item['partId'],
+                        description: item['description'],
+                        partName: item['partName'],
+                        actualDistance: item['actualDistance'],
+                        distance: item['distance'],
+                        partCost: item['partCost'],
+                        maintenanceCost: item['maintenanceCost'],
+                        otherCost: item['otherCost'],
+                        delete: IconButton(
+                          icon: const Icon(Icons.delete),
+                          onPressed: () {
+                            setState(() {
+                              db
+                                  .collection('customHistory')
+                                  .doc(item['id'])
+                                  .delete();
+                              _items.remove(item['id']);
+                            });
+                          },
+                        ),
+                      );
+                    }),
+                floatingActionButton: ElevatedButton(
+                  child: const Icon(Icons.add),
+                  onPressed: () {
+                    context.push(AddCustomHistory.routeName);
+                  },
+                  style: ElevatedButton.styleFrom(
+                    shape: const CircleBorder(),
+                    primary: const Color(0xFF193566),
+                    padding: const EdgeInsets.all(15),elevation: 5,
+
+                  ),
+                ),
+              );
+            }),
+          ],
+        ),
+      ),
+    );
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-List<TowProvider> providers = [
-  TowProvider(
-      nationalID: '123132',
-      name: 'Report 1',
-      phoneNumber: 'MG 6',
-      loc: CustomLocation(
-          address:
-          "Factorya, shar3 45 odam mtafy 12311321312312hasdhdashjss221",
-          longitude: 11,
-          latitude: 11),
-      avatar: 'https://www.woolha.com/media/2020/03/eevee.png',
-      email: 'email@yahoo.com',
-      type: Type.provider),
-  TowProvider(
-      nationalID: '123132',
-      name: 'Report 2',
-      phoneNumber: 'Bmw 320I',
-      loc: CustomLocation(
-          address:
-          "Factorya, shar3 45 odam mtafy 12311321312312hasdhdashjss221",
-          longitude: 11,
-          latitude: 11),
-      avatar: 'https://www.woolha.com/media/2020/03/eevee.png',
-      email: 'email@yahoo.com',
-      type: Type.provider),
-];
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

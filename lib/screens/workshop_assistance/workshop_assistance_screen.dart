@@ -1,446 +1,514 @@
 import 'dart:async';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:geolocator/geolocator.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:slahly/classes/models/location.dart';
-import 'package:slahly/abstract_classes/user.dart';
-import 'package:slahly/classes/models/towProvider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:slahly/classes/firebase/roadsideassistance/roadsideassistance.dart';
+import 'package:slahly/classes/provider/app_data.dart';
 import 'package:slahly/classes/provider/rsadata.dart';
-import 'package:slahly/utils/location/getuserlocation.dart';
-import 'package:slahly/utils/location/geocoding.dart';
+import 'package:slahly/utils/constants.dart';
+import 'package:slahly/utils/firebase/get_mechanic_data.dart';
+import 'package:slahly/utils/firebase/get_provider_data.dart';
+import 'package:slahly/widgets/workshopassistant/choose_sliders.dart';
+import 'package:slahly/widgets/dialogues/all_rejected.dart';
+import 'package:slahly/widgets/dialogues/confirm_cancellation.dart';
+import 'package:slahly/widgets/dialogues/none_found.dart';
+import 'package:slahly/widgets/dialogues/request_confirmation_dialogue.dart';
 import "package:slahly/widgets/dropOff/TextFieldOnMap.dart";
-
+import 'package:slahly/widgets/location/mapWidget.dart';
+import 'package:slahly/widgets/roadsideassistance/select_car_request.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
-import 'package:slahly/classes/firebase/roadsideassistance/roadsideassistance.dart';
-import 'package:slahly/classes/models/mechanic.dart';
-import 'package:slahly/widgets/WSA/choose_mech_slider.dart';
-import 'package:slahly/widgets/roadsideassistance/services_provider_card.dart';
-import 'package:slahly/utils/constants.dart';
-
-class WSAScreen extends StatefulWidget {
+class WSAScreen extends ConsumerStatefulWidget {
   static const String routeName = "/WSAScreen";
 
   const WSAScreen({Key? key}) : super(key: key);
 
   @override
-  State<WSAScreen> createState() => _WSAScreenState();
+  _WSAScreenState createState() => _WSAScreenState();
 }
 
-class _WSAScreenState extends State<WSAScreen> {
-  final Completer<GoogleMapController> _controllerGoogleMap = Completer();
-  late GoogleMapController newGoogleMapController;
+class _WSAScreenState extends ConsumerState<WSAScreen> {
+  GlobalKey<MapWidgetState> myMapWidgetState = GlobalKey();
 
-  static const double initialCameraZoom = 15;
-  double cameraZoom = 14;
-
-  // Current Location
-  // late Position currentPos;
-  late LatLng currentPos;
-  late CustomLocation currentCustomLoc;
-
-  Geolocator geoLocator = Geolocator();
-
-  //initial Camera position
-  final CameraPosition _kGooglePlex = const CameraPosition(
-    target: LatLng(30.0444, 31.2357),
-    zoom: initialCameraZoom,
-  );
-
-  //Markers
-  List<Marker> myMarkers = [];
-
-  @override
-  void initState() {
-    // initialLocation();
-    locatePosition();
-
-    super.initState();
-  }
-
-  bool needProvider = false;
+  bool needProvider = false, needMechanic = true;
   bool gotMechanics = false;
+  bool didRequest = false;
+
+  late StreamSubscription _myStream;
 
   final PanelController _pcMechanic = PanelController();
 
   final PanelController _pcTowProvider = PanelController();
 
+  final PanelController _pcServiceSlider = PanelController();
+
+  final PanelController _pcCarSlider = PanelController();
+
+  @override
+  void initState() {
+    Future.delayed(Duration.zero, () async {
+      // ref.watch(salahlyClientProvider.notifier).getSavedData();
+      final prefs = await SharedPreferences.getInstance();
+      print("YARAB ${prefs.getBool("needProvider")}");
+      print("didRequest${didRequest}");
+      if (prefs.getBool("needProvider") ?? false) {
+        setState(() {
+          needProvider = true;
+          ref.watch(rsaProvider.notifier).needTowProvider = true;
+        });
+      }
+
+      if (ref.watch(salahlyClientProvider).requestType == RequestType.WSA) {
+        // ref.watch(rsaProvider.notifier).searchNearbyMechanicsAndProviders();
+        ref.watch(rsaProvider.notifier).assignRequestType(RequestType.WSA);
+        ref.watch(rsaProvider.notifier).assignRequestID(
+            ref.watch(salahlyClientProvider).requestID.toString());
+        print("there is a onging request");
+        print("HELLO::${ref.watch(rsaProvider).rsaID}");
+        setState(() {
+          didRequest = true;
+
+          if (ref.watch(rsaProvider).mechanic != null) {
+            gotMechanics = true;
+          }
+        });
+        if (didRequest) _pcServiceSlider.open();
+        if (prefs.getString("mechanic") != null) {
+          ref.watch(rsaProvider.notifier).assignMechanic(
+              await getMechanicData(prefs.getString("mechanic")!), false);
+        }
+        if (prefs.getString("towProvider") != null) {
+          ref.watch(rsaProvider.notifier).assignProvider(
+              await getProviderData(prefs.getString("towProvider")!), false);
+        }
+        getAcceptedMechanic();
+      }
+    });
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Stack(
-      children: [
-        GoogleMap(
-          mapType: MapType.normal,
-          myLocationButtonEnabled: true,
-          // myLocationEnabled: true,
-          zoomGesturesEnabled: true,
-          zoomControlsEnabled: true,
-          initialCameraPosition: _kGooglePlex,
-          onMapCreated: (GoogleMapController controller) {
-            _controllerGoogleMap.complete(controller);
-            newGoogleMapController = controller;
-          },
-          markers: Set.from(myMarkers),
-          onTap: _handleTap,
-        ),
-        Positioned(
-          left: 0,
-          right: 0,
-          bottom: 0,
-          child: Container(
-            height: MediaQuery.of(context).size.height * 0.40,
-            decoration: const BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(15),
-                  topRight: Radius.circular(15),
-                ),
-                boxShadow: [
-                  BoxShadow(
-                      color: Colors.black,
-                      blurRadius: 16,
-                      spreadRadius: 0.5,
-                      offset: Offset(0.7, 0.7))
-                ]),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 18),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const SizedBox(height: 6),
-                  Text(("hi_there".tr()), style: const TextStyle(fontSize: 12)),
-                  Text(("where_to".tr()), style: const TextStyle(fontSize: 20)),
-                  const SizedBox(height: 20),
-                  TextFieldOnMap(
-                    isSelected: false,
-                    textToDisplay: ("your_current_location".tr()),
-                    iconToDisplay: const Icon(
-                      Icons.my_location,
-                      color: Colors.blue,
+      body: Stack(
+        children: [
+          MapWidget(key: myMapWidgetState),
+          Positioned(
+            left: 0,
+            right: 0,
+            bottom: 0,
+            child: Container(
+              height: MediaQuery.of(context).size.height *
+                  ((didRequest) ? 0.0 : 0.43),
+              decoration: const BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(15),
+                    topRight: Radius.circular(15),
+                  ),
+                  boxShadow: [
+                    BoxShadow(
+                        color: Colors.black,
+                        blurRadius: 16,
+                        spreadRadius: 0.5,
+                        offset: Offset(0.7, 0.7))
+                  ]),
+              child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 24, vertical: 18),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(height: 6),
+                    Text(("hi_there".tr()),
+                        style: const TextStyle(fontSize: 12)),
+                    Text(("where_to".tr()),
+                        style: const TextStyle(fontSize: 20)),
+                    const SizedBox(height: 20),
+                    GestureDetector(
+                      child: TextFieldOnMap(
+                        isSelected: (!didRequest && needProvider),
+                        textToDisplay: (needProvider
+                            ? "your_current_location".tr()
+                            : "goOnYourOwn".tr()),
+                        iconToDisplay: Icon(
+                          needProvider ? Icons.my_location : Icons.car_repair,
+                          color: const Color(0xFF193566),
+                        ),
+                      ),
+                      onTap: () {
+                        myMapWidgetState.currentState?.locatePosition();
+                      },
                     ),
-                  ),
-                  const SizedBox(height: 15),
-                  Consumer(
-                    builder: (context, ref, child) {
-                      return GestureDetector(
-                        child: getMechanicWidget(ref),
-                        onTap: () async {
-                          if (ref.watch(rsaProvider).mechanic == null) {
-                            _pcMechanic.open();
+                    const SizedBox(height: 15),
+                    GestureDetector(
+                      child: getMechanicWidget(),
+                      onTap: () async {
+                        if (ref.watch(rsaProvider).mechanic == null &&
+                            didRequest) {
+                          _pcMechanic.open();
+                        }
+                      },
+                    ),
+                    const SizedBox(height: 15),
+                    GestureDetector(
+                        child: getProviderWidget(),
+                        onTap: () {
+                          print("The bool value::$needProvider");
+                          if (!needProvider) return;
+                          if (ref.watch(rsaProvider).towProvider == null) {
+                            _pcTowProvider.open();
                           }
-                          await requestWSA(ref);
-                        },
-                      );
-                    },
-                  ),
-                  const SizedBox(height: 15),
-                  Consumer(
-                    builder:
-                        (BuildContext context, WidgetRef ref, Widget? child) {
-                      return GestureDetector(
-                          child: getProviderWidget(ref),
-                          onTap: () {
-                            print("The bool value::$needProvider");
-                            if (needProvider) return;
-                            if (ref.watch(rsaProvider).towProvider == null) {
-                              _pcTowProvider.open();
-                            }
-                          });
-                    },
-                  )
-                ],
+                        }),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        didRequest
+                            ? ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  primary: const Color(0xFF193566),
+                                ),
+                                child: const Text("Cancel").tr(),
+                                onPressed: () {
+                                  confirmCancellation(context, ref);
+                                },
+                              )
+                            : ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  primary: const Color(0xFF193566),
+                                ),
+                                child: const Text("request").tr(),
+                                onPressed: () {
+                                  if (ref
+                                          .watch(salahlyClientProvider)
+                                          .requestType !=
+                                      null) {
+                                    if (ref
+                                            .watch(salahlyClientProvider)
+                                            .requestType ==
+                                        RequestType.WSA) {
+                                      // _pcMechanic.open();
+                                      _pcServiceSlider.open();
+                                    } else {
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(SnackBar(
+                                              content:
+                                                  Text("onGoingRequest".tr())));
+                                    }
+                                    return;
+                                  }
+                                  _pcCarSlider.open();
+                                }),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
-        ),
-        Positioned(
-          left: MediaQuery.of(context).size.width * 0.8,
-          right: 0,
-          bottom: MediaQuery.of(context).size.height * 0.29,
-          child: ElevatedButton(
-            onPressed: locatePosition,
-            child: const Icon(
-              Icons.location_on,
-            ),
-            style: ElevatedButton.styleFrom(
-              shape: const CircleBorder(),
-              padding: const EdgeInsets.all(10),
+          Positioned(
+            left: MediaQuery.of(context).size.width * 0.85,
+            right: 0,
+            bottom:
+                MediaQuery.of(context).size.height * (didRequest ? 0 : 0.4),
+            child: ElevatedButton(
+              onPressed: () => myMapWidgetState.currentState?.locatePosition(),
+              child: const Icon(
+                Icons.location_on,
+              ),
+              style: ElevatedButton.styleFrom(
+                shape: const CircleBorder(),
+                primary: const Color(0xFF193566),
+                padding: const EdgeInsets.all(10),
+              ),
             ),
           ),
-        ),
-        Consumer(builder: (context, ref, child) {
-          RSA rsa = ref.watch(rsaProvider);
-          print("HEEEEEE${rsa.acceptedNearbyMechanics}");
-          return ChooseMechanicSlider(
-              pc: _pcMechanic, mechanics: rsa.acceptedNearbyMechanics ?? []
-              // pc: _pc, mechanics: mechanics,
-              );
-        }),
-        Consumer(builder: (context, ref, child) {
-          RSA rsa = ref.watch(rsaProvider);
-          print("PROVIDER:HEEEEEE${rsa}");
-          return ChooseTowProviderSlider(
+          ChooseMechanicSlider(
+              pc: _pcMechanic,
+              mechanics: ref.watch(rsaProvider).acceptedNearbyMechanics ?? []
+              // pc: _pc, mechanics: mechanics,//static data for testing
+              ),
+          ChooseTowProviderSlider(
               pc: _pcTowProvider,
-              towProviders: rsa.acceptedNearbyProviders ?? []
-              // pc: _pc, mechanics: mechanics,
-              );
-        }),
-      ],
-    ));
+              towProviders: ref.watch(rsaProvider).acceptedNearbyProviders ?? []
+              // pc: _pc, mechanics: mechanics,//static data for testing
+              ),
+          WSASlider(
+            needTowProvider: needProvider,
+            needMechanic: needMechanic,
+            pc: _pcServiceSlider,
+          ),
+          SelectCarRequest(
+            pc: _pcCarSlider,
+            onTap: onTapOfConfirm,
+          )
+        ],
+      ),
+    );
+  }
+
+  void onTapOfConfirm() {
+    if (ref.watch(rsaProvider).car == null) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text("plzSpecCar".tr()),
+      ));
+      return;
+    }
+
+    requestConfirmationDialogue(context,
+        titleChildren: [const Text("confirm").tr()],
+        content: Text("wsaConfirmation".tr() +
+            "\n" +
+            (needProvider
+                ? ("withTowTruck".tr() +
+                    "at".tr() +
+                    " " +
+                    myMapWidgetState.currentState!.currentCustomLoc.address!)
+                : "withNoTowTruck".tr())),
+        actionChildren: [
+          ElevatedButton(
+            onPressed: () => Navigator.pop(context),
+            style: ElevatedButton.styleFrom(
+              primary: const Color(0xFF193566),
+            ),
+            child: Text("Cancel".tr()),
+          ),
+          ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                primary: const Color(0xFF193566),
+              ),
+              onPressed: () async {
+                Navigator.pop(context);
+                setState(() {
+                  didRequest = true;
+                });
+                await requestWSA();
+                print(
+                    "2=>WE FOUND ${ref.watch(rsaProvider).newNearbyProviders!.keys.length} Provider");
+                print(
+                    "2=>WE FOUND ${ref.watch(rsaProvider).newNearbyMechanics!.keys.length} Mechanics");
+                _pcCarSlider.close();
+              },
+              child: const Text("confirm").tr()),
+        ]);
+  }
+
+  //wait 3 minute
+  void activate3Min() async {
+    print("RSA: abl el 3 minutes");
+    bool foundAny = await ref
+        .watch(rsaProvider.notifier)
+        .atLeastOne(needMechanic: true, needProvider: needProvider);
+
+    if (!foundAny && ref.watch(rsaProvider).state != RSAStates.cancelled) {
+      !ref.watch(rsaProvider.notifier).atLeastOneProvider
+          ? noneFound(context, who: false)
+          : null;
+      !ref.watch(rsaProvider.notifier).atLeastOneMechanic
+          ? noneFound(context, who: true)
+          : null;
+    }
   }
 
   //request work shop assistance
-  requestWSA(ref) async {
+  requestWSA() async {
     print("Requesting WSA::");
     RSANotifier rsaNotifier = ref.watch(rsaProvider.notifier);
     rsaNotifier.assignRequestTypeToWSA();
-    rsaNotifier.assignUserLocation(currentCustomLoc);
+    rsaNotifier
+        .assignUserLocation(myMapWidgetState.currentState!.currentCustomLoc);
 
     if (!gotMechanics) {
       await rsaNotifier.requestWSA();
       gotMechanics = true;
-      await rsaNotifier.searchNearbyMechanicsAndProviders();
+      // await rsaNotifier.searchNearbyMechanicsAndProviders();
+      await rsaNotifier.searchNearbyMechanicsAndProvidersSergi(rsaNotifier);
     }
-    getAcceptedMechanic(ref);
+    // _pcMechanic.open();
+    _pcServiceSlider.open();
+    //salahlyClientProvider
+    ref.watch(salahlyClientProvider.notifier).assignRequest(
+        ref.watch(rsaProvider).requestType!, ref.watch(rsaProvider).rsaID!);
+    getAcceptedMechanic();
+    activate3Min();
   }
 
-  getAcceptedMechanic(ref) {
+  getAcceptedMechanic() {
     print("IN STREAM FUNCTION ::");
-    RSA rsa = ref.watch(rsaProvider);
-    if (rsa.rsaID == null) return [];
-
-    wsaRef.child(rsa.rsaID!).onValue.listen((event) {
+    if (ref.watch(rsaProvider).rsaID == null) return [];
+    print("WSA ID is ${ref.watch(rsaProvider).rsaID}");
+    _myStream =
+        wsaRef.child(ref.watch(rsaProvider).rsaID!).onValue.listen((event) {
       print("WSA LISTENER");
       print("${event.snapshot.value}");
       if (event.snapshot.value != null) {
+        //TODO: add the constraints of rsa state if needed
+
+        bool flagAllRejected = true;
+        bool flagFindYet = false;
+
         DataSnapshot dataSnapshot = event.snapshot;
-        print("1111111");
-        // if (dataSnapshot.child("state").value.toString() ==
-        //     RSA.stateToString(RSAStates.waitingForMechanicResponse)) {
-        print("2222222");
         dataSnapshot
             .child("mechanicsResponses")
             .children
             .forEach((dataSnapShotMechanic) {
-          print("333333333333");
+          ref.watch(rsaProvider.notifier).atLeastOneMechanic = true;
+          flagFindYet = true;
+          if (dataSnapShotMechanic.value == "chosen") {
+            flagAllRejected = false;
+          }
+          if (dataSnapShotMechanic.value == "pending") {
+            flagAllRejected = false;
+          }
           print("Stream::${dataSnapShotMechanic.value}");
           if (dataSnapShotMechanic.value == "accepted") {
+            flagAllRejected = false;
             print(
                 "inside if accepted and ${dataSnapShotMechanic.key} accepted");
 
             print(
                 "AAAAAAAAAAAAAAAAAAAAA${ref.watch(rsaProvider).newNearbyMechanics}");
-            for (var mech in ref.watch(rsaProvider).newNearbyMechanics.keys) {
-              print(
-                  "${mech} ====== ${dataSnapShotMechanic.key}-> ${dataSnapShotMechanic.key == mech}");
-              print("do I already have him?");
-              if (dataSnapShotMechanic.key == mech) {
-                print(
-                    "YESSSSSSSSSSSSS->${ref.watch(rsaProvider).newNearbyMechanics[mech].name}");
-                ref.watch(rsaProvider.notifier).addAcceptedNearbyMechanic(
-                    ref.watch(rsaProvider).newNearbyMechanics[mech]);
-                // print(ref.watch(rsaProvider).);
+            // for (var mech in ref.watch(rsaProvider).newNearbyMechanics!.keys) {
+            //   print(
+            //       "${mech} ====== ${dataSnapShotMechanic.key}-> ${dataSnapShotMechanic.key == mech}");
+            //   print("do I already have him?");
+            //   if (dataSnapShotMechanic.key == mech) {
+            //     print(
+            //         "YESSSSSSSSSSSSS->${ref.watch(rsaProvider).newNearbyMechanics![mech]!.name}");
+            //     ref.watch(rsaProvider.notifier).addAcceptedNearbyMechanic(mech);
+            //     // print(ref.watch(rsaProvider).);
+            //   }
+            // }
+            ref
+                .watch(rsaProvider.notifier)
+                .addAcceptedNearbyMechanic(dataSnapShotMechanic.key.toString());
+          }
+          if (dataSnapShotMechanic.value == "rejected") {
+            if (ref.watch(rsaProvider).mechanic != null) {
+              if (dataSnapShotMechanic.key ==
+                  ref.watch(rsaProvider).mechanic!.id) {
+                print("No--------------------------------");
+                print("The assigned mechanic just rejected the request");
               }
             }
           }
+          if (dataSnapShotMechanic.value == "chosen") {
+            if (!needProvider) {
+              _myStream.cancel();
+            }
+          }
         });
-        // }
+
+        if (flagAllRejected && flagFindYet) {
+          allRejected(context, ref, "Mechanics");
+        }
+
+        flagAllRejected = true;
+        flagFindYet = false;
 
         dataSnapshot
             .child("providersResponses")
             .children
             .forEach((dataSnapShotProvider) {
+          ref.watch(rsaProvider.notifier).atLeastOneProvider = true;
+          flagFindYet = true;
           print("PROV::333333333333");
           print("PROV::Stream::${dataSnapShotProvider.value}");
+          if (dataSnapShotProvider.value == "pending") {
+            flagAllRejected = false;
+          }
+          if (dataSnapShotProvider.value == "chosen") {
+            flagAllRejected = false;
+          }
           if (dataSnapShotProvider.value == "accepted") {
+            flagAllRejected = false;
             print(
                 "PROV::inside if accepted and ${dataSnapShotProvider.key} accepted");
 
             print(
                 "PROV::AAAAAAAAAAAAAAAAAAAAA${ref.watch(rsaProvider).newNearbyProviders}");
-            for (var towProvider
-                in ref.watch(rsaProvider).newNearbyProviders.keys) {
-              print(
-                  "${towProvider} ====== ${dataSnapShotProvider.key}-> ${dataSnapShotProvider.key == towProvider}");
-              print("PROV::do I already have him?");
-              if (dataSnapShotProvider.key == towProvider) {
-                print(
-                    "PROV::YESSSSSSSSSSSSS->${ref.watch(rsaProvider).newNearbyProviders[towProvider].name}");
-                ref.watch(rsaProvider.notifier).addAcceptedNearbyProvider(
-                    ref.watch(rsaProvider).newNearbyProviders[towProvider]);
-                // print(ref.watch(rsaProvider).);
-              }
-            }
+            // for (var towProvider
+            //     in ref.watch(rsaProvider).newNearbyProviders!.keys) {
+            //   print(
+            //       "${towProvider} ====== ${dataSnapShotProvider.key}-> ${dataSnapShotProvider.key == towProvider}");
+            //   print("PROV::do I already have him?");
+            //   if (dataSnapShotProvider.key == towProvider) {
+            //     print(
+            //         "PROV::YESSSSSSSSSSSSS->${ref.watch(rsaProvider).newNearbyProviders![towProvider]!.name}");
+            //     ref
+            //         .watch(rsaProvider.notifier)
+            //         .addAcceptedNearbyProvider(towProvider);
+            //     // print(ref.watch(rsaProvider).);
+            //   }
+            // }
+
+            ref
+                .watch(rsaProvider.notifier)
+                .addAcceptedNearbyProvider(dataSnapShotProvider.key.toString());
+            ref
+                .watch(rsaProvider.notifier)
+                .getEstimatedTime(dataSnapShotProvider.key.toString());
           }
         });
+        if (flagAllRejected && flagFindYet) {
+          //TODO: Show a dialog box (ALL rejected Please request later)
+          allRejected(context, ref, "Providers");
+          print("All providers rejected");
+        }
       }
     });
   }
 
-  // Get assigned Provider
-  Widget getProviderWidget(ref) {
-    RSA rsa = ref.watch(rsaProvider);
-    return (rsa.towProvider != null
-        ? mapTowProviderToWidget(rsa.towProvider!)
-        // ? Container(child: Text("Mech exits"))
-        : TextFieldOnMap(
-            textToDisplay: "Do you need a Tow truck",
-            imageIconTodisplay:
-                const ImageIcon(AssetImage('assets/images/tow-truck 2.png')),
-            isSelected: !needProvider,
-            child: Switch(
-              value: !needProvider,
-              onChanged: (value) {
-                print("The switch value is $needProvider");
-                setState(() => needProvider = !needProvider);
+// Get assigned Provider
+  Widget getProviderWidget() {
+    return (
+        // ref.watch(rsaProvider).towProvider != null
+        // ? mapTowProviderToWidget(ref.watch(rsaProvider).towProvider!)
+        // :
+        TextFieldOnMap(
+      textToDisplay: didRequest ? "choose_provider".tr() : "needTowTruck".tr(),
+      imageIconToDisplay: const ImageIcon(
+          AssetImage('assets/images/tow-truck 2.png'),
+          color: Color(0xFF193566)),
+      isSelected: didRequest ? needProvider : false,
+      child: didRequest
+          ? null
+          : Switch(
+              value: needProvider,
+              onChanged: (value) async {
+                setState(() {
+                  needProvider = !needProvider;
+
+                  ref.watch(rsaProvider.notifier).needTowProvider =
+                      needProvider;
+                });
+
+                final prefs = await SharedPreferences.getInstance();
+                prefs.setBool("needProvider", needProvider);
               },
-              activeTrackColor: Colors.lightGreenAccent,
-              activeColor: Colors.green,
+              // activeTrackColor: Colors.lightGreenAccent,
+              activeTrackColor: Colors.blueAccent,
+              activeColor: const Color(0xFF193566),
             ),
-          ));
+    ));
   }
 
-  //Get assigned mechanic
-  Widget getMechanicWidget(ref) {
-    RSA rsa = ref.watch(rsaProvider);
-    return (rsa.mechanic != null
-        ? mapMechanicToWidget(rsa.mechanic!)
-        // ? Container(child: Text("Mech exits"))
-        : const TextFieldOnMap(
-            isSelected: true,
-            textToDisplay: ("Choose nearby mechanics"),
-            iconToDisplay: Icon(
-              Icons.search,
-              color: Colors.blue,
-            ),
-          ));
+//Get assigned mechanic
+  Widget getMechanicWidget() {
+    return (
+        // ref.watch(rsaProvider).mechanic != null
+        // ? mapMechanicToWidget(ref.watch(rsaProvider).mechanic!)
+        // :
+        TextFieldOnMap(
+      isSelected: didRequest,
+      textToDisplay: ("choose_mech").tr(),
+      iconToDisplay: const Icon(
+        Icons.search,
+        color: Color(0xFF193566),
+      ),
+    ));
   }
-
-  //Get UI of assigned mechanic
-  Widget mapMechanicToWidget(Mechanic mec) {
-    _pcMechanic.close();
-    print("MECHH::${mec.toString()}");
-    return ServicesProviderCard(
-      serviceProviderEmail: mec.email,
-      serviceProviderName: mec.name,
-      serviceProviderIsCenter: mec.isCenter,
-      serviceProviderType: mec.getUserType(),
-      serviceProviderPhoneNumber: mec.phoneNumber,
-      serviceProviderRating: mec.rating,
-      serviceProviderAddress: mec.address,
-    );
-  }
-
-  Widget mapTowProviderToWidget(TowProvider towProvider) {
-    _pcTowProvider.close();
-    print("MECHH::${towProvider.toString()}");
-    return ServicesProviderCard(
-      serviceProviderEmail: towProvider.email,
-      serviceProviderName: towProvider.name,
-      serviceProviderIsCenter: towProvider.isCenter,
-      serviceProviderType: towProvider.getUserType(),
-      serviceProviderPhoneNumber: towProvider.phoneNumber,
-      serviceProviderRating: towProvider.rating,
-      serviceProviderAddress: towProvider.address,
-    );
-  }
-
-  //get user position
-  locatePosition() async {
-    currentCustomLoc = await getUserLocation();
-    cameraZoom = 19;
-    print(
-        "::lat:${currentCustomLoc.latitude} - long:${currentCustomLoc.longitude}");
-    print("::address: ${currentCustomLoc.address}");
-
-    moveCamera(currentCustomLoc);
-  }
-
-  //move camera to current position
-  moveCamera(CustomLocation cus) async {
-    currentCustomLoc = cus;
-
-    currentCustomLoc.address = await searchCoordinateAddress_google(
-        currentCustomLoc.latitude, currentCustomLoc.longitude);
-
-    LatLng latLatPosition =
-        LatLng(currentCustomLoc.latitude, currentCustomLoc.longitude);
-
-    CameraPosition camPos =
-        CameraPosition(target: latLatPosition, zoom: cameraZoom);
-    newGoogleMapController
-        .animateCamera(CameraUpdate.newCameraPosition(camPos));
-  }
-
-  //put a marker on pressed on map
-  _handleTap(LatLng tappedPoint) {
-    setState(() {
-      cameraZoom = 19;
-      moveCamera(CustomLocation(
-          latitude: tappedPoint.latitude, longitude: tappedPoint.longitude));
-      myMarkers = [];
-      myMarkers.add(
-        Marker(
-            draggable: true,
-            markerId: MarkerId(tappedPoint.toString()),
-            position: tappedPoint,
-            onDragEnd: (dragEndPosition) {
-              moveCamera(CustomLocation(
-                  latitude: dragEndPosition.latitude,
-                  longitude: dragEndPosition.longitude));
-            }),
-      );
-    });
-  }
-
-  //get approximate location of user
-  initialLocation() async {
-    List temp = await getApproximateLocation();
-    CustomLocation initialPos =
-        CustomLocation(latitude: temp[0], longitude: temp[1]);
-
-    moveCamera(initialPos);
-  }
-
-  List<Mechanic> mechanics = [
-    Mechanic(
-        name: 'Ahmed tarek',
-        phoneNumber: '01115612314',
-        isCenter: true,
-        type: Type.mechanic,
-        loc: CustomLocation(
-            address:
-                "Factorya, shar3 45 odam mtafy 12311321312312hasdhdashjss221",
-            latitude: 11,
-            longitude: 12),
-        avatar:
-            'https://thumbs.dreamstime.com/b/default-avatar-photo-placeholder-profile-image-default-avatar-photo-placeholder-profile-image-eps-file-easy-to-edit-124557892.jpg',
-        email: 'email@yahoo.com'),
-    Mechanic(
-        name: 'Sergi Samir',
-        email: 'mechanic@yahoo.com',
-        type: Type.mechanic,
-        phoneNumber: '0122321099',
-        loc: CustomLocation(
-            address: "sedigabr,180 3omrt y3okbyan",
-            latitude: 11,
-            longitude: 12),
-        isCenter: false,
-        avatar:
-            'https://thumbs.dreamstime.com/b/default-avatar-photo-placeholder-profile-image-default-avatar-photo-placeholder-profile-image-eps-file-easy-to-edit-124557892.jpg'),
-    Mechanic(
-        name: 'Mahmoud Magdy',
-        type: Type.mechanic,
-        email: 'Workshop@gmail.com',
-        phoneNumber: '01550164495',
-        loc: CustomLocation(
-            address: "Miami, mostshafa 3m ahmed", latitude: 11, longitude: 12),
-        isCenter: true,
-        avatar:
-            'https://thumbs.dreamstime.com/b/default-avatar-photo-placeholder-profile-image-default-avatar-photo-placeholder-profile-image-eps-file-easy-to-edit-124557892.jpg')
-  ];
 }

@@ -1,12 +1,15 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
 import 'package:slahly/screens/allScreens.dart';
 import 'package:slahly/screens/login_signup/signupscreen.dart';
 
+import '../homepage.dart';
+
 class SplashScreen extends StatefulWidget {
   //ThemeData(),
-  static final routeName = "/splashcreen";
+  static const routeName = "/splashcreen";
   const SplashScreen({Key? key}) : super(key: key);
 
   @override
@@ -18,7 +21,7 @@ class _SplashScreenState extends State<SplashScreen>with TickerProviderStateMixi
   @override
  void initState(){
    super.initState();
-   _navigatetohome();
+   _navigateToHome();
  }
 
  late final AnimationController _logoController = AnimationController(
@@ -110,11 +113,15 @@ class _SplashScreenState extends State<SplashScreen>with TickerProviderStateMixi
   }
 
 
- _navigatetohome()async{
+ _navigateToHome()async{
    await Future.delayed(Duration(seconds:9),(){});
    // Navigator.pushReplacement(context,MaterialPageRoute(builder: (context)=>SignUpScreen()));
-   context.go(AllScreens.routeName);
-   //TODO check already signed in
+   User? user = await FirebaseAuth.instance.currentUser;
+   if (user == null) {
+     context.go(LoginSignupScreen.routeName);
+   } else {
+     context.go(HomePage.routeName);
+   }
  }
 }
 

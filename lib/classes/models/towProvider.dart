@@ -6,6 +6,7 @@ class TowProvider extends UserType {
   bool? isCenter;
   bool? isAccepted;
   double? rating;
+  String? estimatedTime;
 
   List<TowDriver> towDriver = [];
 
@@ -26,6 +27,7 @@ class TowProvider extends UserType {
     this.isAccepted,
     this.isCenter,
     this.nationalID,
+    this.estimatedTime,
   }) : super(
             name: name,
             email: email,

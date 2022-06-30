@@ -16,7 +16,7 @@ class MyInputField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Size size=MediaQuery.of(context).size;
+    Size size = MediaQuery.of(context).size;
     return Container(
       margin: const EdgeInsets.only(top: 16),
       // width: size.width,
@@ -50,9 +50,8 @@ class MyInputField extends StatelessWidget {
                   Expanded(
                     child: TextFormField(
                       onChanged: (value) {
-                        _textEditingController.text=value;
+                        _textEditingController.text = value;
                         fn(value);
-
                       },
                       readOnly: widget == null ? false : true,
                       autofocus: false,

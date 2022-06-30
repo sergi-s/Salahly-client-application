@@ -1,43 +1,46 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-
 import "package:slahly/classes/models/place_predictions.dart";
-
 import 'package:slahly/classes/models/location.dart';
 import 'package:slahly/classes/provider/rsadata.dart';
 import 'package:slahly/utils/constants.dart';
 import 'package:slahly/utils/http_request.dart';
-import 'package:slahly/widgets/location/progressDialog.dart';
-import 'package:slahly/classes/provider/rsadata.dart';
+import 'package:slahly/classes/provider/app_data.dart';
+import 'package:slahly/screens/roadsideassistance/chooseprovider.dart';
 
-import '../../classes/firebase/roadsideassistance/roadsideassistance.dart';
-import '../../screens/roadsideassistance/chooseprovider.dart';
-
-class PredictionTile extends ConsumerWidget {
+class PredictionTile extends ConsumerStatefulWidget {
   const PredictionTile({Key? key, required this.placePredictions})
       : super(key: key);
   final PlacePredictions placePredictions;
 
+  _PredictionTileState createState() => _PredictionTileState();
+}
+
+class _PredictionTileState extends ConsumerState<PredictionTile> {
   @override
-  Widget build(BuildContext context, ref) {
+  Widget build(BuildContext context) {
     return TextButton(
-      onPressed: () {
-        final rsaNotifier = ref.watch(rsaProvider.notifier);
-        final RSA rsa = ref.watch(rsaProvider);
+      onPressed: () async {
+        await getPlaceAddressDetails(widget.placePredictions.place_id!);
 
-        getPlaceAddressDetails(placePredictions.place_id!, ref, context);
-        rsaNotifier.searchNearbyMechanicsAndProviders();
-        print("xxxxxxxx");
-        // print(rsa.nearbyProviders);
-        print("hiii");
-        context.go(ChooseProviderScreen.routeName);
+        print("${ref.watch(rsaProvider).dropOffLocation} ->>>");
+        ref.watch(rsaProvider.notifier).assignRequestTypeToTTA();
+        await ref.watch(rsaProvider.notifier).requestTta();
+        if(ref.watch(rsaProvider).newNearbyProviders!.isEmpty) {
+          // ref.watch(rsaProvider.notifier).searchNearbyMechanicsAndProviders();
+          ref.watch(rsaProvider.notifier).searchNearbyMechanicsAndProvidersSergi(ref.watch(rsaProvider.notifier));
+        }
 
-        // searchNearbyMechanicsAndProviders()
-        // context.go();
+        print("before app state");
+
+        ref.watch(salahlyClientProvider.notifier).assignRequest(
+            ref.watch(rsaProvider).requestType!, ref.watch(rsaProvider).rsaID!);
+        print("after app state");
+
+        context.push(ChooseProviderScreen.routeName);
       },
-      child: Container(
-          child: Column(
+      child: Column(
         children: [
           const SizedBox(width: 10),
           Row(
@@ -49,13 +52,13 @@ class PredictionTile extends ConsumerWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      placePredictions.main_text.toString(),
+                      widget.placePredictions.main_text.toString(),
                       overflow: TextOverflow.ellipsis,
                       style: const TextStyle(fontSize: 16),
                     ),
                     const SizedBox(height: 2),
                     Text(
-                      placePredictions.secondary_text.toString(),
+                      widget.placePredictions.secondary_text.toString(),
                       overflow: TextOverflow.ellipsis,
                       style: const TextStyle(fontSize: 12, color: Colors.grey),
                     ),
@@ -66,15 +69,15 @@ class PredictionTile extends ConsumerWidget {
           ),
           const SizedBox(width: 10),
         ],
-      )),
+      ),
     );
   }
 
-  void getPlaceAddressDetails(String placeId, ref, context) async {
-    showDialog(
-        context: context,
-        builder: (BuildContext context) =>
-            ProgressDialog(message: "Setting Drop off, please wait"));
+  Future getPlaceAddressDetails(String placeId) async {
+    // showDialog(
+    //     context: context,
+    //     builder: (BuildContext context) =>
+    //         ProgressDialog(message: "Setting Drop off, please wait"));
 
     String placeDetailsURL =
         "https://maps.googleapis.com/maps/api/place/details/json?place_id=$placeId&key=$googleMapsAPI";
@@ -90,6 +93,6 @@ class PredictionTile extends ConsumerWidget {
 
     ref.watch(rsaProvider.notifier).assignDropOffLocation(customLocation);
 
-    Navigator.pop(context);
+    print("drop off location is at ${ref.watch(rsaProvider).dropOffLocation!}");
   }
 }

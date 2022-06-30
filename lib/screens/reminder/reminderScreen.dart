@@ -4,9 +4,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:slahly/screens/reminder/addReminderScreen.dart';
+import 'package:slahly/widgets/global_widgets/app_bar.dart';
+import 'package:slahly/classes/models/reminder.dart';
 
 class ReminderScreen extends StatefulWidget {
-  static final routeName = "/reminderscreen";
+  static const routeName = "/reminderscreen";
 
   const ReminderScreen({
     Key? key,
@@ -16,26 +18,28 @@ class ReminderScreen extends StatefulWidget {
   State<ReminderScreen> createState() => _ReminderScreenState();
 }
 
-
 class _ReminderScreenState extends State<ReminderScreen> {
   @override
-  void initState(){
+  void initState() {
     super.initState();
-start();
-if(!isListening){
-  isListening=true;
-    AwesomeNotifications().createdStream.listen((notification) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Reminder added Sucessfully'),
-        ),
 
-      );
-start();
-    });
-  }}
-static bool isListening =false;
-  Map<String,bool> map={};
+    start();
+    if (!isListening) {
+      isListening = true;
+      AwesomeNotifications().createdStream.listen((notification) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: const Text('notificationCreated').tr(),
+          ),
+        );
+        start();
+      });
+    }
+  }
+
+  static bool isListening = false;
+  Map<String, bool> map = {};
+
   // @override
   // void dispose() {
   //   AwesomeNotifications().actionSink.close();
@@ -43,50 +47,43 @@ static bool isListening =false;
   //   super.dispose();
   // }
 
-  Future<void> cancelScheduledNotifications() async {
-   List<NotificationModel>deletereminder=await AwesomeNotifications().listScheduledNotifications();
-   deletereminder.forEach((element) {
-     if(element.content!= null && element.content!.body   !=  null && !(map.containsKey(element.content!.body))){
-       map[element.content!.body!]=true;
-       reminder.remove(element.content!.id);
 
-   }});
-
-  }
-
-  start ()async{
-    List<NotificationModel>reminders=await AwesomeNotifications().listScheduledNotifications();
+  start() async {
+    List<NotificationModel> reminders =
+        await AwesomeNotifications().listScheduledNotifications();
     reminders.forEach((element) {
-      if(element.content!= null && element.content!.body   !=  null && !(map.containsKey(element.content!.body))){
-        map[element.content!.body!]=true;
-        reminder.add(Reminder(title: element.content!.body! , date: element.content!.displayedDate??DateTime.now().toString()));
-
-      }else{
+      if (element.content != null &&
+          element.content!.body != null &&
+          !(map.containsKey(element.content!.body))) {
+        map[element.content!.body!] = true;
+        reminder.add(Reminder(
+            title: element.content!.body!,
+            // date: "Hello"));
+            date: element.content!.createdDate ??
+                DateTime.now().add(const Duration(days: 1)).toString()));
+        //  DateTime.now().toString()));
+      } else {
         print("element not valid ");
       }
     });
-    setState(() { });
+    setState(() {});
   }
 
+  List<Reminder> reminder = [];
 
-  List<Reminder> reminder = [
-
-  ];
-
-  Widget personDetailCard(Reminder reminder,BuildContext context) {
+  Widget personDetailCard(Reminder reminder, BuildContext context) {
     Size size = MediaQuery.of(context).size;
     final String title = reminder.title;
     final String date = reminder.date;
 
     return Container(
-      height: size.height/8,
+      height: size.height / 8,
       alignment: Alignment.center,
-
       child: Center(
         child: Card(
-          elevation:8,
+          elevation: 8,
           color: Colors.grey[200],
-          shadowColor:Colors.blueGrey[600],
+          shadowColor: Colors.blueGrey[600],
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),
           ),
@@ -116,6 +113,10 @@ static bool isListening =false;
                       shape:RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),
+                      label: const Text('delete',
+                          style: TextStyle(
+                            color: Colors.white,
+                          )).tr(),
                     ),
                     onPressed: () => {Navigator.pop(context, 'Delete')},
                     icon: const Icon(Icons.delete_outline_outlined,color: Colors.white,),
@@ -127,37 +128,43 @@ static bool isListening =false;
                       backgroundColor: const Color(0xFF193566),
                       shape:RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
-                      ),
-                    ),
-                    onPressed: () => {Navigator.pop(context, 'Okay')},
-                    icon: const Icon(Icons.done,color: Colors.white,),
-                    label: const Text('Okay',style:TextStyle(color: Colors.white,)),
-                  ),
-                ],
-              ),
-            );},
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              ListTile(
-                leading: const Icon(CupertinoIcons.alarm,
-                    color: Color(0xFF193566), size: 40),
-                title: Text(title,
-                        textScaleFactor: 1.4,
-                        style: const TextStyle(
-                            color: Color(0xff193566),
-                            fontWeight: FontWeight.bold))
-                    .tr(),
-                subtitle: Text(date,
-                        textScaleFactor: 1.1,
-                        style: const TextStyle(color: Colors.black54))
-                    .tr(),
 
-              )
-            ],
-          ),
+                      ),
+                      onPressed: () => {Navigator.pop(context, 'ok'.tr())},
+                      icon: const Icon(
+                        Icons.done,
+                        color: Colors.white,
+                      ),
+                      label: const Text('ok',
+                          style: TextStyle(
+                            color: Colors.white,
+                          )).tr(),
+                    ),
+                  ],
+                ),
+              );
+            },
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                ListTile(
+                  leading: const Icon(CupertinoIcons.alarm,
+                      color: Color(0xFF193566), size: 40),
+                  title: Text(title,
+                          textScaleFactor: 1.4,
+                      style: const TextStyle(
+                              color: Color(0xff193566),
+                              fontWeight: FontWeight.bold))
+                      .tr(),
+                  subtitle: Text(date,
+                          textScaleFactor: 1.1,
+                          style: const TextStyle(color: Colors.black54))
+                      .tr(),
+                )
+              ],
             ),
+          ),
         ),
       ),
     );
@@ -168,54 +175,28 @@ static bool isListening =false;
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: const Color(0xFFd1d9e6),
-      appBar: AppBar(
-        elevation: 0.0,
-        backgroundColor: const Color(0xFF193566),
-        leading: IconButton(
-          icon: const Icon(
-            Icons.arrow_back,
-            color: Colors.white,
-          ),
-          onPressed: () {},
-        ),
-        title:
-            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-          const Text(""),
-          const Text(
-            "Reminder",
-            style: TextStyle(
-              fontSize: 25,
-              letterSpacing: 1.5,
-              color: Colors.white,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-          Image.asset(
-            'assets/images/logo white.png',
-            fit: BoxFit.contain,
-            height: 32,
-          ),
-        ]),
-      ),
+      appBar: salahlyAppBar(title: "reminder".tr()),
       body: SingleChildScrollView(
         child: Center(
           child: Column(
               children: reminder.map((p) {
-            return personDetailCard(p,context);
+            return personDetailCard(p, context);
           }).toList()),
         ),
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
+      // floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
       floatingActionButton: FloatingActionButton(
         isExtended: true,
         child: const Icon(Icons.add),
         backgroundColor: const Color(0xFF193566),
-        onPressed: () { context.push(AddReminder.routeName);
+
+        onPressed: () {
+          context.push(AddReminder.routeName);
           print("after add");
-          start();},
+          start();
+        },
       ),
     );
-    ;
   }
 }
 
@@ -233,16 +214,4 @@ class HeaderCurvedContainer extends CustomPainter {
 
   @override
   bool shouldRepaint(CustomPainter oldDelegate) => false;
-}
-
-class Reminder {
-
-  final String title;
-  final String date;
-
-  Reminder({
-
-    required this.title,
-    required this.date,
-  });
 }

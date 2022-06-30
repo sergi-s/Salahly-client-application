@@ -1,6 +1,6 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:slahly/abstract_classes/user.dart';
-import 'package:easy_localization/easy_localization.dart';
 
 class ChooseTile extends StatelessWidget {
   String? email;
@@ -11,6 +11,7 @@ class ChooseTile extends StatelessWidget {
   double? rating;
   String? address;
   Type? type;
+  String? estimatedTime;
 
   ChooseTile(
       {this.email,
@@ -20,12 +21,16 @@ class ChooseTile extends StatelessWidget {
       this.address,
       this.type,
       this.isCenter,
-      this.rating});
+      this.rating,
+      this.estimatedTime});
 
   @override
   Widget build(BuildContext context) {
+    print("yeeeeeeeeeeeeeeeeeeeeeeessssssssssssss ${avatar}");
+    print((avatar == "") ? "yes" : "no");
+
     return SizedBox(
-      height: 130,
+      height: 135,
       width: 100,
       child: Card(
         // color: Color(0xFFd1d9e6), //#D3D3D3 Color(0xFFf7f7f7)
@@ -40,8 +45,10 @@ class ChooseTile extends StatelessWidget {
                 // horizontalTitleGap: 50.0,
                 leading: CircleAvatar(
                   backgroundImage: NetworkImage(
-                    avatar ??
-                        "https://thumbs.dreamstime.com/b/default-avatar-photo-placeholder-profile-image-default-avatar-photo-placeholder-profile-image-eps-file-easy-to-edit-124557892.jpg",
+                    (avatar == "")
+                        ? "https://cdn.icon-icons.com/icons2/1378/PNG/512/avatardefault_92824.png"
+                        : avatar ??
+                            "https://cdn.icon-icons.com/icons2/1378/PNG/512/avatardefault_92824.png",
                   ),
                   radius: 30,
                 ),
@@ -62,68 +69,24 @@ class ChooseTile extends StatelessWidget {
                           type != Type.mechanic
                               ? ""
                               : (isCenter ?? false)
-                                  ? ("center".tr())
-                                  : ("mechanic".tr()),
+                              ? ("center".tr())
+                              : ("mechanic".tr()),
                           style: const TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 16),
                         )
                       ],
                     ),
-                    Row(
-                      children: [
-// <<<<<<< lol
-//                         Container(
-//                           child: ElevatedButton.icon(
-//                             onPressed: () {
-//                               Clipboard.setData(ClipboardData(text: phone));
-//                             },
-//                             label: Text(
-//                               phone ?? "01...",
-//                               style: const TextStyle(
-//                                   color: Colors.black,
-//                                   fontWeight: FontWeight.bold,
-//                                   fontSize: 14),
-//                             ),
-//                             style: ElevatedButton.styleFrom(
-//                               primary: const Color(0xFFff193566).withOpacity(0),
-//                               elevation: 0,
-//                               animationDuration: Duration.zero,
-//                             ),
-//                             icon: const Icon(
-//                               Icons.copy,
-//                               color: Colors.black,
-//                             ),
-//                           ),
-//                         )
-//                       ],
-//                     ),
-//                     Row(
-//                       children: [
-//                         Text(
-//                           'Rating'.tr(),
-//                           style: TextStyle(
-//                               fontWeight: FontWeight.bold, fontSize: 16),
-//                         ),
-//                       ],
-//                     ),
-//                     const SizedBox(height: 5),
-//                     Row(
-//                       children: [
-//                         Flexible(
-//                           child: Text(
-//                             type != Type.provider ? (address ?? "address") : "",
-//                             overflow: TextOverflow.ellipsis,
-//                             style: const TextStyle(
-//                                 fontWeight: FontWeight.bold, fontSize: 16),
-//                           ),
-// =======
-                        Text(
-                          'Rating : ${rating.toString()}',
-                          style: const TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 16),
-                        ),
-                      ],
-                    ),
+                    (rating != null)
+                        ? Row(
+                            children: [
+                              Text(
+                                'Rating : ${rating.toString()}',
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.bold, fontSize: 16),
+                              ),
+                            ],
+                          )
+                        : Container(),
                     const SizedBox(height: 5),
                     Row(
                       children: [
@@ -136,13 +99,26 @@ class ChooseTile extends StatelessWidget {
                             overflow: TextOverflow.ellipsis,
                             style: const TextStyle(
                                 fontWeight: FontWeight.bold, fontSize: 16),
-//                           ),
-// >>>>>>> main
                           ),
-                          // const SizedBox(height: 20),
                         )
                       ],
                     ),
+                    (estimatedTime != null && estimatedTime != "null")
+                        ? Row(
+                            children: [
+                              Flexible(
+                                child: Text(
+                                  ("${'Estimated Time'.tr()}:\t" +
+                                      (estimatedTime ?? "--")),
+                                  overflow: TextOverflow.ellipsis,
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 16),
+                                ),
+                              )
+                            ],
+                          )
+                        : Container(),
                   ]),
                 ),
               ),

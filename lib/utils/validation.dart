@@ -2,6 +2,7 @@ import 'package:string_validator/string_validator.dart';
 
 class Validator {
   static bool emailValidator(String email) {
+    print("inside validator ${isEmail(email)} ${email}");
     if (email != "" && isEmail(email)) {
       return true;
     }
@@ -10,7 +11,7 @@ class Validator {
 
   static bool passValidator(String pass) {
     if (pass != "" &&
-        pass.contains(r'^(?=.*?[a-z])(?=.*?[0-9]).{5,}$') &&
+        pass.contains(RegExp(r'^(?=.*?[a-z])(?=.*?[0-9]).{5,}$')) &&
         pass.length > 5) {
       return true;
       // 5 char and number
@@ -37,21 +38,9 @@ class Validator {
 
   static bool phoneValidator(String phone) {
     //credit card if u wanna
-    if (phone != "" && phone.contains(r"^(?:[+0][1-9])?[0-9]{10,12}$")) {
-      // ^ beginning of a string
-      // (?:[+0][1-9])? optionally match a + or 0 followed by a digit from 1 to 9
-      // [0-9]{10,12} match 10 to 12 digits
-      // $ end of the string
+    if (phone != "" && phone.contains(RegExp(r"^01[0125][0-9]{8}$"))) {
+      //egypt phone number
 
-      return true;
-    }
-    return false;
-  }
-
-  static bool usernameValidator(String username) {
-    if (username != "" &&
-        username.contains(
-            r"^(?=.{8,20}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$")) {
       return true;
     }
     return false;
@@ -60,7 +49,6 @@ class Validator {
   static bool ageValidator(DateTime dateTime) {
     // regex for validation of date format : dd.mm.yyyy, dd/mm/yyyy, dd-mm-yyyy
     if (dateTime != "" && dateTime.isBefore(DateTime.now())) {
-
       return true;
     }
     return false;
