@@ -1,7 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -9,18 +8,17 @@ import 'package:slahly/classes/models/car.dart';
 import 'package:slahly/classes/models/client.dart';
 import 'package:slahly/classes/provider/user_data.dart';
 import 'package:slahly/utils/firebase/get_all_cars.dart';
-
-import '../../main.dart';
+import 'package:slahly/main.dart';
 import 'manageSubowner.dart';
 
-class Choose_car extends ConsumerStatefulWidget {
+class Manage_Subowners extends ConsumerStatefulWidget {
   static const routeName = "/Choose_car";
 
   @override
   _State createState() => _State();
 }
 
-class _State extends ConsumerState<Choose_car> {
+class _State extends ConsumerState<Manage_Subowners> {
   @override
   void initState() {
     super.initState();
@@ -77,7 +75,7 @@ class _State extends ConsumerState<Choose_car> {
               Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
             Text(""),
             Text(
-              "Choose_Car".tr(),
+              "Manage_Ownership".tr(),
               style: const TextStyle(
                 fontSize: 22,
                 letterSpacing: 1,
@@ -346,27 +344,28 @@ class _State extends ConsumerState<Choose_car> {
                                       //             fontSize: 19,
                                       //             fontWeight: FontWeight.bold)),
                                       //     Text("color",
-                                      //         style: TextStyle(
-                                      //             fontSize: 19,
-                                      //             color: Colors.red,
-                                      //             fontWeight: FontWeight.bold)),
-                                      //   ],
-                                      // ),
-                                    ]),
-                                  ),
+                                    //         style: TextStyle(
+                                    //             fontSize: 19,
+                                    //             color: Colors.red,
+                                    //             fontWeight: FontWeight.bold)),
+                                    //   ],
+                                    // ),
+                                  ]),
                                 ),
                               ),
                             ),
                           ),
-                        );
-                      }
-                      return Container();
-                    },
-                  ),
+                        ),
+                      );
+                    }
+                    return Container();
+                  },
                 ),
-              )),
-          painter: HeaderCurvedContainer(),
-        ));
+              ),
+            )),
+        painter: HeaderCurvedContainer(),
+      ),
+    );
   }
 
   Color hexToColor(String code) {

@@ -28,7 +28,8 @@ class _PredictionTileState extends ConsumerState<PredictionTile> {
         ref.watch(rsaProvider.notifier).assignRequestTypeToTTA();
         await ref.watch(rsaProvider.notifier).requestTta();
         if(ref.watch(rsaProvider).newNearbyProviders!.isEmpty) {
-          ref.watch(rsaProvider.notifier).searchNearbyMechanicsAndProviders();
+          // ref.watch(rsaProvider.notifier).searchNearbyMechanicsAndProviders();
+          ref.watch(rsaProvider.notifier).searchNearbyMechanicsAndProvidersSergi(ref.watch(rsaProvider.notifier));
         }
 
         print("before app state");

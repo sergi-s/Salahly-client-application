@@ -1,18 +1,14 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:slahly/classes/models/client.dart';
-import 'package:slahly/screens/car_management/add_car_screen.dart';
-import '../../classes/models/car.dart';
-import '../../classes/provider/user_data.dart';
-import '../../main.dart';
+import 'package:slahly/classes/provider/user_data.dart';
+import 'package:slahly/main.dart';
 
 class TransferOwner extends ConsumerStatefulWidget {
-  static final routeName = "/transferOwner";
+  static const routeName = "/transferOwner";
 
   @override
   _State createState() => _State();
@@ -38,16 +34,15 @@ class _State extends ConsumerState<TransferOwner> {
   Map<String, String> map = new Map();
 
   DatabaseReference user = dbRef.child("users");
-  String dropdownvalue = 'Choose car';
-  var items = ['lada', 'bmw', 'ferari', 'btngan'];
+  String dropDownValue = 'Choose car';
 
   Future showAlertbox(context) {
     return showDialog(
       context: context,
       barrierDismissible: false,
       builder: (context) => AlertDialog(
-        title: Text('Result'.tr()),
-        content: Text('are_you_sure_u_want_to_confirm_ownership_transfer'.tr()),
+        title: const Text('Result').tr(),
+        content: const Text('transferConfirmation').tr(),
         actions: [
           ElevatedButton(
               onPressed: () {
@@ -68,12 +63,7 @@ class _State extends ConsumerState<TransferOwner> {
   }
 
   @override
-  Widget build(
-    BuildContext context,
-  ) {
-    final Client carstate = ref.watch(userProvider);
-
-    final userNotifier = ref.watch(userProvider.notifier);
+  Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: const Color(0xFFd1d9e6),
@@ -126,9 +116,7 @@ class _State extends ConsumerState<TransferOwner> {
               //     ),
               //   ],
               // ),
-              SizedBox(
-                height: 120,
-              ),
+              const SizedBox(height: 120),
               Row(children: [
                 Container(
                   width: MediaQuery.of(context).size.width * 0.6,
@@ -149,7 +137,7 @@ class _State extends ConsumerState<TransferOwner> {
                     getuser();
                   },
                   tooltip: 'search',
-                  child: Icon(Icons.search),
+                  child: const Icon(Icons.search),
                 ),
               ]),
 
@@ -163,7 +151,7 @@ class _State extends ConsumerState<TransferOwner> {
                           const TextStyle(fontSize: 25, color: Colors.black)),
                   SizedBox(width: 20),
                   DropdownButton<dynamic>(
-                    value: dropdownvalue,
+                    value: dropDownValue,
                     icon: Icon(Icons.keyboard_arrow_down),
                     items: models.map((dynamic items) {
                       return DropdownMenuItem(
@@ -174,8 +162,8 @@ class _State extends ConsumerState<TransferOwner> {
                     }).toList(),
                     onChanged: (dynamic? value) {
                       setState(() {
-                        this.dropdownvalue = value!;
-                        selected = map[this.dropdownvalue];
+                        this.dropDownValue = value!;
+                        selected = map[this.dropDownValue];
                       });
                     },
                   ),
@@ -186,14 +174,13 @@ class _State extends ConsumerState<TransferOwner> {
               ),
               Row(
                 children: [
-                  (avatar == null)
-                      ? Container()
-                      : CircleAvatar(
+                  (avatar != null)
+                      ? CircleAvatar(
                           radius: 30.0,
-                          backgroundImage: NetworkImage(avatar ??
-                              "https://cdn.icon-icons.com/icons2/1378/PNG/512/avatardefault_92824.png"),
+                          backgroundImage: NetworkImage(avatar!),
                           backgroundColor: Colors.transparent,
-                        ),
+                        )
+                      : Container(),
                   const SizedBox(width: 20),
                   Text(email!,
                       style: const TextStyle(
@@ -211,42 +198,27 @@ class _State extends ConsumerState<TransferOwner> {
                     width: 300,
                     child: Center(
                       child: TextButton(
-                          child: Text("Confirm_Transfer".tr(),
-                              style:
-                                  // <<<<<<< HEAD
-                                  TextStyle(fontSize: 15, color: Colors.white)),
-                          // >>>>>>> 931e111d966e6532a25d6451b6fa85ee81a45bd7
+                          child: const Text("Confirm_Transfer",
+                                  style:
+                                      TextStyle(
+                                          fontSize: 15, color: Colors.white))
+                              .tr(),
                           style: ButtonStyle(
-                              padding: MaterialStateProperty.all<EdgeInsets>(
-                                  EdgeInsets.all(15)),
-                              foregroundColor: MaterialStateProperty.all<Color>(
-                                  Color(0xFF193566)),
-                              backgroundColor: MaterialStateProperty.all<Color>(
-                                  Color(0xFF193566)),
-                              shape: MaterialStateProperty.all(
-                                  RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(18.0),
-                                      side: BorderSide(
-                                          color: Color(0xFF193566))))),
+                            padding: MaterialStateProperty.all<EdgeInsets>(
+                                const EdgeInsets.all(15)),
+                            foregroundColor: MaterialStateProperty.all<Color>(
+                                const Color(0xFF193566)),
+                            backgroundColor: MaterialStateProperty.all<Color>(
+                                const Color(0xFF193566)),
+                            shape: MaterialStateProperty.all(
+                                RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(18.0),
+                                    side: const BorderSide(
+                                        color: Color(0xFF193566)))),
+                          ),
                           onPressed: () => showAlertbox(context)),
                     )),
               ),
-              // ElevatedButton(
-              //     onPressed: () {
-              //       // cardata();
-              //       getuser();
-              //     },
-              //     child: Text("dataa")),
-              // ElevatedButton(
-              //     onPressed: () {
-              //       context.push(AddCars.routeName);
-              //     },
-              //     child: Text("goooo")),
-              // ElevatedButton(
-              //     onPressed: () {
-              //       transferOwner(selected);
-              //     },
-              //     child: Text("transfer"))
             ]),
           ),
         ),
@@ -266,7 +238,6 @@ class _State extends ConsumerState<TransferOwner> {
         .then((event) {
       final dataSnapshot = event.snapshot;
       print("carssss${dataSnapshot.value.toString()}");
-
       for (var element in dataSnapshot.children) {
         print(element.key.toString());
         cars.child(element.key.toString()).once().then((value) {
@@ -289,14 +260,14 @@ class _State extends ConsumerState<TransferOwner> {
                 map[models[i]] = chasis[i];
               }
 
+
               dropdownvalue = models[0].toString();
             });
           }
 
-          print(models);
-          print(map);
+          dropDownValue = models[0].toString();
         });
-      }
+      });
     });
   }
 
@@ -316,9 +287,6 @@ class _State extends ConsumerState<TransferOwner> {
             .removeCar(ref.watch(userProvider).cars[i]);
       }
     }
-    // ref
-    //     .watch(userProvider.notifier)
-    //     .removeCar(ref.watch(userProvider).cars[index]);
   }
 
   getuser() async {
@@ -347,13 +315,7 @@ class _State extends ConsumerState<TransferOwner> {
           found = true;
         });
       }
-      print(subId);
-      print(avatar);
-      print(email);
-
-      // user.child("cars").orderByChild("model").equalTo(dropdownvalue).;
     });
-    print(items);
   }
 }
 

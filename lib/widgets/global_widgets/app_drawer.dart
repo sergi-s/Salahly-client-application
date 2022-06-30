@@ -1,18 +1,16 @@
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/cupertino.dart';
 import "package:flutter/material.dart";
 import 'package:go_router/go_router.dart';
-import 'package:slahly/screens/car_management/addCars.dart';
 import 'package:slahly/screens/car_management/view_cars_screen.dart';
 import 'package:slahly/screens/history_management/ongoing_requests.dart';
 import 'package:slahly/screens/history_management/view_history.dart';
 import 'package:slahly/screens/homepage.dart';
 import 'package:slahly/screens/reminder/reminderScreen.dart';
 import 'package:slahly/screens/switchLanguage.dart';
-import 'package:slahly/screens/userMangament/choose_car.dart';
+import 'package:slahly/screens/userMangament/view_cars_to_manage_subowners.dart';
 import 'package:slahly/screens/userMangament/transferOwner.dart';
 
-import '../../screens/test_screens/testscreen_foula.dart';
+import 'package:slahly/screens/test_screens/testscreen_foula.dart';
 
 Widget salahlyDrawer(BuildContext context) {
   return Drawer(
@@ -74,21 +72,21 @@ Widget salahlyDrawer(BuildContext context) {
                   context.push(ViewCars.routeName);
                 },
               ),
-              ListTile(
-                title: Text(
-                  "add_car_screen".tr(),
-                  style: const TextStyle(fontWeight: FontWeight.bold),
-                ),
-                onTap: () {
-                  Navigator.pop(context);
-                  context.push(AddCar.routeName);
-                },
-              ),
+              // ListTile(
+              //   title: Text(
+              //     "add_car_screen".tr(),
+              //     style: const TextStyle(fontWeight: FontWeight.bold),
+              //   ),
+              //   onTap: () {
+              //     Navigator.pop(context);
+              //     context.push(AddCar.routeName);
+              //   },
+              // ),
               ListTile(
                 title: const Text('Manage_Ownership').tr(),
                 onTap: () {
                   Navigator.pop(context);
-                  context.push(Choose_car.routeName);
+                  context.push(Manage_Subowners.routeName);
                 },
               ),
               ListTile(

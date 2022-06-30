@@ -77,9 +77,12 @@ class MapWidgetState extends State<MapWidget> {
   //move camera to current position
   moveCamera(CustomLocation cus) async {
     currentCustomLoc = cus;
-    currentCustomLoc.address = await searchCoordinateAddress_google(
-        currentCustomLoc.latitude, currentCustomLoc.longitude);
-
+    try{
+      currentCustomLoc.address = await searchCoordinateAddress_google(
+          currentCustomLoc.latitude, currentCustomLoc.longitude);
+    }catch(e){
+      print(e);
+    }
     LatLng latLatPosition =
         LatLng(currentCustomLoc.latitude, currentCustomLoc.longitude);
 
