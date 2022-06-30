@@ -132,6 +132,7 @@ class _State extends ConsumerState<TransferOwner> {
                   ),
                 ),
                 FloatingActionButton(
+                  backgroundColor: Color(0xFF193566),
                   onPressed: () {
                     getuser();
                   },
@@ -140,12 +141,6 @@ class _State extends ConsumerState<TransferOwner> {
                 ),
               ]),
 
-              // TextFormField(
-              //   controller: getUserController,
-              //   decoration: InputDecoration(
-              //     labelText: "Enter New Ownership email",
-              //   ),
-              // ),
               SizedBox(
                 height: 50,
               ),
@@ -187,7 +182,11 @@ class _State extends ConsumerState<TransferOwner> {
                         )
                       : Container(),
                   const SizedBox(width: 20),
-                  Text(email!, style: TextStyle(fontSize: 25))
+                  Text(email!,
+                      style: const TextStyle(
+                        fontSize: 16,
+                        overflow: TextOverflow.ellipsis,
+                      ))
                 ],
               ),
               const SizedBox(
@@ -229,23 +228,41 @@ class _State extends ConsumerState<TransferOwner> {
 
   cardata() async {
     DatabaseReference cars = dbRef.child("cars");
+    DatabaseReference carsUsers = dbRef.child("users_cars");
 
-    cars
-        .orderByChild("owner")
-        .equalTo(FirebaseAuth.instance.currentUser!.uid)
+    carsUsers
+        .child(FirebaseAuth.instance.currentUser!.uid)
+        .orderByValue()
+        .equalTo("true")
         .once()
         .then((event) {
       final dataSnapshot = event.snapshot;
+      print("carssss${dataSnapshot.value.toString()}");
+      for (var element in dataSnapshot.children) {
+        print(element.key.toString());
+        cars.child(element.key.toString()).once().then((value) {
+          final carsSnapshot = value.snapshot;
+          print(carsSnapshot.value.toString());
+          // print(
+          //     "colooooooooooooor ${carsSnapshot.child("color").value.toString()}");
+          // color = carsSnapshot.child("color").value.toString();
+          // color = color.toString().substring(6);
+          // color = color.toString().substring(0, color.toString().length - 1);
+          // print("ahooooooooooooooooooooooo${color}");
+          CarAccess carAccess = CarAccess.sub;
+          if (carsSnapshot.child("owner").value.toString() ==
+              FirebaseAuth.instance.currentUser!.uid) {
+            carAccess = CarAccess.owner;
+            setState(() {
+              models.add(carsSnapshot.child("model").value.toString());
+              chasis.add(carsSnapshot.key);
+              for (var i = 0; i < models.length; i++) {
+                map[models[i]] = chasis[i];
+              }
 
-      dataSnapshot.children.forEach((carsSnapShot) {
-        // print("this user's cars=>${carsSnapShot.child("model").value}");
-        // print("this user's cars=>${carsSnapShot.key}");
 
-        setState(() {
-          models.add(carsSnapShot.child("model").value.toString());
-          chasis.add(carsSnapShot.key);
-          for (var i = 0; i < models.length; i++) {
-            map[models[i]] = chasis[i];
+              dropdownvalue = models[0].toString();
+            });
           }
 
           dropDownValue = models[0].toString();
