@@ -58,7 +58,9 @@ class _ReminderScreenState extends State<ReminderScreen> {
             title: element.content!.body!,
             // date: "Hello"));
             date: element.content!.createdDate ??
-                DateTime.now().add(const Duration(days: 1)).toString()));
+                // DateTime.now().toString(),
+                DateFormat('yyyy-MM-dd ').format(DateTime.now()).toString(),
+            note:element.content!.body!));
         //  DateTime.now().toString()));
       } else {
         print("element not valid ");
@@ -73,6 +75,7 @@ class _ReminderScreenState extends State<ReminderScreen> {
     Size size = MediaQuery.of(context).size;
     final String title = reminder.title;
     final String date = reminder.date;
+    final String note= reminder.note ;
 
     return Container(
       height: size.height / 8,
@@ -127,12 +130,12 @@ class _ReminderScreenState extends State<ReminderScreen> {
                           borderRadius: BorderRadius.circular(12),
                         ),
                       ),
-                      onPressed: () => {Navigator.pop(context, 'ok'.tr())},
+                      onPressed: () => {Navigator.pop(context, 'cancel'.tr())},
                       icon: const Icon(
-                        Icons.done,
+                        Icons.close,
                         color: Colors.white,
                       ),
-                      label: const Text('ok',
+                      label: const Text('cancel',
                           style: TextStyle(
                             color: Colors.white,
                           )).tr(),
@@ -142,8 +145,8 @@ class _ReminderScreenState extends State<ReminderScreen> {
               );
             },
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
+              // mainAxisAlignment: MainAxisAlignment.center,
+              // crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
                 ListTile(
                   leading: const Icon(CupertinoIcons.alarm,
@@ -154,11 +157,20 @@ class _ReminderScreenState extends State<ReminderScreen> {
                               color: Color(0xff193566),
                               fontWeight: FontWeight.bold))
                       .tr(),
-                  subtitle: Text(date,
-                          textScaleFactor: 1.1,
-                          style: const TextStyle(color: Colors.black54))
-                      .tr(),
-                )
+                  subtitle: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(date,
+                              textScaleFactor: 1.1,
+                              style: TextStyle(color: Colors.indigo.shade800))
+                          .tr(),
+                      Text(note,textScaleFactor: 1.1,
+                          style: const TextStyle(color: Colors.black54)).tr(),
+                    ],
+                  ),
+                ),
+
               ],
             ),
           ),
