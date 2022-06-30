@@ -327,6 +327,7 @@ class _AddReminderState extends State<AddReminder> {
                     day: _selectedDate!.day,
                     timeOfDay: selectedTime);
                 addReminder(
+
                     title: "Salhlay".tr(),
                     body: title,
                     notificationSchedule: nwt);
