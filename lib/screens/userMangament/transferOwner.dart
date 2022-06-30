@@ -7,6 +7,8 @@ import 'package:go_router/go_router.dart';
 import 'package:slahly/classes/provider/user_data.dart';
 import 'package:slahly/main.dart';
 
+import '../../classes/models/car.dart';
+
 class TransferOwner extends ConsumerStatefulWidget {
   static const routeName = "/transferOwner";
 
@@ -141,37 +143,33 @@ class _State extends ConsumerState<TransferOwner> {
                 ),
               ]),
 
-              SizedBox(
-                height: 50,
-              ),
+              const SizedBox(height: 50),
               Row(
                 children: [
-                  Text('Choose_Car'.tr(),
-                      style:
-                          const TextStyle(fontSize: 25, color: Colors.black)),
-                  SizedBox(width: 20),
+                  const Text('Choose_Car',
+                          style: TextStyle(fontSize: 25, color: Colors.black))
+                      .tr(),
+                  const SizedBox(width: 20),
                   DropdownButton<dynamic>(
                     value: dropDownValue,
-                    icon: Icon(Icons.keyboard_arrow_down),
+                    icon: const Icon(Icons.keyboard_arrow_down),
                     items: models.map((dynamic items) {
                       return DropdownMenuItem(
                           value: items,
                           child: Text(items,
-                              style: TextStyle(
+                              style: const TextStyle(
                                   fontSize: 15, color: Colors.black)));
                     }).toList(),
                     onChanged: (dynamic? value) {
                       setState(() {
-                        this.dropDownValue = value!;
-                        selected = map[this.dropDownValue];
+                        dropDownValue = value!;
+                        selected = map[dropDownValue];
                       });
                     },
                   ),
                 ],
               ),
-              const SizedBox(
-                height: 15,
-              ),
+              const SizedBox(height: 15),
               Row(
                 children: [
                   (avatar != null)
@@ -182,16 +180,16 @@ class _State extends ConsumerState<TransferOwner> {
                         )
                       : Container(),
                   const SizedBox(width: 20),
-                  Text(email!,
-                      style: const TextStyle(
-                        fontSize: 16,
-                        overflow: TextOverflow.ellipsis,
-                      ))
+                  Text(
+                    email!,
+                    style: const TextStyle(
+                      fontSize: 16,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  )
                 ],
               ),
-              const SizedBox(
-                height: 70,
-              ),
+              const SizedBox(height: 70),
               Visibility(
                 visible: found,
                 child: Container(
@@ -199,9 +197,8 @@ class _State extends ConsumerState<TransferOwner> {
                     child: Center(
                       child: TextButton(
                           child: const Text("Confirm_Transfer",
-                                  style:
-                                      TextStyle(
-                                          fontSize: 15, color: Colors.white))
+                                  style: TextStyle(
+                                      fontSize: 15, color: Colors.white))
                               .tr(),
                           style: ButtonStyle(
                             padding: MaterialStateProperty.all<EdgeInsets>(
@@ -259,15 +256,12 @@ class _State extends ConsumerState<TransferOwner> {
               for (var i = 0; i < models.length; i++) {
                 map[models[i]] = chasis[i];
               }
-
-
-              dropdownvalue = models[0].toString();
+              dropDownValue = models[0].toString();
             });
           }
-
-          dropDownValue = models[0].toString();
+          // dropDownValue = models[0].toString();
         });
-      });
+      }
     });
   }
 
