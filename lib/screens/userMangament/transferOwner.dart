@@ -34,7 +34,7 @@ class _State extends ConsumerState<TransferOwner> {
   Map<String, String> map = new Map();
 
   DatabaseReference user = dbRef.child("users");
-  String dropdownvalue = 'Choose car';
+  String dropDownValue = 'Choose car';
 
   Future showAlertbox(context) {
     return showDialog(
@@ -63,9 +63,7 @@ class _State extends ConsumerState<TransferOwner> {
   }
 
   @override
-  Widget build(
-    BuildContext context,
-  ) {
+  Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: const Color(0xFFd1d9e6),
@@ -118,9 +116,7 @@ class _State extends ConsumerState<TransferOwner> {
               //     ),
               //   ],
               // ),
-              SizedBox(
-                height: 120,
-              ),
+              const SizedBox(height: 120),
               Row(children: [
                 Container(
                   width: MediaQuery.of(context).size.width * 0.6,
@@ -140,7 +136,7 @@ class _State extends ConsumerState<TransferOwner> {
                     getuser();
                   },
                   tooltip: 'search',
-                  child: Icon(Icons.search),
+                  child: const Icon(Icons.search),
                 ),
               ]),
 
@@ -160,7 +156,7 @@ class _State extends ConsumerState<TransferOwner> {
                           const TextStyle(fontSize: 25, color: Colors.black)),
                   SizedBox(width: 20),
                   DropdownButton<dynamic>(
-                    value: dropdownvalue,
+                    value: dropDownValue,
                     icon: Icon(Icons.keyboard_arrow_down),
                     items: models.map((dynamic items) {
                       return DropdownMenuItem(
@@ -171,8 +167,8 @@ class _State extends ConsumerState<TransferOwner> {
                     }).toList(),
                     onChanged: (dynamic? value) {
                       setState(() {
-                        this.dropdownvalue = value!;
-                        selected = map[this.dropdownvalue];
+                        this.dropDownValue = value!;
+                        selected = map[this.dropDownValue];
                       });
                     },
                   ),
@@ -205,23 +201,21 @@ class _State extends ConsumerState<TransferOwner> {
                       child: TextButton(
                           child: const Text("Confirm_Transfer",
                                   style:
-                                      // <<<<<<< HEAD
                                       TextStyle(
                                           fontSize: 15, color: Colors.white))
                               .tr(),
-                          // >>>>>>> 931e111d966e6532a25d6451b6fa85ee81a45bd7
                           style: ButtonStyle(
                             padding: MaterialStateProperty.all<EdgeInsets>(
-                                EdgeInsets.all(15)),
+                                const EdgeInsets.all(15)),
                             foregroundColor: MaterialStateProperty.all<Color>(
-                                Color(0xFF193566)),
+                                const Color(0xFF193566)),
                             backgroundColor: MaterialStateProperty.all<Color>(
-                                Color(0xFF193566)),
+                                const Color(0xFF193566)),
                             shape: MaterialStateProperty.all(
                                 RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(18.0),
-                                    side:
-                                        BorderSide(color: Color(0xFF193566)))),
+                                    side: const BorderSide(
+                                        color: Color(0xFF193566)))),
                           ),
                           onPressed: () => showAlertbox(context)),
                     )),
@@ -244,8 +238,8 @@ class _State extends ConsumerState<TransferOwner> {
       final dataSnapshot = event.snapshot;
 
       dataSnapshot.children.forEach((carsSnapShot) {
-        print("this user's cars=>${carsSnapShot.child("model").value}");
-        print("this user's cars=>${carsSnapShot.key}");
+        // print("this user's cars=>${carsSnapShot.child("model").value}");
+        // print("this user's cars=>${carsSnapShot.key}");
 
         setState(() {
           models.add(carsSnapShot.child("model").value.toString());
@@ -254,7 +248,7 @@ class _State extends ConsumerState<TransferOwner> {
             map[models[i]] = chasis[i];
           }
 
-          dropdownvalue = models[0].toString();
+          dropDownValue = models[0].toString();
         });
       });
     });

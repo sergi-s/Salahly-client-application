@@ -75,7 +75,7 @@ class _State extends ConsumerState<Manage_Subowners> {
               Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
             Text(""),
             Text(
-              "Choose_Car".tr(),
+              "Manage_Ownership".tr(),
               style: const TextStyle(
                 fontSize: 22,
                 letterSpacing: 1,
