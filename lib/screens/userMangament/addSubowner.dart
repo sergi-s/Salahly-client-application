@@ -9,6 +9,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:slahly/main.dart';
 
+import '../../classes/models/car.dart';
+
 class AddSubowner extends ConsumerStatefulWidget {
   static const routeName = "/addSubowner";
 
@@ -150,6 +152,7 @@ class _State extends ConsumerState<AddSubowner> {
                     ),
                   ),
                   FloatingActionButton(
+                    backgroundColor: Color(0xFF193566),
                     onPressed: () {
                       getuser();
                     },
@@ -213,11 +216,11 @@ class _State extends ConsumerState<AddSubowner> {
         children: [
           Padding(
             padding: const EdgeInsets.all(32.0),
-            child: FloatingActionButton(
-              onPressed: () => scanQRcode(),
-              child: const Icon(Icons.qr_code),
-              backgroundColor: const Color(0xFF193566),
-            ),
+            // child: FloatingActionButton(
+            //   onPressed: () => scanQRcode(),
+            //   child: const Icon(Icons.qr_code),
+            //   backgroundColor: const Color(0xFF193566),
+            // ),
           ),
           // SizedBox(width: MediaQuery.of(context).size.width * 0.7),
 
@@ -249,33 +252,79 @@ class _State extends ConsumerState<AddSubowner> {
 
   cardata() async {
     DatabaseReference cars = dbRef.child("cars");
-    // final userNotifier = ref.watch(userProvider.notifier);
+    DatabaseReference carsUsers = dbRef.child("users_cars");
 
-    cars
-        .orderByChild("owner")
-        .equalTo(FirebaseAuth.instance.currentUser!.uid)
+    carsUsers
+        .child(FirebaseAuth.instance.currentUser!.uid)
+        .orderByValue()
+        .equalTo("true")
         .once()
         .then((event) {
       final dataSnapshot = event.snapshot;
+      print("carssss${dataSnapshot.value.toString()}");
 
-      dataSnapshot.children.forEach((carsSnapShot) {
-        print("this user's cars=>${carsSnapShot.child("model").value}");
-        print("this user's cars=>${carsSnapShot.key}");
+      for (var element in dataSnapshot.children) {
+        print(element.key.toString());
+        cars.child(element.key.toString()).once().then((value) {
+          final carsSnapshot = value.snapshot;
+          print(carsSnapshot.value.toString());
+          // print(
+          //     "colooooooooooooor ${carsSnapshot.child("color").value.toString()}");
+          // color = carsSnapshot.child("color").value.toString();
+          // color = color.toString().substring(6);
+          // color = color.toString().substring(0, color.toString().length - 1);
+          // print("ahooooooooooooooooooooooo${color}");
+          CarAccess carAccess = CarAccess.sub;
+          if (carsSnapshot.child("owner").value.toString() ==
+              FirebaseAuth.instance.currentUser!.uid) {
+            carAccess = CarAccess.owner;
+            setState(() {
+              models.add(carsSnapshot.child("model").value.toString());
+              chasis.add(carsSnapshot.key);
+              for (var i = 0; i < models.length; i++) {
+                map[models[i]] = chasis[i];
+              }
 
-        setState(() {
-          models.add(carsSnapShot.child("model").value.toString());
-          chasis.add(carsSnapShot.key);
-          for (var i = 0; i < models.length; i++) {
-            map[models[i]] = chasis[i];
+              dropdownvalue = models[0].toString();
+            });
           }
 
-          dropdownvalue = models[0].toString();
+          print(models);
+          print(map);
         });
-        print(models);
-        print(map);
-      });
+      }
     });
   }
+
+  // cardata() async {
+  //   DatabaseReference cars = dbRef.child("cars");
+  //   // final userNotifier = ref.watch(userProvider.notifier);
+  //
+  //   cars
+  //       .orderByChild("owner")
+  //       .equalTo(FirebaseAuth.instance.currentUser!.uid)
+  //       .once()
+  //       .then((event) {
+  //     final dataSnapshot = event.snapshot;
+  //
+  //     dataSnapshot.children.forEach((carsSnapShot) {
+  //       print("this user's cars=>${carsSnapShot.child("model").value}");
+  //       print("this user's cars=>${carsSnapShot.key}");
+  //
+  //       setState(() {
+  //         models.add(carsSnapShot.child("model").value.toString());
+  //         chasis.add(carsSnapShot.key);
+  //         for (var i = 0; i < models.length; i++) {
+  //           map[models[i]] = chasis[i];
+  //         }
+  //
+  //         dropdownvalue = models[0].toString();
+  //       });
+  //       print(models);
+  //       print(map);
+  //     });
+  //   });
+  // }
 
   addSubowner(selected) async {
     print("selected ${selected}");

@@ -30,23 +30,31 @@ class _State extends ConsumerState<ManageSubowner> {
   Widget showList() {
     return SingleChildScrollView(
         child: Column(children: [
-      Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-        // Text(
-        //   "manageSubOwner".tr(),
-        //   style: const TextStyle(fontSize: 35, color: Colors.white),
-        //   textAlign: TextAlign.center,
-        // ),
-      ]),
-      ListView.builder(
-          padding: const EdgeInsets.all(0),
-          shrinkWrap: true,
-          itemCount: subowners.length,
-          itemBuilder: (BuildContext context, index) {
-            return Column(children: [
-              Container(
-                  padding: EdgeInsets.all(5.0), child: rowItem(context, index))
-            ]);
-          }),
+      // Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+      //   // Text(
+      //   //   "manageSubOwner".tr(),
+      //   //   style: const TextStyle(fontSize: 35, color: Colors.white),
+      //   //   textAlign: TextAlign.center,
+      //   // ),
+      // ]),
+      RefreshIndicator(
+        onRefresh: () {
+          return Future.delayed(const Duration(seconds: 2), () {
+            showSubowner(widget.chasis);
+          });
+        },
+        child: ListView.builder(
+            padding: const EdgeInsets.all(0),
+            shrinkWrap: true,
+            itemCount: subowners.length,
+            itemBuilder: (BuildContext context, index) {
+              return Column(children: [
+                Container(
+                    padding: EdgeInsets.all(5.0),
+                    child: rowItem(context, index))
+              ]);
+            }),
+      ),
     ]));
   }
 

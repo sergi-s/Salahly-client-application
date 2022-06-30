@@ -47,7 +47,7 @@ class _State extends ConsumerState<TransferOwner> {
       barrierDismissible: false,
       builder: (context) => AlertDialog(
         title: Text('Result'.tr()),
-        content: Text('are you sure u want to+ confirm ownership transfer'),
+        content: Text('are_you_sure_u_want_to_confirm_ownership_transfer'.tr()),
         actions: [
           ElevatedButton(
               onPressed: () {
@@ -144,6 +144,7 @@ class _State extends ConsumerState<TransferOwner> {
                   ),
                 ),
                 FloatingActionButton(
+                  backgroundColor: Color(0xFF193566),
                   onPressed: () {
                     getuser();
                   },
@@ -152,12 +153,6 @@ class _State extends ConsumerState<TransferOwner> {
                 ),
               ]),
 
-              // TextFormField(
-              //   controller: getUserController,
-              //   decoration: InputDecoration(
-              //     labelText: "Enter New Ownership email",
-              //   ),
-              // ),
               SizedBox(
                 height: 50,
               ),
@@ -191,13 +186,20 @@ class _State extends ConsumerState<TransferOwner> {
               ),
               Row(
                 children: [
-                  CircleAvatar(
-                    radius: 30.0,
-                    backgroundImage: NetworkImage(avatar ?? "sad"),
-                    backgroundColor: Colors.transparent,
-                  ),
+                  (avatar == null)
+                      ? Container()
+                      : CircleAvatar(
+                          radius: 30.0,
+                          backgroundImage: NetworkImage(avatar ??
+                              "https://cdn.icon-icons.com/icons2/1378/PNG/512/avatardefault_92824.png"),
+                          backgroundColor: Colors.transparent,
+                        ),
                   const SizedBox(width: 20),
-                  Text(email!, style: TextStyle(fontSize: 25))
+                  Text(email!,
+                      style: const TextStyle(
+                        fontSize: 16,
+                        overflow: TextOverflow.ellipsis,
+                      ))
                 ],
               ),
               const SizedBox(
@@ -254,30 +256,47 @@ class _State extends ConsumerState<TransferOwner> {
 
   cardata() async {
     DatabaseReference cars = dbRef.child("cars");
+    DatabaseReference carsUsers = dbRef.child("users_cars");
 
-    cars
-        .orderByChild("owner")
-        .equalTo(FirebaseAuth.instance.currentUser!.uid)
+    carsUsers
+        .child(FirebaseAuth.instance.currentUser!.uid)
+        .orderByValue()
+        .equalTo("true")
         .once()
         .then((event) {
       final dataSnapshot = event.snapshot;
+      print("carssss${dataSnapshot.value.toString()}");
 
-      dataSnapshot.children.forEach((carsSnapShot) {
-        print("this user's cars=>${carsSnapShot.child("model").value}");
-        print("this user's cars=>${carsSnapShot.key}");
+      for (var element in dataSnapshot.children) {
+        print(element.key.toString());
+        cars.child(element.key.toString()).once().then((value) {
+          final carsSnapshot = value.snapshot;
+          print(carsSnapshot.value.toString());
+          // print(
+          //     "colooooooooooooor ${carsSnapshot.child("color").value.toString()}");
+          // color = carsSnapshot.child("color").value.toString();
+          // color = color.toString().substring(6);
+          // color = color.toString().substring(0, color.toString().length - 1);
+          // print("ahooooooooooooooooooooooo${color}");
+          CarAccess carAccess = CarAccess.sub;
+          if (carsSnapshot.child("owner").value.toString() ==
+              FirebaseAuth.instance.currentUser!.uid) {
+            carAccess = CarAccess.owner;
+            setState(() {
+              models.add(carsSnapshot.child("model").value.toString());
+              chasis.add(carsSnapshot.key);
+              for (var i = 0; i < models.length; i++) {
+                map[models[i]] = chasis[i];
+              }
 
-        setState(() {
-          models.add(carsSnapShot.child("model").value.toString());
-          chasis.add(carsSnapShot.key);
-          for (var i = 0; i < models.length; i++) {
-            map[models[i]] = chasis[i];
+              dropdownvalue = models[0].toString();
+            });
           }
 
-          dropdownvalue = models[0].toString();
+          print(models);
+          print(map);
         });
-        print(models);
-        print(map);
-      });
+      }
     });
   }
 
