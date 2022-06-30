@@ -222,10 +222,28 @@ class _State extends ConsumerState<ViewCars> {
                                                     color: Colors.black,
                                                     fontSize: 19,
                                                     fontWeight:
-                                                        FontWeight.bold)),
-                                          ],
-                                        ),
-                                ]),
+                                                        FontWeight.bold))),
+                                      ],
+                                    ),
+                                    (ref
+                                                .watch(userProvider)
+                                                .cars[index]
+                                                .color !=
+                                            null)
+                                        ? Container()
+                                        : Row(
+                                            children: [
+                                              Text("Color".tr(),
+                                                  style: const TextStyle(
+                                                      color: Colors.black,
+                                                      fontSize: 19,
+                                                      fontWeight:
+                                                          FontWeight.bold)),
+                                            ],
+                                          ),
+                                  ]),
+                                ),
+
                               ),
                             ),
                           ),

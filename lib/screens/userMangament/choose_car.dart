@@ -376,15 +376,13 @@ class _State extends ConsumerState<Choose_car> {
   deleteCar(index) async {
     String? chasis = ref.watch(userProvider).cars[index].noChassis;
 
-    //TODO check if this user is the owner of this car
-    //authorization
     DatabaseReference carsUsers = dbRef.child("cars_users").child(chasis!);
     DatabaseReference cars = dbRef.child("cars").child(chasis);
     DatabaseReference userCars = dbRef
         .child("users_cars")
         .child(FirebaseAuth.instance.currentUser!.uid)
         .child(chasis);
-    userCars.set(false);
+    userCars.set("false");
     ref
         .watch(userProvider.notifier)
         .removeCar(ref.watch(userProvider).cars[index]);
