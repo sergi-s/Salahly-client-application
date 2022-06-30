@@ -136,21 +136,11 @@ class _SearchingMechanicProviderScreenState
   //Stream
   _getRsaDataStream() async {
     rsaRef.child(ref.watch(rsaProvider).rsaID!).onValue.listen((event) {
-      // print("LISTENER");
-      // print("${event.snapshot.value}");
       if (event.snapshot.value != null) {
-        // print("data not null");
         DataSnapshot dataSnapshot = event.snapshot;
-
-        // print(dataSnapshot.child("state").value.toString() ==
-        //         RSA.stateToString(RSAStates.waitingForMechanicResponse)
-        //     ? "Mech will activate"
-        //     : "Prov will activate");
 
         if (dataSnapshot.child("state").value.toString() ==
             RSA.stateToString(RSAStates.waitingForMechanicResponse)) {
-          // print("waiting for Mech is activated");
-
           bool flagAllRejected = true;
           bool flagFindYet = false;
           dataSnapshot.child("mechanicsResponses").children.forEach((mechanic) {
@@ -161,7 +151,6 @@ class _SearchingMechanicProviderScreenState
             }
             if (mechanic.value == "accepted") {
               flagAllRejected = false;
-              // print("Someone is accepted");
               if (ref
                   .watch(rsaProvider)
                   .newNearbyMechanics!
@@ -284,7 +273,8 @@ class _SearchingMechanicProviderScreenState
 
     ref.watch(rsaProvider.notifier).assignUserLocation(widget.userLocation!);
     await rsaNotifier.requestRSA();
-    await rsaNotifier.searchNearbyMechanicsAndProviders();
+    // await rsaNotifier.searchNearbyMechanicsAndProviders();
+    await rsaNotifier.searchNearbyMechanicsAndProvidersSergi(rsaNotifier);
     ref.watch(salahlyClientProvider.notifier).assignRequest(
         ref.watch(rsaProvider).requestType!, ref.watch(rsaProvider).rsaID!);
     _getRsaDataStream();

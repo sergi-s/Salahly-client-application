@@ -56,10 +56,9 @@ class _LoginFormState extends State<LoginForm> {
             //               fontSize: 24,
             //
             style: GoogleFonts.raleway(
-              fontWeight: FontWeight.bold,
-              fontSize: 24,
-              color:  Color(0xFF193566)
-            ),
+                fontWeight: FontWeight.bold,
+                fontSize: 24,
+                color: Color(0xFF193566)),
           ),
           const SizedBox(height: 40),
           Image.asset(
@@ -106,19 +105,22 @@ class _LoginFormState extends State<LoginForm> {
           // ),
           SizedBox(height: 40),
           SizedBox(
-            width:MediaQuery.of(context).size.width * 0.4,
+            width: MediaQuery.of(context).size.width * 0.4,
             height: 40,
             child: RaisedButton(
               color: Color(0xFF193566),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12),
               ),
-              onPressed: () async{
+              onPressed: () async {
                 if (!Validator.emailValidator(email)) {
-                   ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                          content: Text('Invalid Email!! Please try again')));
+                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                      content: Text('Invalid Email!! Please try again')));
+                } else if (!Validator.passValidator(password)) {
+                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                      content: Text('Invalid Password!! Please try again')));
                 }
+
                 // if (!Validator.passValidator(password)) {
                 //   return ScaffoldMessenger.of(context).showSnackBar(
                 //       const SnackBar(
