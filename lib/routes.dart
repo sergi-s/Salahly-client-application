@@ -33,7 +33,7 @@ import 'package:slahly/screens/test_screens/test_user_SM.dart';
 import 'package:slahly/screens/test_screens/testscreen_foula.dart';
 import 'package:slahly/screens/testscreenyoyo.dart';
 import 'package:slahly/screens/userMangament/addSubowner.dart';
-import 'package:slahly/screens/userMangament/choose_car.dart';
+import 'package:slahly/screens/userMangament/view_cars_to_manage_subowners.dart';
 import 'package:slahly/screens/userMangament/editProfile.dart';
 import 'package:slahly/screens/userMangament/manageSubowner.dart';
 import 'package:slahly/screens/userMangament/pofile.dart';
@@ -179,8 +179,8 @@ class Routing {
             builder: (context, state) => ViewHistory(),
           ),
           GoRoute(
-            path: Choose_car.routeName,
-            builder: (context, state) => Choose_car(),
+            path: Manage_Subowners.routeName,
+            builder: (context, state) => Manage_Subowners(),
           ),
           GoRoute(
             path: Arrival.routeName,
