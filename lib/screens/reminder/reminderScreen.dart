@@ -10,7 +10,7 @@ import 'package:slahly/classes/models/reminder.dart';
 class ReminderScreen extends StatefulWidget {
   static const routeName = "/reminderscreen";
 
-  ReminderScreen({
+  const ReminderScreen({
     Key? key,
   }) : super(key: key);
 
@@ -22,6 +22,7 @@ class _ReminderScreenState extends State<ReminderScreen> {
   @override
   void initState() {
     super.initState();
+
     start();
     if (!isListening) {
       isListening = true;
@@ -45,6 +46,7 @@ class _ReminderScreenState extends State<ReminderScreen> {
   //   AwesomeNotifications().createdSink.close();
   //   super.dispose();
   // }
+
 
   start() async {
     List<NotificationModel> reminders =
@@ -87,45 +89,46 @@ class _ReminderScreenState extends State<ReminderScreen> {
           ),
           margin: const EdgeInsets.symmetric(vertical: 6, horizontal: 25),
           child: InkWell(
-            splashColor: Colors.blue.withAlpha(30),
-            highlightColor: Colors.grey[200],
+          splashColor: Colors.blue.withAlpha(30),
+          highlightColor: Colors.grey[200],
+          onLongPress: (){
+            // cancelScheduledNotifications();
+            },
             onTap: () {
-              showDialog<String>(
-                context: context,
-                builder: (BuildContext context) => AlertDialog(
-                  title: const Text(
-                    'confirm',
-                    style: TextStyle(
-                      color: Color(0xFF193566),
-                    ),
-                  ).tr(),
-                  content: const Text(''),
-                  actions: <Widget>[
-                    TextButton.icon(
-                      style: TextButton.styleFrom(
-                        textStyle: const TextStyle(color: Colors.white),
-                        backgroundColor: Colors.blueGrey[300],
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                      ),
-                      onPressed: () => {Navigator.pop(context, 'delete'.tr())},
-                      icon: const Icon(
-                        Icons.delete_outline_outlined,
-                        color: Colors.white,
+            showDialog<String>(
+              context: context,
+              builder: (BuildContext context) => AlertDialog(
+                title: const Text(
+                  'Confirmation',
+                  style: TextStyle(
+                    color: Color(0xFF193566),
+                  ),
+                ),
+                content: const Text(''),
+                actions: <Widget>[
+                  TextButton.icon(
+                    style: TextButton.styleFrom(
+                      textStyle: const TextStyle(color: Colors.white),
+                      backgroundColor: Colors.blueGrey[300],
+                      shape:RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
                       ),
                       label: const Text('delete',
                           style: TextStyle(
                             color: Colors.white,
                           )).tr(),
                     ),
-                    TextButton.icon(
-                      style: TextButton.styleFrom(
-                        textStyle: const TextStyle(color: Colors.white),
-                        backgroundColor: const Color(0xFF193566),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
+                    onPressed: () => {Navigator.pop(context, 'Delete')},
+                    icon: const Icon(Icons.delete_outline_outlined,color: Colors.white,),
+                    label: const Text('Delete',style:TextStyle(color: Colors.white,)),
+                  ),
+                  TextButton.icon(
+                    style: TextButton.styleFrom(
+                      textStyle: const TextStyle(color: Colors.white),
+                      backgroundColor: const Color(0xFF193566),
+                      shape:RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+
                       ),
                       onPressed: () => {Navigator.pop(context, 'ok'.tr())},
                       icon: const Icon(
@@ -186,6 +189,7 @@ class _ReminderScreenState extends State<ReminderScreen> {
         isExtended: true,
         child: const Icon(Icons.add),
         backgroundColor: const Color(0xFF193566),
+
         onPressed: () {
           context.push(AddReminder.routeName);
           print("after add");

@@ -87,7 +87,7 @@ class _WSASliderState extends ConsumerState<WSASlider> {
                       who: "provider",
                       size: ref
                           .watch(rsaProvider)
-                          .acceptedNearbyProviders!
+                          .newNearbyProviders!
                           .length)
                   : ListView.separated(
                       itemCount: ref
@@ -188,7 +188,8 @@ class _WSASliderState extends ConsumerState<WSASlider> {
         print(">>>>prov+mech page");
         requestDone = true;
         // context.push(Arrival.routeName, extra: true);
-      } else if (!widget.needTowProvider) {
+      // } else if (!widget.needTowProvider) {
+      } else if (!ref.watch(rsaProvider.notifier).needTowProvider) {
         requestDone = true;
         print(">>>>mech page");
       }

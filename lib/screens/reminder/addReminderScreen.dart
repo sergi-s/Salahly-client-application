@@ -111,7 +111,7 @@ class _AddReminderState extends State<AddReminder> {
             color: Colors.white,
           ),
           onPressed: () {
-            context.push(ReminderScreen.routeName);
+            context.pop();
           },
         ),
         title:
@@ -327,6 +327,7 @@ class _AddReminderState extends State<AddReminder> {
                     day: _selectedDate!.day,
                     timeOfDay: selectedTime);
                 addReminder(
+
                     title: "Salhlay".tr(),
                     body: title,
                     notificationSchedule: nwt);
