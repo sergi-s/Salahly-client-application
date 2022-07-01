@@ -218,5 +218,6 @@
   "initialReport": "Initial Report",
   "youAreAlreadyTheUser": "You Are Already TheUser",
   "who": "Requester",
-  "you": "YOu"
+  "you": "YOu",
+  "ownership_transfered": "ownership transfered"
 }

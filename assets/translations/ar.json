@@ -219,5 +219,7 @@
   "youAreAlreadyTheUser": "انت بالفعل مالك السياره",
   "who": "الطالب",
   "you": "انت",
-  "are_you_sure_u_want_to_confirm_ownership_transfer": "هل متاكد من عملية اجراء التحويل"
+
+  "are_you_sure_u_want_to_confirm_ownership_transfer": "هل متاكد من عملية اجراء التحويل",
+  "ownership_transfered": "تم تحويل الملكيه"
 }

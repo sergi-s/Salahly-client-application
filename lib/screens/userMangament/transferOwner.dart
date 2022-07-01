@@ -52,7 +52,10 @@ class _State extends ConsumerState<TransferOwner> {
           ElevatedButton(
               onPressed: () {
                 transferOwner(selected);
-                Navigator.pop(context, true);
+                final snackBar =
+                    SnackBar(content: Text('ownership_transfered'.tr()));
+                ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                context.pop();
 
                 // ShowSnackbar(context, info, index);
               },
