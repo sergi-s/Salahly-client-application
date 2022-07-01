@@ -213,31 +213,34 @@ class _State extends ConsumerState<AddSubowner> {
         // painter: HeaderCurvedContainer(),
       ),
       floatingActionButton: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Padding(
-            padding: const EdgeInsets.all(32.0),
-            // child: FloatingActionButton(
-            //   onPressed: () => scanQRcode(),
-            //   child: const Icon(Icons.qr_code),
-            //   backgroundColor: const Color(0xFF193566),
-            // ),
-          ),
+          // Padding(
+          //   padding: const EdgeInsets.all(32.0),
+          //   child: FloatingActionButton(
+          //     onPressed: () => scanQRcode(),
+          //     child: const Icon(Icons.qr_code),
+          //   ),
+          // ),
           // SizedBox(width: MediaQuery.of(context).size.width * 0.7),
 
-          Visibility(
-            visible: found,
-            child: FloatingActionButton(
-              onPressed: () {
-                showAlertbox(context);
-              },
-              child: const Icon(Icons.add),
-              backgroundColor: const Color(0xFF193566),
+          Padding(
+            padding: EdgeInsets.only(
+                bottom: MediaQuery.of(context).size.height * 0.05,
+                left: MediaQuery.of(context).size.width * 0.75),
+            child: Visibility(
+              visible: found,
+              child: FloatingActionButton(
+                onPressed: () {
+                  showAlertbox(context);
+                },
+                child: const Icon(Icons.add),
+                backgroundColor: const Color(0xFF193566),
+              ),
             ),
-          ),
+          )
         ],
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+      floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
     );
   }
 
