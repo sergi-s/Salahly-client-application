@@ -10,6 +10,7 @@ import 'package:slahly/main.dart';
 import 'package:slahly/screens/car_management/addCars.dart';
 import 'package:slahly/utils/firebase/get_all_cars.dart';
 import 'package:slahly/widgets/global_widgets/app_bar.dart';
+import 'package:slahly/classes/models/car.dart';
 
 class ViewCars extends ConsumerStatefulWidget {
   static const routeName = "/viewcars";
@@ -83,27 +84,27 @@ class _State extends ConsumerState<ViewCars> {
                                       return AlertDialog(
                                         content:
                                             const Text("carDeleteConfirmation")
-                                              .tr(),
-                                          title: Text("Warning".tr()),
-                                          actions: [
-                                            TextButton(
-                                                onPressed: () {
-                                                  Navigator.of(context).pop();
-                                                },
-                                                child: Text("Cancel".tr())),
-                                            TextButton(
-                                                onPressed: () {
-                                                  deleteCarAllUsers(index);
-                                                  Navigator.of(context).pop();
-                                                  ScaffoldMessenger.of(context)
-                                                      .showSnackBar(snackBar);
-                                                },
-                                                child: Text("Confirm".tr())),
-                                          ],
-                                        );
-                                      });
-                                },
-                                child: Padding(
+                                                .tr(),
+                                        title: Text("Warning".tr()),
+                                        actions: [
+                                          TextButton(
+                                              onPressed: () {
+                                                Navigator.of(context).pop();
+                                              },
+                                              child: Text("Cancel".tr())),
+                                          TextButton(
+                                              onPressed: () {
+                                                deleteCarAllUsers(index);
+                                                Navigator.of(context).pop();
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(snackBar);
+                                              },
+                                              child: Text("Confirm".tr())),
+                                        ],
+                                      );
+                                    });
+                              },
+                              child: Padding(
                                 padding: EdgeInsets.only(
                                     top: MediaQuery.of(context).size.height *
                                         0.015),
@@ -154,42 +155,42 @@ class _State extends ConsumerState<ViewCars> {
                                 ],
                               ),
                             ),
-                              subtitle: Padding(
-                                padding: EdgeInsets.only(
-                                    left: MediaQuery.of(context).size.width *
-                                        0.05),
-                                child: Column(children: [
-                                  const SizedBox(
-                                    height: 10,
-                                  ),
-                                  Row(
-                                    children: [
-                                      Text(
-                                        "${'Plate_Number'.tr()}: ",
+                            subtitle: Padding(
+                              padding: EdgeInsets.only(
+                                  left:
+                                      MediaQuery.of(context).size.width * 0.05),
+                              child: Column(children: [
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                                Row(
+                                  children: [
+                                    Text(
+                                      "${'Plate_Number'.tr()}: ",
+                                      style: const TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.black),
+                                    ),
+                                    Flexible(
+                                      child: Text(
+                                        ref
+                                            .watch(userProvider)
+                                            .cars[index]
+                                            .noPlate
+                                            .toString(),
                                         style: const TextStyle(
                                             fontSize: 18,
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.black),
+                                            fontWeight: FontWeight.bold),
                                       ),
-                                      Flexible(
-                                        child: Text(
-                                          ref
-                                              .watch(userProvider)
-                                              .cars[index]
-                                              .noPlate
-                                              .toString(),
-                                          style: const TextStyle(
-                                              fontSize: 18,
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  const SizedBox(height: 10),
-                                  Row(
-                                    children: [
-                                      Text(
-                                        "${'Chassis_Number'.tr()}: ",
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(height: 10),
+                                Row(
+                                  children: [
+                                    Text(
+                                      "${'Chassis_Number'.tr()}: ",
                                       style: const TextStyle(
                                           fontSize: 18,
                                           fontWeight: FontWeight.bold,
@@ -232,17 +233,14 @@ class _State extends ConsumerState<ViewCars> {
                                                   fontSize: 19,
                                                   fontWeight: FontWeight.bold)),
                                         ],
-                                    ),
-                                    (ref
-                                                .watch(userProvider)
-                                                .cars[index]
-                                                .color !=
-                                            null)
-                                        ? Container()
-                                        : Row(
-                                            children: [
-                                              Text("Color".tr(),
-                                                  style: const TextStyle(
+                                      ),
+                                (ref.watch(userProvider).cars[index].color !=
+                                        null)
+                                    ? Container()
+                                    : Row(
+                                        children: [
+                                          Text("Color".tr(),
+                                              style: const TextStyle(
                                                   color: Colors.black,
                                                   fontSize: 19,
                                                   fontWeight: FontWeight.bold)),
@@ -285,6 +283,22 @@ class _State extends ConsumerState<ViewCars> {
         .child(FirebaseAuth.instance.currentUser!.uid)
         .child(chasis!);
     userCars.set("false");
+    DatabaseReference cars = dbRef.child("cars").child(chasis!);
+    // userCars.set("false");
+    if (ref.watch(userProvider).cars[index].carAccess == CarAccess.owner) {
+      cars.remove();
+    }
+    // cars.once().then((value) {
+    //   final carsSnapshot = value.snapshot;
+    //   if (carsSnapshot.child("owner").value.toString() ==
+    //       FirebaseAuth.instance.currentUser!.uid) {
+    //     cars.remove();
+    //   }
+    // });
+    // if (ref.watch(userProvider).cars[index].carAccess == CarAccess.owner) {
+    //   cars.remove();
+    //   print("hiiii");
+    // }
     ref
         .watch(userProvider.notifier)
         .removeCar(ref.watch(userProvider).cars[index]);
