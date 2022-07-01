@@ -1,8 +1,15 @@
+import 'dart:math';
+
 import 'package:firebase_database/firebase_database.dart';
 import 'package:slahly/abstract_classes/user.dart';
 import 'package:slahly/classes/models/mechanic.dart';
 import 'package:slahly/main.dart';
 import 'package:string_validator/string_validator.dart';
+
+double roundDouble(double value, int places) {
+  num mod = pow(10.0, places);
+  return ((value * mod).round().toDouble() / mod);
+}
 
 Future getMechanicData(String id) async {
   // FirebaseEmulatorScreen().readmsg();
@@ -30,7 +37,7 @@ Future getMechanicData(String id) async {
     if (count == 0) count = 1;
     rating =
         toDouble((ds.child("rating").child("sum").value).toString()) / count;
-    rating = num.parse(rating.toStringAsExponential(2)) as double;
+    rating = roundDouble(rating, 2);
   }
 
   String address = "address";

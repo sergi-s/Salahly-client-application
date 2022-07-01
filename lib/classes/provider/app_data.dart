@@ -1,6 +1,8 @@
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:slahly/classes/firebase/roadsideassistance/roadsideassistance.dart';
+import 'package:slahly/utils/constants.dart';
 
 enum AppState {
   initialState,
@@ -68,7 +70,7 @@ class SalahlyClient {
 }
 
 final salahlyClientProvider =
-    StateNotifierProvider<SalahlyClientNotifier, SalahlyClient>((ref) {
+StateNotifierProvider<SalahlyClientNotifier, SalahlyClient>((ref) {
   return SalahlyClientNotifier();
 });
 
@@ -104,7 +106,15 @@ class SalahlyClientNotifier extends StateNotifier<SalahlyClient> {
   getSavedData() async {
     print("GET SAVED DATA FROM SHARED PREF");
     final prefs = await SharedPreferences.getInstance();
-
+    bool alive = false;
+    if (prefs.getString('requestID') != null &&
+        prefs.getString('requestID') != null) {
+      alive = await isAlive(prefs.getString('requestID')!,
+          RSA.stringToRequestType(prefs.getString('requestType') ?? "null")!);
+    }
+    if (!alive) {
+      return state;
+    }
     state = state.copyWith(
         appState: SalahlyClient.stringToAppState(prefs.getString('appState')),
         requestType:
@@ -114,5 +124,22 @@ class SalahlyClientNotifier extends StateNotifier<SalahlyClient> {
     print(state.appState);
     print(state.requestType);
     print(state.requestID);
+  }
+
+  Future<bool> isAlive(String id, RequestType requestType) async {
+    DatabaseReference localRef = state.requestType == RequestType.WSA
+        ? wsaRef
+        : (state.requestType == RequestType.RSA)
+            ? rsaRef
+            : ttaRef;
+
+    DataSnapshot ds = await localRef.child(id).get();
+    if (ds.value != null &&
+        ds.value.toString() != "" &&
+        ds.value.toString() != "null") {
+      print("is alive alive alive alive ${ds.value.toString()}");
+      return true;
+    }
+    return false;
   }
 }
