@@ -125,7 +125,9 @@ class TestScreen_nearbymechanics_and_create_rsa extends ConsumerWidget {
             onPressed: () async {
               ref
                   .watch(rsaProvider.notifier)
-                  .searchNearbyMechanicsAndProviders();
+                  .searchNearbyMechanicsAndProvidersSergi(
+                      ref.watch(rsaProvider.notifier));
+              // .searchNearbyMechanicsAndProviders();
             },
             child: Text("Get mechanics and providers"),
           ),

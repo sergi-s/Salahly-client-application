@@ -3,9 +3,9 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:slahly/classes/models/reminder.dart';
 import 'package:slahly/screens/reminder/addReminderScreen.dart';
 import 'package:slahly/widgets/global_widgets/app_bar.dart';
-import 'package:slahly/classes/models/reminder.dart';
 
 class ReminderScreen extends StatefulWidget {
   static const routeName = "/reminderscreen";
@@ -45,6 +45,26 @@ class _ReminderScreenState extends State<ReminderScreen> {
   //   AwesomeNotifications().createdSink.close();
   //   super.dispose();
   // }
+  Future<void> cancelScheduledNotifications(Reminder rem) async {
+    List<NotificationModel> deletereminder =
+        await AwesomeNotifications().listScheduledNotifications();
+    deletereminder.forEach((element) {
+      String noonnote = rem.note??"";
+      if ( element.content != null && element.content!.body!=null &&
+          ( (rem.title+": "+noonnote) == element.content!.body!) && element.content!.id != null
+      // &&
+      //     element.content!.body != null &&
+          ) {
+        map[element.content!.body!] = false;
+        // map[element.content!.body!]=true;
+        reminder.remove(rem);
+        AwesomeNotifications().cancel(element.content!.id!);
+        setState(() {
+
+        });
+      }
+    });
+  }
 
   start() async {
     List<NotificationModel> reminders =
@@ -53,12 +73,15 @@ class _ReminderScreenState extends State<ReminderScreen> {
       if (element.content != null &&
           element.content!.body != null &&
           !(map.containsKey(element.content!.body))) {
+        String note =( element.content!.payload != null &&  element.content!.payload!.containsKey("note"))? element.content!.payload!["note"]!: "";
+        String title =( element.content!.payload != null &&  element.content!.payload!.containsKey("title"))? element.content!.payload!["title"]!: "";
         map[element.content!.body!] = true;
         reminder.add(Reminder(
-            title: element.content!.body!,
+            title: title,
             // date: "Hello"));
             date: element.content!.createdDate ??
-                DateTime.now().add(const Duration(days: 1)).toString()));
+                DateFormat('dd-MM-yyyy').format(DateTime.now()).toString(),
+            note: note));
         //  DateTime.now().toString()));
       } else {
         print("element not valid ");
@@ -73,6 +96,7 @@ class _ReminderScreenState extends State<ReminderScreen> {
     Size size = MediaQuery.of(context).size;
     final String title = reminder.title;
     final String date = reminder.date;
+    final String? note=reminder.note;
 
     return Container(
       height: size.height / 8,
@@ -109,7 +133,10 @@ class _ReminderScreenState extends State<ReminderScreen> {
                           borderRadius: BorderRadius.circular(12),
                         ),
                       ),
-                      onPressed: () => {Navigator.pop(context, 'delete'.tr())},
+                      onPressed: () async{
+                        await cancelScheduledNotifications(reminder);
+                        Navigator.pop(context, 'delete'.tr());
+                      },
                       icon: const Icon(
                         Icons.delete_outline_outlined,
                         color: Colors.white,
@@ -127,12 +154,12 @@ class _ReminderScreenState extends State<ReminderScreen> {
                           borderRadius: BorderRadius.circular(12),
                         ),
                       ),
-                      onPressed: () => {Navigator.pop(context, 'ok'.tr())},
+                      onPressed: () => {Navigator.pop(context, 'cancel'.tr())},
                       icon: const Icon(
-                        Icons.done,
+                        Icons.close,
                         color: Colors.white,
                       ),
-                      label: const Text('ok',
+                      label:  Text('cancel'.tr(),
                           style: TextStyle(
                             color: Colors.white,
                           )).tr(),
@@ -150,14 +177,24 @@ class _ReminderScreenState extends State<ReminderScreen> {
                       color: Color(0xFF193566), size: 40),
                   title: Text(title,
                           textScaleFactor: 1.4,
-                      style: const TextStyle(
+                          style: const TextStyle(
                               color: Color(0xff193566),
                               fontWeight: FontWeight.bold))
                       .tr(),
-                  subtitle: Text(date,
-                          textScaleFactor: 1.1,
-                          style: const TextStyle(color: Colors.black54))
-                      .tr(),
+                  subtitle: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(date,
+                              textScaleFactor: 1.1,
+                              style:  TextStyle(color: Colors.indigo.shade800))
+                          .tr(),
+                      Text(note??"",
+                          // textScaleFactor: 1.1,
+                          style: const TextStyle(color: Colors.black87))
+                          .tr(),
+                    ],
+                  ),
                 )
               ],
             ),

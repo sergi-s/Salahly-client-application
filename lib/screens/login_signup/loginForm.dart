@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:slahly/screens/homepage.dart';
-import 'package:slahly/widgets/login_signup/Rounded_Bottom.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -56,10 +55,9 @@ class _LoginFormState extends State<LoginForm> {
             //               fontSize: 24,
             //
             style: GoogleFonts.raleway(
-              fontWeight: FontWeight.bold,
-              fontSize: 24,
-              color:  Color(0xFF193566)
-            ),
+                fontWeight: FontWeight.bold,
+                fontSize: 24,
+                color: Color(0xFF193566)),
           ),
           const SizedBox(height: 40),
           Image.asset(
@@ -106,25 +104,28 @@ class _LoginFormState extends State<LoginForm> {
           // ),
           SizedBox(height: 40),
           SizedBox(
-            width:MediaQuery.of(context).size.width * 0.4,
+            width: MediaQuery.of(context).size.width * 0.4,
             height: 40,
             child: RaisedButton(
               color: Color(0xFF193566),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12),
               ),
-              onPressed: () async{
+              onPressed: () async {
                 if (!Validator.emailValidator(email)) {
-                   ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                          content: Text('Invalid Email!! Please try again')));
+                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                      content: Text('Invalid Email!! Please try again')));
+                } else if (!Validator.passValidator(password)) {
+                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                      content: Text('Invalid Password!! Please try again')));
                 }
+
                 // if (!Validator.passValidator(password)) {
                 //   return ScaffoldMessenger.of(context).showSnackBar(
                 //       const SnackBar(
                 //           content: Text('Invalid Password!! Please try again')));
                 // }
-                bool check = await fb.login(email, password);
+                bool check = await fb.login(email.trim(), password.trim());
                 // bool check = await fb.login("mohamed@h.moh", "123456");
                 // bool check = await fb.login("sergi@client.sergi", "1234567");
                 if (check) {

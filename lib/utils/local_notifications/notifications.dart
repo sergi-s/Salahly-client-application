@@ -44,7 +44,7 @@ Future<void> createWaterReminderNotification({required String title,required Str
 }
 
 Future<void> addReminder({required String title,required String body,
-  required NotificationDateAndTime notificationSchedule}) async {
+  required NotificationDateAndTime notificationSchedule, required Map<String,String> payload}) async {
   await AwesomeNotifications().createNotification(
     content: NotificationContent(
       id: CreateUniqueId(),
@@ -52,6 +52,7 @@ Future<void> addReminder({required String title,required String body,
       title: title,
       body: body,
       notificationLayout: NotificationLayout.Default,
+      payload: payload
     ),
     actionButtons: [
       NotificationActionButton(
@@ -71,9 +72,7 @@ Future<void> addReminder({required String title,required String body,
     ),
   );
 }
-Future<void> cancelScheduledNotifications() async {
-  await AwesomeNotifications().listScheduledNotifications();
-}
+
 class NotificationWeekAndTime {
   final int date;
   final TimeOfDay timeofday;
@@ -92,6 +91,7 @@ class NotificationDateAndTime {
       {this.year, this.month, this.week, this.day, this.timeOfDay});
 
 }
+
 int CreateUniqueId() {
   return DateTime.now().millisecondsSinceEpoch.remainder(100000);
 }

@@ -393,6 +393,12 @@ class RSANotifier extends StateNotifier<RSA> {
     NearbyLocations.getNearbyMechanicsAndProviders(
         state.location!.latitude, state.location!.longitude, radius, ref);
   }
+  searchNearbyMechanicsAndProvidersSergi(RSANotifier rsaNotifier) {
+    double radius =
+    state.user != null ? state.user!.getSubscriptionRange()! : 100;
+    NearbyLocations.getNearbyMechanicsAndProvidersFoula(
+        state.location!.latitude, state.location!.longitude, radius, rsaNotifier);
+  }
 
   searchNearbyProviders() {
     // state = state.copyWith(state: RSAStates.searchingForNearbyProvider);

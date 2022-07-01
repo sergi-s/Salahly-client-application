@@ -8,7 +8,7 @@ import 'package:slahly/screens/splashScreen/splashscreen.dart';
 import 'package:slahly/screens/switchLanguage.dart';
 import 'package:slahly/screens/test_screens/test_user_SM.dart';
 import 'package:slahly/screens/test_screens/testscreen_foula.dart';
-import 'package:slahly/screens/userMangament/choose_car.dart';
+import 'package:slahly/screens/userMangament/view_cars_to_manage_subowners.dart';
 import 'package:slahly/screens/userMangament/manageSubowner.dart';
 import 'roadsideassistance/arrival.dart';
 

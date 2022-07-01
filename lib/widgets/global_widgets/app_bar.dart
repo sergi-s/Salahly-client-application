@@ -40,5 +40,3 @@ PreferredSizeWidget salahlyAppBar({String? title}) {
     // ),
   );
 }
-
-//TODO: el image el mawgoda fl Appbar mynf34 tkon hardcoded mknha

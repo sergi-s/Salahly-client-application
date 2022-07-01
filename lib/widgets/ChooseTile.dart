@@ -26,7 +26,8 @@ class ChooseTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print("yeeeeeeeeeeeeeeeeeeeeeeessssssssssssss ${estimatedTime}");
+    print("yeeeeeeeeeeeeeeeeeeeeeeessssssssssssss ${avatar}");
+    print((avatar == "") ? "yes" : "no");
 
     return SizedBox(
       height: 135,
@@ -44,8 +45,10 @@ class ChooseTile extends StatelessWidget {
                 // horizontalTitleGap: 50.0,
                 leading: CircleAvatar(
                   backgroundImage: NetworkImage(
-                    avatar ??
-                        "https://thumbs.dreamstime.com/b/default-avatar-photo-placeholder-profile-image-default-avatar-photo-placeholder-profile-image-eps-file-easy-to-edit-124557892.jpg",
+                    (avatar == "")
+                        ? "https://cdn.icon-icons.com/icons2/1378/PNG/512/avatardefault_92824.png"
+                        : avatar ??
+                            "https://cdn.icon-icons.com/icons2/1378/PNG/512/avatardefault_92824.png",
                   ),
                   radius: 30,
                 ),
@@ -73,15 +76,17 @@ class ChooseTile extends StatelessWidget {
                         )
                       ],
                     ),
-                    Row(
-                      children: [
-                        Text(
-                          'Rating : ${rating.toString()}',
-                          style: const TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 16),
-                        ),
-                      ],
-                    ),
+                    (rating != null)
+                        ? Row(
+                            children: [
+                              Text(
+                                'Rating : ${rating.toString()}',
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.bold, fontSize: 16),
+                              ),
+                            ],
+                          )
+                        : Container(),
                     const SizedBox(height: 5),
                     Row(
                       children: [
@@ -98,7 +103,7 @@ class ChooseTile extends StatelessWidget {
                         )
                       ],
                     ),
-                    (estimatedTime != null)
+                    (estimatedTime != null && estimatedTime != "null")
                         ? Row(
                             children: [
                               Flexible(

@@ -324,7 +324,8 @@ class _WSAScreenState extends ConsumerState<WSAScreen> {
     if (!gotMechanics) {
       await rsaNotifier.requestWSA();
       gotMechanics = true;
-      await rsaNotifier.searchNearbyMechanicsAndProviders();
+      // await rsaNotifier.searchNearbyMechanicsAndProviders();
+      await rsaNotifier.searchNearbyMechanicsAndProvidersSergi(rsaNotifier);
     }
     // _pcMechanic.open();
     _pcServiceSlider.open();

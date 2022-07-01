@@ -111,7 +111,7 @@ class _AddReminderState extends State<AddReminder> {
             color: Colors.white,
           ),
           onPressed: () {
-            context.push(ReminderScreen.routeName);
+            context.pop();
           },
         ),
         title:
@@ -321,14 +321,17 @@ class _AddReminderState extends State<AddReminder> {
                   borderRadius: BorderRadius.circular(12)),
               color: const Color(0xFF193566),
               onPressed: () {
+                Map<String,String> _payload = {"note":note,"title":title};
                 NotificationDateAndTime nwt = NotificationDateAndTime(
                     year: _selectedDate!.year,
                     month: _selectedDate!.month,
                     day: _selectedDate!.day,
                     timeOfDay: selectedTime);
                 addReminder(
-                    title: "Salhlay".tr(),
-                    body: title,
+
+                    title: "salahli".tr(),
+                    body: title+": "+note,
+                    payload: _payload,
                     notificationSchedule: nwt);
                 Navigator.pop(context);
               },

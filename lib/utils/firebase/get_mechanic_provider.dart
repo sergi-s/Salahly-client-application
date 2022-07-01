@@ -11,7 +11,7 @@ Future getMechanicOrProviderData(String id) async {
 
   String avatar =
       "https://cdn.icon-icons.com/icons2/1378/PNG/512/avatardefault_92824.png";
-  if ((ds.child("avatar").value) != null) {
+  if ((ds.child("avatar").value) != null && (ds.child("avatar").value!="")) {
     avatar = (ds.child("avatar").value).toString();
   }
   //
@@ -19,13 +19,14 @@ Future getMechanicOrProviderData(String id) async {
   if ((ds.child("address").value) != null) {
     address = (ds.child("address").value).toString();
   }
-  double? rating;
+  double? rating = 1;
   if (ds.child("rating").value != null) {
     double count =
         toDouble((ds.child("rating").child("count").value).toString());
     if (count == 0) count = 1;
     rating =
         toDouble((ds.child("rating").child("sum").value).toString()) / count;
+    rating = num.parse(rating.toStringAsExponential(2)) as double;
   }
 
   if (ds.child("type").value.toString() == "mechanic") {
@@ -43,7 +44,7 @@ Future getMechanicOrProviderData(String id) async {
   } else {
     return TowProvider(
         isCenter: toBoolean((ds.child("isCenter").value).toString()),
-        avatar: "",
+        avatar: avatar,
         phoneNumber: (ds.child("phoneNumber").value).toString(),
         id: id,
         type: Type.provider,

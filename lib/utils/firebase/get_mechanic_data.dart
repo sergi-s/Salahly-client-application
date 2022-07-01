@@ -19,17 +19,18 @@ Future getMechanicData(String id) async {
   // print("saddddddde");
   String avatar =
       "https://cdn.icon-icons.com/icons2/1378/PNG/512/avatardefault_92824.png";
-  if ((ds.child("avatar").value) != null) {
+  if ((ds.child("avatar").value) != null && (ds.child("avatar").value) != '') {
     avatar = (ds.child("avatar").value).toString();
   }
 
-  double? rating;
+  double? rating = 1;
   if (ds.child("rating").value != null) {
     double count =
         toDouble((ds.child("rating").child("count").value).toString());
     if (count == 0) count = 1;
     rating =
         toDouble((ds.child("rating").child("sum").value).toString()) / count;
+    rating = num.parse(rating.toStringAsExponential(2)) as double;
   }
 
   String address = "address";
