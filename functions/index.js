@@ -5,12 +5,12 @@ const {user} = require("firebase-functions/v1/auth");
 
 // var admin = require("firebase-admin");
 
-const serviceAccount = require("./salahny-6bfea-firebase-adminsdk-h27mh-9c1e802abc.json");
+// const serviceAccount = require("./salahny-6bfea-firebase-adminsdk-h27mh-9c1e802abc.json");
 
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount),
-  databaseURL: "https://salahny-6bfea-default-rtdb.firebaseio.com",
-});
+// admin.initializeApp({
+//   credential: admin.credential.cert(serviceAccount),
+//   databaseURL: "https://salahny-6bfea-default-rtdb.firebaseio.com",
+// });
 
 const functions = require("firebase-functions");
 
@@ -34,7 +34,7 @@ firebase deploy --only functions:functionname
 
  */
 
-// admin.initializeApp();
+admin.initializeApp();
 exports.helloWorld = functions.https.onRequest((request, response) => {
   functions.logger.info("Hello logs!", {structuredData: true});
   response.send("Hello from Firebase!");
