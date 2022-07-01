@@ -219,7 +219,7 @@
   "youAreAlreadyTheUser": "انت بالفعل مالك السياره",
   "who": "الطالب",
   "you": "انت",
-  "Owned_cars_management": "إدارة السيارات المملوكة",
+  "owned_cars_management": "إدارة السيارات المملوكة",
   "transferConfirmation": "هل أنت متأكد أنك تريد تأكيد نقل الملكية؟"
   "ownership_transfered": "تم تحويل الملكيه"
 }
