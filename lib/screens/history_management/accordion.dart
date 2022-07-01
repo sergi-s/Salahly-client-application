@@ -263,7 +263,7 @@ class _CustomHistoryTileState extends State<CustomHistoryTile> {
   Widget build(BuildContext context) {
     return Card(
       elevation: 5,
-      color: const Color(0xFFE8E8E8),
+      color: Colors.white70,
       shape: BeveledRectangleBorder(
         borderRadius: BorderRadius.circular(15.0),
       ),
@@ -274,16 +274,18 @@ class _CustomHistoryTileState extends State<CustomHistoryTile> {
               children: [
                 widget.carNoPlate == null
                     ? Container()
-                    : Text(
-                        widget.carNoPlate!,
-                        style: const TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 20),
-                      ),
+                    : Center(
+                      child: Text(
+                          widget.carNoPlate!,
+                          style: const TextStyle(color: Colors.indigo,
+                              fontWeight: FontWeight.bold, fontSize: 20),
+                        ),
+                    ),
               ],
             ),
             trailing: IconButton(
               icon: Icon(
-                  _showContent ? Icons.arrow_drop_up : Icons.arrow_drop_down),
+                  _showContent ? Icons.arrow_drop_up : Icons.arrow_drop_down,color: Color(0xFF193566) ),
               onPressed: () {
                 setState(() {
                   _showContent = !_showContent;

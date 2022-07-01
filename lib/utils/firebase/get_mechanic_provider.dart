@@ -26,6 +26,7 @@ Future getMechanicOrProviderData(String id) async {
     if (count == 0) count = 1;
     rating =
         toDouble((ds.child("rating").child("sum").value).toString()) / count;
+    rating = num.parse(rating.toStringAsExponential(2)) as double;
   }
 
   if (ds.child("type").value.toString() == "mechanic") {

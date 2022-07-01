@@ -3,14 +3,14 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:slahly/classes/models/reminder.dart';
 import 'package:slahly/screens/reminder/addReminderScreen.dart';
 import 'package:slahly/widgets/global_widgets/app_bar.dart';
-import 'package:slahly/classes/models/reminder.dart';
 
 class ReminderScreen extends StatefulWidget {
   static const routeName = "/reminderscreen";
 
-  const ReminderScreen({
+  ReminderScreen({
     Key? key,
   }) : super(key: key);
 
@@ -22,7 +22,6 @@ class _ReminderScreenState extends State<ReminderScreen> {
   @override
   void initState() {
     super.initState();
-
     start();
     if (!isListening) {
       isListening = true;
@@ -46,7 +45,26 @@ class _ReminderScreenState extends State<ReminderScreen> {
   //   AwesomeNotifications().createdSink.close();
   //   super.dispose();
   // }
+  Future<void> cancelScheduledNotifications(Reminder rem) async {
+    List<NotificationModel> deletereminder =
+        await AwesomeNotifications().listScheduledNotifications();
+    deletereminder.forEach((element) {
+      String noonnote = rem.note??"";
+      if ( element.content != null && element.content!.body!=null &&
+          ( (rem.title+": "+noonnote) == element.content!.body!) && element.content!.id != null
+      // &&
+      //     element.content!.body != null &&
+          ) {
+        map[element.content!.body!] = false;
+        // map[element.content!.body!]=true;
+        reminder.remove(rem);
+        AwesomeNotifications().cancel(element.content!.id!);
+        setState(() {
 
+        });
+      }
+    });
+  }
 
   start() async {
     List<NotificationModel> reminders =
@@ -55,14 +73,15 @@ class _ReminderScreenState extends State<ReminderScreen> {
       if (element.content != null &&
           element.content!.body != null &&
           !(map.containsKey(element.content!.body))) {
+        String note =( element.content!.payload != null &&  element.content!.payload!.containsKey("note"))? element.content!.payload!["note"]!: "";
+        String title =( element.content!.payload != null &&  element.content!.payload!.containsKey("title"))? element.content!.payload!["title"]!: "";
         map[element.content!.body!] = true;
         reminder.add(Reminder(
-            title: element.content!.body!,
+            title: title,
             // date: "Hello"));
             date: element.content!.createdDate ??
-                // DateTime.now().toString(),
-                DateFormat('yyyy-MM-dd ').format(DateTime.now()).toString(),
-            note:element.content!.body!));
+                DateFormat('dd-MM-yyyy').format(DateTime.now()).toString(),
+            note: note));
         //  DateTime.now().toString()));
       } else {
         print("element not valid ");
@@ -77,7 +96,7 @@ class _ReminderScreenState extends State<ReminderScreen> {
     Size size = MediaQuery.of(context).size;
     final String title = reminder.title;
     final String date = reminder.date;
-    final String note= reminder.note ;
+    final String? note=reminder.note;
 
     return Container(
       height: size.height / 8,
@@ -92,53 +111,55 @@ class _ReminderScreenState extends State<ReminderScreen> {
           ),
           margin: const EdgeInsets.symmetric(vertical: 6, horizontal: 25),
           child: InkWell(
-          splashColor: Colors.blue.withAlpha(30),
-          highlightColor: Colors.grey[200],
-          onLongPress: (){
-            // cancelScheduledNotifications();
-            },
+            splashColor: Colors.blue.withAlpha(30),
+            highlightColor: Colors.grey[200],
             onTap: () {
-            showDialog<String>(
-              context: context,
-              builder: (BuildContext context) => AlertDialog(
-                title: const Text(
-                  'Confirmation',
-                  style: TextStyle(
-                    color: Color(0xFF193566),
-                  ),
-                ),
-                content: const Text(''),
-                actions: <Widget>[
-                  TextButton.icon(
-                    style: TextButton.styleFrom(
-                      textStyle: const TextStyle(color: Colors.white),
-                      backgroundColor: Colors.blueGrey[300],
-                      shape:RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
+              showDialog<String>(
+                context: context,
+                builder: (BuildContext context) => AlertDialog(
+                  title: const Text(
+                    'confirm',
+                    style: TextStyle(
+                      color: Color(0xFF193566),
+                    ),
+                  ).tr(),
+                  content: const Text(''),
+                  actions: <Widget>[
+                    TextButton.icon(
+                      style: TextButton.styleFrom(
+                        textStyle: const TextStyle(color: Colors.white),
+                        backgroundColor: Colors.blueGrey[300],
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                      onPressed: () async{
+                        await cancelScheduledNotifications(reminder);
+                        Navigator.pop(context, 'delete'.tr());
+                      },
+                      icon: const Icon(
+                        Icons.delete_outline_outlined,
+                        color: Colors.white,
                       ),
                       label: const Text('delete',
                           style: TextStyle(
                             color: Colors.white,
                           )).tr(),
                     ),
-                    onPressed: () => {Navigator.pop(context, 'Delete')},
-                    icon: const Icon(Icons.delete_outline_outlined,color: Colors.white,),
-                    label: const Text('Delete',style:TextStyle(color: Colors.white,)),
-                  ),
-                  TextButton.icon(
-                    style: TextButton.styleFrom(
-                      textStyle: const TextStyle(color: Colors.white),
-                      backgroundColor: const Color(0xFF193566),
-                      shape:RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-
+                    TextButton.icon(
+                      style: TextButton.styleFrom(
+                        textStyle: const TextStyle(color: Colors.white),
+                        backgroundColor: const Color(0xFF193566),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
                       ),
                       onPressed: () => {Navigator.pop(context, 'cancel'.tr())},
                       icon: const Icon(
                         Icons.close,
                         color: Colors.white,
                       ),
-                      label: const Text('cancel',
+                      label:  Text('cancel'.tr(),
                           style: TextStyle(
                             color: Colors.white,
                           )).tr(),
@@ -148,15 +169,15 @@ class _ReminderScreenState extends State<ReminderScreen> {
               );
             },
             child: Column(
-              // mainAxisAlignment: MainAxisAlignment.center,
-              // crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
                 ListTile(
                   leading: const Icon(CupertinoIcons.alarm,
                       color: Color(0xFF193566), size: 40),
                   title: Text(title,
                           textScaleFactor: 1.4,
-                      style: const TextStyle(
+                          style: const TextStyle(
                               color: Color(0xff193566),
                               fontWeight: FontWeight.bold))
                       .tr(),
@@ -166,14 +187,15 @@ class _ReminderScreenState extends State<ReminderScreen> {
                     children: [
                       Text(date,
                               textScaleFactor: 1.1,
-                              style: TextStyle(color: Colors.indigo.shade800))
+                              style:  TextStyle(color: Colors.indigo.shade800))
                           .tr(),
-                      Text(note,textScaleFactor: 1.1,
-                          style: const TextStyle(color: Colors.black54)).tr(),
+                      Text(note??"",
+                          // textScaleFactor: 1.1,
+                          style: const TextStyle(color: Colors.black87))
+                          .tr(),
                     ],
                   ),
-                ),
-
+                )
               ],
             ),
           ),
@@ -201,7 +223,6 @@ class _ReminderScreenState extends State<ReminderScreen> {
         isExtended: true,
         child: const Icon(Icons.add),
         backgroundColor: const Color(0xFF193566),
-
         onPressed: () {
           context.push(AddReminder.routeName);
           print("after add");

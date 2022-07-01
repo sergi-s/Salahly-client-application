@@ -2,11 +2,11 @@
 class Reminder {
   final String title;
   final String date;
-  final String note;
+  final String? note;
 
   Reminder({
     required this.title,
     required this.date,
-    required this.note,
+    this.note,
   });
 }

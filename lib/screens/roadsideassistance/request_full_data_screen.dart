@@ -129,7 +129,6 @@ class _RequestFullDataScreenState extends State<RequestFullDataScreen> {
                   )),
               SizedBox(height: MediaQuery.of(context).size.height * 0.02),
               (rsa.mechanic != null) ? mechanicData() : Container(),
-              (rsa.semiReport != null) ? Text(rsa.semiReport!) : Container(),
               (rsa.towProvider != null) ? towProviderData() : Container(),
               SizedBox(height: MediaQuery.of(context).size.height * 0.1),
             ],
@@ -178,13 +177,13 @@ class _RequestFullDataScreenState extends State<RequestFullDataScreen> {
               backgroundImage: const AssetImage("assets/images/mechanic.png"),
               radius: MediaQuery.of(context).size.height * 0.05,
             ),
-      Text(
-        "mechanic".tr(),
-        style: const TextStyle(
+      const Text(
+        "mechanic",
+        style: TextStyle(
             color: Color(0xff193566),
             fontWeight: FontWeight.bold,
             fontSize: 15),
-      ),
+      ).tr(),
       Row(
         children: [
           SizedBox(width: MediaQuery.of(context).size.width * 0.7),
@@ -232,6 +231,25 @@ class _RequestFullDataScreenState extends State<RequestFullDataScreen> {
               .tr(),
         ),
       ),
+      (rsa.semiReport != null)
+          ? ListTile(
+              leading: const Padding(
+                  padding:
+                      EdgeInsets.only(top: 10.0, bottom: 15.0, right: 10.0),
+                  child: Icon(Icons.bookmark,
+                      color: Color(0xff97a7c3), size: 43)),
+              title: Padding(
+                padding: const EdgeInsets.only(top: 6.0, bottom: 6.0),
+                child: Text(rsa.semiReport!,
+                        textScaleFactor: 1.1,
+                        style: const TextStyle(
+                            color: Color(0xff193566),
+                            fontWeight: FontWeight.bold),
+                        textAlign: TextAlign.left)
+                    .tr(),
+              ),
+            )
+          : Container(),
 
       ///-------------------------------------------
       (rsa.user != null &&

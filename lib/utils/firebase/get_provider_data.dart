@@ -24,6 +24,7 @@ if(ds.child("name").value!=null){
     if (count == 0) count = 1;
     rating =
         toDouble((ds.child("rating").child("sum").value).toString()) / count;
+    rating = num.parse(rating.toStringAsExponential(2)) as double;
   }
   String address = "address_";
   if ((ds.child("address").value) != null) {

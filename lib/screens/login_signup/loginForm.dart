@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:slahly/screens/homepage.dart';
-import 'package:slahly/widgets/login_signup/Rounded_Bottom.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -126,7 +125,7 @@ class _LoginFormState extends State<LoginForm> {
                 //       const SnackBar(
                 //           content: Text('Invalid Password!! Please try again')));
                 // }
-                bool check = await fb.login(email, password);
+                bool check = await fb.login(email.trim(), password.trim());
                 // bool check = await fb.login("mohamed@h.moh", "123456");
                 // bool check = await fb.login("sergi@client.sergi", "1234567");
                 if (check) {
