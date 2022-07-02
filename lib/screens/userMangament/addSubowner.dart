@@ -8,6 +8,8 @@ import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:slahly/main.dart';
+import 'package:slahly/screens/userMangament/manageSubowner.dart';
+import 'package:slahly/screens/userMangament/view_cars_to_manage_subowners.dart';
 
 import '../../classes/models/car.dart';
 
@@ -56,7 +58,8 @@ class _State extends ConsumerState<AddSubowner> {
           ElevatedButton(
               onPressed: () {
                 addSubowner(widget.chasis);
-                Navigator.pop(context, true);
+                // Navigator.pop(context, true);
+                // context.push(Manage_Subowners.routeName);
 
                 // ShowSnackbar(context, info, index);
               },
@@ -225,7 +228,7 @@ class _State extends ConsumerState<AddSubowner> {
 
           Padding(
             padding: EdgeInsets.only(
-                bottom: MediaQuery.of(context).size.height * 0.05,
+                bottom: MediaQuery.of(context).size.height * 0.1,
                 left: MediaQuery.of(context).size.width * 0.75),
             child: Visibility(
               visible: found,
@@ -355,6 +358,7 @@ class _State extends ConsumerState<AddSubowner> {
               .child(subId!)
               .set(true);
           usersCars.child(chasis).set("true");
+          context.pop();
           context.pop();
         } else {
           print("add car");
