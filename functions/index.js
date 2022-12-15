@@ -257,8 +257,8 @@ exports.onRequestCancel = functions.database.ref("/{requestType}/{requestID}/sta
     let requestType = context.params.requestType;
     let requestID = context.params.requestID;
     let state = change.after.val();
-    if (state === "cancelled") {
-      console.log("Request " + requestID + " was canceled");
+    if (state === "cancelled" || state === "done") {
+      console.log("Request " + requestID + " was "+state);
       // update the state of all mechanics in database to "not chosen"
       await (await admin.database().ref(`/${requestType}/${requestID}/mechanicsResponses`)).get().then(async (snapshot) => {
           let mechanics = snapshot.val();
@@ -269,7 +269,7 @@ exports.onRequestCancel = functions.database.ref("/{requestType}/{requestID}/sta
                 requestID: requestID,
                 receiverID: mechanicID,
                 receiverType: "mechanic",
-                state: "cancelled",
+                state: state,
               });
             }
           }
@@ -285,7 +285,7 @@ exports.onRequestCancel = functions.database.ref("/{requestType}/{requestID}/sta
                 requestID: requestID,
                 receiverID: providerID,
                 receiverType: "provider",
-                state: "cancelled",
+                state: state,
               });
             }
           }
